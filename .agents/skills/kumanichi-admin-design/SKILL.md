@@ -5,7 +5,7 @@ description: Design and review Master / Client admin screens, shared UI, form co
 
 # 熊日モール管理画面デザイン
 
-`shop-manage_2611`の管理画面を、共通UIの一貫性を保ちながら静的HTML・Sassとブラウザ確認で設計する。HTMLはユーザーが手打ちし、Codexは依頼された範囲で仕様整理やコードの提案・修正を支援する。Figmaは必要な場合のみ使用する。
+`shop-manage_2611`の管理画面を、共通UIの一貫性を保ちながら制作用PHP（共通部品のインクルード）・Sassとブラウザ確認で設計する。Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。Figmaは必要な場合のみ使用する。
 
 ## 仕様の確認
 
@@ -38,7 +38,7 @@ description: Design and review Master / Client admin screens, shared UI, form co
 - 色差は同じ用途のトークンを使い、各管理画面のSassで値を設定する
 - 共通UIの状態はHTML属性、疑似クラス、状態classなどで表現する
 - 変更後はブラウザでレイアウト、操作、主要状態を確認する
-- Laravel・Bladeへの組み込みはバックエンド担当者が行い、このプロジェクトではLaravelを構築しない
+- Laravel・Bladeへの組み込みはバックエンド担当者が行う。フロントの作業ではLaravelを構築しない
 
 ## Figmaを使用する場合
 
@@ -67,7 +67,7 @@ Input、Select、Textarea、Checkbox、Radio、Date Picker、File Uploadは共�
 
 - 既存デザインへ自然に組み込み、依頼されていない全面変更をしない
 - 一度に複数画面を大幅変更せず、最小単位で確認する
-- 依頼なくHTMLを自動生成・書き出ししない
+- 依頼範囲外のPHP・HTMLを作成・変更しない。ユーザーが調整した箇所を元に戻さない
 - 実装難易度を理由にデザインを簡略化しない
 - 確定した仕様だけを該当Markdownと`docs/MEMORY.md`へ反映する
 

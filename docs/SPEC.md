@@ -11,10 +11,11 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 ## 制作・実装方針
 
 - デザイン実装プロジェクトは1つとし、Master / Clientの基本UIを共通化する
-- HTMLはユーザーが手打ちし、Codexは依頼なくHTMLを自動生成・書き出ししない
+- 制作の流れ：Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。Codexは依頼範囲外のPHP・HTMLを作成・変更しない
 - 静的HTML・Sassをブラウザで確認しながらデザインを固める
-- 静的HTML・Sass・生成CSSをバックエンド担当者へ渡し、Laravel・Bladeへの組み込みは担当者が行う
-- このプロジェクトではLaravelを構築しない
+- 制作時はDDEVのPHPで共通ヘッダー・サイドバーをインクルードする。HTMLの組み立てにNodeは使わず、PHPは表示の共通化・現在地・静的出力時のリンク切り替えだけに限定する
+- 制作用PHP（include構成）・Sass・生成CSSをバックエンド担当者へ渡し、Laravel・Bladeへの組み込みは担当者が行う。静的HTMLは納品物に含めない
+- フロント（デザイン実装）の作業ではLaravelを構築しない。Laravelの構築・組み込みはバックエンド担当者が同じリポジトリで行う
 - Figmaは必須工程ではなく、必要な場合のみ使用する
 - Vite・Astroは現時点では使用しない
 
@@ -29,7 +30,7 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 - 静的HTML・Sassによる管理画面のデザイン実装と、共通UI・画面仕様・状態の整理を行う
 - Codexは要件整理、仕様策定、依頼されたコードの提案・修正を支援する
 - バックエンド処理、DB設計、API実装は対象外
-- 依頼なくHTMLを自動生成・書き出ししない
+- 依頼範囲外のPHP・HTMLを作成・変更しない
 
 ## フォルダとSass
 
@@ -38,6 +39,9 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 - `shop-partner/`：Client用の静的HTMLとアセット。対象URLは`https://shop-partner.kumanichi.com/`
 - `docs/`：仕様・デザイン方針・実装引き渡し資料
 - `.agents/`：プロジェクト専用スキル
+- `backend/`：バックエンド（Laravel）のコード。バックエンド担当者が使う
+- `shop-partner/includes/`：制作用PHPの共通部品。`inc_header.php`・`inc_sidebar.php`を置く
+- `scripts/export-html.php`：制作用PHPから静的HTMLを書き出すPHP CLI専用スクリプト。PHPが動かない環境で見せる場合だけ使う（出力したHTMLはGit管理外）
 
 Node.js環境ではnpmパッケージの`sass`を使用し、`node-sass`は使用しない。
 
@@ -47,7 +51,8 @@ Node.js環境ではnpmパッケージの`sass`を使用し、`node-sass`は使�
 | `shop-partner/assets/scss/` | `shop-partner/assets/css/` |
 
 - ディレクトリ単位で同名のCSSへ変換する。`_`で始まる共通部品は単独出力しない
-- Client受注一覧固有のスタイルは、`shop-partner/orders.html` ↔ `shop-partner/assets/scss/order.scss`の1対1で作り、`shop-partner/assets/css/order.css`へ出力する。共通部分はユーザーが独立させた`shop-partner/assets/scss/common.scss`から`shop-partner/assets/css/common.css`へ出力し、`orders.html`は`common.css`→`order.css`の順に読み込む。`_reset.scss`の読み込みは`common.scss`だけに置く
+- Client受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。共通部分は`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、`common.css`→`order.css`の順に読み込む。`_reset.scss`の読み込みは`common.scss`だけに置く
+- 制作・修正・納品はPHPに一本化する。静的HTML（`shop-partner/orders.html`等）は常設せず、必要なときだけ`ddev exec php scripts/export-html.php`で書き出す。書き出したHTMLはGit管理外で、納品しない。SassのNode環境・npmコマンドは変更しない
 - 現在のSCSSの記述構成を基準とし、共通レイアウト・ブランド設定は`common.scss`、受注一覧固有は`order.scss`へ置く。既存のネストとセクションコメントを維持し、`admin.scss`への再編は前提にしない
 - 色は既存の色変数・ブランド用CSSカスタムプロパティを使う。サイズは既存の`fz()`と流動フォント設定を使い、余白・幅・罫線などは`px`・`rem`・`em`の直接指定も認める。サイズの全面変数化や削除済み変数の復活は行わない
 - class名は既存HTMLを優先し、役割が分かる名前にする。`.admin-*`／`.order-*`やBEMは必須にせず、要素セレクタと短いクラス名を使った現在のネスト構成を継続する
@@ -100,7 +105,7 @@ Node.js環境ではnpmパッケージの`sass`を使用し、`node-sass`は使�
 - 入稿のある商品だけを表示し、どの商品にも入稿がない注文は入稿画像欄を出さない。注文側の形式・容量・受付件数の制限、拡大表示の方式、一括ダウンロードの要否、ファイル名の規則は未確定
 - 注文単位でメモ・入稿画像を展開して確認する。閉じた状態でも、メモまたは入稿画像の有無が分かるようにする。受注詳細画面や注文詳細リンクは設ける前提にせず、支払方法・配送希望日時など一覧にない情報の必要性と表示場所を確認する
 - 発送状況の最終更新日時（日付・時刻）を表示し、変更が保存された時点で更新する。メモ編集・入稿画像の確認やダウンロードだけでは更新しない
-- KPIは「すべて｜本日の新規｜持ち越し｜発送待ち」とし、選択KPIと受注一覧の対象・件数を連動させる。「すべて」は全件表示、「持ち越し」は前日以前に受け付けて未対応の注文を表す。KPIの詳細な集計条件は未確定
+- KPIは「すべて｜未着手｜発送待ち」とし、選択KPIと受注一覧の対象・件数を連動させる。初期選択は「未着手」。受付済みで準備・制作等の作業を始めていない注文を、受付日にかかわらず対象にする。「持ち越し」という日付の区分は設けない。対象ステータスとの対応・発送待ちの範囲等の詳細な集計条件は未確定
 - 検索・詳細検索で受注を絞り込み、全件表示への切り替えはKPI「すべて」で行う。KPIと重複する範囲指定は設けない。検索条件とKPIの組み合わせや切り替え時の入力値保持は未確定
 - 商品明細ごとに商品名・個数・税込の小計、注文単位で送料・合計（税込）を確認できるようにする。現行の集計行は送料と合計の2行とし、送料の計算方法・送料無料の条件・消費税の表示要否・端数処理は未確定。送料800円は表示例であり固定送料の決定ではない
 - 注文日は年月日表記。一覧の住所はお届け先住所とする。氏名・電話・メールの参照元、特に注文者メールかお届け先メールかは別途確認する

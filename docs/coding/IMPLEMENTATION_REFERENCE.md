@@ -2,9 +2,9 @@
 
 ## この資料の目的
 
-ユーザーが管理画面を静的HTMLへ手打ちで実装し、Sassとともにバックエンド担当者へ引き渡すための基準。デザインはブラウザで確認しながら固める。
+管理画面を制作用PHP（共通部品のインクルード）・Sassで実装し、バックエンド担当者へ引き渡すための基準。Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。デザインはブラウザで確認しながら固める。
 
-Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態、命名候補を資料として整理する。Figmaは必要な場合のみ使用する。
+Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構造・状態・命名は資料にも整理する。Figmaは必要な場合のみ使用する。
 
 ## 資料の優先順位
 
@@ -27,7 +27,7 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 
 ## Client受注一覧の制作単位
 
-受注一覧固有のスタイルは、`shop-partner/orders.html`と`shop-partner/assets/scss/order.scss`を1対1で扱い、`shop-partner/assets/css/order.css`へ出力する。ユーザーが独立させた共通部分は`shop-partner/assets/scss/common.scss`から`shop-partner/assets/css/common.css`へ出力し、HTMLは`common.css`→`order.css`の順に読み込む。
+受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。ユーザーが独立させた共通部分は`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→`order.css`の順に読み込む。
 
 `_reset.scss`は`common.scss`だけで読み込み、`order.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
 
@@ -36,6 +36,16 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 - `order.scss`は`@use → コメントヘッダー → ページ固有のセクション`とする。今後追加するKPI・検索・注文・展開行は画面の並びに沿って整理し、共通のBrand・Layoutは戻さない
 - `common.scss`＋ページ別Sassの構成を継続し、受注一覧完成後も`admin.scss`への再編を前提にしない
 - 既存の関数・mixinを利用し、Codexは依頼なく新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない
+
+### 制作用PHPのインクルード
+
+- PHPインクルードはユーザー承認済みの制作補助。Laravel・DB・認証・受注処理等は作らず、バックエンド担当者が後からBladeのレイアウト・`@include`等へ組み込む
+- 編集するファイルは`shop-partner/orders.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。共通部品は`inc_`で始め、`require __DIR__ . '/includes/…';`で読み込む。見た目のためのラッパーは追加しない
+- 各ページで`$currentPage`を設定する。受注一覧は`orders`とし、サイドバーの該当リンクだけに`aria-current="page"`を付ける。未作成画面のリンクは引き続き`#`のまま
+- 制作確認用のURLは`/shop-partner/orders.php`。PHP版のリンク・検索フォームは`.php`へ向け、静的出力では`.html`へ切り替える。外部入力でinclude先や現在地を決めない
+- 静的HTMLは常設しない。PHPが動かない環境で見せる必要がある場合だけ、プロジェクトルートで`ddev exec php scripts/export-html.php`を実行して書き出す。出力したHTMLはGit管理外（`.gitignore`）で、直接編集しない。ページ追加時はスクリプトの`$pages`へ対象を明示的に追加する
+- NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
+- バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
 
 ## クラス名とSCSSの書き方
 
@@ -56,9 +66,9 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 ## 制作環境と引き渡し
 
 - Sassの編集元、出力先、npmコマンドは`docs/SPEC.md`の「フォルダとSass」を参照する
-- 引き渡すものは静的HTML、共通・管理画面別のSass、生成CSSと必要なアセット、仕様資料とする
+- 引き渡すものは制作用PHP（ページと`includes/`の共通部品）、共通・管理画面別のSass、生成CSSと必要なアセット、仕様資料とする。静的HTMLは含めない
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
-- Laravel・Bladeへの組み込みはバックエンド担当者が行う。このプロジェクトではLaravelを構築しない
+- Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
 
 ## HTML要素の考え方
@@ -75,7 +85,7 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 
 ### ファイル冒頭のコメントヘッダー
 
-手動作成するHTML・Sassには、用途・ファイルの場所・利用元・作成日・更新日を統一形式で記載する。これは、こうの湯・ふもと旅館のコメントヘッダー規約を、本プロジェクトの静的HTML・Sass向けに読み替えたもの。依頼なくHTMLを生成する方針には変更しない。
+手動作成するHTML・制作用PHP・Sassには、用途・ファイルの場所・利用元・作成日・更新日を統一形式で記載する。これは、こうの湯・ふもと旅館のコメントヘッダー規約を、本プロジェクトの静的HTML・Sass向けに読み替えたもの。依頼なく新規画面のHTMLを生成しない方針は維持し、承認済みのPHPインクルードの静的出力とは区別する。
 
 - 新規ファイルの作成時に記載する。既存ファイルにない場合は、そのファイルを次に修正するときに追加する。ヘッダー追加のためだけの一括改修はしない
 - タイトルは「熊日モール＋管理画面種別＋ページ名または用途」で簡潔に書く。対応するHTMLとSassで名前をそろえる
@@ -85,6 +95,7 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 - ファイルを修正したら`Last updated`を実際の修正日へ更新する。日付は`YYYY-MM-DD`で統一する。下記の`YYYY-MM-DD`はテンプレート用のプレースホルダーで、そのまま実ファイルへ残さない
 - パスや利用元に誤記がある場合は、対象ファイルを修正するときに併せて直す
 - 生成CSS・ソースマップには手動で追加しない。外部ライブラリなどの既存ライセンス・著作権表記は維持する
+- 制作用PHPは、ページ本文ではdoctype直後のHTMLコメント、共通部品（`includes/`）とCLIスクリプトは先頭のPHPコメント（`<?php /* … */ ?>`）に記載し、出力HTMLの本文に制作用コメントを出さない。ページ冒頭のPHP設定はHTMLを出力しない
 
 ### HTMLのテンプレート
 
@@ -94,8 +105,8 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 <!doctype html>
 <!-- =======================================
  * 熊日モール Client 受注一覧
- * URL: /shop-partner/orders.html
- * Referenced in: /shop-partner/orders.html
+ * URL: /shop-partner/orders.php
+ * Referenced in: /shop-partner/orders.php
  * Created: YYYY-MM-DD
  * Last updated: YYYY-MM-DD
  * ======================================= -->
@@ -112,7 +123,7 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 /* =======================================
  * 熊日モール Client 受注一覧 スタイル
  * URL: /shop-partner/assets/scss/order.scss
- * Referenced in: /shop-partner/orders.html
+ * Referenced in: /shop-partner/orders.php
  * Created: YYYY-MM-DD
  * Last updated: YYYY-MM-DD
  * ======================================= */
@@ -161,7 +172,7 @@ JavaScriptの操作対象には、必要に応じて`id`、`data-*`、`aria-expa
 
 ## 完了時の確認
 
-- 静的HTMLと仕様資料から主要な構造・状態・操作を判断できるか
+- 制作用PHPと仕様資料から主要な構造・状態・操作を判断できるか
 - 入力、リンク、ボタンの用途が区別できるか
 - コンポーネントの全状態が揃っているか
 - デザイントークンと画面内の値が一致しているか

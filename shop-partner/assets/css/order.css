@@ -16,9 +16,172 @@
 /* =======================================
  * 熊日モール Client 受注一覧 スタイル
  * URL: /shop-partner/assets/scss/order.scss
- * Referenced in: /shop-partner/orders.html
+ * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
  * Last updated: 2026-10-17
  * ======================================= */
+/* =================================
+ * ページ見出し
+ * ------------------------------ */
+.admin-main {
+  min-width: 0;
+}
+.admin-main .page-heading {
+  font-size: inherit;
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem 2.4rem;
+  margin-bottom: 2.4rem;
+}
+.admin-main .page-heading h1 {
+  font-size: max(12px, 1.75em);
+  font-weight: 700;
+}
+.admin-main .page-heading time {
+  font-size: inherit;
+  color: #22272e;
+  white-space: nowrap;
+}
+
+/* =================================
+ * KPI
+ * ------------------------------ */
+.admin-main .kpi-list {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+.admin-main .kpi-list li {
+  font-size: inherit;
+  min-width: 0;
+}
+.admin-main .kpi-list button {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  width: 100%;
+  min-height: 7.2rem;
+  padding: 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  color: #22272e;
+  background: #fff;
+  text-align: left;
+}
+.admin-main .kpi-list button .label {
+  font-size: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.admin-main .kpi-list button .count {
+  font-size: inherit;
+  white-space: nowrap;
+}
+.admin-main .kpi-list button .count strong {
+  font-size: max(12px, 1.875em);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.admin-main .kpi-list button .count .unit {
+  font-size: inherit;
+  margin-left: 0.4rem;
+}
+.admin-main .kpi-list button:not([aria-pressed=true]):hover {
+  border-color: #aeb5be;
+}
+.admin-main .kpi-list button[aria-pressed=true] {
+  padding: calc(1.6rem - 1px);
+  border-width: 2px;
+  border-color: var(--color-brand-accent);
+  color: var(--color-brand-accent);
+}
+
+/* =================================
+ * 検索
+ * ------------------------------ */
+.admin-main .search-box {
+  font-size: inherit;
+  margin-top: 2.4rem;
+}
+.admin-main .search-box .filter-bar {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+.admin-main .search-box .filter-bar label {
+  font-size: inherit;
+}
+.admin-main .search-box .filter-bar input,
+.admin-main .search-box .filter-bar button {
+  font-size: inherit;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  color: #22272e;
+  background: #fff;
+}
+.admin-main .search-box .filter-bar input {
+  flex: 1;
+  min-width: 0;
+  appearance: none;
+}
+.admin-main .search-box .filter-bar input::placeholder {
+  color: #4f5863;
+  opacity: 1;
+}
+.admin-main .search-box .filter-bar button {
+  flex-shrink: 0;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.admin-main .search-box .filter-bar button:hover {
+  background: #f6f7f8;
+}
+.admin-main .search-box .filter-bar .detail-toggle {
+  gap: 1.2rem;
+}
+.admin-main .search-box .filter-bar .detail-toggle::after {
+  content: "";
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-0.2rem) rotate(45deg);
+}
+.admin-main .search-box .filter-bar .detail-toggle[aria-expanded=true]::after {
+  transform: translateY(0.2rem) rotate(225deg);
+}
+.admin-main .search-box .search-panel {
+  font-size: inherit;
+}
+
+/* =================================
+ * 一覧見出し
+ * ------------------------------ */
+.admin-main .list-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.2rem;
+  margin-top: 2.4rem;
+}
+.admin-main .list-heading h2 {
+  font-size: max(12px, 1.375em);
+  font-weight: 700;
+}
+.admin-main .list-heading .count {
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.admin-main .list-heading .filter-note {
+  font-size: inherit;
+  color: #4f5863;
+}
 
 /*# sourceMappingURL=order.css.map */

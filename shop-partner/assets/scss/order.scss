@@ -4,7 +4,180 @@
 /* =======================================
  * 熊日モール Client 受注一覧 スタイル
  * URL: /shop-partner/assets/scss/order.scss
- * Referenced in: /shop-partner/orders.html
+ * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
  * Last updated: 2026-10-17
  * ======================================= */
+
+/* =================================
+ * ページ見出し
+ * ------------------------------ */
+.admin-main {
+    min-width: 0;
+    .page-heading {
+        font-size: inherit;
+        display: flex;
+        align-items: baseline;
+        gap: 1.6rem 2.4rem;
+        margin-bottom: 2.4rem;
+        h1 {
+            font-size: fz(28);
+            font-weight: 700;
+        }
+        time {
+            font-size: inherit;
+            color: $color-text-primary;
+            white-space: nowrap;
+        }
+    }
+}
+
+/* =================================
+ * KPI
+ * ------------------------------ */
+.admin-main {
+    .kpi-list {
+        font-size: inherit;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.6rem;
+        li {
+            font-size: inherit;
+            min-width: 0;
+        }
+        button {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.2rem;
+            width: 100%;
+            min-height: 7.2rem;
+            padding: 1.6rem;
+            border: 1px solid $color-border-default;
+            border-radius: $radius-sm;
+            color: $color-text-primary;
+            background: $pure-white;
+            text-align: left;
+            .label {
+                font-size: inherit;
+                font-weight: 500;
+                white-space: nowrap;
+            }
+            .count {
+                font-size: inherit;
+                white-space: nowrap;
+                strong {
+                    font-size: fz(30);
+                    font-weight: 700;
+                    font-variant-numeric: tabular-nums;
+                }
+                .unit {
+                    font-size: inherit;
+                    margin-left: 0.4rem;
+                }
+            }
+            // 強さの順：通常 → ホバー（濃いグレーの枠）→ 選択中（ブランド色の2px枠・文字）。面は塗らない
+            &:not([aria-pressed="true"]):hover {
+                border-color: $color-border-strong;
+            }
+            &[aria-pressed="true"] {
+                // 枠を1px太くした分だけ内側の余白を減らし、レイアウトをずらさない
+                padding: calc(1.6rem - 1px);
+                border-width: 2px;
+                border-color: var(--color-brand-accent);
+                color: var(--color-brand-accent);
+            }
+        }
+    }
+}
+
+/* =================================
+ * 検索
+ * ------------------------------ */
+.admin-main {
+    .search-box {
+        font-size: inherit;
+        margin-top: 2.4rem;
+        .filter-bar {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            gap: 1.6rem;
+            label {
+                font-size: inherit;
+            }
+            input,
+            button {
+                font-size: inherit;
+                min-height: 4.4rem;
+                padding: 1rem 1.6rem;
+                border: 1px solid $color-border-default;
+                border-radius: $radius-sm;
+                color: $color-text-primary;
+                background: $pure-white;
+            }
+            input {
+                flex: 1;
+                min-width: 0;
+                // Safariの検索欄の角丸・独自余白を外す
+                appearance: none;
+                &::placeholder {
+                    color: $color-text-secondary;
+                    opacity: 1;
+                }
+            }
+            button {
+                flex-shrink: 0;
+                font-weight: 500;
+                white-space: nowrap;
+                &:hover {
+                    background: $color-bg-subtle;
+                }
+            }
+            .detail-toggle {
+                gap: 1.2rem;
+                &::after {
+                    content: "";
+                    width: 0.6rem;
+                    height: 0.6rem;
+                    border-right: 2px solid currentColor;
+                    border-bottom: 2px solid currentColor;
+                    transform: translateY(-0.2rem) rotate(45deg);
+                }
+                &[aria-expanded="true"]::after {
+                    transform: translateY(0.2rem) rotate(225deg);
+                }
+            }
+        }
+        .search-panel {
+            font-size: inherit;
+        }
+    }
+}
+
+/* =================================
+ * 一覧見出し
+ * ------------------------------ */
+.admin-main {
+    .list-heading {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.8rem 1.2rem;
+        margin-top: 2.4rem;
+        h2 {
+            font-size: fz(22);
+            font-weight: 700;
+        }
+        .count {
+            font-size: inherit;
+            font-variant-numeric: tabular-nums;
+        }
+        .filter-note {
+            font-size: inherit;
+            color: $color-text-secondary;
+        }
+    }
+}
