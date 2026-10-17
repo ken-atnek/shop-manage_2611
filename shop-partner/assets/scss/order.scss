@@ -54,7 +54,7 @@
             width: 100%;
             min-height: 7.2rem;
             padding: 1.6rem;
-            border: 1px solid $color-border-default;
+            border: 1px solid $color-border-card;
             border-radius: $radius-sm;
             color: $color-text-primary;
             background: $pure-white;
@@ -79,7 +79,7 @@
             }
             // 強さの順：通常 → ホバー（濃いグレーの枠）→ 選択中（ブランド色の2px枠・文字）。面は塗らない
             &:not([aria-pressed="true"]):hover {
-                border-color: $color-border-strong;
+                border-color: $color-border-hover;
             }
             &[aria-pressed="true"] {
                 // 枠を1px太くした分だけ内側の余白を減らし、レイアウトをずらさない
@@ -118,6 +118,8 @@
                 background: $pure-white;
             }
             input {
+                // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
+                font-size: 1.6rem;
                 flex: 1;
                 min-width: 0;
                 // Safariの検索欄の角丸・独自余白を外す
@@ -133,6 +135,16 @@
                 white-space: nowrap;
                 &:hover {
                     background: $color-bg-subtle;
+                }
+            }
+            // 主ボタン（検索）
+            button[type="submit"] {
+                font-weight: 700;
+                border-color: $color-button-primary-border;
+                color: $color-button-primary-text;
+                background: $color-button-primary-bg;
+                &:hover {
+                    background: $color-button-primary-bg-hover;
                 }
             }
             .detail-toggle {
@@ -152,6 +164,103 @@
         }
         .search-panel {
             font-size: inherit;
+            display: grid;
+            grid-template-rows: 0fr;
+            @media (prefers-reduced-motion: no-preference) {
+                transition: grid-template-rows 0.25s ease-out;
+            }
+            &:not([inert]) {
+                grid-template-rows: 1fr;
+            }
+            .search-panel-inner {
+                font-size: inherit;
+                min-height: 0;
+                overflow: hidden;
+            }
+            .search-fields {
+                font-size: inherit;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 1.6rem 2.4rem;
+                // 装飾はクリップする内側へ置き、閉じたときの枠・余白残りを防ぐ。
+                margin-top: 1.6rem;
+                padding: 1.6rem;
+                border: 1px solid $color-border-card;
+                border-radius: $radius-sm;
+                background: $pure-white;
+                @include tb {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    .product-field {
+                        grid-column: 1 / -1;
+                    }
+                }
+            }
+            .date-field,
+            .status-field {
+                grid-column: 1 / -1;
+            }
+            .date-range {
+                font-size: inherit;
+                display: flex;
+                align-items: center;
+                gap: 1.2rem;
+                max-width: 56rem;
+                label,
+                span {
+                    font-size: inherit;
+                }
+                input {
+                    flex: 1;
+                }
+            }
+            .status-checks {
+                font-size: inherit;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem 2.4rem;
+            }
+            .search-actions {
+                font-size: inherit;
+                grid-column: 1 / -1;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 1.2rem;
+                button {
+                    font-size: inherit;
+                    min-height: 4.4rem;
+                    padding: 1rem 1.6rem;
+                    border: 1px solid $color-border-default;
+                    border-radius: $radius-sm;
+                    color: $color-text-primary;
+                    background: $pure-white;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    &:hover {
+                        background: $color-bg-subtle;
+                    }
+                }
+                // 主ボタン（この条件で検索）
+                button[type="submit"] {
+                    font-weight: 700;
+                    border-color: $color-button-primary-border;
+                    color: $color-button-primary-text;
+                    background: $color-button-primary-bg;
+                    &:hover {
+                        background: $color-button-primary-bg-hover;
+                    }
+                }
+                // 副ボタン（条件をクリア）
+                .clear-conditions {
+                    border-color: $color-button-secondary-bg;
+                    color: $color-text-primary;
+                    background: $color-button-secondary-bg;
+                    &:hover {
+                        border-color: $color-button-secondary-bg-hover;
+                        background: $color-button-secondary-bg-hover;
+                    }
+                }
+            }
         }
     }
 }
@@ -208,17 +317,19 @@
         }
         .column-head {
             font-size: inherit;
-            border: 1px solid $color-border-default;
-            background: $color-bg-subtle;
+            border: 1px solid $color-border-card;
+            background: $color-bg-head;
             text-align: center;
             > * {
                 min-width: 0;
             }
             > :not(:first-child) {
-                border-left: 1px solid $color-border-default;
+                border-left: 1px solid $color-border-card;
             }
             .column-label {
                 font-size: fz(14);
+                font-weight: 700;
+                color: $color-text-secondary;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -231,7 +342,7 @@
                 display: flex;
                 flex-direction: column;
                 > .column-label:first-child {
-                    border-bottom: 1px solid $color-border-default;
+                    border-bottom: 1px solid $color-border-card;
                 }
                 > :last-child {
                     flex: 1;
@@ -245,12 +356,14 @@
                     var(--item-subtotal-width);
                 span {
                     font-size: fz(14);
+                    font-weight: 700;
+                    color: $color-text-secondary;
                     min-width: 0;
                     padding: 0.8rem 1.2rem;
                     @include flex-center;
                 }
                 span + span {
-                    border-left: 1px solid $color-border-default;
+                    border-left: 1px solid $color-border-card;
                 }
                 span:nth-child(2) {
                     // 個数列の幅は変えず、2文字を横並びで収める。
@@ -279,18 +392,19 @@
     }
     .order-card {
         font-size: inherit;
-        border: 1px solid $color-border-default;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
         transition: border-color $transition-base;
         // 縞模様は使わず、見ている注文だけ枠を濃くする（展開行の淡いグレーと区別するため）
         &:hover {
-            border-color: $color-border-strong;
+            border-color: $color-border-hover;
         }
         > * {
             font-size: inherit;
             min-width: 0;
         }
         > :not(:first-child) {
-            border-left: 1px solid $color-border-default;
+            border-left: 1px solid $color-border-inner;
         }
         .destination {
             padding: 1.6rem;
@@ -305,7 +419,7 @@
             align-items: baseline;
             gap: 0.8rem 1.2rem;
             h3 {
-                font-size: fz(16);
+                font-size: fz(18);
                 font-weight: 700;
                 font-variant-numeric: tabular-nums;
                 white-space: nowrap;
@@ -380,10 +494,10 @@
                 overflow-wrap: anywhere;
             }
             td + td {
-                border-left: 1px solid $color-border-default;
+                border-left: 1px solid $color-border-inner;
             }
             tr + tr td {
-                border-top: 1px solid $color-border-default;
+                border-top: 1px solid $color-border-inner;
             }
             .item-name {
                 font-size: fz(14);
@@ -410,7 +524,7 @@
             }
             th,
             td {
-                border-top: 1px solid $color-border-default;
+                border-top: 1px solid $color-border-inner;
                 text-align: right;
             }
             th {
@@ -418,7 +532,7 @@
                 color: $color-text-secondary;
             }
             td {
-                border-left: 1px solid $color-border-default;
+                border-left: 1px solid $color-border-inner;
                 font-variant-numeric: tabular-nums;
                 white-space: nowrap;
             }
@@ -549,8 +663,8 @@
             min-height: 0;
             overflow: hidden;
             display: flex;
-            border-top: 1px solid $color-border-default;
-            background: $color-bg-subtle;
+            border-top: 1px solid $color-border-inner;
+            background: $color-bg-detail;
         }
         &[inert] .order-detail-inner {
             // 0frでもborder分だけ1px残るのを防ぎ、閉じた行の高さを0にする。
@@ -563,7 +677,7 @@
             min-width: 0;
             max-width: 40%;
             padding: 1.6rem;
-            border-right: 1px solid $color-border-default;
+            border-right: 1px solid $color-border-inner;
             h4 {
                 font-size: inherit;
                 font-weight: 500;
@@ -636,7 +750,8 @@
                 font-weight: 500;
             }
             textarea {
-                font-size: inherit;
+                // 入力欄は16px固定（iOSのSafariの拡大を防ぐ）
+                font-size: 1.6rem;
                 width: 100%;
                 min-height: 10.4rem;
                 padding: 1.2rem;
@@ -645,18 +760,19 @@
                 background: $pure-white;
                 resize: vertical;
             }
+            // 主ボタン（保存）
             .memo-save {
                 font-size: inherit;
-                font-weight: 500;
+                font-weight: 700;
                 align-self: flex-end;
                 min-height: 4.4rem;
                 padding: 1rem 1.6rem;
-                border: 1px solid $color-border-default;
+                border: 1px solid $color-button-primary-border;
                 border-radius: $radius-sm;
-                color: $color-text-primary;
-                background: $pure-white;
+                color: $color-button-primary-text;
+                background: $color-button-primary-bg;
                 &:hover {
-                    background: $color-bg-subtle;
+                    background: $color-button-primary-bg-hover;
                 }
             }
         }

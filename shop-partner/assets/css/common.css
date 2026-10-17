@@ -252,8 +252,13 @@ body {
   background-color: #fff;
   --color-brand-subtle: #eef9f4;
   --color-brand-accent: #097141;
-  --color-nav-bg: #eef9f4;
-  --color-nav-active: #097141;
+  --color-nav-bg: #123c2c;
+  --color-nav-bg-start: #174a37;
+  --color-nav-bg-end: #0f3326;
+  --color-nav-text: #cfe3d9;
+  --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
+  --color-nav-active-bg: #1e5a43;
+  --color-nav-active: #7be0ae;
 }
 @media (max-width: 1194px) and (orientation: landscape) {
   body {
@@ -281,6 +286,7 @@ body {
 
 main {
   font-size: inherit;
+  background: #f3f5f7;
   flex: 1;
   width: 100%;
   display: flex;
@@ -365,8 +371,9 @@ footer {
  * サイドメニュー
  * ------------------------------ */
 .admin-sidebar {
-  border-right: 1px solid #d9dde2;
-  background: var(--color-nav-bg);
+  border-right: 1px solid var(--color-nav-bg-end);
+  background-color: var(--color-nav-bg);
+  background-image: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
   font-size: inherit;
   width: 100%;
   max-width: 18rem;
@@ -383,22 +390,70 @@ footer {
   align-items: center;
   padding: 0.8rem 2.4rem;
   border-left: 3px solid transparent;
-  color: #22272e;
+  color: var(--color-nav-text);
   font-size: max(12px, 1.125em);
   transition: background-color 0.15s ease-out, color 0.15s ease-out;
 }
 .admin-sidebar nav a:focus-visible {
-  outline: 3px solid var(--color-brand-accent);
+  outline: 3px solid #fff;
   outline-offset: -3px;
 }
 .admin-sidebar nav a:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-nav-hover-bg);
+  color: #fff;
 }
 .admin-sidebar nav a[aria-current=page] {
-  background: #fff;
+  background: var(--color-nav-active-bg);
   border-left-color: var(--color-nav-active);
-  color: var(--color-nav-active);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* =================================
+ * フォーム部品（共通候補）
+ * ------------------------------ */
+.form-field {
+  font-size: inherit;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.form-field input {
+  font-size: 1.6rem;
+  width: 100%;
+  min-width: 0;
+  height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+}
+.form-field .form-label {
+  font-size: max(12px, 0.875em);
+  display: block;
+  margin-bottom: 0.8rem;
+  padding: 0;
   font-weight: 500;
+}
+
+.form-check {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 4rem;
+  cursor: pointer;
+}
+.form-check input {
+  font-size: inherit;
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  accent-color: var(--color-brand-accent);
+}
+.form-check span {
+  font-size: inherit;
 }
 
 /*# sourceMappingURL=common.css.map */

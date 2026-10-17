@@ -56,6 +56,8 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - 文字サイズは画面幅に応じて流動的に変わる仕様（本文は概ね12〜16px）。読ませたい箇所は`fz()`で個別に大きくし、PC・タブレット横・タブレット縦の幅で確認する
 - `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
+- 例外として、入力欄（`input`・`textarea`）の文字は`1.6rem`（16px）固定とする。16px未満だとiOSのSafariがフォーカス時に画面を拡大するため
+- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
 - アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
   - 線のアイコン：`fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`の属性を書かない（リセットの「fill属性のないsvg＝文字色の線・丸い角」が効く）。`stroke-width`と`width`・`height`・`viewBox`は書く

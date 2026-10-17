@@ -76,8 +76,63 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
               詳細検索
             </button>
           </div>
-          <div class="search-panel" id="order-search-panel" hidden>
-            <!-- 詳細検索の条件と開閉処理は次の段階で作る。 -->
+          <div class="search-panel" id="order-search-panel" inert>
+            <div class="search-panel-inner">
+              <div class="search-fields">
+                <!-- nameは表示例。バックエンドの正式な項目名を決めるものではない。 -->
+                <fieldset class="form-field date-field">
+                  <legend class="form-label">注文日</legend>
+                  <div class="date-range">
+                    <label class="sr-only" for="order-date-from">開始日</label>
+                    <input class="form-input" type="date" id="order-date-from" name="date_from" />
+                    <span aria-hidden="true">〜</span>
+                    <label class="sr-only" for="order-date-to">終了日</label>
+                    <input class="form-input" type="date" id="order-date-to" name="date_to" />
+                  </div>
+                </fieldset>
+                <fieldset class="form-field status-field">
+                  <legend class="form-label">ステータス</legend>
+                  <div class="status-checks">
+                    <label class="form-check" for="search-status-new">
+                      <input type="checkbox" id="search-status-new" name="status[]" value="new" />
+                      <span>新規受付</span>
+                    </label>
+                    <label class="form-check" for="search-status-processing">
+                      <input type="checkbox" id="search-status-processing" name="status[]" value="processing" />
+                      <span>対応中</span>
+                    </label>
+                    <label class="form-check" for="search-status-shipped">
+                      <input type="checkbox" id="search-status-shipped" name="status[]" value="shipped" />
+                      <span>発送済</span>
+                    </label>
+                    <label class="form-check" for="search-status-return">
+                      <input type="checkbox" id="search-status-return" name="status[]" value="return" />
+                      <span>返品対応</span>
+                    </label>
+                    <label class="form-check" for="search-status-cancelled">
+                      <input type="checkbox" id="search-status-cancelled" name="status[]" value="cancelled" />
+                      <span>キャンセル</span>
+                    </label>
+                  </div>
+                </fieldset>
+                <div class="form-field">
+                  <label class="form-label" for="order-phone">電話番号</label>
+                  <input class="form-input" type="tel" id="order-phone" name="phone" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="order-email">メールアドレス</label>
+                  <input class="form-input" type="email" id="order-email" name="email" />
+                </div>
+                <div class="form-field product-field">
+                  <label class="form-label" for="order-product">商品名</label>
+                  <input class="form-input" type="text" id="order-product" name="product" />
+                </div>
+                <div class="search-actions">
+                  <button class="clear-conditions" type="button">条件をクリア</button>
+                  <button type="submit">この条件で検索</button>
+                </div>
+              </div>
+            </div>
           </div>
         </form>
         <div class="list-heading" aria-live="polite" aria-atomic="true">

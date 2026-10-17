@@ -165,3 +165,25 @@ imageDialog.addEventListener("close", () => {
   imagePreviewOpener?.focus();
   imagePreviewOpener = null;
 });
+
+// ===== 詳細検索（パネル内だけをクリアし、キーワード・KPIは維持） =====
+const detailSearchButton = document.querySelector(".detail-toggle");
+const detailSearchPanel = document.getElementById("order-search-panel");
+
+detailSearchButton.addEventListener("click", () => {
+  const expanded = detailSearchButton.getAttribute("aria-expanded") === "true";
+  detailSearchButton.setAttribute("aria-expanded", String(!expanded));
+  detailSearchPanel.inert = expanded;
+  // 開閉時にフォーカスは動かさず、詳細検索ボタンに残す。
+});
+
+detailSearchPanel.querySelector(".clear-conditions").addEventListener("click", () => {
+  detailSearchPanel.querySelectorAll("input").forEach((input) => {
+    if (input.type === "checkbox") {
+      input.checked = false;
+    } else {
+      input.value = "";
+    }
+  });
+  detailSearchPanel.querySelector('input[type="date"]').focus();
+});

@@ -388,6 +388,34 @@
 - Kenの決定により、class名を色の変数名（`$color-status-*`）とKenの最初の命名（`new`・`processing`）に合わせて統一：`status-registered`→`status-new`、`status-preparing`→`status-processing`。`orders.php`のlabelのclass・radioのid末尾・labelの`for`、`scss/_ui.scss`の`apply-status-box`を置き換えた。valueと`order.js`は変更なし
 - 矢印の色はKenが対応済み
 
+## 2026-10-17 入力欄16px固定・角丸4px・ボタンの色の整理（Claude）
+
+- Kenの決定：入力欄の文字は16px固定で統一（iOSのSafariの拡大を防ぐ）。詳細検索の入力欄（Kenが`common.scss`のフォーム部品で指定済み）に合わせ、検索欄と、メモのtextareaも16pxにした
+- Kenが`$radius-sm`を2pxから4pxに変更（2pxは角張って見えたため様子見）。資料を4pxに同期
+- ボタンの色を整理（Kenの決定）：主ボタン＝淡い青の面`#E6EDF7`＋濃い青の文字`#1F4E8C`＋枠`#9DB5D6`（検索・この条件で検索・メモの保存）、副ボタン＝グレーの面`#ECEEF1`（条件をクリア）。Master・Client共通でブランド色とは切り離す。ログアウトは管理画面の色分けのため緑の塗りのまま
+- `scss/_colors.scss`に`$color-button-primary-*`・`$color-button-secondary-*`を追加し、`order.scss`に反映。`npm run sass`は警告なし。834幅で入力欄3種が16px、各ボタンの色を確認
+- `_colors.scss`の`$hover-blue`・`$hover-bg-blue`・`$border-gray`は未使用のまま残っている
+
+## 2026-10-17 地と面・線の強弱の整理（Claude）
+
+- Kenの「全体がのぺっと見える」という指摘を受け、原因を「白の上に白で地と面の区別がない」「線がすべて同じ強さ」「グレーが1種類」「注文番号が弱い」と整理。調整案を一時適用で比較し、Kenの確認後に実装した
+- `scss/_colors.scss`：`$color-bg-page`（#F3F5F7）、`$color-bg-head`（#E9EDF1）、`$color-bg-detail`（#F8F9FB）、`$color-border-card`（#C4CAD2）、`$color-border-inner`（#E3E6EA）、`$color-border-hover`（#8A929C）を追加
+- `common.scss`：mainの地を`$color-bg-page`に。`order.scss`：KPI・詳細検索・列見出し・注文の箱の外枠を`$color-border-card`、箱の中の区切りを`$color-border-inner`、列見出しの面と文字（太字・補助色）、展開行の面、注文番号`fz(18)`、注文と未選択KPIのホバー枠を`$color-border-hover`に変更
+- `npm run sass`は警告なし。1440幅で表示し、列見出しと注文の縦線の位置がそろったまま（差0px）であること、ホバー枠が外枠と見分けられることを確認
+
+## 2026-10-17 サイドバーの濃色化（Claude）
+
+- Kenの提案で、サイドバーを濃い色＋白系の文字に変更。地を淡いグレーにしたことで淡い緑のサイドバーと明るさが近くなり、枠がぼやけていた。濃いチャコールと深い緑を比較し、MasterとClientで色を変えたいというKenの意向から、管理画面ごとの色（Client＝深い緑`#123C2C`、Master＝深い紺`#13294B`の予定）とした
+- `common.scss`：`--color-nav-bg`を濃色に、`--color-nav-text`・`--color-nav-hover-bg`・`--color-nav-active-bg`を追加し、`--color-nav-active`は明るい左バーの色`#7BE0AE`に。選択中は白の太字、ホバーは白8%の面、サイドバー内のフォーカス枠は白。`--color-brand-accent`（KPI選択・フォーカス）は緑のまま
+- 方針の変更：「ブランド色の濃い塗り面は作らない」の例外に、ログアウトに加えてサイドバーの面を追加。`$color-nav-hover`は未使用になった
+- `npm run sass`は警告なし。選択中・ホバー・フォーカスの見え方を確認。Masterの値は資料上の仮値で、Master画面の制作時に確認する
+
+## 2026-10-17 サイドバーのグラデーション（Claude）
+
+- Kenの提案で、ベタ塗りのサイドバーに横方向のグラデーションを追加。左が明るく右へ暗く（C案）、左右逆・縦方向・斜めと比較したうえでKenが決定。本文との境目が締まる
+- `common.scss`：`--color-nav-bg-start`（#174A37）・`--color-nav-bg-end`（#0F3326）を追加し、`linear-gradient(90deg, …)`で描画。`--color-nav-bg`は単色の予備として`background-color`に残す。Masterの仮値は#1B3763→#0F2240
+- 通常の項目の文字`#CFE3D9`は、グラデーションの明るい側でも十分なコントラストを保つ
+
 ## 次に確認すること
 
 - 熊日の正式なコーポレートカラーの指定値（提供SVGの色値は確認済みだが、公式の指定値・運用ルールの確認とは分ける）
@@ -563,4 +591,12 @@
 - 展開行セクションだけを変更し、外側は0fr→1frのGrid、内側はmin-height: 0・overflow: hidden・従来のFlex・上罫線・背景。閉じたときだけ内側の上罫線を0にして1px残りを防ぐ。no-preferenceのときだけ0.25秒ease-out、reduceではトランジションなし。JSは展開部のpanel.hiddenをpanel.inertへ置換する1行だけ
 - npm run sassは警告・エラーなし、node --check・DDEV php -l成功。Chromeは古いCSSキャッシュが残ったため内蔵ブラウザで最新CSSの適用を確認し、1280×800・1024×768・834×1194で検証。開閉途中の高さ変化と、閉じ切った全3件の高さ0px・罫線と余白なしを確認した
 - 閉じた中身へのTab除外、開いた拡大・メモ・保存のフォーカス枠が内側へ収まること、文字サイズの継承、834幅の横スクロール連動、ステータス選択と拡大モーダルを確認。reduce設定の実切り替えとダウンロード実保存、Safari・Firefoxは未確認。画像・メモ・モーダルの中身とdownloadリンクは変更せず、保存送信とGitコミットなし
+
+## 2026-10-17 Client受注一覧 詳細検索の入力・開閉・クリア
+
+- 検索フォーム内の空パネルへ注文日期間・ステータス5項目の複数チェック・電話・メール・商品名を追加。注文番号／注文者名はキーワードと重複するため入れない。fieldset／legend・label／idを関連付け、nameはバックエンドの正式項目名を決めない表示例とコメントした
+- 初期はinert、外側Gridの0fr→1frで開閉し、no-preferenceだけ0.25秒ease-out。内側のクリップ領域に枠・余白を持つGridを入れ、閉じ切ったときの線・余白残りを防ぐ。開閉時はボタンにフォーカスを残す。「条件をクリア」は詳細検索の入力だけを空にし、キーワードとKPIを維持して開始日へ戻す。JSは末尾への追加だけで既存処理を保持
+- 入力欄は検索欄と同じ高さ4.4rem、余白1rem×1.6rem・標準1px枠・角丸2px・白背景。ラベルはfz(14)／500、チェックはネイティブ・accent-color・高さ4remのlabel。共通候補の見た目を独立した節へ分け、配置は検索節に記述。PC3列、834幅縦は2列、日付・ステータス・タブレットの商品名は全幅。保存や検索実行・KPI切り替えは作らない
+- npm run sassは警告・エラーなし、node --check・DDEV php -l成功。内蔵ブラウザで1280×800・1024×768・834×1194を確認。古いCSS・JSキャッシュの影響を避けるため同じDDEV配信先の別パスで最新適用を照合した。入力44px・文字継承・横はみ出しなし、アコーディオン途中の高さ変化と閉じ切った0px、矢印・inert、Tab除外・指定順・枠のクリップなし、クリア範囲と開始日への復帰を確認。日付欄はネイティブの年月日・カレンダー内にもTab停止する
+- 既存のステータスの矢印キー／Enter、展開行、画像モーダル・Esc・フォーカス復帰を回帰確認。Safari・Firefox・読み上げ実機、reduce設定の実切り替えは未確認。ステータスとKPIの組み合わせ、検索条件の照合・集計は未確定のまま。ルートscss・common.scss・共通CSSは変更せず、生成order.cssと画面資料を更新。検索送信・保存送信・Gitコミットなし
 

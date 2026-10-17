@@ -3,11 +3,15 @@
 // ブランド色は各管理画面の CSS カスタムプロパティで設定し、
 // ステータス色は下の $color-status-* で定義する（白文字を乗せる塗り。比は白文字とのコントラスト）。
 
-// $color-bg-page: #ffffff; // 仮：ページ背景
-// $color-bg-surface: #ffffff; // 仮：ヘッダー・コンテンツ背景
+$color-bg-page: #f3f5f7; // 仮：メイン領域の地。白い箱（KPI・検索・注文）を浮かせる
+$color-bg-head: #e9edf1; // 仮：一覧の列見出しの面
+$color-bg-detail: #f8f9fb; // 仮：注文の展開行の面（列見出しと役割を分ける）
 $color-bg-subtle: #f6f7f8; // 仮：補助背景
 $color-border-default: #d9dde2; // 仮：標準の罫線
 $color-border-strong: #aeb5be; // 仮：強調する罫線
+$color-border-card: #c4cad2; // 仮：箱の外枠（KPI・注文の箱・列見出し・詳細検索）
+$color-border-inner: #e3e6ea; // 仮：箱の中の区切り線（セル・展開行）
+$color-border-hover: #8a929c; // 仮：箱（注文・KPI）にマウスを乗せたときの外枠。外枠より一段濃く
 $color-text-primary: #22272e; // 仮：白上 15.02:1、bg-subtle 上 14.01:1
 $color-text-secondary: #4f5863; // 仮：白上 7.22:1、bg-subtle 上 6.73:1
 $color-nav-hover: rgba(255, 255, 255, 0.5); // 仮：ナビのホバー背景
@@ -16,6 +20,16 @@ $color-nav-hover: rgba(255, 255, 255, 0.5); // 仮：ナビのホバー背景
 // 白上 4.28:1、bg-subtle 上 3.99:1。
 $color-text-muted: #737b86;
 $pure-white: #fff;
+
+// ボタン（Master・Client共通。ブランド色とは切り離す）
+// 主ボタン：実行・確定（検索、この条件で検索、保存）。淡い青の面＋濃い青の文字・枠。文字と面は7.05:1
+$color-button-primary-bg: #e6edf7;
+$color-button-primary-bg-hover: #d6e2f2;
+$color-button-primary-border: #9db5d6;
+$color-button-primary-text: #1f4e8c;
+// 副ボタン：補助の操作（条件をクリアなど）。グレーの面＋本文色の文字、枠なし。12.93:1
+$color-button-secondary-bg: #eceef1;
+$color-button-secondary-bg-hover: #e2e5e9;
 
 // 受注ステータス（2026-10-17 Ken決定。白文字との比はすべて4.5:1以上）
 $color-status-new: #c2410c; // 新規受付：オレンジ 5.18:1
