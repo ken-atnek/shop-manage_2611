@@ -63,10 +63,19 @@ Figmaは必須工程とせず、必要な場合のみ使用する。
 
 ## Sassと引き渡し
 
-- 共通Sassはルートの`scss/`へ置き、各管理画面のSassから`@use`で読み込む
+- ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、各管理画面のSassから相対パスの`@use`で読み込む
 - `shop-master/assets/scss/`から`shop-master/assets/css/`へ、`shop-partner/assets/scss/`から`shop-partner/assets/css/`へコンパイルする
-- 最初は各管理画面の`admin.css`を1ファイルとし、必要になってからページ別CSSへ分割する
+- Clientは現在の`common.scss`（共通部分）＋`order.scss`（受注一覧固有）の構成を継続し、`common.css`→`order.css`の順に読み込む。resetは`common.scss`だけで読み込む。`admin.scss`への再編は前提にしない
+- クラス名・ネスト・セクションコメントは既存コードを優先する。`.admin-*`／`.order-*`の接頭辞やBEMを強制せず、依頼なく一括改名しない
+- サイズは既存の`fz()`・流動フォント設定を使い、余白・幅・罫線などは`px`・`rem`・`em`の直接指定も認める。すべての数値を変数化せず、削除済みのサイズ変数を資料の旧仮案に合わせて復活させない
 - Node.js環境でnpmパッケージの`sass`を使用し、`node-sass`は使用しない
 - Vite・Astroは現時点では使用しない
 - Laravel・Bladeへの組み込みはバックエンド担当者が行い、このプロジェクトではLaravelを構築しない
+
+## HTML・Sassのコメントヘッダー
+
+- 手動作成するHTML・Sassには、用途のタイトル・`URL`・`Referenced in`・`Created`・`Last updated`を記載したファイル冒頭のコメントヘッダーを付ける
+- 新規作成時に記載し、既存ファイルにない場合は、そのファイルを次に修正するときに追加する。`Created`は保持し、修正時は`Last updated`を更新する。日付は`YYYY-MM-DD`とし、不明な作成日を推測しない
+- HTMLは`<!doctype html>`の直後に`<!-- ... -->`で、Sassは先頭の`@use`群の直後（なければ先頭。`@charset`があればその後）に`/* ... */`で記載する
+- 詳細・テンプレートは[実装連携ガイドのコメント記述ルール](docs/coding/IMPLEMENTATION_REFERENCE.md#コメント記述ルール)を参照する。既存のセクション区切りは維持し、ヘッダー追加だけを理由に依頼範囲外のHTML・Sassを一括変更しない
 

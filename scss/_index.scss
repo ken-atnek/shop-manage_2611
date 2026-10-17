@@ -1,4 +1,5 @@
-// ページ別Sassから `@use "./foundation/" as *;` で参照する共通入口
+// 画面別Sassから `@use "index" as *;` でトークンを参照する共通入口。
+// コンパイル時にルートの scss/ を --load-path で指定する。
 
 @forward "./settings";
 @forward "./colors";
@@ -6,4 +7,4 @@
 @forward "./typography";
 @forward "./interaction";
 @forward "./ui";
-
+@forward "./svg";

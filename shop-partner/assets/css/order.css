@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+/* =======================================
+ * ふもと旅館採用 SVG背景・アイコンmixin
+ * URL: /src/styles/foundation/_svg.scss
+ * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * Created: 2026-07-07
+ * Last updated: 2026-09-21
+ * Created source: ファイル作成日時（移植元由来）
+ * ======================================= */
+/* =======================================
+ * 熊日モール Client 受注一覧 スタイル
+ * URL: /shop-partner/assets/scss/order.scss
+ * Referenced in: /shop-partner/orders.html
+ * Created: 2026-10-17
+ * Last updated: 2026-10-17
+ * ======================================= */
+
+/*# sourceMappingURL=order.css.map */

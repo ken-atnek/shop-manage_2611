@@ -1,11 +1,18 @@
-// カラー変数
-// docs/DESIGN_TOKENS.md のカラー定義に対応
+// 共通ニュートラルカラー（すべて仮）
+// ルートの DESIGN_TOKENS.md のカラー定義に対応する。
+// ブランド色は各管理画面の CSS カスタムプロパティで設定し、
+// ステータス色は受注一覧のステップ4で定義する。
 
-$color-primary: #1c2b45;
-$color-secondary: #b08d57; // ゴールド。強調箇所のみに使用
-$color-background: #faf9f6;
-$color-surface: #ffffff;
-$color-text-primary: #1f2328;
-$color-text-secondary: #5c6470;
-$color-border: #e4e1da;
+// $color-bg-page: #ffffff; // 仮：ページ背景
+// $color-bg-surface: #ffffff; // 仮：ヘッダー・コンテンツ背景
+$color-bg-subtle: #f6f7f8; // 仮：補助背景
+$color-border-default: #d9dde2; // 仮：標準の罫線
+$color-border-strong: #aeb5be; // 仮：強調する罫線
+$color-text-primary: #22272e; // 仮：白上 15.02:1、bg-subtle 上 14.01:1
+$color-text-secondary: #4f5863; // 仮：白上 7.22:1、bg-subtle 上 6.73:1
+$color-nav-hover: rgba(255, 255, 255, 0.5); // 仮：ナビのホバー背景
 
+// 仮：無効表示専用。通常の本文・補助文には使用しない。
+// 白上 4.28:1、bg-subtle 上 3.99:1。
+$color-text-muted: #737b86;
+$pure-white: #fff;

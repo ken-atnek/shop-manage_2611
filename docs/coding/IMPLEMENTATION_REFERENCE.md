@@ -25,6 +25,34 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 - バックエンド処理は実装しないが、送信単位と繰り返し単位は明記する
 - 実装難易度を理由にデザインを簡略化しない
 
+## Client受注一覧の制作単位
+
+受注一覧固有のスタイルは、`shop-partner/orders.html`と`shop-partner/assets/scss/order.scss`を1対1で扱い、`shop-partner/assets/css/order.css`へ出力する。ユーザーが独立させた共通部分は`shop-partner/assets/scss/common.scss`から`shop-partner/assets/css/common.css`へ出力し、HTMLは`common.css`→`order.css`の順に読み込む。
+
+`_reset.scss`は`common.scss`だけで読み込み、`order.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
+
+- ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、画面スタイルは各管理画面側へ置く
+- `common.scss`は現在の`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー`の構成を基準とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
+- `order.scss`は`@use → コメントヘッダー → ページ固有のセクション`とする。今後追加するKPI・検索・注文・展開行は画面の並びに沿って整理し、共通のBrand・Layoutは戻さない
+- `common.scss`＋ページ別Sassの構成を継続し、受注一覧完成後も`admin.scss`への再編を前提にしない
+- 既存の関数・mixinを利用し、Codexは依頼なく新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない
+
+## クラス名とSCSSの書き方
+
+- 既存HTMLのクラス名を優先する。`.admin-layout`・`.admin-sidebar`に加え、`.box-identity`・`.box-actions`・`.service-name`など、現在の短い名前とネストをそのまま使う
+- `.admin-*`／`.order-*`の接頭辞やBEMは必須にしない。新しい名前は役割が分かるものとし、同名の衝突に気を付ける。依頼なく既存クラスを一括改名しない
+- `header`・`nav`・`a`・`button`などの要素セレクタも利用できる。意図した範囲に適用されるよう親セレクタを確認し、不要なクラスやネストを増やさない
+- 文字サイズは`scss/_settings.scss`の既存の流動フォント設定と`fz()`を使う。`fz(18)`等は16px基準の相対指定であり、常に18px表示になるわけではない
+- 文字サイズは画面幅に応じて流動的に変わる仕様（本文は概ね12〜16px）。読ませたい箇所は`fz()`で個別に大きくし、PC・タブレット横・タブレット縦の幅で確認する
+- `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
+- `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
+- リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
+- フォーカス枠は`scss/_reset.scss`の共通指定（`:where(...)`で詳細度0、幅3px・`--color-brand-accent`）を基本とし、枠が切れる・埋もれる箇所だけ個別に上書きする
+- フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;700&display=swap`の`stylesheet`を置く
+- 余白・幅・罫線・角丸などは、現在のように`px`・`rem`・`em`の直接指定も認める。すべての数値の変数化や、削除済みの`$space-*`・`$font-size-*`等の復活は行わない
+- 共通で調整する必要がある値だけ、既存変数を利用する。新しい変数の追加は必要になった箇所に限定する。色は既存の色変数とブランド用CSSカスタムプロパティを優先する
+- サイズの旧仮案よりユーザーが調整した現行SCSSを優先し、実装時は読みやすさ・タップ領域・画面幅をブラウザで確認する。小さい文字や操作しにくい箇所は、構成を変えず個別に調整する
+
 ## 制作環境と引き渡し
 
 - Sassの編集元、出力先、npmコマンドは`docs/SPEC.md`の「フォルダとSass」を参照する
@@ -42,6 +70,69 @@ Codexは依頼なくHTMLを自動生成・書き出しせず、構造、状態�
 - 実行操作は`button`、ページ遷移は`a`を基本にする
 - 表形式のデータは、意味上適切であれば`table`を使用する
 - ダイアログは実装環境に合わせて`dialog`または適切なARIA属性を検討する
+
+## コメント記述ルール
+
+### ファイル冒頭のコメントヘッダー
+
+手動作成するHTML・Sassには、用途・ファイルの場所・利用元・作成日・更新日を統一形式で記載する。これは、こうの湯・ふもと旅館のコメントヘッダー規約を、本プロジェクトの静的HTML・Sass向けに読み替えたもの。依頼なくHTMLを生成する方針には変更しない。
+
+- 新規ファイルの作成時に記載する。既存ファイルにない場合は、そのファイルを次に修正するときに追加する。ヘッダー追加のためだけの一括改修はしない
+- タイトルは「熊日モール＋管理画面種別＋ページ名または用途」で簡潔に書く。対応するHTMLとSassで名前をそろえる
+- `URL`はWebサイトのURLではなく、プロジェクトルートを基準に`/`から始めたファイルパスを書く
+- `Referenced in`は主な利用ページ・読み込み元を書く。単独のHTMLページは自身のパス、Sassは対応するHTMLまたは読み込み元Sassのパスを記載する
+- `Created`は作成日を保持する。既存の作成日が不明なら推測せず`不明`とし、確認できた時点で補う
+- ファイルを修正したら`Last updated`を実際の修正日へ更新する。日付は`YYYY-MM-DD`で統一する。下記の`YYYY-MM-DD`はテンプレート用のプレースホルダーで、そのまま実ファイルへ残さない
+- パスや利用元に誤記がある場合は、対象ファイルを修正するときに併せて直す
+- 生成CSS・ソースマップには手動で追加しない。外部ライブラリなどの既存ライセンス・著作権表記は維持する
+
+### HTMLのテンプレート
+
+`<!doctype html>`は先頭に維持し、その直後、`<html>`より前へHTMLコメントとして記載する。
+
+```html
+<!doctype html>
+<!-- =======================================
+ * 熊日モール Client 受注一覧
+ * URL: /shop-partner/orders.html
+ * Referenced in: /shop-partner/orders.html
+ * Created: YYYY-MM-DD
+ * Last updated: YYYY-MM-DD
+ * ======================================= -->
+```
+
+### Sassのテンプレート
+
+先頭の`@use`群の直後へ`/* ... */`のコメントヘッダーを記載する。`@use`がなければ先頭に置き、`@charset`がある場合はその後とする。読み込み先・順序・ファイル構成は変更せず、本プロジェクトの既存ルールを優先する。
+
+```scss
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 受注一覧 スタイル
+ * URL: /shop-partner/assets/scss/order.scss
+ * Referenced in: /shop-partner/orders.html
+ * Created: YYYY-MM-DD
+ * Last updated: YYYY-MM-DD
+ * ======================================= */
+
+// ===== ページ固有のセクション =====
+```
+
+### コード内の補足コメント
+
+- ファイルヘッダーとは別に、`// ===== セクション名 =====`や`/* ... */`による既存のセクション区切りを維持する。固定の書式へ一括置換せず、各ファイルの書き方に合わせる
+- コードを読めば分かる内容を繰り返さず、実装理由・制約・状態など分かりにくい箇所だけ短く説明する。Sassの内部説明には`//`を使う
+- 未確定の仕様を確定事項として書かず、不要な旧コードのコメントアウトを蓄積しない。HTMLコメントには顧客情報・認証情報を記載しない
+
+### 規約の参照元
+
+- こうの湯：`/Users/ken/site_data/xbaf8039.xbiz.jp/kounoyu.jp/public_html/kounoyu_2608/docs/rules/tsx-comment-rules.md`、同ディレクトリの`scss-comment-rules.md`
+- ふもと旅館：`/Users/ken/site_data/xbaf8039.xbiz.jp/fumotoryokan.com/public_html/fumoto_2606/docs/rules/tsx-comment-rules.md`、同ディレクトリの`scss-comment-rules.md`
+- ふもと旅館採用：`/Users/ken/site_data/xbaf8039.xbiz.jp/fumoto-ryokan.jp/public_html/recruit/recruit_fumoto_2609/docs/DEVELOPMENT.md`の「コメントヘッダー」
+
+取り込むのはファイルのメタ情報と更新日の運用。TSX・Astro・module.scssやfoundationの構成は導入せず、HTMLのコメント構文・配置と本プロジェクトの読み込み先へ置き換える。
 
 ## 状態の命名候補
 

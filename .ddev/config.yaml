@@ -1,0 +1,17 @@
+name: shop-manage-2611
+type: generic
+docroot: ""
+php_version: "8.4"
+webserver_type: nginx-fpm
+xdebug_enabled: false
+
+# 現段階は静的HTML・Sassの制作環境なのでDBコンテナは起動しない。
+omit_containers:
+  - db
+
+# generic構成ではアップロードディレクトリを使わないため警告を抑止する。
+disable_upload_dirs_warning: true
+
+use_dns_when_possible: true
+composer_version: "2"
+web_environment: []

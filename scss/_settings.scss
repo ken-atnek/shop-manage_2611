@@ -1,16 +1,30 @@
-// 汎用変数
+$radius-sm: 2px; // 仮
 
-// 余白（docs/DESIGN_TOKENS.md：通常の要素間は24〜32pxを基準）
-$space-xs: 8px;
-$space-sm: 16px;
-$space-md: 24px;
-$space-lg: 32px;
-$space-xl: 48px;
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
 
-// 角丸（フォーム：小さめの角丸）
-$radius-sm: 4px;
-$radius-md: 8px;
+// MAX-WIDTH宣言
+$m-width: 1024;
+$pc-max-width: calc($m-width * 1px);
 
-// 管理画面の基準幅（一覧・詳細ともに共通で使用）
-$content-max-width: 1440px;
+// フォントサイズ(mx1000)
+$max-font: 16;
+$min-font: 12;
+$sp-width: 375;
 
+// 可変フォントサイズ計算
+$tilt: calc(($max-font - $min-font) / ($m-width - $sp-width));
+$slice: calc($min-font - ($tilt * $sp-width));
+$base-vw: calc($tilt * 100);
+
+// 指定フォント関数
+@function fz($size) {
+    @if $size <= $min-font {
+        @return $min-font * 1px;
+    } @else {
+        @return max(12px, ($size / $max-font) * 1em);
+    }
+}
+
+$article-max-width: 1164px;

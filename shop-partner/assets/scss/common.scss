@@ -1,0 +1,185 @@
+@use "../../../scss/reset";
+@use "../../../scss/settings" as *;
+@use "../../../scss/typography" as *;
+@use "../../../scss/colors" as *;
+@use "../../../scss/breakpoints" as *;
+@use "../../../scss/interaction" as *;
+@use "../../../scss/svg" as *;
+@use "../../../scss/ui" as *;
+/* =======================================
+ * 熊日モール Client 共通スタイル
+ * URL: /shop-partner/assets/scss/common.scss
+ * Referenced in: /shop-partner/orders.html
+ * Created: 2026-10-17
+ * Last updated: 2026-10-17
+ * ======================================= */
+
+body {
+    font-size: clamp(1.2rem, calc($base-vw * 1vw) + calc($slice * 1px), 1.6rem);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: space-between;
+    width: 100%;
+    color: $color-text-primary;
+    font-family: $font-family-base;
+    background-color: #fff;
+    --color-brand-subtle: #eef9f4;
+    --color-brand-accent: #097141;
+    --color-nav-bg: #eef9f4;
+    --color-nav-active: #097141;
+    @include tbw {
+        overflow-x: clip;
+    }
+    @include tb {
+        // タブレットでも既存の12px下限を維持する。
+        font-size: clamp(1.2rem, 1.4vw, 1.6rem);
+    }
+    @include sp {
+        font-size: 3.6vw;
+    }
+}
+.admin-layout {
+    position: relative;
+    width: 100%;
+    display: flex;
+    font-size: inherit;
+    // ヘッダーを除いた残りの高さを使い、画面高の二重計上を避ける。
+    flex: 1;
+}
+main {
+    font-size: inherit;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 3.2rem;
+}
+
+section,
+article,
+header,
+footer {
+    width: 100%;
+    position: relative;
+    font-size: inherit;
+}
+
+svg {
+    width: 100%;
+    fill: unset;
+    stroke: unset;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* =================================
+ * HEADER
+ * ------------------------------ */
+.admin-header {
+    // min-height: $admin-header-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    border-bottom: 1px solid $color-border-default;
+    background: $pure-white;
+    .box-identity {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0 1.6rem;
+        .service-name {
+            font-size: fz(20);
+            font-weight: 700;
+        }
+        .admin-name {
+            padding-left: 1.6rem;
+            border-left: 1px solid $color-border-strong;
+            color: $color-text-primary;
+            font-size: fz(20);
+            font-weight: 500;
+        }
+    }
+    .box-actions {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0 2.4rem;
+        a {
+            font-size: inherit;
+        }
+        form {
+            font-size: inherit;
+            button {
+                font-size: inherit;
+                color: $pure-white;
+                background-color: var(--color-brand-accent);
+                padding: 0.5em 1.4em;
+                border-radius: 2px;
+
+                // 塗りと同色の枠が埋もれないよう、ボタンから離して表示する。
+                &:focus-visible {
+                    outline: 3px solid var(--color-brand-accent);
+                    outline-offset: 4px;
+                }
+            }
+        }
+    }
+}
+/* =================================
+ * サイドメニュー
+ * ------------------------------ */
+.admin-sidebar {
+    border-right: 1px solid $color-border-default;
+    background: var(--color-nav-bg);
+    font-size: inherit;
+    width: 100%;
+    max-width: 18rem;
+    nav {
+        padding-block: 1.6rem;
+        font-size: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 4px 0;
+        a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 2.4rem;
+            border-left: 3px solid transparent;
+            color: $color-text-primary;
+            font-size: fz(18);
+            transition:
+                background-color $transition-base,
+                color $transition-base;
+            &:focus-visible {
+                outline: 3px solid var(--color-brand-accent);
+                // 左端で枠を切らず、border幅も変えない。
+                outline-offset: -3px;
+            }
+            &:hover {
+                background: $color-nav-hover;
+            }
+            // 強さの順：通常 → ホバー（白50%）→ 選択中（白）
+            &[aria-current="page"] {
+                background: $pure-white;
+                border-left-color: var(--color-nav-active);
+                color: var(--color-nav-active);
+                font-weight: 500;
+            }
+        }
+    }
+}
