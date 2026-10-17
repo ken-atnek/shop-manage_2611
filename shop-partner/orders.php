@@ -99,8 +99,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                   <span>小計</span>
                 </div>
               </div>
-              <span class="column-label">進捗状況</span>
-              <span class="column-label">操作</span>
+              <div class="progress-column">
+                <span class="column-label">進捗状況</span>
+                <span class="column-label">操作</span>
+              </div>
             </div>
             <ol class="order-list" role="list" aria-label="未着手の注文">
               <li>
@@ -161,7 +163,6 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         class="selectbox__head"
                         type="button"
                         aria-label="注文#2610170112345のステータスを変更（現在：新規受付）"
-                        aria-haspopup="true"
                         aria-expanded="false"
                         aria-controls="status-panel-2610170112345"
                       >
@@ -173,12 +174,12 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <div class="list-wrapper" id="status-panel-2610170112345" hidden>
                         <ul class="selectbox__panel" role="radiogroup" aria-label="注文#2610170112345のステータス">
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2610170112345" value="1" id="status-2610170112345-registered" checked />
-                            <label for="status-2610170112345-registered" class="status-registered">新規受付</label>
+                            <input type="radio" name="order-status-choice-2610170112345" value="1" id="status-2610170112345-new" checked />
+                            <label for="status-2610170112345-new" class="status-new">新規受付</label>
                           </li>
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2610170112345" value="2" id="status-2610170112345-preparing" />
-                            <label for="status-2610170112345-preparing" class="status-preparing">対応中</label>
+                            <input type="radio" name="order-status-choice-2610170112345" value="2" id="status-2610170112345-processing" />
+                            <label for="status-2610170112345-processing" class="status-processing">対応中</label>
                           </li>
                           <li role="presentation">
                             <input type="radio" name="order-status-choice-2610170112345" value="3" id="status-2610170112345-shipped" />
@@ -195,9 +196,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         </ul>
                       </div>
                     </div>
-                    <p class="updated"><time datetime="2026-10-17T08:40">2026/10/17 08:40</time></p>
-                  </div>
-                  <div class="order-actions">
+                    <p class="updated"><span class="sr-only">更新日時：</span><time datetime="2026-10-17T08:40">2026/10/17 08:40</time></p>
                     <button
                       class="order-toggle has-content"
                       type="button"
@@ -271,7 +270,6 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         class="selectbox__head"
                         type="button"
                         aria-label="注文#2026110300002のステータスを変更（現在：新規受付）"
-                        aria-haspopup="true"
                         aria-expanded="false"
                         aria-controls="status-panel-2026110300002"
                       >
@@ -283,12 +281,12 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <div class="list-wrapper" id="status-panel-2026110300002" hidden>
                         <ul class="selectbox__panel" role="radiogroup" aria-label="注文#2026110300002のステータス">
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300002" value="1" id="status-2026110300002-registered" checked />
-                            <label for="status-2026110300002-registered" class="status-registered">新規受付</label>
+                            <input type="radio" name="order-status-choice-2026110300002" value="1" id="status-2026110300002-new" checked />
+                            <label for="status-2026110300002-new" class="status-new">新規受付</label>
                           </li>
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300002" value="2" id="status-2026110300002-preparing" />
-                            <label for="status-2026110300002-preparing" class="status-preparing">対応中</label>
+                            <input type="radio" name="order-status-choice-2026110300002" value="2" id="status-2026110300002-processing" />
+                            <label for="status-2026110300002-processing" class="status-processing">対応中</label>
                           </li>
                           <li role="presentation">
                             <input type="radio" name="order-status-choice-2026110300002" value="3" id="status-2026110300002-shipped" />
@@ -305,9 +303,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         </ul>
                       </div>
                     </div>
-                    <p class="updated"><time datetime="2026-10-17T08:25">2026/10/17 08:25</time></p>
-                  </div>
-                  <div class="order-actions">
+                    <p class="updated"><span class="sr-only">更新日時：</span><time datetime="2026-10-17T08:25">2026/10/17 08:25</time></p>
                     <button
                       class="order-toggle has-content"
                       type="button"
@@ -381,7 +377,6 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         class="selectbox__head"
                         type="button"
                         aria-label="注文#2026110300003のステータスを変更（現在：新規受付）"
-                        aria-haspopup="true"
                         aria-expanded="false"
                         aria-controls="status-panel-2026110300003"
                       >
@@ -393,12 +388,12 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <div class="list-wrapper" id="status-panel-2026110300003" hidden>
                         <ul class="selectbox__panel" role="radiogroup" aria-label="注文#2026110300003のステータス">
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300003" value="1" id="status-2026110300003-registered" checked />
-                            <label for="status-2026110300003-registered" class="status-registered">新規受付</label>
+                            <input type="radio" name="order-status-choice-2026110300003" value="1" id="status-2026110300003-new" checked />
+                            <label for="status-2026110300003-new" class="status-new">新規受付</label>
                           </li>
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300003" value="2" id="status-2026110300003-preparing" />
-                            <label for="status-2026110300003-preparing" class="status-preparing">対応中</label>
+                            <input type="radio" name="order-status-choice-2026110300003" value="2" id="status-2026110300003-processing" />
+                            <label for="status-2026110300003-processing" class="status-processing">対応中</label>
                           </li>
                           <li role="presentation">
                             <input type="radio" name="order-status-choice-2026110300003" value="3" id="status-2026110300003-shipped" />
@@ -415,9 +410,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                         </ul>
                       </div>
                     </div>
-                    <p class="updated"><time datetime="2026-10-17T08:10">2026/10/17 08:10</time></p>
-                  </div>
-                  <div class="order-actions">
+                    <p class="updated"><span class="sr-only">更新日時：</span><time datetime="2026-10-17T08:10">2026/10/17 08:10</time></p>
                     <button
                       class="order-toggle"
                       type="button"

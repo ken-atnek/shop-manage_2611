@@ -35,6 +35,7 @@
 @mixin select-status-box($height: 4.4rem, $position: left, $list-height: 3rem) {
     position: relative;
     font-size: inherit;
+    --corner-radius: 6px;
     .selectbox__head {
         transition: 0.3s ease-out;
         position: relative;
@@ -43,7 +44,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 8px;
+        border-radius: var(--corner-radius);
         cursor: pointer;
         user-select: none;
         color: #fff;
@@ -54,7 +55,7 @@
             translate: 0 -50%;
             right: 0.8em;
             width: 0.7em;
-            @include svg-icon-arrow-bottom("403726");
+            @include svg-icon-arrow-bottom("4f5863");
             transition: 0.2s cubic-bezier(0.4, 0.25, 0.3, 1);
         }
         &:hover {
@@ -72,12 +73,12 @@
             font-size: fz(14);
             display: flex;
             align-self: stretch;
-            border-radius: 8px 0 0 8px;
+            border-radius: var(--corner-radius) 0 0 var(--corner-radius);
             align-items: center;
             justify-content: center;
-            border-top: 1px solid $border-gray;
-            border-left: 1px solid $border-gray;
-            border-bottom: 1px solid $border-gray;
+            border-top: 1px solid $color-border-default;
+            border-left: 1px solid $color-border-default;
+            border-bottom: 1px solid $color-border-default;
             @if $position == "center" {
                 text-align: center;
             } @else {
@@ -87,10 +88,10 @@
         i {
             display: block;
             align-self: stretch;
-            width: 38px;
+            width: 3var (--corner-radius);
             background-color: #fff;
-            border-radius: 0 8px 8px 0;
-            border: 1px solid $border-gray;
+            border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
+            border: 1px solid $color-border-default;
             transition: 0.3s ease-out;
         }
     }
@@ -108,16 +109,16 @@
         transition: grid-template-rows 0.2s ease-out;
         overflow: hidden;
         @include drop-shadow;
-        border-radius: 6px;
+        border-radius: var(--corner-radius);
         .selectbox__panel {
             font-size: inherit;
             position: relative;
             margin: 0;
             background: #fff;
-            border-radius: 8px;
+            border-radius: var(--corner-radius);
             overflow: hidden;
             min-height: 0;
-            border-radius: 6px;
+            border-radius: var(--corner-radius);
             width: 100%;
             li {
                 width: 100%;
@@ -197,13 +198,13 @@
             width: 36px;
         }
         // 新規受付
-        &.status-registered {
+        &.status-new {
             .selectbox__value {
                 background-color: $color-status-new;
             }
         }
         // 対応中
-        &.status-preparing {
+        &.status-processing {
             .selectbox__value {
                 background-color: $color-status-processing;
             }
@@ -233,11 +234,11 @@
                 label {
                     transition: 0.3s ease-out;
                     // 新規受付
-                    &.status-registered {
+                    &.status-new {
                         --status-color: #{$color-status-new};
                     }
                     // 対応中
-                    &.status-preparing {
+                    &.status-processing {
                         --status-color: #{$color-status-processing};
                     }
                     // 発送済

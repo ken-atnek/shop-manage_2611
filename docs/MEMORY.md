@@ -364,6 +364,30 @@
 - ステータスの矢印のホバー枠・押下時の背景・開いたパネルの枠に使っていた青（`$hover-blue`・`$hover-bg-blue`、黒川管理画面由来）を、`$color-border-strong`・`$color-bg-subtle`の濃いグレー系へ変更（Kenの判断）。`_colors.scss`の青の変数は未使用のまま残っている
 - 2件目の商品名に残っていた折り返し確認用の長い文字列を「オリジナルラベルギフト」へ戻した
 
+## 2026-10-17 ステップ4の確認と修正（Claude）
+
+- キーボードでステータスを選ぶと、↓キー1回で隣の選択肢に確定して閉じていた（radioの矢印キー移動でchangeが起き、JSがchangeで閉じていたため。ヘッドレスChromiumで再現）。`order.js`を、マウス・タッチの選択だけ即時に閉じ、矢印キーでは開いたまま同期、Enterで閉じてフォーカスを戻す形に修正。Esc・Tabでも閉じる。修正後、Enter→↓↓→Enter、Esc、マウス選択、同じ項目の再クリック、Tabで抜ける操作を確認
+- 更新日時に「更新」ラベルを追加（日時の上に補助色で表示）。注文日時と区別できるようにした
+- ステータスのheadから`aria-haspopup="true"`を削除（メニューではなくradioのグループのため）
+- `order.js`の不要なコードを削除：ステータスのheadへのtitle設定（見える文字があるため不要）、初期化時のcloseStatusBox（閉じた状態はHTMLのhidden・aria-expandedで持つ）、部品の二重取得、ステップ5の予告コメント。削除後もキーボード・マウス・展開ボタンの動作が変わらないことを確認
+- Kenの判断待ち：ステータスのmixinの角丸8px・6pxと影（画面全体は角丸2px・影なし）、矢印の背景svgの色が別案件の茶色`403726`に固定されている点、`$border-gray`、class名`status-registered`／`status-preparing`と変数名`$color-status-new`／`-processing`のずれ
+
+## 2026-10-17 列見出し「進捗状況・操作」の2段化（Claude）
+
+- Kenの提案により、列見出しの3列目を上段「進捗状況」・下段「操作」の2段に変更。セルの中の縦積み（上にステータス・更新日時、下端に展開ボタン）と対応させた
+- `orders.php`：`.progress-column`に`.column-label`を2つ置く形に変更。`order.scss`：`.product-column`と`.progress-column`を同じ縦並びのFlexにし、上段に区切り線、下段は残りの高さを埋める
+- 1280・1024・834幅で、3列目の上下の区切り線が「商品」と同じ高さ（差0px）、縦の罫線が注文の箱とそろうことを確認。`npm run sass`は警告なし、PHP構文エラーなし
+
+## 2026-10-17 ステータスの装飾の判断
+
+- ステータスの矢印が閉じた状態で左向きになる点と、角丸（8px・6px）はこのまま維持する（Kenの判断）。画面全体の「角丸2px・影なし」に対する、ステータスの部品だけの例外として画面資料に記録した
+- 残りの確認事項：矢印の背景svgの色が別案件の茶色`403726`に固定されている点、`$border-gray`、class名`status-registered`／`status-preparing`と変数名のずれ
+
+## 2026-10-17 ステータスのclass名の統一（Claude）
+
+- Kenの決定により、class名を色の変数名（`$color-status-*`）とKenの最初の命名（`new`・`processing`）に合わせて統一：`status-registered`→`status-new`、`status-preparing`→`status-processing`。`orders.php`のlabelのclass・radioのid末尾・labelの`for`、`scss/_ui.scss`の`apply-status-box`を置き換えた。valueと`order.js`は変更なし
+- 矢印の色はKenが対応済み
+
 ## 次に確認すること
 
 - 熊日の正式なコーポレートカラーの指定値（提供SVGの色値は確認済みだが、公式の指定値・運用ルールの確認とは分ける）
@@ -496,4 +520,26 @@
 
 - JS整理時に外してしまった親のis-selectedの同期をorder.jsのsyncStatusへ復旧。checkedの有無に合わせて初期化時・選択変更時にclassを付け外しする。初期値が選択済みなのに既存mixinのrotate: 90degが効かない原因だった
 - Chromeで3件とも初期classと90度回転、開いた注文のis-openと0度回転、Escで閉じて90度に戻ることを確認。node --check成功。Sass・PHP・CSS・hiddenの開閉処理は変更していない
+
+## 2026-10-17 進捗状況・操作を1列へ統合し、更新ラベルを読み上げ専用へ
+
+- Kenの決定により外側を「注文・お届け先｜商品｜進捗状況・操作」の3列へ変更。旧14rem＋5.6remを19.6remに統合し、前2列・最小幅76rem・商品内の列幅は維持。各order-actionsを削除し、展開ボタンのHTMLをそのままorder-progressへ移動。DOM順はステータス→展開ボタン→更新日時とした
+- order-progressを2列Grid（minmax(0, 1fr)＋4rem、gap 0.8rem、内側1.2rem）にし、1行目のボタン中心をそろえ、日時は2行目のステータス下へ配置。可視ラベル「更新」をsr-only「更新日時：」へ置換し、不要なorder-actions・updated .labelのスタイルを削除。色・矢印・点・押した状態・受け皿は維持
+- 閉じたradioへTabが入る既存の問題を確認し、order.scssでlist-wrapper[hidden]をdisplay: noneにする最小補正を追加。共通mixin・JSは変更せず、Tab順をステータス→展開ボタンにした
+- npm run sassは警告・エラーなし、DDEV php -l成功。Chromeで1280×800・1024×768・834×1194の全3件を確認し、外側3列・商品内罫線の差0px、ボタンの縦中心差0px、間隔11px。834幅は表示590px・内容760pxの一覧内横スクロールで、ページ全体の横はみ出しなし。先頭・末尾メニューは切れず、次の箱や展開ボタンの前に表示される
+- 3件のTab順とフォーカス枠、矢印キーで対応中を選択→開いたまま→Enterで閉じて復帰、Esc、展開ボタンの開閉・名前・aria-expanded・hidden・アイコン反転を確認。可視の更新ラベルなし・sr-onlyありを確認。Safari・Firefox・読み上げソフト実機は未確認
+- PHPの許可範囲外と展開ボタンのHTML、商品明細Sass・既存の見出し/KPI/検索、共通Sass・common.scss・common.css・order.jsが作業前と同じことを比較確認。生成order.cssと画面資料を更新。ステップ5の中身・保存処理・Gitコミットは行っていない
+
+## 2026-10-17 進捗状況・操作列を縦積み・下端配置へ変更
+
+- Kenの決定で3件ともDOM順をステータス→更新日時→展開ボタンへ変更。PHPは日時要素の移動だけで、class・属性・中身・受け皿を保持。order-progressは縦Flex・中央ぞろえ・高さを箱いっぱいに伸ばし、展開ボタンのmargin-top: autoで下端余白1.2remにそろえる。展開行と押す位置を近づけ、お届け先の下端配置と同じ考え方にする
+- 末尾列19.6rem→14rem、一覧の最小幅76rem→70.4rem。宛先の幅を従来の比率から維持するcalc式にして、縮めた56pxを商品列へ配分。120pxのステータスが収まるよう左右余白だけ0.8rem、上下1.2rem。日時の上余白0.8rem・下余白1.2remで、短い箱でも展開ボタンとの最低間隔を保つ。横並び用のgrid指定は削除
+- npm run sassは警告・エラーなし、DDEV php -l正常。Chromeの1280×800・1024×768・834×1194で全3件の外側3列・商品内罫線の差0pxを確認。ステータス上端余白12px、展開ボタン下端余白12px、3要素の横中心が一致。商品2つと1つの両方で維持し、日時と展開ボタンの間隔は20〜88px
+- 1280・1024幅は一覧の横スクロールなし。834幅は表示590px・内容704pxの一覧内だけで横スクロールし、ページ全体の横はみ出しなし。先頭・末尾メニューは切れず、展開ボタンや次の注文より前に表示される。メニューとボタンが重なる位置のヒットテストでもメニューのlabelが前面にあることを確認
+- 3件のTab順（ステータス→展開ボタン）、展開ボタンの開閉・属性・受け皿・アイコン反転、ステータスの矢印キー選択→Enterで閉じて復帰、Escを確認。共通Sass・mixin・common.scss・common.css・order.jsはハッシュ比較で未変更。生成order.cssと画面資料を更新。Safari・Firefox・読み上げ実機は未確認。展開行の中身・Gitコミットなし
+
+## 2026-10-17 共通UIの罫線変数を標準トークンへ置換
+
+- Ken指定によりscss/_ui.scss内の$border-grayを$color-border-defaultへ4か所置換。それ以外のmixin指定と_colors.scssの変数定義は変更していない。生成CSSも更新
+- npm run sassは警告・エラーなし。Chromeで3件のステータスの現在値・矢印部分の罫線色が標準色#D9DDE2になったことを確認
 

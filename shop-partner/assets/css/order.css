@@ -214,10 +214,10 @@
 }
 .admin-main .orders-board {
   font-size: inherit;
-  --order-columns: minmax(26rem, 1fr) minmax(30rem, 1.3fr) 14rem 5.6rem;
+  --order-columns: minmax(26rem, calc((100% - 19.6rem) / 2.3)) minmax(30rem, 1fr) 14rem;
   --item-quantity-width: 5.2rem;
   --item-subtotal-width: 9.6rem;
-  min-width: 76rem;
+  min-width: 70.4rem;
 }
 .admin-main .orders-board .column-head,
 .admin-main .orders-board .order-card {
@@ -243,11 +243,19 @@
   justify-content: center;
   padding: 0.8rem 1.2rem;
 }
-.admin-main .orders-board .column-head .product-column {
+.admin-main .orders-board .column-head .product-column,
+.admin-main .orders-board .column-head .progress-column {
   font-size: inherit;
+  display: flex;
+  flex-direction: column;
 }
-.admin-main .orders-board .column-head .product-column .column-label {
+.admin-main .orders-board .column-head .product-column > .column-label:first-child,
+.admin-main .orders-board .column-head .progress-column > .column-label:first-child {
   border-bottom: 1px solid #d9dde2;
+}
+.admin-main .orders-board .column-head .product-column > :last-child,
+.admin-main .orders-board .column-head .progress-column > :last-child {
+  flex: 1;
 }
 .admin-main .orders-board .column-head .item-head {
   font-size: inherit;
@@ -433,12 +441,17 @@
  * ------------------------------ */
 .admin-main .order-progress {
   font-size: inherit;
-  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  padding: 1.2rem 0.8rem;
 }
 .admin-main .order-progress .select-customer-status {
   width: 120px;
   position: relative;
   font-size: inherit;
+  --corner-radius: 6px;
 }
 .admin-main .order-progress .select-customer-status .selectbox__head {
   transition: 0.3s ease-out;
@@ -448,7 +461,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 8px;
+  border-radius: var(--corner-radius);
   cursor: pointer;
   user-select: none;
   color: #fff;
@@ -464,7 +477,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%23403726"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%234f5863"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
   transition: 0.2s cubic-bezier(0.4, 0.25, 0.3, 1);
 }
 .admin-main .order-progress .select-customer-status .selectbox__head:hover i {
@@ -478,21 +491,21 @@
   font-size: max(12px, 0.875em);
   display: flex;
   align-self: stretch;
-  border-radius: 8px 0 0 8px;
+  border-radius: var(--corner-radius) 0 0 var(--corner-radius);
   align-items: center;
   justify-content: center;
-  border-top: 1px solid #c7c7c7;
-  border-left: 1px solid #c7c7c7;
-  border-bottom: 1px solid #c7c7c7;
+  border-top: 1px solid #d9dde2;
+  border-left: 1px solid #d9dde2;
+  border-bottom: 1px solid #d9dde2;
   text-align: center;
 }
 .admin-main .order-progress .select-customer-status .selectbox__head i {
   display: block;
   align-self: stretch;
-  width: 38px;
+  width: 3var --corner-radius;
   background-color: #fff;
-  border-radius: 0 8px 8px 0;
-  border: 1px solid #c7c7c7;
+  border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
+  border: 1px solid #d9dde2;
   transition: 0.3s ease-out;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper {
@@ -509,17 +522,17 @@
   transition: grid-template-rows 0.2s ease-out;
   overflow: hidden;
   box-shadow: 2px 2px 3px 0 rgba(53, 45, 32, 0.15);
-  border-radius: 6px;
+  border-radius: var(--corner-radius);
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel {
   font-size: inherit;
   position: relative;
   margin: 0;
   background: #fff;
-  border-radius: 8px;
+  border-radius: var(--corner-radius);
   overflow: hidden;
   min-height: 0;
-  border-radius: 6px;
+  border-radius: var(--corner-radius);
   width: 100%;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li {
@@ -566,10 +579,10 @@
 .admin-main .order-progress .select-customer-status .selectbox__head i {
   width: 36px;
 }
-.admin-main .order-progress .select-customer-status .selectbox__head.status-registered .selectbox__value {
+.admin-main .order-progress .select-customer-status .selectbox__head.status-new .selectbox__value {
   background-color: #c2410c;
 }
-.admin-main .order-progress .select-customer-status .selectbox__head.status-preparing .selectbox__value {
+.admin-main .order-progress .select-customer-status .selectbox__head.status-processing .selectbox__value {
   background-color: #8a3fd1;
 }
 .admin-main .order-progress .select-customer-status .selectbox__head.status-shipped .selectbox__value {
@@ -584,10 +597,10 @@
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label {
   transition: 0.3s ease-out;
 }
-.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-registered {
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-new {
   --status-color: #c2410c;
 }
-.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-preparing {
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-processing {
   --status-color: #8a3fd1;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-shipped {
@@ -610,9 +623,15 @@
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label:hover::before {
   filter: brightness(0.9);
 }
+.admin-main .order-progress .select-customer-status {
+  flex-shrink: 0;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper[hidden] {
+  display: none;
+}
 .admin-main .updated {
   font-size: 12px;
-  margin-top: 0.8rem;
+  margin-block: 0.8rem 1.2rem;
   text-align: center;
 }
 .admin-main .updated time {
@@ -641,15 +660,9 @@
 /* =================================
  * 操作
  * ------------------------------ */
-.admin-main .order-actions {
-  font-size: inherit;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-block: 1.2rem;
-}
 .admin-main .order-toggle {
   font-size: inherit;
+  margin-top: auto;
   position: relative;
   width: 4rem;
   height: 4rem;

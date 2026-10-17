@@ -38,7 +38,6 @@ function syncStatus(box) {
   const number = box.closest(".order-card").querySelector("h3").textContent.trim();
   const name = `注文${number}のステータスを変更（現在：${value.textContent}）`;
   head.setAttribute("aria-label", name);
-  head.title = name;
   // 保存方法が未確定のため、値と表示だけを同期し、通信・更新日時の変更はしない。
 }
 
@@ -66,20 +65,39 @@ function toggleStatusBox(box) {
   box.querySelector('input[type="radio"]:checked')?.focus();
 }
 
-// scriptはbody末尾で読み込む。検索パネルや汎用ツールチップの処理は持ち込まない。
+// scriptはbody末尾で読み込む。初期の閉じた状態（hidden・aria-expanded）はHTML側で持つ。
 document.querySelectorAll(".select-customer-status[data-selectbox]").forEach((box) => {
-  const { head } = getStatusParts(box);
+  const { head, panel } = getStatusParts(box);
   syncStatus(box);
-  closeStatusBox(box);
   head.addEventListener("click", () => toggleStatusBox(box));
+  // マウス・タッチで選んだときだけ、選択と同時に閉じる。
+  // 矢印キーでは選択が移るたびにchangeが起きるため、表示だけ同期して開いたままにし、Enterで閉じる。
+  let pointerSelecting = false;
+  panel.addEventListener("pointerdown", () => {
+    pointerSelecting = true;
+  });
+  panel.addEventListener("keydown", (event) => {
+    pointerSelecting = false;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      closeStatusBox(box, true);
+    } else if (event.key === "Tab") {
+      // Tabで一覧の次の操作へ移るときは、開いたメニューを残さない。
+      closeStatusBox(box);
+    }
+  });
   box.querySelectorAll('input[type="radio"]').forEach((radio) => {
     radio.addEventListener("click", () => {
       // 選択済み項目の再クリックではchangeが出ないため、ここで閉じる。
-      if (radio.value === getStatusParts(box).hidden.value) closeStatusBox(box, true);
+      if (pointerSelecting && radio.value === getStatusParts(box).hidden.value) {
+        pointerSelecting = false;
+        closeStatusBox(box, true);
+      }
     });
     radio.addEventListener("change", () => {
       syncStatus(box);
-      closeStatusBox(box, true);
+      if (pointerSelecting) closeStatusBox(box, true);
+      pointerSelecting = false;
     });
   });
 });
@@ -102,7 +120,6 @@ document.addEventListener("click", (event) => {
   button.setAttribute("aria-label", name);
   button.title = name;
   panel.hidden = expanded;
-  // 行クリックによる開閉とパネルの中身はステップ5で追加する。
 });
 
 document.addEventListener("keydown", (event) => {
