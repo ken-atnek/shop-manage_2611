@@ -57,6 +57,10 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
+- アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
+  - 線のアイコン：`fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`の属性を書かない（リセットの「fill属性のないsvg＝文字色の線・丸い角」が効く）。`stroke-width`と`width`・`height`・`viewBox`は書く
+  - 塗りのアイコン：`fill`属性を書く（リセットで文字色の塗りになる）
+  - すべてのアイコンに`aria-hidden="true" focusable="false"`を付け、意味はボタンの`aria-label`で伝える。色は`color`で変える
 - フォーカス枠は`scss/_reset.scss`の共通指定（`:where(...)`で詳細度0、幅3px・`--color-brand-accent`）を基本とし、枠が切れる・埋もれる箇所だけ個別に上書きする
 - フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;700&display=swap`の`stylesheet`を置く
 - 余白・幅・罫線・角丸などは、現在のように`px`・`rem`・`em`の直接指定も認める。すべての数値の変数化や、削除済みの`$space-*`・`$font-size-*`等の復活は行わない

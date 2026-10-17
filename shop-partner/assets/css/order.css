@@ -14,6 +14,25 @@
  * Created source: ファイル作成日時（移植元由来）
  * ======================================= */
 /* =======================================
+ * 熊日モール 共通UI mixin
+ * URL: /scss/_ui.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 不明
+ * Last updated: 2026-10-17
+ * ======================================= */
+/*=========================================
+中央寄せ
+-----------------------------------------*/
+/*=========================================
+ドロップシャドウ
+-----------------------------------------*/
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+/* =======================================
  * 熊日モール Client 受注一覧 スタイル
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
@@ -182,6 +201,490 @@
 .admin-main .list-heading .filter-note {
   font-size: inherit;
   color: #4f5863;
+}
+
+/* =================================
+ * 列見出し
+ * ------------------------------ */
+.admin-main .orders-scroll {
+  font-size: inherit;
+  width: 100%;
+  margin-top: 1.6rem;
+  overflow-x: auto;
+}
+.admin-main .orders-board {
+  font-size: inherit;
+  --order-columns: minmax(26rem, 1fr) minmax(30rem, 1.3fr) 14rem 5.6rem;
+  --item-quantity-width: 5.2rem;
+  --item-subtotal-width: 9.6rem;
+  min-width: 76rem;
+}
+.admin-main .orders-board .column-head,
+.admin-main .orders-board .order-card {
+  display: grid;
+  grid-template-columns: var(--order-columns);
+}
+.admin-main .orders-board .column-head {
+  font-size: inherit;
+  border: 1px solid #d9dde2;
+  background: #f6f7f8;
+  text-align: center;
+}
+.admin-main .orders-board .column-head > * {
+  min-width: 0;
+}
+.admin-main .orders-board .column-head > :not(:first-child) {
+  border-left: 1px solid #d9dde2;
+}
+.admin-main .orders-board .column-head .column-label {
+  font-size: max(12px, 0.875em);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.2rem;
+}
+.admin-main .orders-board .column-head .product-column {
+  font-size: inherit;
+}
+.admin-main .orders-board .column-head .product-column .column-label {
+  border-bottom: 1px solid #d9dde2;
+}
+.admin-main .orders-board .column-head .item-head {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--item-quantity-width) var(--item-subtotal-width);
+}
+.admin-main .orders-board .column-head .item-head span {
+  font-size: max(12px, 0.875em);
+  min-width: 0;
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.admin-main .orders-board .column-head .item-head span + span {
+  border-left: 1px solid #d9dde2;
+}
+.admin-main .orders-board .column-head .item-head span:nth-child(2) {
+  padding-inline: 0.8rem;
+  white-space: nowrap;
+}
+
+/* =================================
+ * 注文の箱
+ * ------------------------------ */
+.admin-main .order-list {
+  font-size: inherit;
+  display: grid;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+.admin-main .order-list > li {
+  font-size: inherit;
+  min-width: 0;
+  z-index: calc(sibling-count() - sibling-index() + 1);
+}
+.admin-main .order-card {
+  font-size: inherit;
+  border: 1px solid #d9dde2;
+  transition: border-color 0.15s ease-out;
+}
+.admin-main .order-card:hover {
+  border-color: #aeb5be;
+}
+.admin-main .order-card > * {
+  font-size: inherit;
+  min-width: 0;
+}
+.admin-main .order-card > :not(:first-child) {
+  border-left: 1px solid #d9dde2;
+}
+.admin-main .order-card .destination {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.admin-main .order-card .order-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.2rem;
+}
+.admin-main .order-card .order-heading h3 {
+  font-size: max(12px, 1em);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.admin-main .order-card .order-heading time {
+  font-size: max(12px, 0.875em);
+  margin-left: auto;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.admin-main .order-card .shipping-info {
+  font-size: inherit;
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1.6rem;
+}
+.admin-main .order-card .shipping-info p {
+  font-size: inherit;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .shipping-info .name {
+  font-weight: 700;
+}
+
+/* =================================
+ * 商品明細
+ * ------------------------------ */
+.admin-main .item-table {
+  font-size: inherit;
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.admin-main .item-table thead,
+.admin-main .item-table tbody,
+.admin-main .item-table tfoot,
+.admin-main .item-table tr,
+.admin-main .item-table th,
+.admin-main .item-table td {
+  font-size: inherit;
+}
+.admin-main .item-table col.quantity {
+  width: var(--item-quantity-width);
+}
+.admin-main .item-table col.subtotal {
+  width: var(--item-subtotal-width);
+}
+.admin-main .item-table th,
+.admin-main .item-table td {
+  padding: 1.2rem;
+  vertical-align: top;
+}
+.admin-main .item-table thead th {
+  height: 0;
+  padding: 0;
+  line-height: 0;
+}
+.admin-main .item-table tbody {
+  height: 1px;
+}
+.admin-main .item-table tbody td:first-child {
+  overflow-wrap: anywhere;
+}
+.admin-main .item-table tbody td + td {
+  border-left: 1px solid #d9dde2;
+}
+.admin-main .item-table tbody tr + tr td {
+  border-top: 1px solid #d9dde2;
+}
+.admin-main .item-table tbody .item-name {
+  font-size: max(12px, 0.875em);
+}
+.admin-main .item-table tbody .quantity,
+.admin-main .item-table tbody .subtotal {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.admin-main .item-table tfoot {
+  height: 100%;
+}
+.admin-main .item-table tfoot tr:not(:last-child) {
+  height: 1px;
+}
+.admin-main .item-table tfoot tr:last-child {
+  height: 100%;
+}
+.admin-main .item-table tfoot tr:last-child th,
+.admin-main .item-table tfoot tr:last-child td {
+  vertical-align: middle;
+}
+.admin-main .item-table tfoot th,
+.admin-main .item-table tfoot td {
+  border-top: 1px solid #d9dde2;
+  text-align: right;
+}
+.admin-main .item-table tfoot th {
+  font-size: max(12px, 0.875em);
+  color: #4f5863;
+}
+.admin-main .item-table tfoot td {
+  border-left: 1px solid #d9dde2;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.admin-main .item-table tfoot .total strong {
+  font-size: max(12px, 1.25em);
+  font-weight: 700;
+}
+
+/* =================================
+ * 進捗状況
+ * ------------------------------ */
+.admin-main .order-progress {
+  font-size: inherit;
+  padding: 1.2rem;
+}
+.admin-main .order-progress .select-customer-status {
+  width: 120px;
+  position: relative;
+  font-size: inherit;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head {
+  transition: 0.3s ease-out;
+  position: relative;
+  width: 100%;
+  height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: #fff;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  right: 0.8em;
+  width: 0.7em;
+  aspect-ratio: 8/5;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%23403726"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
+  transition: 0.2s cubic-bezier(0.4, 0.25, 0.3, 1);
+}
+.admin-main .order-progress .select-customer-status .selectbox__head:hover i {
+  border-color: #aeb5be;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head:active i {
+  background-color: #f6f7f8;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head .selectbox__value {
+  flex: 1;
+  font-size: max(12px, 0.875em);
+  display: flex;
+  align-self: stretch;
+  border-radius: 8px 0 0 8px;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #c7c7c7;
+  border-left: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  text-align: center;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head i {
+  display: block;
+  align-self: stretch;
+  width: 38px;
+  background-color: #fff;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #c7c7c7;
+  transition: 0.3s ease-out;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-size: inherit;
+  top: calc(100% + 0.4rem);
+  z-index: 10;
+  display: grid;
+  width: 100%;
+  grid-template-rows: 0fr;
+  grid-template-columns: 1fr;
+  transition: grid-template-rows 0.2s ease-out;
+  overflow: hidden;
+  box-shadow: 2px 2px 3px 0 rgba(53, 45, 32, 0.15);
+  border-radius: 6px;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel {
+  font-size: inherit;
+  position: relative;
+  margin: 0;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+  border-radius: 6px;
+  width: 100%;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li {
+  width: 100%;
+  position: relative;
+  font-size: inherit;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li input[type=radio] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  height: 3.6rem;
+  cursor: pointer;
+  font-size: max(12px, 0.875em);
+  padding-left: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: 0.3s ease-out;
+  padding-right: 1.4em;
+}
+.admin-main .order-progress .select-customer-status.is-selected .selectbox__head::after {
+  rotate: 90deg;
+}
+.admin-main .order-progress .select-customer-status.is-selected.is-open .selectbox__head::after {
+  rotate: 0deg;
+}
+.admin-main .order-progress .select-customer-status.is-selected:hover .selectbox__head::after {
+  rotate: 0deg;
+}
+.admin-main .order-progress .select-customer-status.is-open .list-wrapper {
+  grid-template-rows: 1fr;
+}
+.admin-main .order-progress .select-customer-status.is-open .list-wrapper .selectbox__panel {
+  overflow: auto;
+  border-color: #aeb5be;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head i {
+  width: 36px;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head.status-registered .selectbox__value {
+  background-color: #c2410c;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head.status-preparing .selectbox__value {
+  background-color: #8a3fd1;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head.status-shipped .selectbox__value {
+  background-color: #3d7a1f;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head.status-return .selectbox__value {
+  background-color: #d21f3c;
+}
+.admin-main .order-progress .select-customer-status .selectbox__head.status-cancelled .selectbox__value {
+  background-color: #3a3f46;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label {
+  transition: 0.3s ease-out;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-registered {
+  --status-color: #c2410c;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-preparing {
+  --status-color: #8a3fd1;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-shipped {
+  --status-color: #3d7a1f;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-return {
+  --status-color: #d21f3c;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-cancelled {
+  --status-color: #3a3f46;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--status-color);
+  z-index: -1;
+  transition: 0.3s ease-out;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label:hover::before {
+  filter: brightness(0.9);
+}
+.admin-main .updated {
+  font-size: 12px;
+  margin-top: 0.8rem;
+  text-align: center;
+}
+.admin-main .updated time {
+  font-size: inherit;
+  display: block;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.admin-main .order-list > li:has(.select-customer-status.is-open) {
+  z-index: 10;
+}
+.admin-main .order-list:has(> li:last-child .select-customer-status.is-open) {
+  padding-bottom: 19.2rem;
+}
+
+@keyframes status-menu-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* =================================
+ * 操作
+ * ------------------------------ */
+.admin-main .order-actions {
+  font-size: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-block: 1.2rem;
+}
+.admin-main .order-toggle {
+  font-size: inherit;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  flex: 0 0 4rem;
+  color: #737b86;
+  border: 1px solid transparent;
+}
+.admin-main .order-toggle.has-content {
+  color: #22272e;
+}
+.admin-main .order-toggle.has-content::after {
+  content: "";
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.admin-main .order-toggle[aria-expanded=true] {
+  background: #f6f7f8;
+  border-color: #d9dde2;
+}
+.admin-main .order-toggle[aria-expanded=true] .panel-chevron {
+  transform: scaleY(-1);
+}
+.admin-main .order-toggle .panel-chevron {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.admin-main .order-card .order-detail {
+  font-size: inherit;
+  grid-column: 1/-1;
+  border-left: 0;
 }
 
 /*# sourceMappingURL=order.css.map */

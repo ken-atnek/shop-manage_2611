@@ -181,3 +181,337 @@
         }
     }
 }
+
+/* =================================
+ * 列見出し
+ * ------------------------------ */
+.admin-main {
+    .orders-scroll {
+        font-size: inherit;
+        width: 100%;
+        margin-top: 1.6rem;
+        overflow-x: auto;
+    }
+    .orders-board {
+        font-size: inherit;
+        // 外側4列と商品内の幅を、見出しと各注文で共有する。
+        --order-columns: minmax(26rem, 1fr) minmax(30rem, 1.3fr) 14rem 5.6rem;
+        --item-quantity-width: 5.2rem;
+        --item-subtotal-width: 9.6rem;
+        min-width: 76rem;
+        .column-head,
+        .order-card {
+            display: grid;
+            grid-template-columns: var(--order-columns);
+        }
+        .column-head {
+            font-size: inherit;
+            border: 1px solid $color-border-default;
+            background: $color-bg-subtle;
+            text-align: center;
+            > * {
+                min-width: 0;
+            }
+            > :not(:first-child) {
+                border-left: 1px solid $color-border-default;
+            }
+            .column-label {
+                font-size: fz(14);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.8rem 1.2rem;
+            }
+            .product-column {
+                font-size: inherit;
+                .column-label {
+                    border-bottom: 1px solid $color-border-default;
+                }
+            }
+            .item-head {
+                font-size: inherit;
+                display: grid;
+                grid-template-columns:
+                    minmax(0, 1fr) var(--item-quantity-width)
+                    var(--item-subtotal-width);
+                span {
+                    font-size: fz(14);
+                    min-width: 0;
+                    padding: 0.8rem 1.2rem;
+                    @include flex-center;
+                }
+                span + span {
+                    border-left: 1px solid $color-border-default;
+                }
+                span:nth-child(2) {
+                    // 個数列の幅は変えず、2文字を横並びで収める。
+                    padding-inline: 0.8rem;
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+}
+
+/* =================================
+ * 注文の箱
+ * ------------------------------ */
+.admin-main {
+    .order-list {
+        font-size: inherit;
+        display: grid;
+        gap: 1.2rem;
+        margin-top: 1.2rem;
+        > li {
+            font-size: inherit;
+            min-width: 0;
+            z-index: calc(sibling-count() - sibling-index() + 1);
+        }
+    }
+    .order-card {
+        font-size: inherit;
+        border: 1px solid $color-border-default;
+        transition: border-color $transition-base;
+        // 縞模様は使わず、見ている注文だけ枠を濃くする（展開行の淡いグレーと区別するため）
+        &:hover {
+            border-color: $color-border-strong;
+        }
+        > * {
+            font-size: inherit;
+            min-width: 0;
+        }
+        > :not(:first-child) {
+            border-left: 1px solid $color-border-default;
+        }
+        .destination {
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .order-heading {
+            font-size: inherit;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.8rem 1.2rem;
+            h3 {
+                font-size: fz(16);
+                font-weight: 700;
+                font-variant-numeric: tabular-nums;
+                white-space: nowrap;
+            }
+            time {
+                font-size: fz(14);
+                // 折り返しても日時は列の右端にそろえる。
+                margin-left: auto;
+                text-align: right;
+                font-variant-numeric: tabular-nums;
+                white-space: nowrap;
+            }
+        }
+        .shipping-info {
+            font-size: inherit;
+            display: grid;
+            gap: 0.4rem;
+            margin-top: 1.6rem;
+            p {
+                font-size: inherit;
+                overflow-wrap: anywhere;
+            }
+            .name {
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+/* =================================
+ * 商品明細
+ * ------------------------------ */
+.admin-main {
+    .item-table {
+        font-size: inherit;
+        width: 100%;
+        // お届け先が高い注文でも、合計欄の縦罫線を箱の下端までつなぐ。
+        height: 100%;
+        table-layout: fixed;
+        // セルの内側に罫線を収め、列見出しとの半ピクセルのずれを避ける。
+        border-collapse: separate;
+        border-spacing: 0;
+        thead,
+        tbody,
+        tfoot,
+        tr,
+        th,
+        td {
+            font-size: inherit;
+        }
+        col.quantity {
+            width: var(--item-quantity-width);
+        }
+        col.subtotal {
+            width: var(--item-subtotal-width);
+        }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: top;
+        }
+        thead th {
+            // 列名は読み上げに残し、見えるヘッダー行は一覧上部の1回だけにする。
+            height: 0;
+            padding: 0;
+            line-height: 0;
+        }
+        tbody {
+            // tableでは内容が最小の高さになるため、1px指定でも長い商品名を切らない。
+            height: 1px;
+            td:first-child {
+                overflow-wrap: anywhere;
+            }
+            td + td {
+                border-left: 1px solid $color-border-default;
+            }
+            tr + tr td {
+                border-top: 1px solid $color-border-default;
+            }
+            .item-name {
+                font-size: fz(14);
+            }
+            .quantity,
+            .subtotal {
+                text-align: right;
+                font-variant-numeric: tabular-nums;
+                white-space: nowrap;
+            }
+        }
+        tfoot {
+            height: 100%;
+            tr:not(:last-child) {
+                height: 1px;
+            }
+            tr:last-child {
+                // flexではなくtableの高さ配分で、余った高さを合計行だけに渡す。
+                height: 100%;
+                th,
+                td {
+                    vertical-align: middle;
+                }
+            }
+            th,
+            td {
+                border-top: 1px solid $color-border-default;
+                text-align: right;
+            }
+            th {
+                font-size: fz(14);
+                color: $color-text-secondary;
+            }
+            td {
+                border-left: 1px solid $color-border-default;
+                font-variant-numeric: tabular-nums;
+                white-space: nowrap;
+            }
+            .total strong {
+                font-size: fz(20);
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+/* =================================
+ * 進捗状況
+ * ------------------------------ */
+.admin-main {
+    .order-progress {
+        font-size: inherit;
+        padding: 1.2rem;
+        .select-customer-status {
+            @include apply-status-box;
+        }
+    }
+    .updated {
+        font-size: fz(12);
+        margin-top: 0.8rem;
+        text-align: center;
+        time {
+            font-size: inherit;
+            display: block;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+    // 開いた注文を前へ出す。Kenのliのsibling-*指定はそのまま維持する。
+    .order-list > li:has(.select-customer-status.is-open) {
+        z-index: 10;
+    }
+    // 末尾メニュー（5項目×36px）と余白を、横スクロール領域内に収める。
+    .order-list:has(> li:last-child .select-customer-status.is-open) {
+        padding-bottom: 19.2rem;
+    }
+}
+
+@keyframes status-menu-open {
+    from {
+        opacity: 0;
+        transform: translateY(-0.4rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =================================
+ * 操作
+ * ------------------------------ */
+.admin-main {
+    .order-actions {
+        font-size: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-block: 1.2rem;
+    }
+    .order-toggle {
+        font-size: inherit;
+        position: relative;
+        width: 4rem;
+        height: 4rem;
+        flex: 0 0 4rem;
+        color: $color-text-muted;
+        border: 1px solid transparent;
+        &.has-content {
+            color: $color-text-primary;
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0.3rem;
+                right: 0.3rem;
+                width: 0.7rem;
+                height: 0.7rem;
+                border-radius: 50%;
+                background: currentColor;
+            }
+        }
+        &[aria-expanded="true"] {
+            background: $color-bg-subtle;
+            border-color: $color-border-default;
+            .panel-chevron {
+                transform: scaleY(-1);
+            }
+        }
+        .panel-chevron {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+    }
+    .order-card .order-detail {
+        font-size: inherit;
+        grid-column: 1 / -1;
+        border-left: 0;
+        // 受け皿だけを用意し、内容・罫線・背景はステップ5で作る。
+    }
+}
