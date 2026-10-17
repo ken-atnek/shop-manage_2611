@@ -200,10 +200,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                     <button
                       class="order-toggle has-content"
                       type="button"
-                      aria-expanded="false"
+                      aria-expanded="true"
                       aria-controls="order-detail-2610170112345"
-                      aria-label="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
-                      title="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      aria-label="注文#2610170112345のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
+                      title="注文#2610170112345のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -212,8 +212,57 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       </svg>
                     </button>
                   </div>
-                  <div class="order-detail" id="order-detail-2610170112345" hidden>
-                    <!-- メモ・入稿画像の中身はステップ5で作る。 -->
+                  <div class="order-detail" id="order-detail-2610170112345">
+                    <div class="order-detail-inner">
+                      <section class="submissions" aria-labelledby="submissions-2610170112345">
+                        <h4 id="submissions-2610170112345">入稿画像（注文者より）</h4>
+                        <ul class="submission-products" role="list">
+                          <li>
+                            <p class="product-name">写真入りマグカップ</p>
+                            <ul class="file-list" role="list" aria-label="写真入りマグカップの入稿画像">
+                              <!-- sample/の画像は表示確認用。実際の入稿データではない。 -->
+                              <li class="file-row">
+                                <img src="assets/images/sample/photo_01.jpg" width="48" height="48" alt="" />
+                                <span class="file-name">photo_01.jpg</span>
+                                <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_01.jpg" data-image-alt="写真入りマグカップの入稿画像 photo_01.jpg" data-file-name="photo_01.jpg" aria-label="photo_01.jpgを拡大表示" title="photo_01.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <circle cx="10" cy="10" r="6" />
+                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                  </svg>
+                                </button>
+                                <a class="file-download" href="assets/images/sample/photo_01.jpg" download="photo_01.jpg" aria-label="photo_01.jpgをダウンロード" title="photo_01.jpgをダウンロード">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                  </svg>
+                                </a>
+                              </li>
+                              <li class="file-row">
+                                <img src="assets/images/sample/photo_02.jpg" width="48" height="48" alt="" />
+                                <span class="file-name">photo_02.jpg</span>
+                                <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_02.jpg" data-image-alt="写真入りマグカップの入稿画像 photo_02.jpg" data-file-name="photo_02.jpg" aria-label="photo_02.jpgを拡大表示" title="photo_02.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <circle cx="10" cy="10" r="6" />
+                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                  </svg>
+                                </button>
+                                <a class="file-download" href="assets/images/sample/photo_02.jpg" download="photo_02.jpg" aria-label="photo_02.jpgをダウンロード" title="photo_02.jpgをダウンロード">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                  </svg>
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </section>
+                      <form class="memo-form" method="post" action="">
+                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
+                        <input type="hidden" name="order_id" value="2610170112345" />
+                        <label for="memo-2610170112345">メモ</label>
+                        <textarea id="memo-2610170112345" name="memo" rows="4"></textarea>
+                        <button class="memo-save" type="submit">保存</button>
+                      </form>
+                    </div>
                   </div>
                 </article>
               </li>
@@ -307,10 +356,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                     <button
                       class="order-toggle has-content"
                       type="button"
-                      aria-expanded="false"
+                      aria-expanded="true"
                       aria-controls="order-detail-2026110300002"
-                      aria-label="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
-                      title="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      aria-label="注文#2026110300002のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
+                      title="注文#2026110300002のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -319,8 +368,42 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       </svg>
                     </button>
                   </div>
-                  <div class="order-detail" id="order-detail-2026110300002" hidden>
-                    <!-- メモ・入稿画像の中身はステップ5で作る。 -->
+                  <div class="order-detail" id="order-detail-2026110300002">
+                    <div class="order-detail-inner">
+                      <section class="submissions" aria-labelledby="submissions-2026110300002">
+                        <h4 id="submissions-2026110300002">入稿画像（注文者より）</h4>
+                        <ul class="submission-products" role="list">
+                          <li>
+                            <p class="product-name">オリジナルラベルギフト</p>
+                            <ul class="file-list" role="list" aria-label="オリジナルラベルギフトの入稿画像">
+                              <!-- sample/の画像を表示確認用に流用。注文間で入稿データを共有する仕様ではない。 -->
+                              <li class="file-row">
+                                <img src="assets/images/sample/photo_02.jpg" width="48" height="48" alt="" />
+                                <span class="file-name">photo_02.jpg</span>
+                                <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_02.jpg" data-image-alt="オリジナルラベルギフトの入稿画像 photo_02.jpg" data-file-name="photo_02.jpg" aria-label="photo_02.jpgを拡大表示" title="photo_02.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <circle cx="10" cy="10" r="6" />
+                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                  </svg>
+                                </button>
+                                <a class="file-download" href="assets/images/sample/photo_02.jpg" download="photo_02.jpg" aria-label="photo_02.jpgをダウンロード" title="photo_02.jpgをダウンロード">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                  </svg>
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </section>
+                      <form class="memo-form" method="post" action="">
+                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
+                        <input type="hidden" name="order_id" value="2026110300002" />
+                        <label for="memo-2026110300002">メモ</label>
+                        <textarea id="memo-2026110300002" name="memo" rows="4">名入れの文字は「祝 還暦」で確定済み。</textarea>
+                        <button class="memo-save" type="submit">保存</button>
+                      </form>
+                    </div>
                   </div>
                 </article>
               </li>
@@ -426,8 +509,16 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       </svg>
                     </button>
                   </div>
-                  <div class="order-detail" id="order-detail-2026110300003" hidden>
-                    <!-- メモ・入稿画像の中身はステップ5で作る。 -->
+                  <div class="order-detail" id="order-detail-2026110300003" inert>
+                    <div class="order-detail-inner">
+                      <form class="memo-form" method="post" action="">
+                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
+                        <input type="hidden" name="order_id" value="2026110300003" />
+                        <label for="memo-2026110300003">メモ</label>
+                        <textarea id="memo-2026110300003" name="memo" rows="4"></textarea>
+                        <button class="memo-save" type="submit">保存</button>
+                      </form>
+                    </div>
                   </div>
                 </article>
               </li>
@@ -436,6 +527,14 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
         </div>
       </main>
     </div>
+    <!-- すべての入稿画像で共用する拡大表示。内容は押したボタンのdata属性から設定する。 -->
+    <dialog class="image-dialog" id="submission-preview" aria-labelledby="preview-file-name">
+      <div class="dialog-content">
+        <h2 id="preview-file-name">入稿画像</h2>
+        <img class="preview-image" alt="" />
+        <button class="dialog-close" type="button" autofocus>閉じる</button>
+      </div>
+    </dialog>
     <script src="assets/js/order.js"></script>
   </body>
 </html>

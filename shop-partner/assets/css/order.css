@@ -214,7 +214,8 @@
 }
 .admin-main .orders-board {
   font-size: inherit;
-  --order-columns: minmax(26rem, calc((100% - 19.6rem) / 2.3)) minmax(30rem, 1fr) 14rem;
+  --order-columns: minmax(26rem, calc((100% - 19.6rem) / 2.3))
+      minmax(30rem, 1fr) 14rem;
   --item-quantity-width: 5.2rem;
   --item-subtotal-width: 9.6rem;
   min-width: 70.4rem;
@@ -698,6 +699,192 @@
   font-size: inherit;
   grid-column: 1/-1;
   border-left: 0;
+}
+
+/* =================================
+ * 展開行
+ * ------------------------------ */
+.admin-main .order-card .order-detail {
+  font-size: inherit;
+  display: grid;
+  grid-template-rows: 0fr;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .admin-main .order-card .order-detail {
+    transition: grid-template-rows 0.25s ease-out;
+  }
+}
+.admin-main .order-card .order-detail:not([inert]) {
+  grid-template-rows: 1fr;
+}
+.admin-main .order-card .order-detail .order-detail-inner {
+  font-size: inherit;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  border-top: 1px solid #d9dde2;
+  background: #f6f7f8;
+}
+.admin-main .order-card .order-detail[inert] .order-detail-inner {
+  border-top-width: 0;
+}
+.admin-main .order-card .order-detail .submissions {
+  font-size: inherit;
+  flex: 0 1 auto;
+  width: max-content;
+  min-width: 0;
+  max-width: 40%;
+  padding: 1.6rem;
+  border-right: 1px solid #d9dde2;
+}
+.admin-main .order-card .order-detail .submissions h4 {
+  font-size: inherit;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .order-detail .submission-products,
+.admin-main .order-card .order-detail .file-list {
+  font-size: inherit;
+  display: grid;
+  gap: 1.2rem;
+}
+.admin-main .order-card .order-detail .submission-products li,
+.admin-main .order-card .order-detail .file-list li {
+  font-size: inherit;
+  min-width: 0;
+}
+.admin-main .order-card .order-detail .submission-products {
+  margin-top: 1.2rem;
+}
+.admin-main .order-card .order-detail .product-name {
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .order-detail .file-row {
+  display: grid;
+  grid-template-columns: 4.8rem minmax(0, 1fr) 4rem 4rem;
+  align-items: center;
+  gap: 0.8rem;
+}
+.admin-main .order-card .order-detail .file-row img {
+  width: 4.8rem;
+  height: 4.8rem;
+  object-fit: cover;
+  border: 1px solid #d9dde2;
+}
+.admin-main .order-card .order-detail .file-row .file-name {
+  font-size: max(12px, 0.875em);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .order-detail .file-row .image-preview,
+.admin-main .order-card .order-detail .file-row .file-download {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  color: #4f5863;
+  border-radius: 2px;
+  border-radius: 50%;
+}
+.admin-main .order-card .order-detail .file-row .image-preview:hover,
+.admin-main .order-card .order-detail .file-row .file-download:hover {
+  color: #22272e;
+  background: #fff;
+}
+.admin-main .order-card .order-detail .memo-form {
+  font-size: inherit;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1.6rem;
+}
+.admin-main .order-card .order-detail .memo-form label {
+  font-size: inherit;
+  font-weight: 500;
+}
+.admin-main .order-card .order-detail .memo-form textarea {
+  font-size: inherit;
+  width: 100%;
+  min-height: 10.4rem;
+  padding: 1.2rem;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  background: #fff;
+  resize: vertical;
+}
+.admin-main .order-card .order-detail .memo-form .memo-save {
+  font-size: inherit;
+  font-weight: 500;
+  align-self: flex-end;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  color: #22272e;
+  background: #fff;
+}
+.admin-main .order-card .order-detail .memo-form .memo-save:hover {
+  background: #f6f7f8;
+}
+
+/* =================================
+ * 拡大表示
+ * ------------------------------ */
+.image-dialog {
+  font-size: inherit;
+  width: fit-content;
+  max-width: calc(100vw - 4.8rem);
+  max-height: calc(100dvh - 4.8rem);
+  margin: auto;
+  padding: 2.4rem;
+  overflow: auto;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  color: #22272e;
+  background: #fff;
+}
+.image-dialog::backdrop {
+  background: rgba(34, 39, 46, 0.6);
+}
+.image-dialog .dialog-content {
+  font-size: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+.image-dialog .dialog-content h2 {
+  font-size: inherit;
+  font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.image-dialog .dialog-content .preview-image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100dvh - 20rem);
+  object-fit: contain;
+}
+.image-dialog .dialog-content .dialog-close {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 2px;
+  background: #fff;
+}
+.image-dialog .dialog-content .dialog-close:hover {
+  background: #f6f7f8;
 }
 
 /*# sourceMappingURL=order.css.map */

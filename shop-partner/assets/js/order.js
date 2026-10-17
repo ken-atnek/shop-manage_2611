@@ -119,11 +119,49 @@ document.addEventListener("click", (event) => {
   button.setAttribute("aria-expanded", String(!expanded));
   button.setAttribute("aria-label", name);
   button.title = name;
-  panel.hidden = expanded;
+  panel.inert = expanded;
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape" || !openStatusBox) return;
   event.preventDefault();
   closeStatusBox(openStatusBox, true);
+});
+
+// ===== 入稿画像の拡大表示（全注文で1つのdialogを共用） =====
+const imageDialog = document.getElementById("submission-preview");
+const previewImage = imageDialog.querySelector(".preview-image");
+const previewFileName = imageDialog.querySelector("#preview-file-name");
+let imagePreviewOpener = null;
+
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) return;
+  const button = event.target.closest(".image-preview");
+  if (!button) return;
+
+  imagePreviewOpener = button;
+  previewImage.src = button.dataset.imageSrc;
+  previewImage.alt = button.dataset.imageAlt;
+  previewFileName.textContent = button.dataset.fileName;
+  imageDialog.showModal();
+});
+
+imageDialog.querySelector(".dialog-close").addEventListener("click", () => {
+  imageDialog.close();
+});
+
+imageDialog.addEventListener("click", (event) => {
+  if (event.target !== imageDialog) return;
+  const bounds = imageDialog.getBoundingClientRect();
+  // dialogの余白を押しただけでは閉じず、外側の背景クリックだけを扱う。
+  if (event.clientX < bounds.left || event.clientX > bounds.right ||
+      event.clientY < bounds.top || event.clientY > bounds.bottom) {
+    imageDialog.close();
+  }
+});
+
+// Escはdialog標準の動作で閉じる。どの閉じ方でも元の拡大ボタンへ戻す。
+imageDialog.addEventListener("close", () => {
+  imagePreviewOpener?.focus();
+  imagePreviewOpener = null;
 });
