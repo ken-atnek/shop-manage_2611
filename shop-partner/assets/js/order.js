@@ -8,6 +8,19 @@
 
 "use strict";
 
+// ===== 共通 =====
+function getOrderNumber(element) {
+  return element.closest(".order-card").querySelector("h3").textContent.trim();
+}
+
+// grid 0fr/1fr のアコーディオン。閉じたパネルはinertで操作・読み上げの対象から外す。
+function toggleAccordion(button, panel) {
+  const open = button.getAttribute("aria-expanded") !== "true";
+  button.setAttribute("aria-expanded", String(open));
+  panel.inert = !open;
+  return open;
+}
+
 // ===== ステータス（radio・表示値・hiddenの同期） =====
 let openStatusBox = null;
 
@@ -35,9 +48,7 @@ function syncStatus(box) {
   });
   head.classList.add(...[...label.classList].filter((name) => name.startsWith("status-")));
 
-  const number = box.closest(".order-card").querySelector("h3").textContent.trim();
-  const name = `注文${number}のステータスを変更（現在：${value.textContent}）`;
-  head.setAttribute("aria-label", name);
+  head.setAttribute("aria-label", `注文${getOrderNumber(box)}のステータスを変更（現在：${value.textContent}）`);
   // 保存方法が未確定のため、値と表示だけを同期し、通信・更新日時の変更はしない。
 }
 
@@ -102,31 +113,22 @@ document.querySelectorAll(".select-customer-status[data-selectbox]").forEach((bo
   });
 });
 
-// ===== 外側クリック・メモ／入稿画像の展開 =====
-document.addEventListener("click", (event) => {
-  if (!(event.target instanceof Element)) return;
-  if (openStatusBox && !openStatusBox.contains(event.target)) closeStatusBox(openStatusBox);
-
-  const button = event.target.closest(".order-toggle");
-  if (!button) return;
-  const panel = document.getElementById(button.getAttribute("aria-controls"));
-  if (!panel) return;
-
-  const expanded = button.getAttribute("aria-expanded") === "true";
-  const number = button.closest(".order-card").querySelector("h3").textContent.trim();
-  const contentNote = button.classList.contains("has-content") ? "（メモ・入稿画像あり）" : "";
-  const name = `注文${number}のメモ・入稿画像を${expanded ? "開く" : "閉じる"}${contentNote}`;
-  button.setAttribute("aria-expanded", String(!expanded));
-  button.setAttribute("aria-label", name);
-  button.title = name;
-  panel.inert = expanded;
-});
-
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape" || !openStatusBox) return;
   event.preventDefault();
   closeStatusBox(openStatusBox, true);
 });
+
+// ===== メモ／入稿画像の展開 =====
+function toggleOrderDetail(button) {
+  const panel = document.getElementById(button.getAttribute("aria-controls"));
+  if (!panel) return;
+  const open = toggleAccordion(button, panel);
+  const contentNote = button.classList.contains("has-content") ? "（メモ・入稿画像あり）" : "";
+  const name = `注文${getOrderNumber(button)}のメモ・入稿画像を${open ? "閉じる" : "開く"}${contentNote}`;
+  button.setAttribute("aria-label", name);
+  button.title = name;
+}
 
 // ===== 入稿画像の拡大表示（全注文で1つのdialogを共用） =====
 const imageDialog = document.getElementById("submission-preview");
@@ -134,17 +136,13 @@ const previewImage = imageDialog.querySelector(".preview-image");
 const previewFileName = imageDialog.querySelector("#preview-file-name");
 let imagePreviewOpener = null;
 
-document.addEventListener("click", (event) => {
-  if (!(event.target instanceof Element)) return;
-  const button = event.target.closest(".image-preview");
-  if (!button) return;
-
+function openImagePreview(button) {
   imagePreviewOpener = button;
   previewImage.src = button.dataset.imageSrc;
   previewImage.alt = button.dataset.imageAlt;
   previewFileName.textContent = button.dataset.fileName;
   imageDialog.showModal();
-});
+}
 
 imageDialog.querySelector(".dialog-close").addEventListener("click", () => {
   imageDialog.close();
@@ -170,12 +168,8 @@ imageDialog.addEventListener("close", () => {
 const detailSearchButton = document.querySelector(".detail-toggle");
 const detailSearchPanel = document.getElementById("order-search-panel");
 
-detailSearchButton.addEventListener("click", () => {
-  const expanded = detailSearchButton.getAttribute("aria-expanded") === "true";
-  detailSearchButton.setAttribute("aria-expanded", String(!expanded));
-  detailSearchPanel.inert = expanded;
-  // 開閉時にフォーカスは動かさず、詳細検索ボタンに残す。
-});
+// 開閉時にフォーカスは動かさず、詳細検索ボタンに残す。
+detailSearchButton.addEventListener("click", () => toggleAccordion(detailSearchButton, detailSearchPanel));
 
 detailSearchPanel.querySelector(".clear-conditions").addEventListener("click", () => {
   detailSearchPanel.querySelectorAll("input").forEach((input) => {
@@ -186,4 +180,18 @@ detailSearchPanel.querySelector(".clear-conditions").addEventListener("click", (
     }
   });
   detailSearchPanel.querySelector('input[type="date"]').focus();
+});
+
+// ===== 一覧のクリック（注文が増えても1つのリスナーで扱う） =====
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) return;
+  if (openStatusBox && !openStatusBox.contains(event.target)) closeStatusBox(openStatusBox);
+
+  const orderToggle = event.target.closest(".order-toggle");
+  if (orderToggle) {
+    toggleOrderDetail(orderToggle);
+    return;
+  }
+  const imagePreview = event.target.closest(".image-preview");
+  if (imagePreview) openImagePreview(imagePreview);
 });

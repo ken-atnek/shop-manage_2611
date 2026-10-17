@@ -600,3 +600,15 @@
 - npm run sassは警告・エラーなし、node --check・DDEV php -l成功。内蔵ブラウザで1280×800・1024×768・834×1194を確認。古いCSS・JSキャッシュの影響を避けるため同じDDEV配信先の別パスで最新適用を照合した。入力44px・文字継承・横はみ出しなし、アコーディオン途中の高さ変化と閉じ切った0px、矢印・inert、Tab除外・指定順・枠のクリップなし、クリア範囲と開始日への復帰を確認。日付欄はネイティブの年月日・カレンダー内にもTab停止する
 - 既存のステータスの矢印キー／Enter、展開行、画像モーダル・Esc・フォーカス復帰を回帰確認。Safari・Firefox・読み上げ実機、reduce設定の実切り替えは未確認。ステータスとKPIの組み合わせ、検索条件の照合・集計は未確定のまま。ルートscss・common.scss・共通CSSは変更せず、生成order.cssと画面資料を更新。検索送信・保存送信・Gitコミットなし
 
+## 2026-10-17 注文の展開行を全件初期クローズへ変更
+
+- Kenの決定により、読み込み時は全注文のメモ・入稿画像を閉じる。先頭2件の展開ボタンをaria-expanded="false"・名前とtitleを「開く」へ変更し、対応パネルにinertを追加。3件目は既に閉じているため変更なし。画像・メモ・中身ありの点は維持する
+- 内蔵ブラウザで全3件の初期高さ0px・inert・aria-expanded="false"、先頭のボタンで開く動作、再読み込みで閉じることを確認。PHP構文正常。Sass・JS・生成CSSの変更とGitコミットなし
+
+## 2026-10-17 KPI初期選択を「すべて」へ・未使用変数の削除・ファイル内リファクタ
+
+- Kenの決定により、読み込み時のKPIは「すべて」を選択。aria-pressedを「すべて」true／「未着手」false、一覧見出しを`8件 すべてを表示`、一覧のaria-labelを「すべての注文」に変更。一覧は表示例として先頭3件のみ掲載のまま。SPEC・CLIENT_ORDER_LISTを同期
+- _colors.scssの未使用`$color-nav-hover`と、コメントアウトの`$border-gray`・`$hover-blue`・`$hover-bg-blue`を削除。_svg.scssは使用中のため維持。ほかの未使用候補（`--color-brand-subtle`、`$article-max-width`、`$pc-max-width`、mixin `pc`・`spw`）はKen管理の土台のため削除せず保留
+- order.scss：ボタンの共通指定をファイル内mixin `order-button`・`order-button-primary`にまとめ、検索・この条件で検索・保存・閉じるで使用（Sass分割時に_ui.scssへ移す候補）。`.order-detail`の2か所の指定を展開行の節へ統合し、古い「ステップ5で作る」コメントを削除。拡大・ダウンロードボタンの重複border-radiusを削除。生成CSSの実効値は変更なし（宣言の並び・まとまりのみ変化）
+- order.js：documentのclickリスナー2つを1つへ統合し、注文番号取得`getOrderNumber`、アコーディオン開閉`toggleAccordion`（aria-expanded・inert）を展開行と詳細検索で共用。動作は変更なし
+- npm run sass警告なし、node --check成功。Playwright（PHP書き出しHTML・1280幅）でKPI初期状態、ステータスの矢印＋Enter・ポインタ選択・外側クリック・Esc、展開行の開閉と名前・inert・高さ、画像dialogのEsc・フォーカス復帰、詳細検索の開閉・クリア・開始日への復帰を回帰確認。ファイル分割・Gitコミットなし

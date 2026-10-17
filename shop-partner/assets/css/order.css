@@ -134,18 +134,14 @@
 .admin-main .search-box .filter-bar label {
   font-size: inherit;
 }
-.admin-main .search-box .filter-bar input,
-.admin-main .search-box .filter-bar button {
-  font-size: inherit;
+.admin-main .search-box .filter-bar input {
+  font-size: 1.6rem;
   min-height: 4.4rem;
   padding: 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
   color: #22272e;
   background: #fff;
-}
-.admin-main .search-box .filter-bar input {
-  font-size: 1.6rem;
   flex: 1;
   min-width: 0;
   appearance: none;
@@ -155,12 +151,21 @@
   opacity: 1;
 }
 .admin-main .search-box .filter-bar button {
-  flex-shrink: 0;
+  font-size: inherit;
   font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
   white-space: nowrap;
 }
 .admin-main .search-box .filter-bar button:hover {
   background: #f6f7f8;
+}
+.admin-main .search-box .filter-bar button {
+  flex-shrink: 0;
 }
 .admin-main .search-box .filter-bar button[type=submit] {
   font-weight: 700;
@@ -256,13 +261,13 @@
 }
 .admin-main .search-box .search-panel .search-actions button {
   font-size: inherit;
+  font-weight: 500;
   min-height: 4.4rem;
   padding: 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
   color: #22272e;
   background: #fff;
-  font-weight: 500;
   white-space: nowrap;
 }
 .admin-main .search-box .search-panel .search-actions button:hover {
@@ -808,17 +813,14 @@
   transform-box: fill-box;
   transform-origin: center;
 }
-.admin-main .order-card .order-detail {
-  font-size: inherit;
-  grid-column: 1/-1;
-  border-left: 0;
-}
 
 /* =================================
  * 展開行
  * ------------------------------ */
 .admin-main .order-card .order-detail {
   font-size: inherit;
+  grid-column: 1/-1;
+  border-left: 0;
   display: grid;
   grid-template-rows: 0fr;
 }
@@ -901,7 +903,6 @@
   width: 4rem;
   height: 4rem;
   color: #4f5863;
-  border-radius: 4px;
   border-radius: 50%;
 }
 .admin-main .order-card .order-detail .file-row .image-preview:hover,
@@ -935,17 +936,29 @@
 }
 .admin-main .order-card .order-detail .memo-form .memo-save {
   font-size: inherit;
-  font-weight: 700;
-  align-self: flex-end;
+  font-weight: 500;
   min-height: 4.4rem;
   padding: 1rem 1.6rem;
-  border: 1px solid #9db5d6;
+  border: 1px solid #d9dde2;
   border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.admin-main .order-card .order-detail .memo-form .memo-save:hover {
+  background: #f6f7f8;
+}
+.admin-main .order-card .order-detail .memo-form .memo-save {
+  font-weight: 700;
+  border-color: #9db5d6;
   color: #1f4e8c;
   background: #e6edf7;
 }
 .admin-main .order-card .order-detail .memo-form .memo-save:hover {
   background: #d6e2f2;
+}
+.admin-main .order-card .order-detail .memo-form .memo-save {
+  align-self: flex-end;
 }
 
 /* =================================
@@ -994,7 +1007,9 @@
   padding: 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
+  color: #22272e;
   background: #fff;
+  white-space: nowrap;
 }
 .image-dialog .dialog-content .dialog-close:hover {
   background: #f6f7f8;

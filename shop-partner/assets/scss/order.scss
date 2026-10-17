@@ -9,6 +9,33 @@
  * Last updated: 2026-10-17
  * ======================================= */
 
+// ===== このファイル内のボタン共通（Sass分割時に_ui.scssへ移す候補） =====
+@mixin order-button {
+    font-size: inherit;
+    font-weight: 500;
+    min-height: 4.4rem;
+    padding: 1rem 1.6rem;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    color: $color-text-primary;
+    background: $pure-white;
+    white-space: nowrap;
+    &:hover {
+        background: $color-bg-subtle;
+    }
+}
+
+// 主ボタン（検索・この条件で検索・保存）。order-buttonの後に重ねる
+@mixin order-button-primary {
+    font-weight: 700;
+    border-color: $color-button-primary-border;
+    color: $color-button-primary-text;
+    background: $color-button-primary-bg;
+    &:hover {
+        background: $color-button-primary-bg-hover;
+    }
+}
+
 /* =================================
  * ページ見出し
  * ------------------------------ */
@@ -107,19 +134,15 @@
             label {
                 font-size: inherit;
             }
-            input,
-            button {
-                font-size: inherit;
+            input {
+                // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
+                font-size: 1.6rem;
                 min-height: 4.4rem;
                 padding: 1rem 1.6rem;
                 border: 1px solid $color-border-default;
                 border-radius: $radius-sm;
                 color: $color-text-primary;
                 background: $pure-white;
-            }
-            input {
-                // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
-                font-size: 1.6rem;
                 flex: 1;
                 min-width: 0;
                 // Safariの検索欄の角丸・独自余白を外す
@@ -130,22 +153,12 @@
                 }
             }
             button {
+                @include order-button;
                 flex-shrink: 0;
-                font-weight: 500;
-                white-space: nowrap;
-                &:hover {
-                    background: $color-bg-subtle;
-                }
             }
             // 主ボタン（検索）
             button[type="submit"] {
-                font-weight: 700;
-                border-color: $color-button-primary-border;
-                color: $color-button-primary-text;
-                background: $color-button-primary-bg;
-                &:hover {
-                    background: $color-button-primary-bg-hover;
-                }
+                @include order-button-primary;
             }
             .detail-toggle {
                 gap: 1.2rem;
@@ -227,28 +240,11 @@
                 justify-content: flex-end;
                 gap: 1.2rem;
                 button {
-                    font-size: inherit;
-                    min-height: 4.4rem;
-                    padding: 1rem 1.6rem;
-                    border: 1px solid $color-border-default;
-                    border-radius: $radius-sm;
-                    color: $color-text-primary;
-                    background: $pure-white;
-                    font-weight: 500;
-                    white-space: nowrap;
-                    &:hover {
-                        background: $color-bg-subtle;
-                    }
+                    @include order-button;
                 }
                 // 主ボタン（この条件で検索）
                 button[type="submit"] {
-                    font-weight: 700;
-                    border-color: $color-button-primary-border;
-                    color: $color-button-primary-text;
-                    background: $color-button-primary-bg;
-                    &:hover {
-                        background: $color-button-primary-bg-hover;
-                    }
+                    @include order-button-primary;
                 }
                 // 副ボタン（条件をクリア）
                 .clear-conditions {
@@ -636,12 +632,6 @@
             transform-origin: center;
         }
     }
-    .order-card .order-detail {
-        font-size: inherit;
-        grid-column: 1 / -1;
-        border-left: 0;
-        // 受け皿だけを用意し、内容・罫線・背景はステップ5で作る。
-    }
 }
 
 /* =================================
@@ -650,6 +640,9 @@
 .admin-main {
     .order-card .order-detail {
         font-size: inherit;
+        // 注文の3列をまたぐ全幅の行。左罫線は列区切り用の指定を打ち消す。
+        grid-column: 1 / -1;
+        border-left: 0;
         display: grid;
         grid-template-rows: 0fr;
         @media (prefers-reduced-motion: no-preference) {
@@ -728,7 +721,6 @@
                 width: 4rem;
                 height: 4rem;
                 color: $color-text-secondary;
-                border-radius: $radius-sm;
                 border-radius: 50%;
                 &:hover {
                     color: $color-text-primary;
@@ -762,18 +754,9 @@
             }
             // 主ボタン（保存）
             .memo-save {
-                font-size: inherit;
-                font-weight: 700;
+                @include order-button;
+                @include order-button-primary;
                 align-self: flex-end;
-                min-height: 4.4rem;
-                padding: 1rem 1.6rem;
-                border: 1px solid $color-button-primary-border;
-                border-radius: $radius-sm;
-                color: $color-button-primary-text;
-                background: $color-button-primary-bg;
-                &:hover {
-                    background: $color-button-primary-bg-hover;
-                }
             }
         }
     }
@@ -817,16 +800,7 @@
             object-fit: contain;
         }
         .dialog-close {
-            font-size: inherit;
-            font-weight: 500;
-            min-height: 4.4rem;
-            padding: 1rem 1.6rem;
-            border: 1px solid $color-border-default;
-            border-radius: $radius-sm;
-            background: $pure-white;
-            &:hover {
-                background: $color-bg-subtle;
-            }
+            @include order-button;
         }
     }
 }

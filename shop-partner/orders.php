@@ -36,16 +36,16 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
           <h1>受注一覧</h1>
           <time datetime="2026-10-17">2026年10月17日</time>
         </div>
-        <!-- 表示例は固定。未着手と一覧見出しの対象・件数をそろえる。 -->
+        <!-- 表示例は固定。初期選択は「すべて」。一覧見出しの件数はKPIと連動させる（一覧は先頭3件のみ掲載）。 -->
         <ul class="kpi-list" role="list" aria-label="注文の絞り込み">
           <li>
-            <button type="button" aria-pressed="false">
+            <button type="button" aria-pressed="true">
               <span class="label">すべて</span>
               <span class="count"><strong>8</strong><span class="unit">件</span></span>
             </button>
           </li>
           <li>
-            <button type="button" aria-pressed="true">
+            <button type="button" aria-pressed="false">
               <span class="label">未着手</span>
               <span class="count"><strong>3</strong><span class="unit">件</span></span>
             </button>
@@ -137,8 +137,8 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
         </form>
         <div class="list-heading" aria-live="polite" aria-atomic="true">
           <h2>注文一覧</h2>
-          <span class="count">3件</span>
-          <p class="filter-note">未着手を表示</p>
+          <span class="count">8件</span>
+          <p class="filter-note">すべてを表示</p>
         </div>
 
         <!-- 列見出しと注文の箱を同じ領域で横スクロールさせる。 -->
@@ -159,7 +159,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                 <span class="column-label">操作</span>
               </div>
             </div>
-            <ol class="order-list" role="list" aria-label="未着手の注文">
+            <ol class="order-list" role="list" aria-label="すべての注文">
               <li>
                 <article class="order-card" aria-labelledby="order-2610170112345">
                   <div class="destination">
@@ -255,10 +255,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                     <button
                       class="order-toggle has-content"
                       type="button"
-                      aria-expanded="true"
+                      aria-expanded="false"
                       aria-controls="order-detail-2610170112345"
-                      aria-label="注文#2610170112345のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
-                      title="注文#2610170112345のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
+                      aria-label="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      title="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -267,7 +267,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       </svg>
                     </button>
                   </div>
-                  <div class="order-detail" id="order-detail-2610170112345">
+                  <div class="order-detail" id="order-detail-2610170112345" inert>
                     <div class="order-detail-inner">
                       <section class="submissions" aria-labelledby="submissions-2610170112345">
                         <h4 id="submissions-2610170112345">入稿画像（注文者より）</h4>
@@ -411,10 +411,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                     <button
                       class="order-toggle has-content"
                       type="button"
-                      aria-expanded="true"
+                      aria-expanded="false"
                       aria-controls="order-detail-2026110300002"
-                      aria-label="注文#2026110300002のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
-                      title="注文#2026110300002のメモ・入稿画像を閉じる（メモ・入稿画像あり）"
+                      aria-label="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      title="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -423,7 +423,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       </svg>
                     </button>
                   </div>
-                  <div class="order-detail" id="order-detail-2026110300002">
+                  <div class="order-detail" id="order-detail-2026110300002" inert>
                     <div class="order-detail-inner">
                       <section class="submissions" aria-labelledby="submissions-2026110300002">
                         <h4 id="submissions-2026110300002">入稿画像（注文者より）</h4>

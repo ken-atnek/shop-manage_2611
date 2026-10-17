@@ -14,7 +14,6 @@ $color-border-inner: #e3e6ea; // 仮：箱の中の区切り線（セル・展�
 $color-border-hover: #8a929c; // 仮：箱（注文・KPI）にマウスを乗せたときの外枠。外枠より一段濃く
 $color-text-primary: #22272e; // 仮：白上 15.02:1、bg-subtle 上 14.01:1
 $color-text-secondary: #4f5863; // 仮：白上 7.22:1、bg-subtle 上 6.73:1
-$color-nav-hover: rgba(255, 255, 255, 0.5); // 仮：ナビのホバー背景
 
 // 仮：無効表示専用。通常の本文・補助文には使用しない。
 // 白上 4.28:1、bg-subtle 上 3.99:1。
@@ -37,6 +36,3 @@ $color-status-processing: #8a3fd1; // 対応中：紫 5.66:1
 $color-status-shipped: #3d7a1f; // 発送済：黄みの緑（ブランド緑#097141と色味を離す）5.25:1
 $color-status-return: #d21f3c; // 返品対応：赤 5.25:1
 $color-status-cancelled: #3a3f46; // キャンセル：チャコール 10.61:1
-// $border-gray: #c7c7c7;
-// $hover-blue: #335d95;
-// $hover-bg-blue: #e6edf7;
