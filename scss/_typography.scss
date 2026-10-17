@@ -1,0 +1,22 @@
+// タイポグラフィ
+// docs/DESIGN_TOKENS.md：Noto Sans JP、明朝体は使用しない
+
+$font-family-base:
+  "Noto Sans JP",
+  -apple-system,
+  BlinkMacSystemFont,
+  "Hiragino Kaku Gothic ProN",
+  "Yu Gothic",
+  sans-serif;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$font-size-eyebrow: 13px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-md: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 28px;
+

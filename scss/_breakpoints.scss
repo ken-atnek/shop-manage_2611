@@ -1,0 +1,12 @@
+// ブレイクポイント
+// 管理画面はPC利用前提。1440pxを基準に、1024pxまでの縮小表示を確認する。
+
+$breakpoint-desktop: 1440px;
+$breakpoint-laptop: 1024px;
+
+@mixin mq-down($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+

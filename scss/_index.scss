@@ -1,0 +1,9 @@
+// ページ別Sassから `@use "./foundation/" as *;` で参照する共通入口
+
+@forward "./settings";
+@forward "./colors";
+@forward "./breakpoints";
+@forward "./typography";
+@forward "./interaction";
+@forward "./ui";
+

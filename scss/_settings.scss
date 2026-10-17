@@ -1,0 +1,16 @@
+// 汎用変数
+
+// 余白（docs/DESIGN_TOKENS.md：通常の要素間は24〜32pxを基準）
+$space-xs: 8px;
+$space-sm: 16px;
+$space-md: 24px;
+$space-lg: 32px;
+$space-xl: 48px;
+
+// 角丸（フォーム：小さめの角丸）
+$radius-sm: 4px;
+$radius-md: 8px;
+
+// 管理画面の基準幅（一覧・詳細ともに共通で使用）
+$content-max-width: 1440px;
+
