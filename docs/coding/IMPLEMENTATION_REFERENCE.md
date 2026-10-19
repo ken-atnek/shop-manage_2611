@@ -27,15 +27,17 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 
 ## Client受注一覧の制作単位
 
-受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。ユーザーが独立させた共通部分は`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→`order.css`の順に読み込む。
+受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。Client画面で共用するスタイルは`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→ページ別CSSの順に読み込む。
 
 `_reset.scss`は`common.scss`だけで読み込み、`order.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
 
 - ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、画面スタイルは各管理画面側へ置く
-- `common.scss`は現在の`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー`の構成を基準とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
-- `order.scss`は`@use → コメントヘッダー → ページ固有のセクション`とする。今後追加するKPI・検索・注文・展開行は画面の並びに沿って整理し、共通のBrand・Layoutは戻さない
+- `common.scss`は`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー → フォーム部品 → ページ見出し → 検索 → 一覧見出し → 一覧の状態 → ページ送り`の順とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
+- `order.scss`は`@use → コメントヘッダー → 受注一覧固有のセクション`とする。KPI、受注一覧だけの検索条件配置、列見出し、注文の箱、商品明細、進捗状況、操作、展開行、拡大表示を置き、共通部分は戻さない
 - `common.scss`＋ページ別Sassの構成を継続し、受注一覧完成後も`admin.scss`への再編を前提にしない
 - 既存の関数・mixinを利用し、Codexは依頼なく新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない
+
+Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面固有の操作はページ別JSへ置く。受注一覧は`common.js`→`order.js`の順に`</body>`直前で読み込み、`order.js`は`common.js`の`toggleAccordion`を展開行に使用する。
 
 ### 制作用PHPのインクルード
 
@@ -57,7 +59,7 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
 - 例外として、入力欄（`input`・`textarea`）の文字は`1.6rem`（16px）固定とする。16px未満だとiOSのSafariがフォーカス時に画面を拡大するため
-- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
+- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
 - アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
   - 線のアイコン：`fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`の属性を書かない（リセットの「fill属性のないsvg＝文字色の線・丸い角」が効く）。`stroke-width`と`width`・`height`・`viewBox`は書く

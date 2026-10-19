@@ -9,56 +9,6 @@
  * Last updated: 2026-10-19
  * ======================================= */
 
-// ===== このファイル内のボタン共通（Sass分割時に_ui.scssへ移す候補） =====
-@mixin order-button {
-    font-size: inherit;
-    font-weight: 500;
-    min-height: 4.4rem;
-    padding: 1rem 1.6rem;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-sm;
-    color: $color-text-primary;
-    background: $pure-white;
-    white-space: nowrap;
-    &:hover {
-        background: $color-bg-subtle;
-    }
-}
-
-// 主ボタン（検索・この条件で検索・保存）。order-buttonの後に重ねる
-@mixin order-button-primary {
-    font-weight: 700;
-    border-color: $color-button-primary-border;
-    color: $color-button-primary-text;
-    background: $color-button-primary-bg;
-    &:hover {
-        background: $color-button-primary-bg-hover;
-    }
-}
-
-/* =================================
- * ページ見出し
- * ------------------------------ */
-.admin-main {
-    min-width: 0;
-    .page-heading {
-        font-size: inherit;
-        display: flex;
-        align-items: baseline;
-        gap: 1.6rem 2.4rem;
-        margin-bottom: 2.4rem;
-        h1 {
-            font-size: fz(28);
-            font-weight: 700;
-        }
-        time {
-            font-size: inherit;
-            color: $color-text-primary;
-            white-space: nowrap;
-        }
-    }
-}
-
 /* =================================
  * KPI
  * ------------------------------ */
@@ -120,89 +70,13 @@
 }
 
 /* =================================
- * 検索
+ * 受注一覧だけの検索条件配置
  * ------------------------------ */
 .admin-main {
     .search-box {
-        font-size: inherit;
-        margin-top: 2.4rem;
-        .filter-bar {
-            font-size: inherit;
-            display: flex;
-            align-items: center;
-            gap: 1.6rem;
-            label {
-                font-size: inherit;
-            }
-            input {
-                // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
-                font-size: 1.6rem;
-                min-height: 4.4rem;
-                padding: 1rem 1.6rem;
-                border: 1px solid $color-border-default;
-                border-radius: $radius-sm;
-                color: $color-text-primary;
-                background: $pure-white;
-                flex: 1;
-                min-width: 0;
-                // Safariの検索欄の角丸・独自余白を外す
-                appearance: none;
-                &::placeholder {
-                    color: $color-text-secondary;
-                    opacity: 1;
-                }
-            }
-            button {
-                @include order-button;
-                flex-shrink: 0;
-            }
-            // 主ボタン（検索）
-            button[type="submit"] {
-                @include order-button-primary;
-            }
-            .detail-toggle {
-                gap: 1.2rem;
-                &::after {
-                    content: "";
-                    width: 0.6rem;
-                    height: 0.6rem;
-                    border-right: 2px solid currentColor;
-                    border-bottom: 2px solid currentColor;
-                    transform: translateY(-0.2rem) rotate(45deg);
-                }
-                &[aria-expanded="true"]::after {
-                    transform: translateY(0.2rem) rotate(225deg);
-                }
-            }
-        }
         .search-panel {
-            font-size: inherit;
-            display: grid;
-            grid-template-rows: 0fr;
-            @media (prefers-reduced-motion: no-preference) {
-                transition: grid-template-rows 0.25s ease-out;
-            }
-            &:not([inert]) {
-                grid-template-rows: 1fr;
-            }
-            .search-panel-inner {
-                font-size: inherit;
-                min-height: 0;
-                overflow: hidden;
-            }
             .search-fields {
-                font-size: inherit;
-                display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 1.6rem 2.4rem;
-                // 装飾はクリップする内側へ置き、閉じたときの枠・余白残りを防ぐ。
-                margin-top: 1.6rem;
-                padding: 1.6rem;
-                border: 1px solid $color-border-card;
-                border-radius: $radius-sm;
-                background: $pure-white;
                 @include tb {
-                    grid-template-columns: repeat(2, minmax(0, 1fr));
                     .product-field {
                         grid-column: 1 / -1;
                     }
@@ -211,114 +85,6 @@
             .date-field,
             .status-field {
                 grid-column: 1 / -1;
-            }
-            .date-range {
-                font-size: inherit;
-                display: flex;
-                align-items: center;
-                gap: 1.2rem;
-                max-width: 56rem;
-                label,
-                span {
-                    font-size: inherit;
-                }
-                input {
-                    flex: 1;
-                }
-            }
-            .status-checks {
-                font-size: inherit;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.4rem 2.4rem;
-            }
-            .search-actions {
-                font-size: inherit;
-                grid-column: 1 / -1;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-                gap: 1.2rem;
-                button {
-                    @include order-button;
-                }
-                // 主ボタン（この条件で検索）
-                button[type="submit"] {
-                    @include order-button-primary;
-                }
-                // 副ボタン（条件をクリア）
-                .clear-conditions {
-                    border-color: $color-button-secondary-bg;
-                    color: $color-text-primary;
-                    background: $color-button-secondary-bg;
-                    &:hover {
-                        border-color: $color-button-secondary-bg-hover;
-                        background: $color-button-secondary-bg-hover;
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* =================================
- * 一覧見出し
- * ------------------------------ */
-.admin-main {
-    .list-heading {
-        font-size: inherit;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 0.8rem 1.2rem;
-        margin-top: 2.4rem;
-        h2 {
-            font-size: fz(22);
-            font-weight: 700;
-        }
-        .count {
-            font-size: inherit;
-            font-variant-numeric: tabular-nums;
-        }
-        .filter-note {
-            font-size: inherit;
-            color: $color-text-secondary;
-        }
-    }
-}
-
-/* =================================
- * 一覧の状態
- * ------------------------------ */
-.admin-main {
-    .orders-empty {
-        font-size: inherit;
-        margin-top: 1.6rem;
-        padding: 6.4rem 2.4rem;
-        border: 1px solid $color-border-card;
-        border-radius: $radius-sm;
-        background: $pure-white;
-        text-align: center;
-        .message {
-            font-size: inherit;
-            font-weight: 500;
-        }
-        .empty-actions {
-            font-size: inherit;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-top: 2.4rem;
-            a {
-                @include order-button;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-            }
-            .show-all-orders {
-                @include order-button-primary;
             }
         }
     }
@@ -405,77 +171,6 @@
                 }
             }
         }
-    }
-}
-
-/* =================================
- * ページ送り
- * ------------------------------ */
-.admin-main {
-    .pagination {
-        font-size: inherit;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 0.8rem 1.6rem;
-        margin-top: 1.6rem;
-    }
-    .pagination-list {
-        font-size: inherit;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        // フォーカス枠（3px＋offset 2px）が隣の番号や現在ページの枠に重ならない間隔
-        gap: 0.8rem;
-        li {
-            font-size: inherit;
-            flex: 0 0 auto;
-        }
-        a,
-        .pagination-ellipsis {
-            font-size: inherit;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 4.4rem;
-            min-height: 4.4rem;
-            border-radius: $radius-sm;
-            color: $color-text-secondary;
-            font-variant-numeric: tabular-nums;
-        }
-        a {
-            transition:
-                background-color $transition-base,
-                color $transition-base;
-            &:focus-visible {
-                // 共通のoffset 5pxでは隣と重なるため、ページ送りの中だけ近づける
-                outline-offset: 2px;
-            }
-            &:hover {
-                color: $color-text-primary;
-                background: $color-bg-head;
-            }
-        }
-        // 現在ページはKPIの選択中と同じ表現（ブランド色の2px枠・文字、面は塗らない）
-        a[aria-current="page"] {
-            border: 2px solid var(--color-brand-accent);
-            color: var(--color-brand-accent);
-            font-weight: 700;
-            background: $pure-white;
-            &:hover {
-                background: $pure-white;
-            }
-        }
-        svg {
-            flex-shrink: 0;
-        }
-    }
-    .page-status {
-        font-size: inherit;
-        color: $color-text-secondary;
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
     }
 }
 
@@ -851,8 +546,8 @@
             }
             // 主ボタン（保存）
             .memo-save {
-                @include order-button;
-                @include order-button-primary;
+                @include button-base;
+                @include button-primary;
                 align-self: flex-end;
             }
         }
@@ -897,7 +592,7 @@
             object-fit: contain;
         }
         .dialog-close {
-            @include order-button;
+            @include button-base;
         }
     }
 }

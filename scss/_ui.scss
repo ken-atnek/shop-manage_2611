@@ -13,6 +13,46 @@
  * Last updated: 2026-10-19
  * ======================================= */
 /*=========================================
+ボタン
+-----------------------------------------*/
+@mixin button-base {
+    font-size: inherit;
+    font-weight: 500;
+    min-height: 4.4rem;
+    padding: 1rem 1.6rem;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    color: $color-text-primary;
+    background: $pure-white;
+    white-space: nowrap;
+    &:hover {
+        background: $color-bg-subtle;
+    }
+}
+
+// 主ボタン（検索・この条件で検索・保存）。button-baseの後に重ねる
+@mixin button-primary {
+    font-weight: 700;
+    border-color: $color-button-primary-border;
+    color: $color-button-primary-text;
+    background: $color-button-primary-bg;
+    &:hover {
+        background: $color-button-primary-bg-hover;
+    }
+}
+
+// 副ボタン（条件をクリア）。button-baseの後に重ねる
+@mixin button-secondary {
+    border-color: $color-button-secondary-bg;
+    color: $color-text-primary;
+    background: $color-button-secondary-bg;
+    &:hover {
+        border-color: $color-button-secondary-bg-hover;
+        background: $color-button-secondary-bg-hover;
+    }
+}
+
+/*=========================================
 中央寄せ
 -----------------------------------------*/
 @mixin flex-center($direction: row) {

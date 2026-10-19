@@ -1,7 +1,7 @@
 # Client受注一覧 バックエンドへの申し送り
 
 - 作成日：2026-10-19
-- 対象：`shop-partner/orders.php`（制作用PHP）、`shop-partner/assets/js/order.js`、`shop-partner/assets/scss/order.scss`・`common.scss`
+- 対象：`shop-partner/orders.php`（制作用PHP）、`shop-partner/assets/js/common.js`・`order.js`、`shop-partner/assets/scss/common.scss`・`order.scss`
 - 作成：フロント（Ken・Claude）
 
 Laravel・Bladeへ組み込むときに知っておいてほしいことをまとめた資料。仕様の正は`docs/SPEC.md`と`docs/design/CLIENT_ORDER_LIST.md`で、この資料は組み込み時の注意点に絞っている。内容が食い違う場合は仕様資料を優先し、フロントへ知らせてほしい。
@@ -23,8 +23,8 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 | 状態 | 条件 | 表示 |
 |---|---|---|
 | 通常 | 注文が1件以上 | 列見出し＋注文の一覧（`.orders-scroll`）＋ページ送り（`.pagination`） |
-| データなし | 注文が1件もない | `.orders-scroll`とページ送りの代わりに`.orders-empty`「まだ注文はありません」。KPIはすべて0件 |
-| 検索結果0件 | 検索・KPIの条件に一致する注文がない | `.orders-empty`「条件に一致する注文はありません」＋「すべての注文を表示」「条件をクリア」。KPIは全体の件数のまま |
+| データなし | 注文が1件もない | `.orders-scroll`とページ送りの代わりに`.list-empty`「まだ注文はありません」。KPIはすべて0件 |
+| 検索結果0件 | 検索・KPIの条件に一致する注文がない | `.list-empty`「条件に一致する注文はありません」＋`.show-all`「すべての注文を表示」＋「条件をクリア」。KPIは全体の件数のまま |
 
 - 一覧見出し（`.list-heading`）の件数と対象名（`filter-note`）は、表示中の条件に合わせて出力する
 - 「条件をクリア」の遷移先（キーワード・詳細条件を外すURL）はバックエンドで決める。今は`href="#"`の仮リンク
@@ -92,19 +92,20 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 
 ## 9. JSが依存しているclass・属性・id
 
-Bladeへ組み込むときは、次を変えないでほしい（変える場合は`order.js`も合わせて修正が必要）。
+Bladeへ組み込むときは、次を変えないでほしい（変える場合は担当する`common.js`または`order.js`も合わせて修正が必要）。
 
 | 対象 | 用途 |
 |---|---|
 | `.select-customer-status[data-selectbox]`、`.selectbox__head`、`.list-wrapper`（`hidden`）、`[data-selectbox-value]`、`[data-selectbox-hidden]`、中のradioとlabel | ステータスの開閉・選択・表示の同期 |
 | `.order-card`内の`h3`のテキスト | 読み上げ名に使う注文番号 |
-| `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | メモ・入稿画像の展開 |
+| `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | メモ・入稿画像の展開。`order.js`から`common.js`の`toggleAccordion`を使う |
 | `.image-preview`の`data-*`、`#submission-preview`（dialog）、`.preview-image`、`#preview-file-name`、`.dialog-close` | 入稿画像の拡大表示（全注文で1つのdialogを共用） |
-| `.detail-toggle`、`#order-search-panel`、`.clear-conditions`、パネル内の最初の`input[type="date"]` | 詳細検索の開閉とクリア |
+| `.detail-toggle`の`aria-controls`・`aria-expanded`、対応する検索パネルの`id`と`inert`、`.clear-conditions`、パネル内の最初の`input` | `common.js`による詳細検索の開閉とクリア。パネルは`aria-controls`の値から取得する |
 
 - 注文ごとのidは注文IDから作っている（`order-{ID}`・`status-panel-{ID}`・`status-{ID}-{状態キー}`・`order-detail-{ID}`・`submissions-{ID}`・`memo-{ID}`）。ページ内で重複しないようにする
 - radioの`name`は注文ごと（`order-status-choice-{ID}`）に分ける
-- `order.js`は`</body>`直前で1回だけ読み込む
+- `common.js`→`order.js`の順に`</body>`直前で各1回読み込む。`common.js`を先に読み込まないと、`order.js`の展開行で`toggleAccordion`を使えない
+- JS・CSSを更新したときに古いファイルがブラウザに残らないよう、読み込むURLにバージョンを付けてほしい（Laravelの仕組み、またはファイルの更新日時を`?v=`に付けるなど）。`common.js`と`order.js`は必ず組で更新する。片方だけ古いと、受注一覧の操作がすべて止まることがある
 
 ## 10. 未確定のまま残っている項目
 

@@ -21,6 +21,9 @@
  * Last updated: 2026-10-19
  * ======================================= */
 /*=========================================
+ボタン
+-----------------------------------------*/
+/*=========================================
 中央寄せ
 -----------------------------------------*/
 /*=========================================
@@ -39,29 +42,6 @@
  * Created: 2026-10-17
  * Last updated: 2026-10-19
  * ======================================= */
-/* =================================
- * ページ見出し
- * ------------------------------ */
-.admin-main {
-  min-width: 0;
-}
-.admin-main .page-heading {
-  font-size: inherit;
-  display: flex;
-  align-items: baseline;
-  gap: 1.6rem 2.4rem;
-  margin-bottom: 2.4rem;
-}
-.admin-main .page-heading h1 {
-  font-size: max(12px, 1.75em);
-  font-weight: 700;
-}
-.admin-main .page-heading time {
-  font-size: inherit;
-  color: #22272e;
-  white-space: nowrap;
-}
-
 /* =================================
  * KPI
  * ------------------------------ */
@@ -119,110 +99,9 @@
 }
 
 /* =================================
- * 検索
+ * 受注一覧だけの検索条件配置
  * ------------------------------ */
-.admin-main .search-box {
-  font-size: inherit;
-  margin-top: 2.4rem;
-}
-.admin-main .search-box .filter-bar {
-  font-size: inherit;
-  display: flex;
-  align-items: center;
-  gap: 1.6rem;
-}
-.admin-main .search-box .filter-bar label {
-  font-size: inherit;
-}
-.admin-main .search-box .filter-bar input {
-  font-size: 1.6rem;
-  min-height: 4.4rem;
-  padding: 1rem 1.6rem;
-  border: 1px solid #d9dde2;
-  border-radius: 4px;
-  color: #22272e;
-  background: #fff;
-  flex: 1;
-  min-width: 0;
-  appearance: none;
-}
-.admin-main .search-box .filter-bar input::placeholder {
-  color: #4f5863;
-  opacity: 1;
-}
-.admin-main .search-box .filter-bar button {
-  font-size: inherit;
-  font-weight: 500;
-  min-height: 4.4rem;
-  padding: 1rem 1.6rem;
-  border: 1px solid #d9dde2;
-  border-radius: 4px;
-  color: #22272e;
-  background: #fff;
-  white-space: nowrap;
-}
-.admin-main .search-box .filter-bar button:hover {
-  background: #f6f7f8;
-}
-.admin-main .search-box .filter-bar button {
-  flex-shrink: 0;
-}
-.admin-main .search-box .filter-bar button[type=submit] {
-  font-weight: 700;
-  border-color: #9db5d6;
-  color: #1f4e8c;
-  background: #e6edf7;
-}
-.admin-main .search-box .filter-bar button[type=submit]:hover {
-  background: #d6e2f2;
-}
-.admin-main .search-box .filter-bar .detail-toggle {
-  gap: 1.2rem;
-}
-.admin-main .search-box .filter-bar .detail-toggle::after {
-  content: "";
-  width: 0.6rem;
-  height: 0.6rem;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateY(-0.2rem) rotate(45deg);
-}
-.admin-main .search-box .filter-bar .detail-toggle[aria-expanded=true]::after {
-  transform: translateY(0.2rem) rotate(225deg);
-}
-.admin-main .search-box .search-panel {
-  font-size: inherit;
-  display: grid;
-  grid-template-rows: 0fr;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .admin-main .search-box .search-panel {
-    transition: grid-template-rows 0.25s ease-out;
-  }
-}
-.admin-main .search-box .search-panel:not([inert]) {
-  grid-template-rows: 1fr;
-}
-.admin-main .search-box .search-panel .search-panel-inner {
-  font-size: inherit;
-  min-height: 0;
-  overflow: hidden;
-}
-.admin-main .search-box .search-panel .search-fields {
-  font-size: inherit;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.6rem 2.4rem;
-  margin-top: 1.6rem;
-  padding: 1.6rem;
-  border: 1px solid #c4cad2;
-  border-radius: 4px;
-  background: #fff;
-}
 @media (max-width: 834px) and (orientation: portrait) {
-  .admin-main .search-box .search-panel .search-fields {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .admin-main .search-box .search-panel .search-fields .product-field {
     grid-column: 1/-1;
   }
@@ -230,144 +109,6 @@
 .admin-main .search-box .search-panel .date-field,
 .admin-main .search-box .search-panel .status-field {
   grid-column: 1/-1;
-}
-.admin-main .search-box .search-panel .date-range {
-  font-size: inherit;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  max-width: 56rem;
-}
-.admin-main .search-box .search-panel .date-range label,
-.admin-main .search-box .search-panel .date-range span {
-  font-size: inherit;
-}
-.admin-main .search-box .search-panel .date-range input {
-  flex: 1;
-}
-.admin-main .search-box .search-panel .status-checks {
-  font-size: inherit;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 2.4rem;
-}
-.admin-main .search-box .search-panel .search-actions {
-  font-size: inherit;
-  grid-column: 1/-1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 1.2rem;
-}
-.admin-main .search-box .search-panel .search-actions button {
-  font-size: inherit;
-  font-weight: 500;
-  min-height: 4.4rem;
-  padding: 1rem 1.6rem;
-  border: 1px solid #d9dde2;
-  border-radius: 4px;
-  color: #22272e;
-  background: #fff;
-  white-space: nowrap;
-}
-.admin-main .search-box .search-panel .search-actions button:hover {
-  background: #f6f7f8;
-}
-.admin-main .search-box .search-panel .search-actions button[type=submit] {
-  font-weight: 700;
-  border-color: #9db5d6;
-  color: #1f4e8c;
-  background: #e6edf7;
-}
-.admin-main .search-box .search-panel .search-actions button[type=submit]:hover {
-  background: #d6e2f2;
-}
-.admin-main .search-box .search-panel .search-actions .clear-conditions {
-  border-color: #eceef1;
-  color: #22272e;
-  background: #eceef1;
-}
-.admin-main .search-box .search-panel .search-actions .clear-conditions:hover {
-  border-color: #e2e5e9;
-  background: #e2e5e9;
-}
-
-/* =================================
- * 一覧見出し
- * ------------------------------ */
-.admin-main .list-heading {
-  font-size: inherit;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.8rem 1.2rem;
-  margin-top: 2.4rem;
-}
-.admin-main .list-heading h2 {
-  font-size: max(12px, 1.375em);
-  font-weight: 700;
-}
-.admin-main .list-heading .count {
-  font-size: inherit;
-  font-variant-numeric: tabular-nums;
-}
-.admin-main .list-heading .filter-note {
-  font-size: inherit;
-  color: #4f5863;
-}
-
-/* =================================
- * 一覧の状態
- * ------------------------------ */
-.admin-main .orders-empty {
-  font-size: inherit;
-  margin-top: 1.6rem;
-  padding: 6.4rem 2.4rem;
-  border: 1px solid #c4cad2;
-  border-radius: 4px;
-  background: #fff;
-  text-align: center;
-}
-.admin-main .orders-empty .message {
-  font-size: inherit;
-  font-weight: 500;
-}
-.admin-main .orders-empty .empty-actions {
-  font-size: inherit;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.2rem;
-  margin-top: 2.4rem;
-}
-.admin-main .orders-empty .empty-actions a {
-  font-size: inherit;
-  font-weight: 500;
-  min-height: 4.4rem;
-  padding: 1rem 1.6rem;
-  border: 1px solid #d9dde2;
-  border-radius: 4px;
-  color: #22272e;
-  background: #fff;
-  white-space: nowrap;
-}
-.admin-main .orders-empty .empty-actions a:hover {
-  background: #f6f7f8;
-}
-.admin-main .orders-empty .empty-actions a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.admin-main .orders-empty .empty-actions .show-all-orders {
-  font-weight: 700;
-  border-color: #9db5d6;
-  color: #1f4e8c;
-  background: #e6edf7;
-}
-.admin-main .orders-empty .empty-actions .show-all-orders:hover {
-  background: #d6e2f2;
 }
 
 /* =================================
@@ -448,70 +189,6 @@
 }
 .admin-main .orders-board .column-head .item-head span:nth-child(2) {
   padding-inline: 0.8rem;
-  white-space: nowrap;
-}
-
-/* =================================
- * ページ送り
- * ------------------------------ */
-.admin-main .pagination {
-  font-size: inherit;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.8rem 1.6rem;
-  margin-top: 1.6rem;
-}
-.admin-main .pagination-list {
-  font-size: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.8rem;
-}
-.admin-main .pagination-list li {
-  font-size: inherit;
-  flex: 0 0 auto;
-}
-.admin-main .pagination-list a,
-.admin-main .pagination-list .pagination-ellipsis {
-  font-size: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 4.4rem;
-  min-height: 4.4rem;
-  border-radius: 4px;
-  color: #4f5863;
-  font-variant-numeric: tabular-nums;
-}
-.admin-main .pagination-list a {
-  transition: background-color 0.15s ease-out, color 0.15s ease-out;
-}
-.admin-main .pagination-list a:focus-visible {
-  outline-offset: 2px;
-}
-.admin-main .pagination-list a:hover {
-  color: #22272e;
-  background: #e9edf1;
-}
-.admin-main .pagination-list a[aria-current=page] {
-  border: 2px solid var(--color-brand-accent);
-  color: var(--color-brand-accent);
-  font-weight: 700;
-  background: #fff;
-}
-.admin-main .pagination-list a[aria-current=page]:hover {
-  background: #fff;
-}
-.admin-main .pagination-list svg {
-  flex-shrink: 0;
-}
-.admin-main .page-status {
-  font-size: inherit;
-  color: #4f5863;
-  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 

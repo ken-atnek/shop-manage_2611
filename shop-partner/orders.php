@@ -110,7 +110,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 </fieldset>
                 <fieldset class="form-field status-field">
                   <legend class="form-label">ステータス</legend>
-                  <div class="status-checks">
+                  <div class="check-group">
                     <label class="form-check" for="search-status-new">
                       <input type="checkbox" id="search-status-new" name="status[]" value="new" />
                       <span>新規受付</span>
@@ -160,11 +160,11 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
         </div>
 
         <?php if ($isEmptyState || $isNoResultsState): ?>
-          <div class="orders-empty">
+          <div class="list-empty">
             <p class="message"><?= $isEmptyState ? 'まだ注文はありません' : '条件に一致する注文はありません' ?></p>
             <?php if ($isNoResultsState): ?>
               <div class="empty-actions">
-                <a class="show-all-orders" href="orders.<?= $pageExtension ?>">すべての注文を表示</a>
+                <a class="show-all" href="orders.<?= $pageExtension ?>">すべての注文を表示</a>
                 <!-- 仮リンク。検索条件を解除する遷移先はバックエンド実装時に決める。 -->
                 <a href="#">条件をクリア</a>
               </div>
@@ -676,6 +676,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
         <button class="dialog-close" type="button" autofocus>閉じる</button>
       </div>
     </dialog>
+    <script src="assets/js/common.js"></script>
     <script src="assets/js/order.js"></script>
   </body>
 </html>

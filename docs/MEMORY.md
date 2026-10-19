@@ -665,3 +665,14 @@
 - `npm run sass`は警告・エラーなし、DDEV内のPHP構文確認と`git diff --check`は正常。Chromiumで1280×800・1024×768・834×1194を確認し、SVGは20×20px・線幅1.5px・丸い線端・ボタン中央に一致。834pxでもページ全体の横はみ出しはなく、一覧内だけ横スクロールする
 - 拡大dialogの開閉・Esc後のフォーカス復帰、ダウンロードの実保存、ページ送りの前へリンクの遷移、リンクと拡大ボタンのフォーカス枠、ダウンロードリンクのホバーを確認。ブラウザ警告・エラーなし。比較画像は既存の`.gitignore`によりGit管理外で、ローカルに保存。Gitコミットなし
 - 追記（同日）：`IMPLEMENTATION_REFERENCE.md`のアイコンセット節をSCSSの書き方の末尾へ移し、Feather由来とMIT通知の説明をLICENSE一覧に基づく表現へ変更。`CLIENT_ORDER_LIST.md`の旧サイドバー配色を現行の深い緑・選択中・ホバーの指定へ訂正。資料のみ変更
+
+## 2026-10-19 Client受注一覧の共通部分を商品一覧向けに整理
+
+- 見た目と動作を変えず、商品一覧で再利用する準備として置き場所と名前だけを整理。商品一覧のPHP・Sassは未作成
+- `order.scss`内の`order-button`・`order-button-primary`を`scss/_ui.scss`へ移し、`button-base`・`button-primary`へ改名。条件クリアの直書き指定を`button-secondary`へまとめた。新しいmixin・関数・パーシャルは、この3つ以外に追加していない
+- ページ見出し、検索、一覧見出し、一覧の状態、ページ送りを`order.scss`から`common.scss`のフォーム部品の後へ移動。KPI、注文日・ステータスの全幅指定、タブレット縦の商品名の全幅指定と、受注一覧本体・展開行・dialogは`order.scss`に残した
+- 汎用classへ変更：`.orders-empty`→`.list-empty`、`.show-all-orders`→`.show-all`、`.status-checks`→`.check-group`。ほかのclass・id・name・JS依存属性は変更していない
+- `shop-partner/assets/js/common.js`を新設し、`toggleAccordion`と詳細検索の開閉・クリアを`order.js`から移動。詳細検索パネルは`.detail-toggle`の`aria-controls`から取得し、クリア後はパネル内の最初の`input`へフォーカスする。`.detail-toggle`がないページでもエラーにならないことを確認。`orders.php`は`common.js`→`order.js`の順に読み込む
+- 作業前は通常・`pager-middle`・`empty`・`no-results`・`date-error`を1280×800・1024×768・834×1194で撮影。作業後も同じ15条件をChromiumで撮影し、主要状態を見比べた。生成CSSは新旧class名を正規化して全250ルールを比較し、宣言の増減0件
+- 詳細検索の開閉・全入力のクリア・開始日へのフォーカス、ステータスの矢印キー選択→Enter・表示／hidden値・フォーカス復帰、展開行のinert解除、画像dialogのEsc・フォーカス復帰を確認。`npm run sass`、`node --check`、DDEV PHP 8.4の`php -l`、`git diff --check`は正常。Gitコミットなし
+- 追記（2026-10-19）：`common.js`の詳細検索処理をブロックスコープにし、`toggleAccordion`は外に維持。作業用`index.html`のリンクなし画面名を本文色の`.screen-name`へ変更し、申し送り§9にJS・CSSのURLバージョン付与と`common.js`・`order.js`の同時更新を追記。Gitコミットなし

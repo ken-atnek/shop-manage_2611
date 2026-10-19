@@ -83,6 +83,7 @@ Master＝青／Client＝緑の割り当ては要確認。以下の面・線・�
 ### ボタンの色（Master・Client共通）
 
 ブランド色とは切り離し、両管理画面で同じ色にする（Kenの決定、2026-10-17）。
+通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。
 
 | 種類 | 変数 | 見た目 | 使う場所 |
 |---|---|---|---|

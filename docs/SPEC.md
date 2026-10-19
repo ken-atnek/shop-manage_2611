@@ -34,6 +34,7 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 
 ## フォルダとSass
 
+- ルートの `index.html` は制作確認用のページ一覧で、納品しない。画面の追加や状態の変更のたびに更新する
 - `scss/`：`@use`で読み込むreset・変数・既存の関数やmixinなど。単独のCSS出力対象にしない
 - `shop-master/`：Master用の静的HTMLとアセット。対象URLは`https://shop-master.kumanichi.com/`
 - `shop-partner/`：Client用の静的HTMLとアセット。対象URLは`https://shop-partner.kumanichi.com/`
