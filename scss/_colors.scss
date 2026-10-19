@@ -1,3 +1,11 @@
+/* =======================================
+ * 熊日モール 管理画面 共通カラー
+ * URL: /scss/_colors.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+
 // 共通ニュートラルカラー（すべて仮）
 // ルートの DESIGN_TOKENS.md のカラー定義に対応する。
 // ブランド色は各管理画面の CSS カスタムプロパティで設定し、
@@ -37,3 +45,7 @@ $color-status-processing: #8a3fd1; // 対応中：紫 5.66:1
 $color-status-shipped: #3d7a1f; // 発送済：黄みの緑（ブランド緑#097141と色味を離す）5.25:1
 $color-status-return: #d21f3c; // 返品対応：赤 5.25:1
 $color-status-cancelled: #3a3f46; // キャンセル：チャコール 10.61:1
+
+// 商品の公開状態（2026-10-19 Ken決定。操作できない表示専用バッジ）
+$color-publish-public: #3a5f95; // 公開：青。白文字と6.46:1
+$color-publish-private: #6b7079; // 非公開：グレー。白文字と4.98:1

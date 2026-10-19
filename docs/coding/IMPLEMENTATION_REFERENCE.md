@@ -25,11 +25,13 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - バックエンド処理は実装しないが、送信単位と繰り返し単位は明記する
 - 実装難易度を理由にデザインを簡略化しない
 
-## Client受注一覧の制作単位
+## Client画面の制作単位
 
 受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。Client画面で共用するスタイルは`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→ページ別CSSの順に読み込む。
 
-`_reset.scss`は`common.scss`だけで読み込み、`order.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
+商品一覧の編集・制作確認は`shop-partner/products.php`、固有スタイルは`shop-partner/assets/scss/products.scss`→`shop-partner/assets/css/products.css`。`common.css`→`products.css`の順に読み込み、検索条件の配置と商品テーブルの仮の見た目だけを`products.scss`に置く。
+
+`_reset.scss`は`common.scss`だけで読み込み、`order.scss`・`products.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
 
 - ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、画面スタイルは各管理画面側へ置く
 - `common.scss`は`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー → フォーム部品 → ページ見出し → 検索 → 一覧見出し → 一覧の状態 → ページ送り`の順とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
@@ -39,12 +41,14 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 
 Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面固有の操作はページ別JSへ置く。受注一覧は`common.js`→`order.js`の順に`</body>`直前で読み込み、`order.js`は`common.js`の`toggleAccordion`を展開行に使用する。
 
+商品一覧は`common.js`だけを読み込む。`products.js`は作成しない。詳細検索の対象は`aria-controls="product-search-panel"`で指定し、条件クリア後は先頭の「公開」チェックボックスへフォーカスする。
+
 ### 制作用PHPのインクルード
 
 - PHPインクルードはユーザー承認済みの制作補助。Laravel・DB・認証・受注処理等は作らず、バックエンド担当者が後からBladeのレイアウト・`@include`等へ組み込む
-- 編集するファイルは`shop-partner/orders.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。共通部品は`inc_`で始め、`require __DIR__ . '/includes/…';`で読み込む。見た目のためのラッパーは追加しない
-- 各ページで`$currentPage`を設定する。受注一覧は`orders`とし、サイドバーの該当リンクだけに`aria-current="page"`を付ける。未作成画面のリンクは引き続き`#`のまま
-- 制作確認用のURLは`/shop-partner/orders.php`。PHP版のリンク・検索フォームは`.php`へ向け、静的出力では`.html`へ切り替える。外部入力でinclude先や現在地を決めない
+- 編集するファイルは`shop-partner/orders.php`・`shop-partner/products.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。共通部品は`inc_`で始め、`require __DIR__ . '/includes/…';`で読み込む。見た目のためのラッパーは追加しない
+- 各ページで`$currentPage`を設定する。受注一覧は`orders`、商品一覧は`products`とし、サイドバーの該当リンクだけに`aria-current="page"`を付ける。未作成画面のリンクは引き続き`#`のまま
+- 制作確認用のURLは`/shop-partner/orders.php`・`/shop-partner/products.php`。PHP版のリンク・検索フォームは`.php`へ向け、静的出力では`.html`へ切り替える。外部入力でinclude先や現在地を決めない
 - 静的HTMLは常設しない。PHPが動かない環境で見せる必要がある場合だけ、プロジェクトルートで`ddev exec php scripts/export-html.php`を実行して書き出す。出力したHTMLはGit管理外（`.gitignore`）で、直接編集しない。ページ追加時はスクリプトの`$pages`へ対象を明示的に追加する
 - NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
 - バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
@@ -73,7 +77,7 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 
 ### アイコンセット
 
-- 操作用の線アイコンはLucide（ISC License）を基本とする。LICENSEの一覧にあるFeather由来のアイコン（今回の4つが該当）は、MITの通知も含めて保持する。SVGコードだけをインラインで使い、npmパッケージ・Iconify等の外部スクリプトは読み込まない。ライセンス全文は`docs/design/reference/LUCIDE_LICENSE`
+- 操作用の線アイコンはLucide（ISC License）を基本とする。LICENSEの一覧にあるFeather由来のアイコン（受注一覧で使用する4種が該当）は、MITの通知も含めて保持する。SVGコードだけをインラインで使い、npmパッケージ・Iconify等の外部スクリプトは読み込まない。ライセンス全文は`docs/design/reference/LUCIDE_LICENSE`
 - LucideのSVGは公式の子要素（`path`・`circle`・`line`等）の形を変えず、外側の`svg`を`width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"`にそろえる
 - `fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`属性は付けず、`scss/_reset.scss`の線色・線端・角の指定を効かせる。用途名はSVGではなく操作するボタン・リンクの`aria-label`と`title`で伝える
 
@@ -81,10 +85,11 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 |---|---|---|
 | 入稿画像の拡大 | `zoom-in` | Client受注一覧 |
 | 入稿画像のダウンロード | `download` | Client受注一覧 |
-| ページ送り「前へ」 | `chevron-left` | Client受注一覧 |
-| ページ送り「次へ」 | `chevron-right` | Client受注一覧 |
+| ページ送り「前へ」 | `chevron-left` | Client受注一覧・商品一覧 |
+| ページ送り「次へ」 | `chevron-right` | Client受注一覧・商品一覧 |
+| 商品詳細への編集 | `pencil` | Client商品一覧 |
 | メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
-| 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧 |
+| 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
 | ステータスの開閉 | Lucideではない（`scss/_ui.scss`の背景SVG） | Client受注一覧 |
 
 ## 制作環境と引き渡し
