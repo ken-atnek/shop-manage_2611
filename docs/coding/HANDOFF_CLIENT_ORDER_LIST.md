@@ -1,52 +1,39 @@
 # Client受注一覧 バックエンドへの申し送り
 
 - 作成日：2026-10-19
-- 対象：`shop-partner/orders.php`（制作用PHP）、`shop-partner/assets/js/common.js`・`order.js`、`shop-partner/assets/scss/common.scss`・`order.scss`
+- 更新日：2026-10-19
+- 対象：`shop-partner/orders.php`（制作用PHP）、`shop-partner/assets/js/order.js`、`shop-partner/assets/scss/order.scss`
 - 作成：フロント（Ken・Claude）
 
 Laravel・Bladeへ組み込むときに知っておいてほしいことをまとめた資料。仕様の正は`docs/SPEC.md`と`docs/design/CLIENT_ORDER_LIST.md`で、この資料は組み込み時の注意点に絞っている。内容が食い違う場合は仕様資料を優先し、フロントへ知らせてほしい。
+
+共通の内容は[HANDOFF_CLIENT_COMMON.md](HANDOFF_CLIENT_COMMON.md)を参照。レイアウト・head・サイドバー・共通JS・検索パネルの状態・エラー表示・空状態の共通構造・ページ送り・読み込み順は共通資料へ移した。ここには受注一覧固有の内容だけを記載する。
 
 ## 1. 制作用PHPのうち、Bladeへ移さないもの
 
 | 対象 | 内容 | Bladeでの扱い |
 |---|---|---|
-| `$previewState`（`?preview=`） | 表示確認用の状態切り替え。`pager-middle`・`empty`・`no-results`・`date-error` | 移さない。実際のデータ・検索結果・検証結果で分岐する |
-| `$listCount`・`$kpiCounts`・`$filterNote` | 表示例の件数・文言 | 実際の件数・選択中のKPI名に置き換える |
-| `$staticExport`・`$pageExtension` | 静的HTML書き出し用 | 移さない。リンク先はルーティングに合わせる |
-| `$currentPage` | サイドバーの`aria-current="page"`の判定 | 現在のルートで判定する |
-| 注文3件・ページ送りの番号 | 表示例のデータ | ループと実データへ置き換える |
+| `$previewState`（`?preview=`）と各`$is…State` | 表示確認用の状態切り替え。`pager-middle`＝全20ページ中10ページ目、`empty`＝データなし、`no-results`＝検索結果0件、`date-error`＝注文日の逆転エラー | 制作専用の仕組みは共通申し送り§1のとおり移さず、実際の状態で分岐する |
+| `$listCount`・`$kpiCounts`・`$filterNote` | 表示例の件数・文言（通常8件、KPIは8／3／2件） | 実際の件数・選択中のKPI名に置き換える |
+| 注文3件・ページ送りの番号 | 表示例のデータ。8件のうち3件だけを掲載し、ページ送りは表示確認のため20ページの例を置いている | ループと実データへ置き換える。8件で20ページになる仕様ではない |
 
-`includes/inc_header.php`・`inc_sidebar.php`は、Bladeのレイアウト・`@include`へ置き換える。
+## 2. 受注一覧の表示状態
 
-## 2. 一覧の表示状態
+共通の空状態の構造と全件表示・条件解除の扱いは[共通申し送り§6](HANDOFF_CLIENT_COMMON.md#6-一覧の表示状態)を参照。
 
-| 状態 | 条件 | 表示 |
-|---|---|---|
-| 通常 | 注文が1件以上 | 列見出し＋注文の一覧（`.orders-scroll`）＋ページ送り（`.pagination`） |
-| データなし | 注文が1件もない | `.orders-scroll`とページ送りの代わりに`.list-empty`「まだ注文はありません」。KPIはすべて0件 |
-| 検索結果0件 | 検索・KPIの条件に一致する注文がない | `.list-empty`「条件に一致する注文はありません」＋`.show-all`「すべての注文を表示」＋「条件をクリア」。KPIは全体の件数のまま |
+| 状態 | 受注一覧固有の表示 |
+|---|---|
+| 通常 | 列見出し＋注文の一覧（`.orders-scroll`） |
+| データなし | 「まだ注文はありません」。KPIはすべて0件 |
+| 検索結果0件 | 「条件に一致する注文はありません」＋「すべての注文を表示」「条件をクリア」。KPIは全体の件数のまま |
 
-- 一覧見出し（`.list-heading`）の件数と対象名（`filter-note`）は、表示中の条件に合わせて出力する
-- 「条件をクリア」の遷移先（キーワード・詳細条件を外すURL）はバックエンドで決める。今は`href="#"`の仮リンク
-- 一覧はサーバー側で描画する前提のため、一覧の「読込中」表示は作っていない
-- スクロールは縦横ともページ全体で行う（Kenの決定、2026-10-19）。`.orders-scroll`は通常のラッパーで、名前付きスクロール領域ではない。`overflow-x: auto`や`role="region"`・スクロール用の`aria-label`・`tabindex="0"`を戻さない。最小幅を保ち、ヘッダー・サイドバーの背景もページ全体の幅・高さに追従させる
-- `.order-detail-inner`と`.search-panel-inner`の`position: relative`は維持する。閉じた内容の`.sr-only`が外側のarticle等を基準に配置され、クリップを逃れて一覧の高さを押し広げることを防ぐ。末尾ステータスメニュー用の下余白19.2remは不要になったため削除済み
+- `.order-detail-inner`の`position: relative`は維持する。閉じた内容の`.sr-only`が外側のarticleを基準に配置され、クリップを逃れて一覧の高さを押し広げることを防ぐ
+- 末尾ステータスメニュー用の下余白19.2remは、一覧内スクロールを廃止したことで不要になったため削除済み。メニューを一覧の枠で切らない
 
-## 3. ページ送り
+## 3. 並び順
 
-- 1ページ50件。並び順は仮で新しい注文順（未確定）
-- ページ数・現在ページ・各リンクのURLはバックエンドで生成する。今の`?page=N`とパラメータ名は仮。**キーワード・KPI・詳細条件のパラメータを引き継いだURLにする**（今の仮リンクは引き継がない）
-- 表示ルール（番号と省略記号で最大7項目）
-  - 全7ページ以下：全番号を表示
-  - 8ページ以上：最初と最後のページは常に表示し、現在ページの前後1ページを基本に、空いた範囲を「…」にする
-  - 例（全20ページ）：1ページ目 `1 2 3 4 5 … 20 ›`、10ページ目 `‹ 1 … 9 10 11 … 20 ›`、20ページ目 `‹ 1 … 16 17 18 19 20`
-  - 「前へ」は2ページ目以降、「次へ」は最終ページより前だけ出力する
-- マークアップ
-  - 現在ページは`<a aria-current="page">`
-  - 番号には読み上げ用の`<span class="sr-only">ページ</span>`、矢印には`前のページ`／`次のページ`を入れる
-  - 「…」は`<span class="pagination-ellipsis" aria-hidden="true">`
-  - 右端の`<p class="page-status">現在 / 全体<span class="sr-only">ページ</span></p>`は表示だけ
-- 1ページしかない場合にページ送りを出すかは未確定。フロントの案は「出さない」
+- 並び順は仮で新しい注文順（未確定）
+- 件数・ページ番号・マークアップ・条件を引き継ぐURLは[共通申し送り§7](HANDOFF_CLIENT_COMMON.md#7-ページ送り)を参照
 
 ## 4. KPIの切り替え
 
@@ -55,14 +42,12 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 - 初期選択は「すべて」。KPIの件数は検索条件に関係なく全体の件数を表す
 - KPIの集計条件（未着手・発送待ちの対象ステータス）、キーワード・詳細条件との組み合わせは未確定
 
-## 5. 詳細検索と入力エラー
+## 5. 受注一覧の検索項目とid
 
-- 詳細検索パネル（`#order-search-panel`）は初期状態で閉じている（`inert`、ボタンは`aria-expanded="false"`）
-- **詳細条件が入った状態で検索結果を表示するときは、パネルを開いた状態で出力する**：`#order-search-panel`の`inert`を外し、`.detail-toggle`を`aria-expanded="true"`にする。入力値・チェックも復元する
-- 入力エラー（例：注文日の開始日と終了日が逆）の判定はバックエンドで行う。エラー時だけ次を出力する（例は`?preview=date-error`）
-  - 対象の入力欄に`aria-invalid="true"`と`aria-describedby="エラー文のid"`
-  - fieldset／項目内に`<p class="form-error" id="…">エラー文</p>`
-  - 注文日は開始日・終了日の両方から、1つのエラー文（`#order-date-error`）を参照する
+共通の開閉・値の復元・入力エラー表示は[共通申し送り§4・§5](HANDOFF_CLIENT_COMMON.md#4-commonjsの詳細検索とアコーディオン)を参照。
+
+- 詳細検索パネルは`#order-search-panel`。パネル内クリア後の先頭inputは注文日の開始日`#order-date-from`
+- 注文日の開始日・終了日は`#order-date-from`・`#order-date-to`、共通のエラー文は`#order-date-error`。制作確認の`?preview=date-error`では開始日2026-10-20・終了日2026-10-10の逆転例を出している
 - `name`属性（`date_from`・`date_to`・`status[]`・`phone`・`email`・`product`・`keyword`）は表示例。正式な項目名はバックエンドで決めてよい（変えた場合はフロントへ連絡してほしい）
 
 ## 6. ステータス（発送状況）の保存
@@ -94,7 +79,7 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 
 ## 9. JSが依存しているclass・属性・id
 
-Bladeへ組み込むときは、次を変えないでほしい（変える場合は担当する`common.js`または`order.js`も合わせて修正が必要）。
+Bladeへ組み込むときは、次を変えないでほしい（変える場合は`order.js`も合わせて修正が必要）。
 
 | 対象 | 用途 |
 |---|---|
@@ -102,29 +87,15 @@ Bladeへ組み込むときは、次を変えないでほしい（変える場合
 | `.order-card`内の`h3`のテキスト | 読み上げ名に使う注文番号 |
 | `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | メモ・入稿画像の展開。`order.js`から`common.js`の`toggleAccordion`を使う |
 | `.image-preview`の`data-*`、`#submission-preview`（dialog）、`.preview-image`、`#preview-file-name`、`.dialog-close` | 入稿画像の拡大表示（全注文で1つのdialogを共用） |
-| `.detail-toggle`の`aria-controls`・`aria-expanded`、対応する検索パネルの`id`と`inert`、`.clear-conditions`、パネル内の最初の`input` | `common.js`による詳細検索の開閉とクリア。パネルは`aria-controls`の値から取得する |
-| `.admin-sidebar`、中の`.sidebar-toggle`、`aria-expanded`・`aria-label`・`title` | `common.js`によるナビの開閉、外側クリックの判定、閉じた後のフォーカス復帰 |
-| htmlの`.sidebar-collapsed`・`.sidebar-ready` | head・共通JS・共通CSSで共有する開閉状態と、操作時だけ幅のtransitionを有効にする印 |
-| `.sidebar-content`・`.nav-label`・`.sidebar-close-icon`・`.sidebar-open-icon`、`#client-navigation`とボタンの`aria-controls` | 共通CSSの重ね表示・文字の視覚的な非表示・アイコン切り替え、ボタンとナビの関連付け。リンクのtitleと現在地`aria-current="page"`も維持 |
 
 - 注文ごとのidは注文IDから作っている（`order-{ID}`・`status-panel-{ID}`・`status-{ID}-{状態キー}`・`order-detail-{ID}`・`submissions-{ID}`・`memo-{ID}`）。ページ内で重複しないようにする
 - radioの`name`は注文ごと（`order-status-choice-{ID}`）に分ける
-- `common.js`→`order.js`の順に`</body>`直前で各1回読み込む。`common.js`を先に読み込まないと、`order.js`の展開行で`toggleAccordion`を使えない
-- JS・CSSを更新したときに古いファイルがブラウザに残らないよう、読み込むURLにバージョンを付けてほしい（Laravelの仕組み、またはファイルの更新日時を`?v=`に付けるなど）。`common.js`と`order.js`は必ず組で更新する。片方だけ古いと、受注一覧の操作がすべて止まることがある
-
-### 共通サイドバーの初期化と保存（2026-10-19）
-
-- PC（1194pxより広い）は初期値を開いた状態とし、localStorageのキー`kumanichi-client-sidebar`へ値`expanded`／`collapsed`を保存する。保存なし・不明な値は開く。タブレットの開閉ではこの値を上書きしない
-- タブレット（1194px以下、向きは問わない）は新規表示・再読み込み・戻る／進むの`pageshow`で畳む。開くと本文の幅を変えず重ねる。Esc・外側クリック・開閉ボタンで閉じたら開閉ボタンへフォーカスを戻す。PCへ幅を戻した場合はPCの保存状態へ戻る
-- `orders.php`・`products.php`のheadで、`common.css`より前の同一インラインスクリプトを維持する。`matchMedia("(max-width: 1194px)")`または保存値`collapsed`ならhtmlへ`.sidebar-collapsed`を付け、初期描画のちらつきを防ぐ。`common.js`が同じ状態とボタンの属性を同期する
-- headと`common.js`のlocalStorage読み書きはtry/catchで保護する。保存できなくても当該ページ内の開閉・詳細検索を止めない。幅1194pxは共通Sassの`$tbw`と必ず同時に変更する。CSPでインラインスクリプトを制限する場合はバックエンド側でnonce等を付ける
-- サイドバーはモーダルではなく通常のナビ。畳んだリンクをinert／hiddenにせず、文字だけを`.sr-only`相当で隠す。幅のtransitionは動きを減らす設定では無効
 
 ## 10. 未確定のまま残っている項目
 
 `docs/SPEC.md`の「未確定事項」と`docs/design/CLIENT_ORDER_LIST.md`の「次に決めること」も参照。
 
-- 一覧の並び順、1ページしかない場合のページ送りの表示
+- 一覧の並び順
 - KPIの方式と集計条件、キーワード・詳細条件との組み合わせ
 - ステータスの通信方式と、保存中・成功・失敗の具体的な表示
 - メモの保存後の表示、文字数・閲覧権限

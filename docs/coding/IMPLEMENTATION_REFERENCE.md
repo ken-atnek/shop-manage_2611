@@ -43,7 +43,7 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 
 商品一覧は`common.js`だけを読み込む。`products.js`は作成しない。詳細検索の対象は`aria-controls="product-search-panel"`で指定し、条件クリア後は先頭の「公開」チェックボックスへフォーカスする。
 
-Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC（1194pxより広い）は開閉で本文幅を変更し、`kumanichi-client-sidebar`へ状態を保存。タブレットは初期状態を畳み、開くと本文に重ねる。両PHPのheadには同一の初期化スクリプトを`common.css`より前に置き、htmlの`.sidebar-collapsed`を初期描画前に反映する。保存拒否時のtry/catch、幅の判定値、依存class・属性の詳細は[申し送り§9](HANDOFF_CLIENT_ORDER_LIST.md#9-jsが依存しているclass属性id)を参照する。
+Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC（1194pxより広い）は開閉で本文幅を変更し、`kumanichi-client-sidebar`へ状態を保存。タブレットは初期状態を畳み、開くと本文に重ねる。両PHPのheadには同一の初期化スクリプトを`common.css`より前に置き、htmlの`.sidebar-collapsed`を初期描画前に反映する。保存拒否時のtry/catch、幅の判定値、依存class・属性の詳細は[共通申し送り§2・§3](HANDOFF_CLIENT_COMMON.md#2-headの読み込みと初期化)を参照する。
 
 ### 制作用PHPのインクルード
 
@@ -112,7 +112,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
-- 画面ごとの組み込み時の注意点は申し送り資料にまとめる（Client受注一覧：`docs/coding/HANDOFF_CLIENT_ORDER_LIST.md`）
+- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)の申し送りで確認する
 
 ## HTML要素の考え方
 

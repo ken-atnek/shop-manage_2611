@@ -26,7 +26,9 @@
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
 | `coding/IMPLEMENTATION_REFERENCE.md` | 制作用PHP・Sassの書き方と、バックエンドへの引き渡し方 | フロント |
-| `coding/HANDOFF_CLIENT_ORDER_LIST.md` | Client受注一覧をBladeへ組み込むときの申し送り（移さないもの・状態・JSが依存する属性等） | フロント |
+| `coding/HANDOFF_CLIENT_COMMON.md` | Client共通のBlade組み込み申し送り（レイアウト・head・サイドバー・検索・空状態・ページ送り・読み込み順） | フロント |
+| `coding/HANDOFF_CLIENT_ORDER_LIST.md` | Client受注一覧固有の申し送り（KPI・ステータス保存・メモ・入稿画像・order.jsの依存先） | フロント |
+| `coding/HANDOFF_CLIENT_PRODUCT_LIST.md` | Client商品一覧固有の申し送り（テーブル・状態・画像・編集リンク・検索細則・未確定事項） | フロント |
 | `backend/` | API・DB・ルーティング・Blade組み込み等の資料 | バックエンド |
 | `../backend/`（リポジトリのルート） | Laravel等のバックエンドのコード | バックエンド |
 
