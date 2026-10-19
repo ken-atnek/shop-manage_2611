@@ -69,10 +69,6 @@
   font-size: inherit;
   width: 100%;
   margin-top: 1.6rem;
-  overflow-x: auto;
-}
-.admin-main .products-scroll:focus-visible {
-  outline-offset: -3px;
 }
 .admin-main .products-table {
   font-size: inherit;
@@ -103,7 +99,7 @@
 }
 .admin-main .products-table th {
   font-size: max(12px, 0.875em);
-  font-weight: 700;
+  font-weight: 500;
   color: #4f5863;
   background: #e9edf1;
 }
@@ -152,7 +148,7 @@
   white-space: nowrap;
 }
 .admin-main .products-table .product-updated time {
-  font-size: inherit;
+  font-size: max(12px, 0.875em);
 }
 .admin-main .products-table .product-updated time span {
   font-size: inherit;
@@ -181,13 +177,15 @@
 }
 .admin-main .products-table .publish-state {
   font-size: max(12px, 0.875em);
-  font-weight: 700;
+  font-weight: 500;
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   min-height: 2.8rem;
   padding-inline: 1.2rem;
   border: 0;
-  border-radius: 999px;
+  width: 5em;
+  border-radius: 100vmax;
   color: #fff;
   background: #3a5f95;
   cursor: default;
@@ -195,6 +193,7 @@
 }
 .admin-main .products-table .publish-state.is-private {
   background: #6b7079;
+  opacity: 0.7;
 }
 .admin-main .products-table .edit-link {
   font-size: inherit;
@@ -205,10 +204,13 @@
   height: 4rem;
   color: #4f5863;
   border-radius: 50%;
+  border: 1px solid transparent;
+  transition: color 0.15s ease-out, background-color 0.15s ease-out, border-color 0.15s ease-out;
 }
 .admin-main .products-table .edit-link:hover {
   color: #22272e;
   background: #fff;
+  border-color: #c4cad2;
 }
 
 /*# sourceMappingURL=products.css.map */

@@ -70,7 +70,8 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
   - 塗りのアイコン：`fill`属性を書く（リセットで文字色の塗りになる）
   - すべてのアイコンに`aria-hidden="true" focusable="false"`を付け、意味はボタンの`aria-label`で伝える。色は`color`で変える
 - フォーカス枠は`scss/_reset.scss`の共通指定（`:where(...)`で詳細度0、幅3px・`--color-brand-accent`）を基本とし、枠が切れる・埋もれる箇所だけ個別に上書きする
-- フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;700&display=swap`の`stylesheet`を置く
+- フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;600&display=swap`の`stylesheet`を置く
+- 文字の太さは見出し・強調数値・現在地・サービス名が600、フォーム／表のラベル・ボタン・塗りのバッジ／受注ステータスが500、本文・表の中身が400。700は使用しない（Kenの決定、2026-10-19）。詳細な対象は`DESIGN_TOKENS.md`の「文字の太さ」を参照する
 - 余白・幅・罫線・角丸などは、現在のように`px`・`rem`・`em`の直接指定も認める。すべての数値の変数化や、削除済みの`$space-*`・`$font-size-*`等の復活は行わない
 - 共通で調整する必要がある値だけ、既存変数を利用する。新しい変数の追加は必要になった箇所に限定する。色は既存の色変数とブランド用CSSカスタムプロパティを優先する
 - サイズの旧仮案よりユーザーが調整した現行SCSSを優先し、実装時は読みやすさ・タップ領域・画面幅をブラウザで確認する。小さい文字や操作しにくい箇所は、構成を変えず個別に調整する

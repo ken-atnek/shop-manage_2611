@@ -88,7 +88,7 @@
 }
 .admin-main .kpi-list button .count strong {
   font-size: max(12px, 1.875em);
-  font-weight: 700;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .admin-main .kpi-list button .count .unit {
@@ -125,7 +125,6 @@
   font-size: inherit;
   width: 100%;
   margin-top: 1.6rem;
-  overflow-x: auto;
 }
 .admin-main .orders-board {
   font-size: inherit;
@@ -154,7 +153,7 @@
 }
 .admin-main .orders-board .column-head .column-label {
   font-size: max(12px, 0.875em);
-  font-weight: 700;
+  font-weight: 500;
   color: #4f5863;
   display: flex;
   align-items: center;
@@ -182,7 +181,7 @@
 }
 .admin-main .orders-board .column-head .item-head span {
   font-size: max(12px, 0.875em);
-  font-weight: 700;
+  font-weight: 500;
   color: #4f5863;
   min-width: 0;
   padding: 0.8rem 1.2rem;
@@ -244,7 +243,7 @@
 }
 .admin-main .order-card .order-heading h3 {
   font-size: max(12px, 1.125em);
-  font-weight: 700;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -266,7 +265,7 @@
   overflow-wrap: anywhere;
 }
 .admin-main .order-card .shipping-info .name {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* =================================
@@ -354,7 +353,7 @@
 }
 .admin-main .item-table tfoot .total strong {
   font-size: max(12px, 1.25em);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* =================================
@@ -369,6 +368,7 @@
   padding: 1.2rem 0.8rem;
 }
 .admin-main .order-progress .select-customer-status {
+  font-weight: 500;
   width: 120px;
   position: relative;
   font-size: inherit;
@@ -567,9 +567,6 @@
 .admin-main .order-list > li:has(.select-customer-status.is-open) {
   z-index: 10;
 }
-.admin-main .order-list:has(> li:last-child .select-customer-status.is-open) {
-  padding-bottom: 19.2rem;
-}
 
 /* =================================
  * 操作
@@ -628,6 +625,7 @@
   grid-template-rows: 1fr;
 }
 .admin-main .order-card .order-detail .order-detail-inner {
+  position: relative;
   font-size: inherit;
   min-height: 0;
   overflow: hidden;
@@ -744,7 +742,7 @@
   background: #f6f7f8;
 }
 .admin-main .order-card .order-detail .memo-form .memo-save {
-  font-weight: 700;
+  font-weight: 500;
   border-color: #9db5d6;
   color: #1f4e8c;
   background: #e6edf7;
@@ -784,7 +782,7 @@
 }
 .image-dialog .dialog-content h2 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
   max-width: 100%;
   overflow-wrap: anywhere;
 }

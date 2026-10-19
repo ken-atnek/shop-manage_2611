@@ -35,11 +35,6 @@
         font-size: inherit;
         width: 100%;
         margin-top: 1.6rem;
-        overflow-x: auto;
-        // 領域内だけをスクロールし、フォーカス枠は内側に収める。
-        &:focus-visible {
-            outline-offset: -3px;
-        }
     }
     .products-table {
         font-size: inherit;
@@ -68,7 +63,7 @@
         }
         th {
             font-size: fz(14);
-            font-weight: 700;
+            font-weight: 500;
             color: $color-text-secondary;
             background: $color-bg-head;
         }
@@ -116,7 +111,7 @@
             font-variant-numeric: tabular-nums;
             white-space: nowrap;
             time {
-                font-size: inherit;
+                font-size: fz(14);
                 span {
                     font-size: inherit;
                     display: block;
@@ -147,19 +142,22 @@
         .publish-state {
             // Ken決定：表示専用のバッジ。ホバー色・操作用カーソルは付けない。
             font-size: fz(14);
-            font-weight: 700;
+            font-weight: 500;
             display: inline-flex;
+            justify-content: center;
             align-items: center;
             min-height: 2.8rem;
             padding-inline: 1.2rem;
             border: 0;
-            border-radius: 999px;
+            width: 5em;
+            border-radius: 100vmax;
             color: $pure-white;
             background: $color-publish-public;
             cursor: default;
             white-space: nowrap;
             &.is-private {
                 background: $color-publish-private;
+                opacity: 0.7;
             }
         }
         .edit-link {
@@ -171,9 +169,15 @@
             height: 4rem;
             color: $color-text-secondary;
             border-radius: 50%;
+            border: 1px solid transparent;
+            transition:
+                color $transition-base,
+                background-color $transition-base,
+                border-color $transition-base;
             &:hover {
                 color: $color-text-primary;
                 background: $pure-white;
+                border-color: $color-border-card;
             }
         }
     }

@@ -46,7 +46,7 @@
                 white-space: nowrap;
                 strong {
                     font-size: fz(30);
-                    font-weight: 700;
+                    font-weight: 600;
                     font-variant-numeric: tabular-nums;
                 }
                 .unit {
@@ -98,7 +98,6 @@
         font-size: inherit;
         width: 100%;
         margin-top: 1.6rem;
-        overflow-x: auto;
     }
     .orders-board {
         font-size: inherit;
@@ -127,7 +126,7 @@
             }
             .column-label {
                 font-size: fz(14);
-                font-weight: 700;
+                font-weight: 500;
                 color: $color-text-secondary;
                 display: flex;
                 align-items: center;
@@ -155,7 +154,7 @@
                     var(--item-subtotal-width);
                 span {
                     font-size: fz(14);
-                    font-weight: 700;
+                    font-weight: 500;
                     color: $color-text-secondary;
                     min-width: 0;
                     padding: 0.8rem 1.2rem;
@@ -219,7 +218,7 @@
             gap: 0.8rem 1.2rem;
             h3 {
                 font-size: fz(18);
-                font-weight: 700;
+                font-weight: 600;
                 font-variant-numeric: tabular-nums;
                 white-space: nowrap;
             }
@@ -242,7 +241,7 @@
                 overflow-wrap: anywhere;
             }
             .name {
-                font-weight: 700;
+                font-weight: 600;
             }
         }
     }
@@ -337,7 +336,7 @@
             }
             .total strong {
                 font-size: fz(20);
-                font-weight: 700;
+                font-weight: 600;
             }
         }
     }
@@ -378,10 +377,6 @@
     // 開いた注文を前へ出す。Kenのliのsibling-*指定はそのまま維持する。
     .order-list > li:has(.select-customer-status.is-open) {
         z-index: 10;
-    }
-    // 末尾メニュー（5項目×36px）と余白を、横スクロール領域内に収める。
-    .order-list:has(> li:last-child .select-customer-status.is-open) {
-        padding-bottom: 19.2rem;
     }
 }
 
@@ -444,6 +439,7 @@
             grid-template-rows: 1fr;
         }
         .order-detail-inner {
+            position: relative;
             font-size: inherit;
             min-height: 0;
             overflow: hidden;
@@ -580,7 +576,7 @@
         gap: 1.6rem;
         h2 {
             font-size: inherit;
-            font-weight: 700;
+            font-weight: 600;
             max-width: 100%;
             overflow-wrap: anywhere;
         }

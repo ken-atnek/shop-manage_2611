@@ -14,6 +14,11 @@
  * Last updated: 2026-10-19
  * ======================================= */
 
+// 一覧内ではなくページ全体でスクロールする。共通resetの横方向の抑止を解除する。
+html {
+    overflow-x: auto;
+}
+
 body {
     font-size: clamp(1.2rem, calc($base-vw * 1vw) + calc($slice * 1px), 1.6rem);
     margin: 0;
@@ -24,6 +29,9 @@ body {
     min-height: 100vh;
     justify-content: space-between;
     width: 100%;
+    // 中身の最小幅までbodyも広げ、ヘッダーとレイアウトの背景を右端までつなぐ。
+    min-width: min-content;
+    overflow: visible;
     color: $color-text-primary;
     font-family: $font-family-base;
     background-color: #fff;
@@ -38,9 +46,6 @@ body {
     --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
     --color-nav-active-bg: #1e5a43; // 選択中の面（白文字と8.08:1）
     --color-nav-active: #7be0ae; // 選択中の左バー
-    @include tbw {
-        overflow-x: clip;
-    }
     @include tb {
         // タブレットでも既存の12px下限を維持する。
         font-size: clamp(1.2rem, 1.4vw, 1.6rem);
@@ -107,7 +112,7 @@ footer {
         gap: 0 1.6rem;
         .service-name {
             font-size: fz(20);
-            font-weight: 700;
+            font-weight: 600;
         }
         .admin-name {
             padding-left: 1.6rem;
@@ -147,11 +152,12 @@ footer {
  * サイドメニュー
  * ------------------------------ */
 .admin-sidebar {
+    flex-shrink: 0;
     border-right: 1px solid var(--color-nav-bg-end);
     background-color: var(--color-nav-bg);
     background-image: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
     font-size: inherit;
-    width: 100%;
+    width: 18rem;
     max-width: 18rem;
     nav {
         padding-block: 1.6rem;
@@ -184,7 +190,7 @@ footer {
                 background: var(--color-nav-active-bg);
                 border-left-color: var(--color-nav-active);
                 color: $pure-white;
-                font-weight: 700;
+                font-weight: 600;
             }
         }
     }
@@ -248,7 +254,7 @@ footer {
  * ページ見出し
  * ------------------------------ */
 .admin-main {
-    min-width: 0;
+    min-width: min-content;
     .page-heading {
         font-size: inherit;
         display: flex;
@@ -257,7 +263,7 @@ footer {
         margin-bottom: 2.4rem;
         h1 {
             font-size: fz(28);
-            font-weight: 700;
+            font-weight: 600;
         }
         time {
             font-size: inherit;
@@ -334,6 +340,7 @@ footer {
                 grid-template-rows: 1fr;
             }
             .search-panel-inner {
+                position: relative;
                 font-size: inherit;
                 min-height: 0;
                 overflow: hidden;
@@ -409,7 +416,7 @@ footer {
         margin-top: 2.4rem;
         h2 {
             font-size: fz(22);
-            font-weight: 700;
+            font-weight: 600;
         }
         .count {
             font-size: inherit;
@@ -512,7 +519,7 @@ footer {
         a[aria-current="page"] {
             border: 2px solid var(--color-brand-accent);
             color: var(--color-brand-accent);
-            font-weight: 700;
+            font-weight: 600;
             background: $pure-white;
             &:hover {
                 background: $pure-white;

@@ -34,7 +34,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/common.css" />
@@ -171,8 +171,8 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
             <?php endif; ?>
           </div>
         <?php else: ?>
-        <!-- 列見出しと注文の箱を同じ領域で横スクロールさせる。 -->
-        <div class="orders-scroll" role="region" aria-label="注文一覧（横スクロール対応）" tabindex="0">
+        <!-- 列見出しと注文の箱をまとめる。スクロールは縦横ともページ全体で行う。 -->
+        <div class="orders-scroll">
           <div class="orders-board">
             <div class="column-head" aria-hidden="true">
               <span class="column-label">注文・お届け先</span>

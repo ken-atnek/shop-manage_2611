@@ -32,7 +32,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/common.css" />
@@ -115,7 +115,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
         <!-- 架空商品の表示例。986件のうち6件を掲載。価格は税込、更新が新しい順。写真は既存の確認用JPEGを流用。 -->
         <!-- 残りわずかの3個は表示例。全商品共通の基準値は未確定で、ここでは判定処理を持たない。 -->
         <!-- 編集のhref="#"は商品詳細が未作成の仮リンク。実際のURLはバックエンド組み込み時に差し替える。 -->
-        <div class="products-scroll" role="region" aria-label="商品一覧（横スクロール対応）" tabindex="0">
+        <div class="products-scroll">
           <table class="products-table" aria-labelledby="product-list-heading">
             <thead>
               <tr>
