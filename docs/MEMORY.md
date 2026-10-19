@@ -641,3 +641,12 @@
 - Kenが「単調」と判断し、3案（A：KPIと同じ選択表現、B：白い箱＋下線、C：区切り付きボタン列）を実画面に当てて比較。A案に決定
 - order.scssのページ送り：現在ページを`--color-brand-accent`の2px枠＋文字・太字・白い面、ホバーを`$color-bg-head`の面、角丸`$radius-sm`。Tab移動時に隣のフォーカス枠が現在ページの枠と接して紛らわしかったため、間隔を0.4→0.8rem、ページ送り内のフォーカス枠offsetを2pxにした
 - Playwright（Chromium）で1280・834pxの途中ページを確認。1行に収まり、各項目44px四方、横はみ出しなし。CLIENT_ORDER_LIST・DESIGN_TOKENSに記録。Gitコミットなし
+- 追記（同日）：確認用の`?preview=empty`ではKPIも0件にした（検索結果0件ではKPIは全体件数のまま）。`$color-error`に用途とコントラストのコメントを追加
+
+## 2026-10-19 レビューのP3を整理
+
+- `scss/_ui.scss`の`select-status-box`から無効な`width: 3var (--corner-radius);`を削除（Kenの了承済み。表示はapply-status-boxの36pxで変わらない）
+- order.scssの未使用`@keyframes status-menu-open`を削除
+- メモのlabel「メモ」と保存ボタン「保存」に、読み上げ用の注文番号（sr-only）を追加。見た目は変えない
+- 詳細検索のメール欄に`spellcheck="false"`を追加。`autocomplete="off"`は入力履歴が再検索に役立つ可能性があるため見送り
+- npm run sass警告なし、PHP構文正常。Gitコミットなし

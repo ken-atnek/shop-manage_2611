@@ -13,6 +13,8 @@ $isNoResultsState = $previewState === 'no-results';
 $isDateErrorState = $previewState === 'date-error';
 $isPagerMiddleState = $previewState === 'pager-middle';
 $listCount = ($isEmptyState || $isNoResultsState) ? 0 : 8;
+// KPIは検索条件に関係なく全体の件数を表す。データなしのときだけ0件にする。
+$kpiCounts = $isEmptyState ? ['all' => 0, 'new' => 0, 'waiting' => 0] : ['all' => 8, 'new' => 3, 'waiting' => 2];
 $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
 ?>
 <!doctype html>
@@ -53,19 +55,19 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
           <li>
             <button type="button" aria-pressed="true">
               <span class="label">すべて</span>
-              <span class="count"><strong>8</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['all'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
           <li>
             <button type="button" aria-pressed="false">
               <span class="label">未着手</span>
-              <span class="count"><strong>3</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['new'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
           <li>
             <button type="button" aria-pressed="false">
               <span class="label">発送待ち</span>
-              <span class="count"><strong>2</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['waiting'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
         </ul>
@@ -137,7 +139,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 </div>
                 <div class="form-field">
                   <label class="form-label" for="order-email">メールアドレス</label>
-                  <input class="form-input" type="email" id="order-email" name="email" />
+                  <input class="form-input" type="email" id="order-email" name="email" spellcheck="false" />
                 </div>
                 <div class="form-field product-field">
                   <label class="form-label" for="order-product">商品名</label>
@@ -341,9 +343,10 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2610170112345" />
-                        <label for="memo-2610170112345">メモ</label>
+                        <!-- 複数の注文を開いても区別できるよう、読み上げ用に注文番号を補う。 -->
+                        <label for="memo-2610170112345">メモ<span class="sr-only">（注文#2610170112345）</span></label>
                         <textarea id="memo-2610170112345" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2610170112345のメモ）</span></button>
                       </form>
                     </div>
                   </div>
@@ -482,9 +485,9 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2026110300002" />
-                        <label for="memo-2026110300002">メモ</label>
+                        <label for="memo-2026110300002">メモ<span class="sr-only">（注文#2026110300002）</span></label>
                         <textarea id="memo-2026110300002" name="memo" rows="4">名入れの文字は「祝 還暦」で確定済み。</textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300002のメモ）</span></button>
                       </form>
                     </div>
                   </div>
@@ -597,9 +600,9 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2026110300003" />
-                        <label for="memo-2026110300003">メモ</label>
+                        <label for="memo-2026110300003">メモ<span class="sr-only">（注文#2026110300003）</span></label>
                         <textarea id="memo-2026110300003" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300003のメモ）</span></button>
                       </form>
                     </div>
                   </div>

@@ -88,7 +88,7 @@
         i {
             display: block;
             align-self: stretch;
-            width: 3var (--corner-radius);
+            // 幅は呼び出し側で指定する（apply-status-boxでは36px）。無効だった`3var (--corner-radius)`は削除
             background-color: #fff;
             border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
             border: 1px solid $color-border-default;
