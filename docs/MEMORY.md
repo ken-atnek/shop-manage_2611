@@ -650,3 +650,9 @@
 - メモのlabel「メモ」と保存ボタン「保存」に、読み上げ用の注文番号（sr-only）を追加。見た目は変えない
 - 詳細検索のメール欄に`spellcheck="false"`を追加。`autocomplete="off"`は入力履歴が再検索に役立つ可能性があるため見送り
 - npm run sass警告なし、PHP構文正常。Gitコミットなし
+
+## 2026-10-19 バックエンドへの申し送り資料を作成
+
+- `docs/coding/HANDOFF_CLIENT_ORDER_LIST.md`を新規作成。`docs/backend/`はバックエンド担当者のフォルダでフロントは依頼なく編集しないルールのため、引き渡し資料の置き場の`docs/coding/`に置いた
+- 内容：Bladeへ移さない制作用の変数、一覧の3状態、ページ送りの表示ルールとURL（条件の引き継ぎ）、KPI方式の差し替え方法、詳細検索パネルの初期状態とエラー出力、ステータスの即時保存とキャンセル時の確認、hiddenがformの外にあること、メモ、縮小サムネイル＋lazy・download属性の注意、JSが依存するclass・属性・id、未確定項目
+- docs/README.mdの一覧とIMPLEMENTATION_REFERENCE.mdの引き渡しの節から参照。コード変更・Gitコミットなし

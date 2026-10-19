@@ -76,6 +76,7 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
+- 画面ごとの組み込み時の注意点は申し送り資料にまとめる（Client受注一覧：`docs/coding/HANDOFF_CLIENT_ORDER_LIST.md`）
 
 ## HTML要素の考え方
 
