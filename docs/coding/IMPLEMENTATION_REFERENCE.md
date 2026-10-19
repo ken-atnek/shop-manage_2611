@@ -69,6 +69,22 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - 共通で調整する必要がある値だけ、既存変数を利用する。新しい変数の追加は必要になった箇所に限定する。色は既存の色変数とブランド用CSSカスタムプロパティを優先する
 - サイズの旧仮案よりユーザーが調整した現行SCSSを優先し、実装時は読みやすさ・タップ領域・画面幅をブラウザで確認する。小さい文字や操作しにくい箇所は、構成を変えず個別に調整する
 
+### アイコンセット
+
+- 操作用の線アイコンはLucide（ISC License）を基本とする。LICENSEの一覧にあるFeather由来のアイコン（今回の4つが該当）は、MITの通知も含めて保持する。SVGコードだけをインラインで使い、npmパッケージ・Iconify等の外部スクリプトは読み込まない。ライセンス全文は`docs/design/reference/LUCIDE_LICENSE`
+- LucideのSVGは公式の子要素（`path`・`circle`・`line`等）の形を変えず、外側の`svg`を`width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"`にそろえる
+- `fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`属性は付けず、`scss/_reset.scss`の線色・線端・角の指定を効かせる。用途名はSVGではなく操作するボタン・リンクの`aria-label`と`title`で伝える
+
+| 用途 | Lucideの名前 | 使っている画面 |
+|---|---|---|
+| 入稿画像の拡大 | `zoom-in` | Client受注一覧 |
+| 入稿画像のダウンロード | `download` | Client受注一覧 |
+| ページ送り「前へ」 | `chevron-left` | Client受注一覧 |
+| ページ送り「次へ」 | `chevron-right` | Client受注一覧 |
+| メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
+| 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧 |
+| ステータスの開閉 | Lucideではない（`scss/_ui.scss`の背景SVG） | Client受注一覧 |
+
 ## 制作環境と引き渡し
 
 - Sassの編集元、出力先、npmコマンドは`docs/SPEC.md`の「フォルダとSass」を参照する

@@ -656,3 +656,12 @@
 - `docs/coding/HANDOFF_CLIENT_ORDER_LIST.md`を新規作成。`docs/backend/`はバックエンド担当者のフォルダでフロントは依頼なく編集しないルールのため、引き渡し資料の置き場の`docs/coding/`に置いた
 - 内容：Bladeへ移さない制作用の変数、一覧の3状態、ページ送りの表示ルールとURL（条件の引き継ぎ）、KPI方式の差し替え方法、詳細検索パネルの初期状態とエラー出力、ステータスの即時保存とキャンセル時の確認、hiddenがformの外にあること、メモ、縮小サムネイル＋lazy・download属性の注意、JSが依存するclass・属性・id、未確定項目
 - docs/README.mdの一覧とIMPLEMENTATION_REFERENCE.mdの引き渡しの節から参照。コード変更・Gitコミットなし
+
+## 2026-10-19 受注一覧の操作アイコンをLucideへ統一
+
+- `orders.php`の入稿画像の拡大をLucide `zoom-in`、ダウンロードを`download`、ページ送りの前後を`chevron-left`／`chevron-right`へ置換。ボタン・リンク側のclass・属性・動作は変えず、SVGは20×20px・viewBox 24・線幅1.5、線色・線端は共通リセットに任せた
+- LucideはISC License。今回の4種はFeather由来でMITの通知も公式LICENSEに含まれるため、全文を`docs/design/reference/LUCIDE_LICENSE`へ保存し、使用ルールと用途一覧を`IMPLEMENTATION_REFERENCE.md`へ記録した。npmパッケージ・外部スクリプトは追加していない
+- 展開ボタンは独自アイコンのまま維持。Lucideの`panel-bottom-open`・`panel-bottom-close`は存在するが、公式形状を使う場合は現行の単一`.panel-chevron`の上下反転ではなく、状態ごとに2つのSVGまたはパスを切り替える必要がある。中身あり／なし・開閉の比較画像を`docs/design/proposals/2026-10-19/client-order-panel-icon-comparison-lucide.jpg`へ保存
+- `npm run sass`は警告・エラーなし、DDEV内のPHP構文確認と`git diff --check`は正常。Chromiumで1280×800・1024×768・834×1194を確認し、SVGは20×20px・線幅1.5px・丸い線端・ボタン中央に一致。834pxでもページ全体の横はみ出しはなく、一覧内だけ横スクロールする
+- 拡大dialogの開閉・Esc後のフォーカス復帰、ダウンロードの実保存、ページ送りの前へリンクの遷移、リンクと拡大ボタンのフォーカス枠、ダウンロードリンクのホバーを確認。ブラウザ警告・エラーなし。比較画像は既存の`.gitignore`によりGit管理外で、ローカルに保存。Gitコミットなし
+- 追記（同日）：`IMPLEMENTATION_REFERENCE.md`のアイコンセット節をSCSSの書き方の末尾へ移し、Feather由来とMIT通知の説明をLICENSE一覧に基づく表現へ変更。`CLIENT_ORDER_LIST.md`の旧サイドバー配色を現行の深い緑・選択中・ホバーの指定へ訂正。資料のみ変更
