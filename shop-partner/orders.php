@@ -37,6 +37,18 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- 初期描画前に共通サイドバーの状態を反映。1194pxはcommon.scssの$tbwとそろえる。 -->
+    <script>
+      (() => {
+        let collapsed = window.matchMedia("(max-width: 1194px)").matches;
+        try {
+          collapsed = collapsed || localStorage.getItem("kumanichi-client-sidebar") === "collapsed";
+        } catch {
+          // localStorageが使えなくても初期表示を継続する。
+        }
+        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+      })();
+    </script>
     <link rel="stylesheet" href="assets/css/common.css" />
     <link rel="stylesheet" href="assets/css/order.css" />
   </head>

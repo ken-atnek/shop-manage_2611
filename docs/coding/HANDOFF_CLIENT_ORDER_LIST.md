@@ -103,11 +103,22 @@ Bladeへ組み込むときは、次を変えないでほしい（変える場合
 | `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | メモ・入稿画像の展開。`order.js`から`common.js`の`toggleAccordion`を使う |
 | `.image-preview`の`data-*`、`#submission-preview`（dialog）、`.preview-image`、`#preview-file-name`、`.dialog-close` | 入稿画像の拡大表示（全注文で1つのdialogを共用） |
 | `.detail-toggle`の`aria-controls`・`aria-expanded`、対応する検索パネルの`id`と`inert`、`.clear-conditions`、パネル内の最初の`input` | `common.js`による詳細検索の開閉とクリア。パネルは`aria-controls`の値から取得する |
+| `.admin-sidebar`、中の`.sidebar-toggle`、`aria-expanded`・`aria-label`・`title` | `common.js`によるナビの開閉、外側クリックの判定、閉じた後のフォーカス復帰 |
+| htmlの`.sidebar-collapsed`・`.sidebar-ready` | head・共通JS・共通CSSで共有する開閉状態と、操作時だけ幅のtransitionを有効にする印 |
+| `.sidebar-content`・`.nav-label`・`.sidebar-close-icon`・`.sidebar-open-icon`、`#client-navigation`とボタンの`aria-controls` | 共通CSSの重ね表示・文字の視覚的な非表示・アイコン切り替え、ボタンとナビの関連付け。リンクのtitleと現在地`aria-current="page"`も維持 |
 
 - 注文ごとのidは注文IDから作っている（`order-{ID}`・`status-panel-{ID}`・`status-{ID}-{状態キー}`・`order-detail-{ID}`・`submissions-{ID}`・`memo-{ID}`）。ページ内で重複しないようにする
 - radioの`name`は注文ごと（`order-status-choice-{ID}`）に分ける
 - `common.js`→`order.js`の順に`</body>`直前で各1回読み込む。`common.js`を先に読み込まないと、`order.js`の展開行で`toggleAccordion`を使えない
 - JS・CSSを更新したときに古いファイルがブラウザに残らないよう、読み込むURLにバージョンを付けてほしい（Laravelの仕組み、またはファイルの更新日時を`?v=`に付けるなど）。`common.js`と`order.js`は必ず組で更新する。片方だけ古いと、受注一覧の操作がすべて止まることがある
+
+### 共通サイドバーの初期化と保存（2026-10-19）
+
+- PC（1194pxより広い）は初期値を開いた状態とし、localStorageのキー`kumanichi-client-sidebar`へ値`expanded`／`collapsed`を保存する。保存なし・不明な値は開く。タブレットの開閉ではこの値を上書きしない
+- タブレット（1194px以下、向きは問わない）は新規表示・再読み込み・戻る／進むの`pageshow`で畳む。開くと本文の幅を変えず重ねる。Esc・外側クリック・開閉ボタンで閉じたら開閉ボタンへフォーカスを戻す。PCへ幅を戻した場合はPCの保存状態へ戻る
+- `orders.php`・`products.php`のheadで、`common.css`より前の同一インラインスクリプトを維持する。`matchMedia("(max-width: 1194px)")`または保存値`collapsed`ならhtmlへ`.sidebar-collapsed`を付け、初期描画のちらつきを防ぐ。`common.js`が同じ状態とボタンの属性を同期する
+- headと`common.js`のlocalStorage読み書きはtry/catchで保護する。保存できなくても当該ページ内の開閉・詳細検索を止めない。幅1194pxは共通Sassの`$tbw`と必ず同時に変更する。CSPでインラインスクリプトを制限する場合はバックエンド側でnonce等を付ける
+- サイドバーはモーダルではなく通常のナビ。畳んだリンクをinert／hiddenにせず、文字だけを`.sr-only`相当で隠す。幅のtransitionは動きを減らす設定では無効
 
 ## 10. 未確定のまま残っている項目
 

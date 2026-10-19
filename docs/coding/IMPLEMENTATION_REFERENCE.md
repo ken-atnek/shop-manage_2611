@@ -43,6 +43,8 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 
 商品一覧は`common.js`だけを読み込む。`products.js`は作成しない。詳細検索の対象は`aria-controls="product-search-panel"`で指定し、条件クリア後は先頭の「公開」チェックボックスへフォーカスする。
 
+Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC（1194pxより広い）は開閉で本文幅を変更し、`kumanichi-client-sidebar`へ状態を保存。タブレットは初期状態を畳み、開くと本文に重ねる。両PHPのheadには同一の初期化スクリプトを`common.css`より前に置き、htmlの`.sidebar-collapsed`を初期描画前に反映する。保存拒否時のtry/catch、幅の判定値、依存class・属性の詳細は[申し送り§9](HANDOFF_CLIENT_ORDER_LIST.md#9-jsが依存しているclass属性id)を参照する。
+
 ### 制作用PHPのインクルード
 
 - PHPインクルードはユーザー承認済みの制作補助。Laravel・DB・認証・受注処理等は作らず、バックエンド担当者が後からBladeのレイアウト・`@include`等へ組み込む
@@ -80,7 +82,7 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 
 - 操作用の線アイコンはLucide（ISC License）を基本とする。LICENSEの一覧にあるFeather由来のアイコン（受注一覧で使用する4種が該当）は、MITの通知も含めて保持する。SVGコードだけをインラインで使い、npmパッケージ・Iconify等の外部スクリプトは読み込まない。ライセンス全文は`docs/design/reference/LUCIDE_LICENSE`
 - LucideのSVGは公式の子要素（`path`・`circle`・`line`等）の形を変えず、外側の`svg`を`width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"`にそろえる
-- `fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`属性は付けず、`scss/_reset.scss`の線色・線端・角の指定を効かせる。用途名はSVGではなく操作するボタン・リンクの`aria-label`と`title`で伝える
+- `fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`属性は付けず、`scss/_reset.scss`の線色・線端・角の指定を効かせる。用途名はSVGではなく操作するボタン・リンクの`aria-label`と`title`で伝える。ナビのリンクは実テキスト`.nav-label`を読み上げ名とし、畳んだときだけ視覚的に隠す（同じ名前のtitleも付ける）
 
 | 用途 | Lucideの名前 | 使っている画面 |
 |---|---|---|
@@ -89,9 +91,19 @@ Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面�
 | ページ送り「前へ」 | `chevron-left` | Client受注一覧・商品一覧 |
 | ページ送り「次へ」 | `chevron-right` | Client受注一覧・商品一覧 |
 | 商品詳細への編集 | `pencil` | Client商品一覧 |
+| メニュー：受注一覧 | `clipboard-list` | Client共通ナビ |
+| メニュー：商品一覧 | `package` | Client共通ナビ |
+| メニュー：商品登録 | `package-plus` | Client共通ナビ |
+| メニュー：送料設定 | `truck` | Client共通ナビ |
+| メニュー：顧客管理 | `users` | Client共通ナビ |
+| メニュー：集計 | `chart-column` | Client共通ナビ |
+| メニューを畳む | `panel-left-close` | Client共通ナビ |
+| メニューを開く | `panel-left-open` | Client共通ナビ |
 | メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
 | 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
 | ステータスの開閉 | Lucideではない（`scss/_ui.scss`の背景SVG） | Client受注一覧 |
+
+メニュー用の8種は2026-10-19に[Lucide公式SVG](https://github.com/lucide-icons/lucide/tree/main/icons)で存在と子要素を確認済み。代替アイコンへの変更なし。
 
 ## 制作環境と引き渡し
 

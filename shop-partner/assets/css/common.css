@@ -382,28 +382,72 @@ footer {
  * サイドメニュー
  * ------------------------------ */
 .admin-sidebar {
+  position: relative;
   flex-shrink: 0;
   border-right: 1px solid var(--color-nav-bg-end);
   background-color: var(--color-nav-bg);
   background-image: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
   font-size: inherit;
   width: 18rem;
-  max-width: 18rem;
+}
+.admin-sidebar .sidebar-content {
+  font-size: inherit;
+  width: 100%;
+  min-height: 100%;
+  padding-top: 0.8rem;
+  background-color: var(--color-nav-bg);
+  background-image: inherit;
+}
+.admin-sidebar svg {
+  flex-shrink: 0;
+}
+.admin-sidebar .sidebar-toggle {
+  font-size: inherit;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  margin-inline: 1rem;
+  color: var(--color-nav-text);
+  background: transparent;
+  cursor: pointer;
+}
+.admin-sidebar .sidebar-toggle:hover {
+  color: #fff;
+  background: var(--color-nav-hover-bg);
+}
+.admin-sidebar .sidebar-toggle:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+.admin-sidebar .sidebar-toggle .sidebar-open-icon {
+  display: none;
 }
 .admin-sidebar nav {
-  padding-block: 1.6rem;
+  padding-block: 0.8rem 1.6rem;
   font-size: inherit;
   display: flex;
   flex-direction: column;
   gap: 4px 0;
 }
 .admin-sidebar nav a {
+  position: relative;
   display: flex;
   align-items: center;
-  padding: 0.8rem 2.4rem;
+  gap: 1.2rem;
+  min-height: 4.4rem;
+  padding: 0.8rem 1.8rem;
   border-left: 3px solid transparent;
   color: var(--color-nav-text);
   font-size: max(12px, 1.125em);
+}
+.admin-sidebar nav a .nav-label {
+  font-size: inherit;
+  white-space: nowrap;
+}
+.admin-sidebar nav a {
   transition: background-color 0.15s ease-out, color 0.15s ease-out;
 }
 .admin-sidebar nav a:focus-visible {
@@ -421,6 +465,48 @@ footer {
   font-weight: 600;
 }
 
+html.sidebar-collapsed .admin-sidebar {
+  width: 6.4rem;
+}
+html.sidebar-collapsed .admin-sidebar .sidebar-content {
+  width: 6.4rem;
+}
+html.sidebar-collapsed .admin-sidebar .sidebar-close-icon {
+  display: none;
+}
+html.sidebar-collapsed .admin-sidebar .sidebar-toggle .sidebar-open-icon {
+  display: block;
+}
+html.sidebar-collapsed .admin-sidebar .nav-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1194px) {
+  .admin-sidebar {
+    width: 6.4rem;
+  }
+  .admin-sidebar .sidebar-content {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 18rem;
+    z-index: 20;
+    border-right: 1px solid var(--color-nav-active);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.sidebar-ready .admin-sidebar,
+  html.sidebar-ready .sidebar-content {
+    transition: width 0.2s ease-out;
+  }
+}
 /* =================================
  * フォーム部品（共通候補）
  * ------------------------------ */
