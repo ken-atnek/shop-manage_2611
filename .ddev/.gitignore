@@ -1,0 +1,9 @@
+/.*.yaml
+/.homeadditions/
+/.webimageBuild/
+/.dbimageBuild/
+/mutagen/
+/traefik/
+/db_snapshots/
+/import-db/
+/import-files/

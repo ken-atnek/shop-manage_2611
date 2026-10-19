@@ -1,0 +1,11 @@
+// 共通タイポグラフィ（すべて仮）
+// ルートの DESIGN_TOKENS.md のタイポグラフィ定義に対応する。
+
+$font-family-base:
+    "Noto Sans JP",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif; // 仮：Noto Sans JP を優先し、OS 標準へフォールバック

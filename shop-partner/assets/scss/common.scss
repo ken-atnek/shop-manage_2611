@@ -1,0 +1,237 @@
+@use "../../../scss/reset";
+@use "../../../scss/settings" as *;
+@use "../../../scss/typography" as *;
+@use "../../../scss/colors" as *;
+@use "../../../scss/breakpoints" as *;
+@use "../../../scss/interaction" as *;
+@use "../../../scss/svg" as *;
+@use "../../../scss/ui" as *;
+/* =======================================
+ * 熊日モール Client 共通スタイル
+ * URL: /shop-partner/assets/scss/common.scss
+ * Referenced in: /shop-partner/orders.html
+ * Created: 2026-10-17
+ * Last updated: 2026-10-17
+ * ======================================= */
+
+body {
+    font-size: clamp(1.2rem, calc($base-vw * 1vw) + calc($slice * 1px), 1.6rem);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: space-between;
+    width: 100%;
+    color: $color-text-primary;
+    font-family: $font-family-base;
+    background-color: #fff;
+    --color-brand-subtle: #eef9f4;
+    --color-brand-accent: #097141;
+    // サイドバーは管理画面ごとの濃い色（Client＝深い緑、Master＝深い紺）で種類を示す
+    --color-nav-bg: #123c2c; // グラデーションが使えないときの単色
+    // 左が明るく、本文側（右）へ暗くして境目を締める
+    --color-nav-bg-start: #174a37;
+    --color-nav-bg-end: #0f3326;
+    --color-nav-text: #cfe3d9; // 通常の項目（背景と9.16:1）
+    --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
+    --color-nav-active-bg: #1e5a43; // 選択中の面（白文字と8.08:1）
+    --color-nav-active: #7be0ae; // 選択中の左バー
+    @include tbw {
+        overflow-x: clip;
+    }
+    @include tb {
+        // タブレットでも既存の12px下限を維持する。
+        font-size: clamp(1.2rem, 1.4vw, 1.6rem);
+    }
+    @include sp {
+        font-size: 3.6vw;
+    }
+}
+.admin-layout {
+    position: relative;
+    width: 100%;
+    display: flex;
+    font-size: inherit;
+    // ヘッダーを除いた残りの高さを使い、画面高の二重計上を避ける。
+    flex: 1;
+}
+main {
+    font-size: inherit;
+    // 地を淡いグレーにし、白い箱（KPI・検索・注文）を浮かせる
+    background: $color-bg-page;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 3.2rem;
+}
+
+section,
+article,
+header,
+footer {
+    width: 100%;
+    position: relative;
+    font-size: inherit;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* =================================
+ * HEADER
+ * ------------------------------ */
+.admin-header {
+    // min-height: $admin-header-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    border-bottom: 1px solid $color-border-default;
+    background: $pure-white;
+    .box-identity {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0 1.6rem;
+        .service-name {
+            font-size: fz(20);
+            font-weight: 700;
+        }
+        .admin-name {
+            padding-left: 1.6rem;
+            border-left: 1px solid $color-border-strong;
+            color: $color-text-primary;
+            font-size: fz(20);
+            font-weight: 500;
+        }
+    }
+    .box-actions {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0 2.4rem;
+        a {
+            font-size: inherit;
+        }
+        form {
+            font-size: inherit;
+            button {
+                font-size: inherit;
+                color: $pure-white;
+                background-color: var(--color-brand-accent);
+                padding: 0.5em 1.4em;
+                border-radius: 2px;
+
+                // 塗りと同色の枠が埋もれないよう、ボタンから離して表示する。
+                &:focus-visible {
+                    outline: 3px solid var(--color-brand-accent);
+                    outline-offset: 4px;
+                }
+            }
+        }
+    }
+}
+/* =================================
+ * サイドメニュー
+ * ------------------------------ */
+.admin-sidebar {
+    border-right: 1px solid var(--color-nav-bg-end);
+    background-color: var(--color-nav-bg);
+    background-image: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
+    font-size: inherit;
+    width: 100%;
+    max-width: 18rem;
+    nav {
+        padding-block: 1.6rem;
+        font-size: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 4px 0;
+        a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 2.4rem;
+            border-left: 3px solid transparent;
+            color: var(--color-nav-text);
+            font-size: fz(18);
+            transition:
+                background-color $transition-base,
+                color $transition-base;
+            &:focus-visible {
+                // 濃いサイドバーの上で見えるよう白の枠にする
+                outline: 3px solid $pure-white;
+                // 左端で枠を切らず、border幅も変えない。
+                outline-offset: -3px;
+            }
+            &:hover {
+                background: var(--color-nav-hover-bg);
+                color: $pure-white;
+            }
+            // 強さの順：通常 → ホバー（白8%の面・白文字）→ 選択中（一段明るい面・白の太字・明るい左バー）
+            &[aria-current="page"] {
+                background: var(--color-nav-active-bg);
+                border-left-color: var(--color-nav-active);
+                color: $pure-white;
+                font-weight: 700;
+            }
+        }
+    }
+}
+/* =================================
+ * フォーム部品（共通候補）
+ * ------------------------------ */
+.form-field {
+    font-size: inherit;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    input {
+        font-size: 1.6rem;
+        width: 100%;
+        min-width: 0;
+        height: 4.4rem;
+        padding: 1rem 1.6rem;
+        border: 1px solid $color-border-default;
+        border-radius: $radius-sm;
+        color: $color-text-primary;
+        background: $pure-white;
+    }
+    .form-label {
+        font-size: fz(14);
+        display: block;
+        margin-bottom: 0.8rem;
+        padding: 0;
+        font-weight: 500;
+    }
+}
+
+.form-check {
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4rem;
+    cursor: pointer;
+    input {
+        font-size: inherit;
+        flex-shrink: 0;
+        width: 1.6rem;
+        height: 1.6rem;
+        accent-color: var(--color-brand-accent);
+    }
+    span {
+        font-size: inherit;
+    }
+}

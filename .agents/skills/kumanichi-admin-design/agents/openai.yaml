@@ -1,4 +1,4 @@
 interface:
   display_name: "熊日モール管理画面デザイン"
-  short_description: "Master・Client共通UIを保ちながらFigmaで管理画面を設計"
+  short_description: "Master・Client共通UIをHTML・Sassとブラウザで設計・確認"
   default_prompt: "$kumanichi-admin-design を使って管理画面のデザイン仕様を整理してください。"

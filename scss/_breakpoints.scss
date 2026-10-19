@@ -1,0 +1,46 @@
+// ブレイクポイント
+// PC・タブレット対応。値は仮で、基準幅・最小対応幅は未確定。
+
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+
+$tbw: 1194px;
+$tb: 834px;
+$spw: 928px;
+$sp: 480px;
+
+// PCサイズのみ
+@mixin pc {
+    @media (min-width: $sp) {
+        @content;
+    }
+}
+
+// タブレットサイズ横
+@mixin tbw {
+    @media (max-width: $tbw) and (orientation: landscape) {
+        @content;
+    }
+}
+
+// タブレットサイズ縦
+@mixin tb {
+    @media (max-width: $tb) and (orientation: portrait) {
+        @content;
+    }
+}
+
+// スマホサイズ横
+@mixin spw {
+    @media (max-width: $spw) and (orientation: landscape) {
+        @content;
+    }
+}
+
+// スマホサイズ縦
+@mixin sp {
+    @media (max-width: $sp) and (orientation: portrait) {
+        @content;
+    }
+}

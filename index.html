@@ -1,0 +1,188 @@
+<!doctype html>
+<!-- =======================================
+ * 熊日モール 作業用ページ一覧
+ * URL: /index.html
+ * Referenced in: /index.html
+ * Created: 2026-10-17
+ * Last updated: 2026-10-17
+ * ======================================= -->
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熊日モール 管理画面｜作業用ページ一覧</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+        color: #22272e;
+        background: #f6f7f8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      main {
+        width: min(920px, calc(100% - 48px));
+        margin-inline: auto;
+        padding-block: 64px;
+      }
+
+      header {
+        margin-bottom: 40px;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 12px;
+        font-size: clamp(28px, 4vw, 40px);
+        line-height: 1.35;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-size: 22px;
+      }
+
+      p {
+        color: #4f5863;
+        line-height: 1.7;
+      }
+
+      .eyebrow {
+        margin-bottom: 8px;
+        color: #097141;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .screen-group {
+        margin-top: 24px;
+        border: 1px solid #d9dde2;
+        background: #ffffff;
+      }
+
+      .screen-group__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #d9dde2;
+      }
+
+      .screen-count {
+        color: #4f5863;
+        font-size: 14px;
+      }
+
+      .screen-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .screen-list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 20px 24px;
+      }
+
+      .screen-link {
+        color: #097141;
+        font-size: 18px;
+        font-weight: 700;
+        text-underline-offset: 0.2em;
+      }
+
+      .screen-link:focus-visible {
+        outline: 2px solid #097141;
+        outline-offset: 4px;
+      }
+
+      .screen-path {
+        display: block;
+        margin-top: 4px;
+        color: #4f5863;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        font-weight: 400;
+      }
+
+      .status {
+        flex: none;
+        padding: 4px 8px;
+        border: 1px solid #aeb5be;
+        color: #4f5863;
+        font-size: 13px;
+      }
+
+      .empty-message {
+        margin: 0;
+        padding: 20px 24px;
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 32px, 920px);
+          padding-block: 40px;
+        }
+
+        .screen-list li {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Development index</p>
+        <h1>熊日モール 管理画面</h1>
+        <p>制作中の画面を確認するための作業用ページ一覧です。</p>
+      </header>
+
+      <section class="screen-group" aria-labelledby="client-heading">
+        <div class="screen-group__header">
+          <h2 id="client-heading">Client管理画面</h2>
+          <span class="screen-count">1画面</span>
+        </div>
+        <ul class="screen-list">
+          <li>
+            <a class="screen-link" href="./shop-partner/orders.php">
+              受注一覧
+              <span class="screen-path">shop-partner/orders.php</span>
+            </a>
+            <span class="status">作業中</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="screen-group" aria-labelledby="master-heading">
+        <div class="screen-group__header">
+          <h2 id="master-heading">Master管理画面</h2>
+          <span class="screen-count">0画面</span>
+        </div>
+        <p class="empty-message">HTMLはまだ作成されていません。</p>
+      </section>
+    </main>
+  </body>
+</html>
