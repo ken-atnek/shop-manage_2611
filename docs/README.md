@@ -21,6 +21,7 @@
 | `MEMORY.md` | フロントの作業・判断の履歴 | フロント |
 | `design/DESIGN.md` | デザイン方針 | フロント |
 | `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更は共有） |
+| `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
