@@ -28,13 +28,12 @@ ECサイト管理画面で共通利用するデザイントークンの管理フ
 | `$color-bg-detail` | 注文の展開行の面 | `#F8F9FB`（仮） |
 | `$color-text-primary` | メインテキスト | `#22272E`（仮。白上15.02:1、`bg-subtle`上14.01:1） |
 | `$color-text-secondary` | 補助テキスト | `#4F5863`（仮。白上7.22:1、`bg-subtle`上6.73:1） |
-| `$color-nav-hover` | （未使用）旧：淡いサイドバー用のホバー背景 | `rgba(255, 255, 255, 0.5)`。2026-10-17のサイドバーの濃色化で`--color-nav-hover-bg`へ置き換え |
 | `$color-text-muted` | 無効表示専用 | `#737B86`（仮。白上4.28:1、`bg-subtle`上3.99:1。通常の本文・注釈には使わない） |
 | `color-action-primary` | 主要操作 | 未確定 |
 | `color-action-danger` | 削除・危険操作 | 未確定 |
 | `color-status-success` | 成功・公開中 | 未確定 |
 | `color-status-warning` | 警告・注意 | 未確定 |
-| `color-status-error` | エラー | 未確定 |
+| `$color-error` | 入力エラーの枠・エラー文（`.form-field input[aria-invalid="true"]`・`.form-error`） | `#D21F3C`（2026-10-19にKenが決定。返品対応と同じ値。白上5.25:1） |
 | `color-status-info` | 情報 | 未確定 |
 
 ### 地と面・線の強弱（2026-10-17）
@@ -197,7 +196,7 @@ SVGの基準色は白との比が青`#0080CB`で約4.24:1、Kマークの青`#00
 | `$spw`／`spw` | 既存のスマートフォン横向き設定 | `928px`。残すが対応対象外 |
 | `$sp`／`sp` | 既存のスマートフォン縦向き設定 | `480px`。残すが対応対象外 |
 | `$transition-base` | 基本トランジション | `0.15s ease-out`（現行値） |
-| フォーカスリング | 全操作要素（共通） | `_reset.scss`で`:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible`に幅3px・`--color-brand-accent`、offset 5px。ログアウトは4px、ナビは-3pxを個別指定 |
+| フォーカスリング | 全操作要素（共通） | `_reset.scss`で`:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible`に幅3px・`--color-brand-accent`、offset 5px。ログアウトは4px、ナビは-3px、ステータスの選択肢は白2px・-4px（labelの内側。メニューの`overflow: hidden`で外側の枠が切れるため）、ページ送りの番号はoffset 2px（隣と重なるため）を個別指定 |
 
 旧`$breakpoint-desktop`・`$breakpoint-laptop`・`$focus-ring-*`は現行変数ではなく、復活を必須にしない。フォーカスは`:focus-visible`で表示し、枠によるレイアウト変化を避ける。
 

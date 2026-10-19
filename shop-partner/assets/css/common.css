@@ -216,7 +216,7 @@ button {
  * URL: /scss/_ui.scss
  * Referenced in: /scss/_index.scss
  * Created: 不明
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 /*=========================================
 中央寄せ
@@ -235,7 +235,7 @@ button {
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.html
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 body {
   font-size: clamp(1.2rem, 0.6163328197vw + 9.688751926px, 1.6rem);
@@ -429,12 +429,20 @@ footer {
   color: #22272e;
   background: #fff;
 }
+.form-field input[aria-invalid=true] {
+  border-color: #d21f3c;
+}
 .form-field .form-label {
   font-size: max(12px, 0.875em);
   display: block;
   margin-bottom: 0.8rem;
   padding: 0;
   font-weight: 500;
+}
+.form-field .form-error {
+  font-size: max(12px, 0.875em);
+  margin-top: 0.8rem;
+  color: #d21f3c;
 }
 
 .form-check {

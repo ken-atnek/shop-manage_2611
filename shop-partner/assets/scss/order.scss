@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 
 // ===== このファイル内のボタン共通（Sass分割時に_ui.scssへ移す候補） =====
@@ -288,6 +288,43 @@
 }
 
 /* =================================
+ * 一覧の状態
+ * ------------------------------ */
+.admin-main {
+    .orders-empty {
+        font-size: inherit;
+        margin-top: 1.6rem;
+        padding: 6.4rem 2.4rem;
+        border: 1px solid $color-border-card;
+        border-radius: $radius-sm;
+        background: $pure-white;
+        text-align: center;
+        .message {
+            font-size: inherit;
+            font-weight: 500;
+        }
+        .empty-actions {
+            font-size: inherit;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 2.4rem;
+            a {
+                @include order-button;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+            }
+            .show-all-orders {
+                @include order-button-primary;
+            }
+        }
+    }
+}
+
+/* =================================
  * 列見出し
  * ------------------------------ */
 .admin-main {
@@ -368,6 +405,77 @@
                 }
             }
         }
+    }
+}
+
+/* =================================
+ * ページ送り
+ * ------------------------------ */
+.admin-main {
+    .pagination {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.8rem 1.6rem;
+        margin-top: 1.6rem;
+    }
+    .pagination-list {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        // フォーカス枠（3px＋offset 2px）が隣の番号や現在ページの枠に重ならない間隔
+        gap: 0.8rem;
+        li {
+            font-size: inherit;
+            flex: 0 0 auto;
+        }
+        a,
+        .pagination-ellipsis {
+            font-size: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 4.4rem;
+            min-height: 4.4rem;
+            border-radius: $radius-sm;
+            color: $color-text-secondary;
+            font-variant-numeric: tabular-nums;
+        }
+        a {
+            transition:
+                background-color $transition-base,
+                color $transition-base;
+            &:focus-visible {
+                // 共通のoffset 5pxでは隣と重なるため、ページ送りの中だけ近づける
+                outline-offset: 2px;
+            }
+            &:hover {
+                color: $color-text-primary;
+                background: $color-bg-head;
+            }
+        }
+        // 現在ページはKPIの選択中と同じ表現（ブランド色の2px枠・文字、面は塗らない）
+        a[aria-current="page"] {
+            border: 2px solid var(--color-brand-accent);
+            color: var(--color-brand-accent);
+            font-weight: 700;
+            background: $pure-white;
+            &:hover {
+                background: $pure-white;
+            }
+        }
+        svg {
+            flex-shrink: 0;
+        }
+    }
+    .page-status {
+        font-size: inherit;
+        color: $color-text-secondary;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
     }
 }
 

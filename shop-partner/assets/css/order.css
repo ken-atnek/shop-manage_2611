@@ -18,7 +18,7 @@
  * URL: /scss/_ui.scss
  * Referenced in: /scss/_index.scss
  * Created: 不明
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 /*=========================================
 中央寄せ
@@ -37,7 +37,7 @@
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 /* =================================
  * ページ見出し
@@ -317,6 +317,60 @@
 }
 
 /* =================================
+ * 一覧の状態
+ * ------------------------------ */
+.admin-main .orders-empty {
+  font-size: inherit;
+  margin-top: 1.6rem;
+  padding: 6.4rem 2.4rem;
+  border: 1px solid #c4cad2;
+  border-radius: 4px;
+  background: #fff;
+  text-align: center;
+}
+.admin-main .orders-empty .message {
+  font-size: inherit;
+  font-weight: 500;
+}
+.admin-main .orders-empty .empty-actions {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2.4rem;
+}
+.admin-main .orders-empty .empty-actions a {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.admin-main .orders-empty .empty-actions a:hover {
+  background: #f6f7f8;
+}
+.admin-main .orders-empty .empty-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.admin-main .orders-empty .empty-actions .show-all-orders {
+  font-weight: 700;
+  border-color: #9db5d6;
+  color: #1f4e8c;
+  background: #e6edf7;
+}
+.admin-main .orders-empty .empty-actions .show-all-orders:hover {
+  background: #d6e2f2;
+}
+
+/* =================================
  * 列見出し
  * ------------------------------ */
 .admin-main .orders-scroll {
@@ -394,6 +448,70 @@
 }
 .admin-main .orders-board .column-head .item-head span:nth-child(2) {
   padding-inline: 0.8rem;
+  white-space: nowrap;
+}
+
+/* =================================
+ * ページ送り
+ * ------------------------------ */
+.admin-main .pagination {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem 1.6rem;
+  margin-top: 1.6rem;
+}
+.admin-main .pagination-list {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+.admin-main .pagination-list li {
+  font-size: inherit;
+  flex: 0 0 auto;
+}
+.admin-main .pagination-list a,
+.admin-main .pagination-list .pagination-ellipsis {
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  border-radius: 4px;
+  color: #4f5863;
+  font-variant-numeric: tabular-nums;
+}
+.admin-main .pagination-list a {
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
+}
+.admin-main .pagination-list a:focus-visible {
+  outline-offset: 2px;
+}
+.admin-main .pagination-list a:hover {
+  color: #22272e;
+  background: #e9edf1;
+}
+.admin-main .pagination-list a[aria-current=page] {
+  border: 2px solid var(--color-brand-accent);
+  color: var(--color-brand-accent);
+  font-weight: 700;
+  background: #fff;
+}
+.admin-main .pagination-list a[aria-current=page]:hover {
+  background: #fff;
+}
+.admin-main .pagination-list svg {
+  flex-shrink: 0;
+}
+.admin-main .page-status {
+  font-size: inherit;
+  color: #4f5863;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
@@ -663,6 +781,10 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li input[type=radio]:focus-visible + label {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label {
   position: relative;

@@ -2,6 +2,18 @@
 // 制作確認用。業務処理は持たず、現在地と静的出力時のリンクだけ切り替える。
 $currentPage = 'orders';
 $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
+
+// 制作時の表示確認専用。Laravel・Bladeでは使用せず、バックエンド側の状態分岐へ置き換える。
+$previewState = $_GET['preview'] ?? '';
+if ($staticExport ?? false) {
+    $previewState = '';
+}
+$isEmptyState = $previewState === 'empty';
+$isNoResultsState = $previewState === 'no-results';
+$isDateErrorState = $previewState === 'date-error';
+$isPagerMiddleState = $previewState === 'pager-middle';
+$listCount = ($isEmptyState || $isNoResultsState) ? 0 : 8;
+$filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
 ?>
 <!doctype html>
 <!-- =======================================
@@ -10,7 +22,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
  * Referenced in: /shop-partner/orders.<?= $pageExtension . PHP_EOL ?>
  * 編集元: /shop-partner/orders.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -70,13 +82,13 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
             <button
               class="detail-toggle"
               type="button"
-              aria-expanded="false"
+              aria-expanded="<?= $isDateErrorState ? 'true' : 'false' ?>"
               aria-controls="order-search-panel"
             >
               詳細検索
             </button>
           </div>
-          <div class="search-panel" id="order-search-panel" inert>
+          <div class="search-panel" id="order-search-panel"<?= $isDateErrorState ? '' : ' inert' ?>>
             <div class="search-panel-inner">
               <div class="search-fields">
                 <!-- nameは表示例。バックエンドの正式な項目名を決めるものではない。 -->
@@ -84,11 +96,15 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                   <legend class="form-label">注文日</legend>
                   <div class="date-range">
                     <label class="sr-only" for="order-date-from">開始日</label>
-                    <input class="form-input" type="date" id="order-date-from" name="date_from" />
+                    <input class="form-input" type="date" id="order-date-from" name="date_from"<?= $isDateErrorState ? ' value="2026-10-20" aria-invalid="true" aria-describedby="order-date-error"' : '' ?> />
                     <span aria-hidden="true">〜</span>
                     <label class="sr-only" for="order-date-to">終了日</label>
-                    <input class="form-input" type="date" id="order-date-to" name="date_to" />
+                    <input class="form-input" type="date" id="order-date-to" name="date_to"<?= $isDateErrorState ? ' value="2026-10-10" aria-invalid="true" aria-describedby="order-date-error"' : '' ?> />
                   </div>
+                  <?php if ($isDateErrorState): ?>
+                    <!-- エラー時だけ出力する。日付範囲の判定はバックエンドで行う。 -->
+                    <p class="form-error" id="order-date-error">終了日は開始日以降の日付を指定してください</p>
+                  <?php endif; ?>
                 </fieldset>
                 <fieldset class="form-field status-field">
                   <legend class="form-label">ステータス</legend>
@@ -137,10 +153,22 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
         </form>
         <div class="list-heading" aria-live="polite" aria-atomic="true">
           <h2>注文一覧</h2>
-          <span class="count">8件</span>
-          <p class="filter-note">すべてを表示</p>
+          <span class="count"><?= $listCount ?>件</span>
+          <p class="filter-note"><?= $filterNote ?></p>
         </div>
 
+        <?php if ($isEmptyState || $isNoResultsState): ?>
+          <div class="orders-empty">
+            <p class="message"><?= $isEmptyState ? 'まだ注文はありません' : '条件に一致する注文はありません' ?></p>
+            <?php if ($isNoResultsState): ?>
+              <div class="empty-actions">
+                <a class="show-all-orders" href="orders.<?= $pageExtension ?>">すべての注文を表示</a>
+                <!-- 仮リンク。検索条件を解除する遷移先はバックエンド実装時に決める。 -->
+                <a href="#">条件をクリア</a>
+              </div>
+            <?php endif; ?>
+          </div>
+        <?php else: ?>
         <!-- 列見出しと注文の箱を同じ領域で横スクロールさせる。 -->
         <div class="orders-scroll" role="region" aria-label="注文一覧（横スクロール対応）" tabindex="0">
           <div class="orders-board">
@@ -580,6 +608,49 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
             </ol>
           </div>
         </div>
+        <!-- 表示確認用。実際は1ページ50件で、総件数・現在ページ・番号・URLをバックエンドが決める。通常表示の8件にページ送りは不要。 -->
+        <!-- hrefとpageパラメータ名は仮。バックエンドのルーティングに合わせて置き換える。 -->
+        <nav class="pagination" aria-label="注文一覧のページ">
+          <ul class="pagination-list" role="list">
+            <?php if ($isPagerMiddleState): ?>
+              <li>
+                <a href="?page=9">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7" /></svg>
+                  <span class="sr-only">前のページ</span>
+                </a>
+              </li>
+              <li><a href="?page=1">1<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=9">9<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=10" aria-current="page">10<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=11">11<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=20">20<span class="sr-only">ページ</span></a></li>
+              <li>
+                <a href="?page=11">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg>
+                  <span class="sr-only">次のページ</span>
+                </a>
+              </li>
+            <?php else: ?>
+              <li><a href="?page=1" aria-current="page">1<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=2">2<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=3">3<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=4">4<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=5">5<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=20">20<span class="sr-only">ページ</span></a></li>
+              <li>
+                <a href="?page=2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg>
+                  <span class="sr-only">次のページ</span>
+                </a>
+              </li>
+            <?php endif; ?>
+          </ul>
+          <p class="page-status"><?= $isPagerMiddleState ? '10' : '1' ?> / 20<span class="sr-only">ページ</span></p>
+        </nav>
+        <?php endif; ?>
       </main>
     </div>
     <!-- すべての入稿画像で共用する拡大表示。内容は押したボタンのdata属性から設定する。 -->

@@ -612,3 +612,32 @@
 - order.scss：ボタンの共通指定をファイル内mixin `order-button`・`order-button-primary`にまとめ、検索・この条件で検索・保存・閉じるで使用（Sass分割時に_ui.scssへ移す候補）。`.order-detail`の2か所の指定を展開行の節へ統合し、古い「ステップ5で作る」コメントを削除。拡大・ダウンロードボタンの重複border-radiusを削除。生成CSSの実効値は変更なし（宣言の並び・まとまりのみ変化）
 - order.js：documentのclickリスナー2つを1つへ統合し、注文番号取得`getOrderNumber`、アコーディオン開閉`toggleAccordion`（aria-expanded・inert）を展開行と詳細検索で共用。動作は変更なし
 - npm run sass警告なし、node --check成功。Playwright（PHP書き出しHTML・1280幅）でKPI初期状態、ステータスの矢印＋Enter・ポインタ選択・外側クリック・Esc、展開行の開閉と名前・inert・高さ、画像dialogのEsc・フォーカス復帰、詳細検索の開閉・クリア・開始日への復帰を回帰確認。ファイル分割・Gitコミットなし
+
+## 2026-10-19 ステータスメニュー内のフォーカス表示を修正（レビュー指摘#1）
+
+- `docs/reviews/CLIENT_ORDER_LIST_REVIEW_2026-10-19.md`のP1#1への対応。radioはlabelの下に隠れ、共通のフォーカス枠（外側5px）も`.list-wrapper`・`.selectbox__panel`の`overflow: hidden`で切れていたため、矢印キーで移動しても位置が見えなかった
+- Kenの依頼により`scss/_ui.scss`の`select-status-box`へ`input[type="radio"]:focus-visible + label { outline: 2px solid #fff; outline-offset: -4px; }`を追加。ステータス5色はいずれも白と5:1以上で、ブランド緑より色面の上で見分けやすい。DESIGN_TOKENSのフォーカスの個別指定に追記
+- マウスで開いた場合も、JSが選択中のradioへフォーカスを移すため、現在の選択肢に白枠が出る（Chromiumで確認）。現在値の目印として残す
+- npm run sass警告なし。Playwright（Chromium）で1280・1024・834pxの矢印キー移動・Enterで閉じてボタンへ戻る動作と白枠の表示を確認。Safari・Firefoxは未確認。Gitコミットなし
+
+## 2026-10-19 保存・一覧の状態・ページ送り・入力エラーの方針を決定（レビュー指摘#2〜#4）
+
+- Kenの決定：発送状況は選択時に即時保存（保存中・成功・失敗の表示を用意）、KPIの切り替え方式はバックエンド側で調整、データなし・検索0件の表示とページ送りを構築、入力エラーは`$color-error`＝`#D21F3C`の枠＋fz(14)の文＋`aria-invalid`・`aria-describedby`
+- 要確認：ステータス変更時に注文者へメールが送られるか（確認ダイアログの対象が変わる）、1ページの件数と並び順（仮50件・新しい注文順）
+- CLIENT_ORDER_LISTに決定事項の節を追加し、SPECの確定事項・DESIGN_TOKENSのエラー色を更新。DESIGN_TOKENSに残っていた削除済み`$color-nav-hover`の行を削除。コード変更・Gitコミットなし
+- 追記（同日）：ステータス変更では注文者へメールを送らない（Kenの回答）。確認ダイアログは「キャンセル」選択時だけとした。1ページは50件で進める。並び順（新しい注文順）は仮のまま
+
+## 2026-10-19 一覧状態・ページ送り・注文日の入力エラーを実装
+
+- `orders.php`へ制作確認専用の`preview`切り替えを追加。通常・`pager-middle`は既存の注文3件とページ送り、`empty`はデータなし、`no-results`は検索結果0件と2つの導線、`date-error`は詳細検索を開いた逆転日付のエラー例を表示する。静的HTMLは通常状態だけを書き出す
+- 空状態は一覧とページ送りを白い案内箱へ置き換える。ページ送りはページ番号・省略記号を最大7項目とし、先頭・途中・末尾の表示規則と前へ／次への出力条件を`CLIENT_ORDER_LIST.md`へ記録した。通常8件に20ページを表示するのは制作確認用の例で、実際のページ数・URLはバックエンドが決める
+- 共通フォーム候補として、`aria-invalid="true"`の入力枠と`.form-error`に新設した`$color-error: #D21F3C`を適用。注文日の開始・終了欄から同じエラー文を`aria-describedby`で参照する
+- `npm run sass`は警告・エラーなし。ホストにPHPがないためDDEVのPHP 8.4で`php -l shop-partner/orders.php`を実行し、構文エラーなし。静的HTMLも通常状態だけで書き出せること、`node --check`・`git diff --check`が正常であることを確認
+- Chromiumで通常・途中ページ・データなし・検索結果0件・日付エラーの5状態を1280×800・1024×768・834×1194で確認。ページ全体の横はみ出しはなく、834pxでも途中ページのページ送りは1行に収まり、ブラウザコンソールに警告・エラーなし
+- ページ送りの全リンクにキーボードフォーカスと共通枠が表示され、省略記号とページ位置表示にはTabが止まらない。日付2欄の`aria-invalid`と同じエラー文への`aria-describedby`、ステータスの矢印キー＋Enter、展開行、画像dialogのEsc・フォーカス復帰、詳細検索の開閉・クリアを確認。JavaScriptは変更していない。ステータス保存状態とキャンセル確認ダイアログは今回の対象外
+
+## 2026-10-19 ページ送りの見た目をA案へ
+
+- Kenが「単調」と判断し、3案（A：KPIと同じ選択表現、B：白い箱＋下線、C：区切り付きボタン列）を実画面に当てて比較。A案に決定
+- order.scssのページ送り：現在ページを`--color-brand-accent`の2px枠＋文字・太字・白い面、ホバーを`$color-bg-head`の面、角丸`$radius-sm`。Tab移動時に隣のフォーカス枠が現在ページの枠と接して紛らわしかったため、間隔を0.4→0.8rem、ページ送り内のフォーカス枠offsetを2pxにした
+- Playwright（Chromium）で1280・834pxの途中ページを確認。1行に収まり、各項目44px四方、横はみ出しなし。CLIENT_ORDER_LIST・DESIGN_TOKENSに記録。Gitコミットなし
