@@ -1,44 +1,141 @@
 # 熊日モール DB設計（案）
 
-2026-10-20。実装前の論理設計。型はMySQL／MariaDB想定、`bigint`は符号なし、金額は円の整数、日時は`datetime`。PKは各表の`id bigint`、共通で`created_at`・`updated_at datetime`を置く案。FKは原則削除制限とし、注文履歴は物理削除しない。括弧内の必須は保存時の条件であり、未確定条件は下記に明記する。
+2026-10-20。実装前の論理設計。DBはMariaDB 10.11.xを前提とし、`bigint`は符号なし、金額は円の整数、日時は`datetime`。PKは各表の`id bigint`、共通で`created_at`・`updated_at datetime`を置く案。FKは原則削除制限とし、注文履歴は物理削除しない。括弧内の必須は保存時の条件であり、未確定条件は下記に明記する。
 
-参照略号：S販＝`../SPEC.md`「販売店と送料の確定事項」、S商＝同「Client商品詳細（登録・編集）の確定事項」、S受＝同「Client受注一覧の確定事項」、D商＝`../design/CLIENT_PRODUCT_FORM.md`、D受＝`../design/CLIENT_ORDER_LIST.md`、H商＝`../coding/HANDOFF_CLIENT_PRODUCT_FORM.md`。
+サーバー側の実装環境はLaravel 13.x・PHP 8.3.35・MariaDB 10.11.xで確定（2026-10-20）。ローカルはXAMPPを使用予定で、PHPは8.3.30、DBはMariaDB 10.4.32（担当者共有：2026-10-20）。ローカルとサーバーのDBバージョン差による機能・照合順序等の影響は実装時に確認する。個別テーブルの型・制約は引き続き設計案とする。実行環境の記録は`SERVER_DIRECTORY_LAYOUT.md`を参照。
 
-## パートナー・販売店・配送
+参照略号：S販＝`../SPEC.md`「店舗と送料の確定事項」、S商＝同「Client商品詳細（登録・編集）の確定事項」、S受＝同「Client受注一覧の確定事項」、D商＝`../design/CLIENT_PRODUCT_FORM.md`、D受＝`../design/CLIENT_ORDER_LIST.md`、H商＝`../coding/HANDOFF_CLIENT_PRODUCT_FORM.md`。
+
+## 管理画面構成・認証（確定部分：2026-10-20）
+
+- 1環境につき1つのLaravelアプリでMaster・Clientの両管理画面を動かす（担当者決定：2026-10-20）。商品・店舗・注文などの共通データと処理を同じアプリで管理する
+- 管理画面用のログインは、今回のLaravelで新規実装する（担当者決定：2026-10-20）。この決定の対象はMaster・Client管理画面であり、購入者側の認証方式は別途確認する
+- 管理画面の認証はLaravel標準のセッション認証を採用し、ログイン後の状態をサーバー側で管理する（担当者決定：2026-10-20）。セッションの保存先・有効期限・Master／Client間の共有方法は別途決める。ログイン入力項目をフロント方針に合わせる決定は維持する
+- 管理画面のログイン入力項目・画面操作はフロント側の方針に合わせる（担当者指示：2026-10-20）。確認時点のSPECではログイン画面を最後に制作し、Master／ClientのUIを可能な限り共通化する方針までで、ログインIDの種類は未確定。提示した「メールアドレス＋パスワード」は未採用とし、フロントの仕様確定待ちとして保留する
+- Clientが閲覧・操作できる店舗・商品・注文は、自分の所属パートナーに属するものに限定する（担当者決定：2026-10-20）。他パートナーの店舗・商品・注文を管理画面から閲覧・操作する権限は持たせない
+- Clientのデータ照会・更新ではLaravelサーバー側で所属を検証する。店舗は`stores.partner_id`、商品は所属店舗、注文は`orders.partner_id`と所属店舗を通して判定する設計案とし、注文明細などの関連情報も親注文の所属を確認する。認証ユーザーとパートナーの紐付け方法は別途設計する
+- Masterは全パートナーの店舗・商品・注文を横断して閲覧・操作できる（担当者決定：2026-10-20）。各機能の操作は既存の業務仕様に従い、この決定のみをもって削除等の未定義の操作を追加しない
+- 初期の権限区分はMaster／Clientの2区分とし、担当者ごとの「閲覧のみ」「編集可能」などの細分化は設けない（担当者決定：2026-10-20）。各区分の管理対象範囲は上記に従う
+- ログインID、認証情報を保存するユーザーテーブル、Master／Client間のログイン状態の扱いは未確定
+- 配置案は`SERVER_DIRECTORY_LAYOUT.md`を参照。サブドメインの公開入口とLaravelを接続する具体的な方法は未確定
+- SPEC「バックエンドへの確認事項」5の回答欄には、2026-10-20に担当者の了承を得てアプリ構成・ログイン実装方針・管理範囲・初期権限区分と保留事項を反映済み。回答欄以外のSPEC本文・フロント資料等の更新は別途確認後に行う
+
+## パートナー・店舗・配送
 
 | テーブル | 項目（型・必須） | 関連・制約／根拠 |
 |---|---|---|
-| `partners` | `name varchar(255)` 必須、`status varchar(20)` 必須（仮） | 1パートナーが複数販売店。認証・停止状態の仕様は未確定。S販 |
-| `stores` | `partner_id bigint` 必須、`name varchar(255)` 必須、`postal_code varchar(8)` 任意、`prefecture_code char(2)` 任意、`address text` 任意、`contact_name varchar(255)` 任意、`phone varchar(30)` 任意、`email varchar(255)` 任意、`carrier_id bigint` 必須、`size_based boolean` 必須、`free_shipping_threshold_yen int` 任意 | FK→partners/carriers。販売者情報の詳細は未確定。送料無料閾値NULL＝不使用、0は要確認。S販・D商 |
-| `carriers` | `code varchar(20)` 必須・一意（yamato/sagawa/yupack/other）、`name varchar(100)` 必須、`revision varchar(40)` 任意（仮） | 標準3社はSeeder管理。「その他」は販売店独自規格。改定履歴方式は未確定。S販「運送会社の規格」「データの持ち方」 |
+| `partners` | `name varchar(255)` 必須、`status varchar(20)` 必須（仮） | 1パートナーが複数店舗。認証・停止状態の仕様は未確定。パートナー情報の詳細は別途設計。S販 |
+| `stores` | `partner_id bigint` 必須、`name varchar(50)` 必須、`postal_code varchar(8)` 任意、`address text` 任意、`contact_name varchar(50)` 任意、`phone varchar(30)` 任意、`carrier_id bigint` 必須、`size_based boolean` 必須、`free_shipping_threshold_yen int` 任意 | FK→partners/carriers。店舗名・担当者はそれぞれ50文字まで。郵便番号・住所（1行）・担当者・電話番号は発送元の社内連絡用で、店舗のemail・prefecture_code列は持たない。郵便番号・住所・電話番号の長さ・検証の詳細は未確定で、その型・長さは案。送料無料閾値NULL＝不使用、0の適用解釈は要確認。S販「店舗フォームの入力条件と初期値」、D店舗 |
+| `carriers` | `code varchar(20)` 必須・一意（初期対象yamato/sagawa/yupack）、`name varchar(100)` 必須、`revision varchar(40)` 任意（仮） | 運送会社規格をDBで管理し、初期データはLaravelのSeederで登録する方式を採用（担当者決定：2026-10-20）。「その他」は後回しで初期対象に含めない。Masterの規格編集機能は初期対象外・将来の追加候補。規格改定時はバックエンド側で更新処理を用意し、デモ確認後に本番適用する。適用日時・履歴管理の詳細は別途決定。S販「運送会社の規格」「データの持ち方」 |
 | `carrier_sizes` | `carrier_id bigint` 必須、`size_cm smallint` 必須、`max_weight_kg decimal(6,2)` 必須 | FK→carriers、(carrier_id,size_cm)一意。SPECの標準サイズと重さを初期登録。S販規格表 |
 | `carrier_cool_rules` | `carrier_id bigint` 必須、`temperature varchar(10)` 必須（cold/frozen）、`supported boolean` 必須、`max_total_cm decimal(6,1)` 任意、`max_weight_kg decimal(6,2)` 任意、`max_longest_cm decimal(6,1)` 任意、`max_height_cm decimal(6,1)` 任意（仮） | FK→carriers、(carrier_id,temperature)一意。ゆうパック冷凍は非対応、冷蔵の横倒し不可時の高さ条件は入力未整備。S販規格表・未確定事項 |
-| `store_sizes` | `store_id bigint` 必須、`carrier_size_id bigint` 任意、`custom_size_cm smallint` 任意、`custom_max_weight_kg decimal(6,2)` 任意 | FK→stores/carrier_sizes。標準3社は選択のみ、otherは独自値。store内のサイズ一意、標準規格の運送会社一致を検証。独自温度条件は未確定。S販 |
-| `store_shipping_rates` | `store_shipping_table_id bigint` 必須、`prefecture_code char(2)` 必須、`base_fee_yen int` 任意（案） | FK→store_shipping_tables。(store_shipping_table_id,prefecture_code)一意。送料表ごと47行。通常送料の全欄必須は画面案で未確定。S販 |
-| `store_shipping_tables` | `store_id bigint` 必須、`store_size_id bigint` 任意、`cool_surcharge_yen int` 任意 | FK→stores/store_sizes。1販売店の非サイズ別は1行、サイズ別は使用サイズごと1行。上表の`cool_surcharge_yen`は置かず本表を正とする（冗長化回避）。NULLと0を区別。S販 |
+| `store_sizes` | `store_id bigint` 必須、`carrier_size_id bigint` 必須、`is_selected boolean` 必須（選択状態の列案） | FK→stores/carrier_sizes。(store_id,carrier_size_id)一意。標準3社の規格を参照する。未使用になったサイズの料金は残し、選択状態を別管理する。計算対象とするサイズは現在の運送会社と一致し、かつ選択中のものに限定する。独自サイズ・重さの列は初期設計に含めない。S販、2026-10-20の保存済み料金保持の決定 |
+| `store_shipping_rates` | `store_shipping_table_id bigint` 必須、`prefecture_code char(2)` 必須、`base_fee_yen int` 必須 | FK→store_shipping_tables。(store_shipping_table_id,prefecture_code)一意。送信対象の送料表ごと47都道府県すべての金額を必須とする（0〜99,999円の整数、0円は明示入力のみ）。未選択方式・未使用サイズの保存済み料金は保持し、今回の入力検証・更新・現在の送料計算の対象から外す。S販「店舗フォームの入力条件と初期値」「配送・送料の変更と送信」、2026-10-20の保存済み料金保持の決定 |
+| `store_shipping_tables` | `store_id bigint` 必須、`store_size_id bigint` 任意、`cool_refrigerated_surcharge_yen int` 任意、`cool_frozen_surcharge_yen int` 任意 | FK→stores/store_sizes。サイズ共通はstore_size_id=NULLの1表、サイズ別は各サイズに1表。クール追加料金は冷蔵・冷凍それぞれNULL＝非対応、0＝対応・追加無料、入力時0〜99,999円の整数。運送会社の規格による対応可否は別途確認。ゆうパックは冷蔵のみで、通常160サイズの冷蔵欄に150cmまでの金額を持つ。旧cool_surcharge_yenは2列へ分割する設計案。S販・D店舗 |
 
 47都道府県コードは固定のコード表またはアプリ定数で検証する案。送料表の改定履歴と注文時のスナップショットは別扱い。
 
+### 運送会社規格の保存・初期登録（確定部分：2026-10-20）
+
+- 運送会社の規格をDBテーブルに持ち、初期データはLaravelのSeederで登録する（担当者決定：2026-10-20）
+- DB設計案の対象は`carriers`・`carrier_sizes`・`carrier_cool_rules`。初期対象の3社について、SPECの名称・サイズ・重量上限・温度帯ごとのクール便条件を登録する。店舗が入力する送料金額は別テーブルで管理する
+- 用語の区分：ここでの「規格」は標準3社のサイズ区切り・重量上限・クール便条件を指し、現行SPECでは店舗による変更不可。Clientが登録・編集するのは、運送会社・使うサイズの選択、通常送料、冷蔵／冷凍追加料金、送料無料条件である。規格DBの更新運用の検討によってClientの店舗設定機能を制限するものではない（参照：S販、D店舗「項目」）
+- 店舗設定・商品フォームの配送判定・購入時の送料計算は、この規格DBを参照する。制作用`data_carriers.php`を本番の参照元にはせず、Blade組み込み時にDB参照へ置き換える
+- Seederは環境構築時の初期登録に使用する。規格改定時はバックエンド側で更新処理を用意し、デモ環境で確認してから本番へ適用する（担当者決定：2026-10-20）。具体的な更新処理・適用日時・履歴管理の詳細は別途決める
+- Masterから運送会社の規格を編集する機能は初期段階では設けず、将来の追加候補とする（担当者決定：2026-10-20）。将来追加する場合の機能・権限・導入時期は別途決める
+- SPEC「バックエンドへの確認事項」4の回答欄には、2026-10-20に担当者の了承を得て保存方式・初期登録・更新運用・Master編集機能の扱いと未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
+
+### フロントからの店舗・送料仕様の照合（2026-10-20）
+
+参照：S販の「店舗フォームの入力条件と初期値」「配送・送料の変更と送信」、D店舗＝`../design/CLIENT_STORE_FORM.md`「項目」「非表示領域と送信対象」、`../design/CLIENT_STORE_LIST.md`。今回の7点の連絡はいずれも最新資料と一致する。
+
+- 呼称は「店舗」、コード名は`store`を維持する。店舗の社内連絡用情報と、送料表の都道府県コードを混同しない。店舗フォームの都道府県欄は設けず、送料表には47都道府県コードを持つ
+- 特定商取引法の表示情報は店舗ではなくパートナー単位で管理するというS販の役割分担に従う。店舗情報を食品表示本文へ自動挿入する旧案も不採用
+- 冷蔵と冷凍の追加料金は別々に判定する。ゆうパックは冷凍非対応で、冷蔵料金が設定されても冷凍対応にはしない。通常160サイズのタブで冷蔵料金を設定しても、冷蔵の実寸上限は150cm・25kg・最長辺100cmのままで、横倒し不可時の高さ条件の入力方法は未確定
+- 方式切り替え時の画面内保持は確定済み。POSTは選択中の方式と使用サイズだけを送信する。使用サイズのうち表示していないタブも送信対象だが、未選択方式・未使用サイズは送信しない
+- 未選択の送料方式・未使用サイズの保存済み料金はDBに残し、現在の送料計算には使わない（担当者決定：2026-10-20）。方式・使用サイズを戻すときに以前の料金を再利用できるようにする。通常送料と冷蔵・冷凍の追加料金を保持し、未送信を削除・NULL・0円への更新指示として扱わない
+- 商品フォームの現行JSONは`coolSurchargeSet`・`coolSurchargeSetBySize`が温度帯共通で、冷蔵だけ設定／冷凍だけ未設定を表せない。冷蔵・冷凍別の設定有無へ変換するJSON契約とJS判定の変更が必要。キー名・形式はフロント連携時に決める
+
+店舗・送料のDB型・列名は設計案であり、今回更新したのはこの資料のみ。SPEC・画面資料・PHP・JSは変更しない。
+
+### 保存済み料金と使用状態の分離（方針確定：2026-10-20）
+
+- 現在の方式は`stores.size_based`、使用サイズの状態は`store_sizes.is_selected`で管理する列構成案とし、料金がDBにあるだけで使用中とは判断しない
+- サイズ共通の場合は共通送料表だけを使用し、残してあるサイズ別料金を計算に混ぜない。サイズ別の場合は、現在の運送会社の使用サイズだけを判定・送料計算の対象にし、共通料金・未使用サイズの料金を使わない
+- 店舗フォームは現行SPECどおり選択中の方式・使用サイズ分だけを送信する。使用中の非表示タブも更新対象とし、送られない方式・サイズの料金表を一括削除しない
+- 再選択時は以前の料金をフォームへ再表示する元として利用し、保存時は選択中の全送料表について47都道府県の金額と現在の運送会社規格を検証する。保持済み料金があることだけで、配送可能とは判断しない
+- 上記は保存後の永続データの扱いについての決定。SPEC「バックエンドへの確認事項」3の回答欄には2026-10-20に担当者の了承を得て反映済み。回答欄以外のSPEC本文・フロント資料等の更新は別途確認後に行う
+
 ## 商品
+
+### 商品画像の一時保存方針（確定：2026-10-20）
+
+- 商品画像は初回実装から一時保存方式を採用し、Laravel標準のファイル検証・ストレージ機能を使って実装する。専用ライブラリの追加は現時点で決めていない
+- Laravelの標準機能を組み合わせて、画像選択時のアップロード、一時画像の管理、商品保存時の本保存を実装する。「商品画像の一時保存フロー全体」が自動で用意されるという意味ではない
+- 商品入力の検証エラー後も、一時保存した画像を再表示し、画像の選び直しを避ける方針とする
+- 保存先はLaravelを設置するXServerビジネス内とする。一時画像は`storage/app/private/tmp/product-images/`、本保存画像は`storage/app/public/product-images/`に置く（確定：2026-10-20）。一時画像はLaravelを通して認可付きで表示し、本保存画像は公開URLで表示する。デモと公開の保存領域は分離する。配置の詳細は`SERVER_DIRECTORY_LAYOUT.md`「商品画像の保存先」を参照
+- 商品に本保存されなかった一時画像の有効期限は、アップロードから24時間とする。期限切れの一時画像を定期処理で削除する（確定：2026-10-20）。本保存済みの商品画像はこの削除対象に含めない
+- 期限切れ一時画像の削除処理は1時間ごとに実行し、実行時点でアップロードから24時間を過ぎた一時画像を削除する（確定：2026-10-20）。実ファイルの削除は24時間到達後の次回実行時となる
+- 商品画像のアップロード許可形式はJPEG・PNG・WebPの3形式とする（確定：2026-10-20）。注文者の入稿画像の許可形式は別途確認する
+- 商品画像の容量上限は1枚あたり5MBとする（確定：2026-10-20）。注文者の入稿画像の容量上限は別途確認する
+- 商品画像は当面、メイン画像と詳細画像を合わせて1商品あたり最大10枚とする（決定：2026-10-20、将来見直し可）。保存後に残す既存画像と追加画像の合計で判定する
+- 保存した表示順の1枚目をメイン画像とし、商品一覧のサムネイルに使用する（確定：2026-10-20）
+- 商品画像のアップロード時に縦横比を制限せず、縦長・横長の画像も受け付ける（確定：2026-10-20）。この決定は表示時のトリミング方法や保存時のリサイズを決めるものではない
+- 商品画像は0枚でも保存可能とし、画像がない場合はバックエンド担当者が用意するNG画像を表示する（確定：2026-10-20）。NG画像のファイル名・保存場所は後日決定とする（2026-10-20、担当者判断）。表示対象画面の詳細は要確認
+- 商品保存時の`image_order[]`は、既存画像を`existing:{画像ID}`、一時保存した新規画像を`temp:{一時画像ID}`として、最終表示順に並べた配列を送る（確定：2026-10-20）。新規画像のファイルは商品保存時に再送せず、一時画像IDを使って本保存する
+- 既存画像の削除は、画面上では削除予定として保持し、`image_delete[]`に既存画像IDの配列を送って、商品保存の成功時に確定する（確定：2026-10-20）。入力エラー時は削除予定を保持し、既存画像の登録・ファイルを残す。保存せず離脱した場合は削除予定を破棄し、保存済みの画像を維持する。不要ファイルの削除は商品保存の成功を確認してから行う
+- 編集中に新規追加した一時画像を画面から削除した場合は、表示と`image_order[]`から外して商品保存の対象に含めない。一時ファイルの即時削除通信は行わず、アップロードから24時間経過後の定期削除に任せる（確定：2026-10-20）。この操作によって期限を延長しない
+- 一時アップロードの送信項目名は`images[]`とし、画像選択時に一時保存用の送信先へ送る（確定：2026-10-20）。商品保存時はファイルを再送せず、`image_order[]`の`temp:{一時画像ID}`で参照する
+- 一時画像はDBの専用テーブルで管理し、保存先・アップロードしたユーザー・有効期限を記録する（確定：2026-10-20）。所有者確認と期限切れ削除に使用する。具体的な項目・型は下表の設計案とする
+- アップロード中は画像ごとに状態を表示し、未完了・失敗の画像が残る間は「保存する」を押せない状態にする。すべて成功または取り消し済みになったら商品保存を可能にする（確定：2026-10-20）
+- 通信失敗した画像はファイル名・エラー・「再試行」「取り消す」を表示する。成功したほかの画像と商品入力値は保持し、再試行では失敗した画像を再送、取り消しではその画像を表示と保存対象から外す（確定：2026-10-20）
+- 形式違い・5MB超過の場合は「JPEG・PNG・WebPの5MB以下の画像を選び直してください」と案内する。同じファイルの再試行ではなく、条件を満たすファイルの選び直し、またはその画像の取り消しで解消する（確定：2026-10-20）。これらの操作・状態表示はフロントへの反映が必要
+- 商品保存時にアップロードから24時間を過ぎた一時画像が含まれていた場合は、商品を保存せず、入力内容を保持して該当画像の選び直し、または取り消しを案内する（確定：2026-10-20）。定期処理による実ファイル削除前でも期限切れとして扱う
+- 定期削除の実行環境・起動方法、一時画像テーブルの詳細、一時アップロードAPIのURL・応答形式等は要確認。確認事項1全体の完了ではない
+- フロント側は画像選択時の送信・一時画像の識別・再表示に対応する変更が必要。現行の`new:{番号}`は、本番の`image_order[]`では`temp:{一時画像ID}`へ変更する。下表には現行契約と確定した本番契約の違いを記載する
+- `../SPEC.md`「バックエンドへの確認事項」1の回答欄には、2026-10-20に担当者の了承を得て確定内容と未確定事項を反映済み。「フロントの仮決め」1などのSPEC本文・H商§4・フロントJSの一括POST方式からの更新は未反映。これらの更新は別途担当者への確認後に行う
+
+### 食品表示の入力と保存（確定部分：2026-10-20）
+
+- 成分・生産者・アレルギーなどを含む食品表示全体を、1つのテキストエリア（現行name=`food_label`）にまとめて記入・表示し、DBでは`products.food_label`に1つの本文として保存する（確定：2026-10-20）。それぞれの個別入力欄・DB項目・項目別の記載有無チェックは設けない
+- 既存SPECの食品表示本文の必須条件を維持し、食品オン時は本文が空でないことを検証する。本文を成分・生産者・アレルギー等へ自動分解して検証しない。文字数上限は未確定
+- アレルゲン専用のチェックボックス群・「該当なし」・その他自由記入欄を前提とした旧案は採用しない。独立したアレルゲンマスタ・中間テーブル・専用フラグ・その他欄のDB設計案も取り下げる。これは設計資料の修正であり、実DBの削除・変更は行わない
+- 食品をオフにして保存しても、アレルゲンの記載を含む食品表示本文は削除せず保持する
+- オフの間は食品表示本文を表示せず、再びオンにした編集画面では保持した保存済み本文を再表示する
+- オフ時のfieldsetのdisabledによる未送信を削除指示として扱わない
+- B方式を採用し、食品をオフにする直前に編集した食品表示本文（アレルゲンの記載を含む）も、商品保存時に保存する（確定：2026-10-20）。例：保存済みAをBへ編集→食品オフ→商品保存の後は、Bを保持して非表示にし、再オン時にBを表示する
+- 現行のdisabledによる食品項目未送信ではB方式に対応できないため、オフ時も画面の入力値を送る契約へフロント変更が必要。具体的な送信方法・項目名は実装連携時に決める。未送信を根拠とした保存済み値の削除は行わない
+- 現行SPEC本文・画面資料・申し送りの独立したアレルゲン入力とは異なるため、フロントの入力欄・検証・送信契約の変更が必要。回答欄以外の全体資料とフロントファイルは未変更
+- SPEC「バックエンドへの確認事項」2の回答欄には、2026-10-20に担当者の了承を得て食品表示の統合・B方式・未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
+
+以下のテーブル・name対応は設計案と現行フォームの対応を示す。確定した採用方針と、未確定の項目・型を区別する。
 
 | テーブル | 項目（型・必須） | 関連・制約／根拠 |
 |---|---|---|
-| `products` | `store_id bigint` 必須、`name varchar(255)` 必須、`description text` 任意、`price_incl_tax_yen int` 必須、`tax_rate_percent tinyint` 必須（8/10）、`no_stock_management boolean` 必須、`stock_quantity int` 任意、`temperature varchar(10)` 必須（normal/cold/frozen）、`packing_length_cm decimal(6,1)` 任意、`packing_width_cm decimal(6,1)` 任意、`packing_height_cm decimal(6,1)` 任意、`packing_weight_kg decimal(6,2)` 任意、`accepts_upload boolean` 必須、`is_food boolean` 必須、`food_label text` 任意、`allergens_other text` 任意、`publish_status varchar(10)` 必須（public/private） | FK→stores。stockは管理なしならNULL。梱包4項目の必須条件・精度は未確定。判定サイズは保存せず規格と寸法から再計算。食品オフでもfood_label等を保持する案。S商・H商 |
-| `allergens` | `code varchar(40)` 必須・一意、`name varchar(100)` 必須、`sort_order smallint` 必須、`active boolean` 必須 | 法改定に合わせた表示マスタ。「該当なし」は品目ではなく商品側の選択状態として扱う案。S商 |
-| `product_allergens` | `product_id bigint` 必須、`allergen_id bigint` 必須 | 複合一意。FK→products/allergens。食品オフでも行を保持。該当なしとの排他条件は未確定。S商 |
-| `product_images` | `product_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 任意、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`sort_order smallint` 必須 | FK→products、(product_id,sort_order)一意。1枚目がメイン。0枚許可は案。保存先・形式・容量・上限枚数は要確認。S商・H商§4 |
+| `products` | `store_id bigint` 必須、`name varchar(255)` 必須、`description text` 任意、`price_incl_tax_yen int` 必須、`tax_rate_percent tinyint` 必須（8/10）、`no_stock_management boolean` 必須、`stock_quantity int` 任意、`temperature varchar(10)` 必須（normal/cold/frozen）、`packing_length_cm decimal(6,1)` 任意、`packing_width_cm decimal(6,1)` 任意、`packing_height_cm decimal(6,1)` 任意、`packing_weight_kg decimal(6,2)` 任意、`accepts_upload boolean` 必須、`is_food boolean` 必須、`food_label text` 任意（条件付き必須）、`publish_status varchar(10)` 必須（public/private） | FK→stores。stockは管理なしならNULL。梱包4項目の必須条件・精度は未確定。判定サイズは保存せず規格と寸法から再計算。アレルゲンもfood_label本文に記入し、食品オフでもオフ直前の編集値を商品保存時に保存（確定：2026-10-20）。S商・H商の独立アレルゲン欄から変更が必要 |
+| `product_images` | `product_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 任意、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`sort_order smallint` 必須 | FK→products、(product_id,sort_order)一意。1枚目がメイン。当面1商品あたり0～10枚。0枚の場合は用意されたNG画像を表示。保存先・許可形式・容量は上記確定方針を参照。S商・H商§4 |
+| `temporary_product_images`（名称・項目・型は案） | `uploaded_by_user_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 任意、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`uploaded_at datetime` 必須、`expires_at datetime` 必須 | 共通PKのidを一時画像IDとして使用する案。アップロードしたユーザーへのFK先は認証設計後に確定。expires_atはアップロードから24時間後。所有者確認・期限切れ削除に使う。本保存済み画像を期限切れ削除から除外するためのレコード整理方法は実装設計時に決める。根拠：2026-10-20の専用テーブル採用決定 |
 
-`allergens[]`の`none`を保持するには `products.allergens_none boolean` を追加する案。ほかの品目・自由記入との排他が決まってから制約を確定する。価格は税込の入力値を正として保持し、注文時に税抜・税額を確定する。商品の価格・税率・販売店の後日変更が注文に波及しないよう注文明細へ写す。
+旧案の`allergens`・`product_allergens`・`products.allergens_none`・`products.allergens_other`は、食品表示本文への統合により今回の設計から除外する。価格は税込の入力値を正として保持し、注文時に税抜・税額を確定する。商品の価格・税率・店舗の後日変更が注文に波及しないよう注文明細へ写す。
 
 ## 注文・入稿
 
+### 購入処理を担当するシステム（確定部分：2026-10-20）
+
+- カート・注文確定の処理は、今回のLaravelで新規実装する（担当者決定：2026-10-20）
+- 店舗ごとの注文分割と送料計算はLaravelのサーバー側で行う（担当者決定：2026-10-20）
+- 公開画面のNext.js静的出力との接続方法、APIのURL・契約、カートの保存方法は未確定
+- 未選択の送料方式・未使用サイズの保存済み料金は保持し、現在の送料計算には使わない（担当者決定：2026-10-20）。詳細は「保存済み料金と使用状態の分離」を参照
+- 注文分割・送料計算の実行タイミング、決済との連携は引き続き未確定。処理場所の決定のみをもって、これらを確定しない
+- SPEC「バックエンドへの確認事項」3の回答欄には2026-10-20に担当者の了承を得て、担当システム・処理場所・料金保持方針と未確定事項を反映済み
+
 | テーブル | 項目（型・必須） | 関連・制約／根拠 |
 |---|---|---|
-| `orders` | `partner_id bigint` 必須、`store_id bigint` 必須、`purchase_group_key varchar(64)` 任意（仮）、`order_number varchar(50)` 必須・一意、`ordered_at datetime` 必須、`shipping_status varchar(20)` 必須、`shipping_status_updated_at datetime` 必須、`customer_note text` 任意、`cancel_return_reason text` 任意、`cancel_return_note text` 任意、`destination_prefecture_code char(2)` 必須、`destination_name varchar(255)` 必須、`destination_postal_code varchar(8)` 任意、`destination_address text` 必須、`destination_phone varchar(30)` 任意、`contact_email varchar(255)` 任意、`shipping_fee_incl_tax_yen int` 必須、`items_total_incl_tax_yen int` 必須、`total_incl_tax_yen int` 必須、`free_shipping_applied boolean` 必須、`applied_shipping_size_cm smallint` 任意、`applied_temperature varchar(10)` 必須 | FK→partners/stores。販売店ごとに1注文、送料1行、発送状況1つ。購入単位を束ねるキーは決済方式確認待ち。配送先・連絡先の参照元は未確定。状態更新時だけ専用日時を更新。S受・S販・D受 |
+| `orders` | `partner_id bigint` 必須、`store_id bigint` 必須、`purchase_group_key varchar(64)` 任意（仮）、`order_number varchar(50)` 必須・一意、`ordered_at datetime` 必須、`shipping_status varchar(20)` 必須、`shipping_status_updated_at datetime` 必須、`customer_note text` 任意、`cancel_return_reason text` 任意、`cancel_return_note text` 任意、`destination_prefecture_code char(2)` 必須、`destination_name varchar(255)` 必須、`destination_postal_code varchar(8)` 任意、`destination_address text` 必須、`destination_phone varchar(30)` 任意、`contact_email varchar(255)` 任意、`shipping_fee_incl_tax_yen int` 必須、`items_total_incl_tax_yen int` 必須、`total_incl_tax_yen int` 必須、`free_shipping_applied boolean` 必須、`applied_shipping_size_cm smallint` 任意、`applied_temperature varchar(10)` 必須 | FK→partners/stores。店舗ごとに1注文、送料1行、発送状況1つ。購入単位を束ねるキーは決済方式確認待ち。配送先・連絡先の参照元は未確定。状態更新時だけ専用日時を更新。S受・S販・D受 |
 | `order_items` | `order_id bigint` 必須、`product_id bigint` 必須、`product_name_snapshot varchar(255)` 必須、`quantity int` 必須、`unit_price_incl_tax_yen int` 必須、`tax_rate_percent tinyint` 必須、`subtotal_incl_tax_yen int` 必須、`cancel_return_item_note varchar(100)` 任意 | FK→orders/products。商品名・価格・税率を注文時に写す。明細ごとの記録は任意100字の仮値。S受・D受 |
 | `order_upload_images` | `order_item_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 必須、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`sort_order smallint` 必須 | FK→order_items。注文者が添付、管理画面は閲覧・ダウンロードのみ。件数・形式・容量・アクセス制御は未確定。S受・D受 |
 
-注文確定時に送料・送料無料判定・税率別内訳をサーバーで計算し、表示再現に必要な金額・適用条件を注文へ保存する。税率別内訳・端数処理の確定後に`order_tax_summaries`等を追加する案。決済、顧客アカウント、販売店変更、返品返金の詳細は購入側のシステム確認後に設計する。キャンセル／返品の記録は発送状態を戻しても削除しない。
+注文分割・送料計算の処理場所はLaravelサーバーで確定。注文確定時に送料・送料無料判定・税率別内訳を計算し、表示再現に必要な金額・適用条件を注文へ保存する設計案だが、具体的な実行タイミングと決済との関係は確認事項3で確定する。税率別内訳・端数処理の確定後に`order_tax_summaries`等を追加する案。決済、顧客アカウント、店舗変更、返品返金の詳細は引き続き要確認。キャンセル／返品の記録は発送状態を戻しても削除しない。
 
 ## `product-form.php`のname対応
 
@@ -51,9 +148,11 @@
 | `temperature` | `products.temperature` |
 | `packing[length]` / `[width]` / `[height]` / `[weight]` | `products.packing_*`。cm/kg、精度未確定 |
 | `upload` | `products.accepts_upload`。未送信はfalse |
-| `is_food` / `food_label` | `products.is_food` / `food_label`。オフ時の未送信は既存値維持案 |
-| `allergens[]` / `allergens_other` | `product_allergens`＋`products.allergens_none`案 / `products.allergens_other`。正式codeと排他条件未確定 |
+| `is_food` / `food_label` | `products.is_food` / `food_label`。食品オフでもオフ直前の編集値を商品保存時に保存するB方式（確定：2026-10-20）。現行disabledによる未送信からの契約変更が必要 |
+| `allergens[]` / `allergens_other` | 現行フロントの旧契約。本番では独立項目を使わず、アレルゲンも`food_label`本文にまとめる（確定：2026-10-20）。フロントの入力欄・送信契約の変更が必要 |
 | `publish` | `products.publish_status` |
-| `images[]` / `image_order[]` / `image_delete[]` | `product_images`の追加／並び順／削除。`new:n`はimagesの1始まり、`existing:ID`は当該商品所属を検証。H商§4 |
+| `images[]` | 一時アップロード用の新規ファイル配列として採用（確定：2026-10-20）。画像選択時に一時保存用の送信先へ送信し、商品保存時は再送しない。H商§4から送信タイミング・送信先の変更が必要 |
+| `image_order[]` | 本番契約は`existing:{画像ID}`／`temp:{一時画像ID}`の最終表示順配列（確定：2026-10-20）。現行の`new:{番号}`から変更が必要 |
+| `image_delete[]` | 削除する既存画像IDの配列を採用（確定：2026-10-20）。商品保存成功時に削除を確定。入力エラー時は削除予定を保持し、元の画像は残す。H商§4と一致 |
 
-`image_order[]`・`image_delete[]`の既存ID改ざん、同一画像重複、添付の保存失敗をサーバー側で検証する。画面の販売店JSONは上記テーブルから組み立て、送料金額は含めない（H商§6）。
+`image_order[]`・`image_delete[]`の既存ID改ざん、同一画像重複、添付の保存失敗をサーバー側で検証する。画面の店舗JSONは上記テーブルから組み立て、送料金額は含めない（H商§6）。
