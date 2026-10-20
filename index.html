@@ -4,7 +4,7 @@
  * URL: /index.html
  * Referenced in: /index.html
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -65,7 +65,7 @@
         margin-bottom: 8px;
         color: #097141;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
@@ -107,7 +107,7 @@
       .screen-link {
         color: #097141;
         font-size: 18px;
-        font-weight: 700;
+        font-weight: 600;
         text-underline-offset: 0.2em;
       }
 
@@ -119,7 +119,7 @@
       .screen-name {
         color: #22272e;
         font-size: 18px;
-        font-weight: 700;
+        font-weight: 600;
       }
 
       .screen-path {
@@ -129,6 +129,58 @@
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 13px;
         font-weight: 400;
+      }
+
+      .screen-meta {
+        display: block;
+        margin-top: 4px;
+        color: #4f5863;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .screen-meta dt {
+        display: inline;
+        font-weight: 500;
+      }
+
+      .screen-meta dt::after {
+        content: "：";
+      }
+
+      .screen-meta dd {
+        display: inline;
+        margin: 0;
+      }
+
+      .screen-meta div + div {
+        margin-top: 2px;
+      }
+
+      .screen-meta code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .group-note {
+        margin: 0;
+        padding: 12px 24px;
+        border-bottom: 1px solid #d9dde2;
+        background: #f6f7f8;
+        font-size: 13px;
+      }
+
+      .group-note code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .status.is-done {
+        border-color: #097141;
+        color: #097141;
+      }
+
+      .status.is-working {
+        border-color: #22272e;
+        color: #22272e;
       }
 
       .status {
@@ -169,8 +221,9 @@
       <section class="screen-group" aria-labelledby="client-heading">
         <div class="screen-group__header">
           <h2 id="client-heading">Client管理画面</h2>
-          <span class="screen-count">8画面</span>
+          <span class="screen-count">7画面</span>
         </div>
+        <p class="group-note">共通の申し送り：<code>docs/coding/HANDOFF_CLIENT_COMMON.md</code></p>
         <ul class="screen-list">
           <li>
             <div>
@@ -178,16 +231,19 @@
                 受注一覧
                 <span class="screen-path">shop-partner/orders.php</span>
               </a>
-              <span class="screen-path">docs/design/CLIENT_ORDER_LIST.md</span>
-              <span class="screen-path">
-                <a href="./shop-partner/orders.php">通常</a> /
-                <a href="./shop-partner/orders.php?preview=pager-middle">途中のページ</a> /
-                <a href="./shop-partner/orders.php?preview=empty">データなし</a> /
-                <a href="./shop-partner/orders.php?preview=no-results">検索結果0件</a> /
-                <a href="./shop-partner/orders.php?preview=date-error">注文日の入力エラー</a>
-              </span>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_ORDER_LIST.md</code></dd></div>
+                <div><dt>申し送り</dt><dd><code>docs/coding/HANDOFF_CLIENT_ORDER_LIST.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/orders.php">通常</a> /
+                  <a href="./shop-partner/orders.php?preview=pager-middle">途中のページ</a> /
+                  <a href="./shop-partner/orders.php?preview=empty">データなし</a> /
+                  <a href="./shop-partner/orders.php?preview=no-results">検索結果0件</a> /
+                  <a href="./shop-partner/orders.php?preview=date-error">注文日の入力エラー</a>
+                </dd></div>
+              </dl>
             </div>
-            <span class="status">完成（引き渡し前）</span>
+            <span class="status is-done">完成（引き渡し前）</span>
           </li>
           <li>
             <div>
@@ -195,24 +251,29 @@
                 商品一覧
                 <span class="screen-path">shop-partner/products.php</span>
               </a>
-              <span class="screen-path">docs/design/CLIENT_PRODUCT_LIST.md</span>
-              <span class="screen-path">
-                <a href="./shop-partner/products.php">通常</a> /
-                <a href="./shop-partner/products.php?preview=pager-middle">途中のページ</a> /
-                <a href="./shop-partner/products.php?preview=empty">データなし</a> /
-                <a href="./shop-partner/products.php?preview=no-results">検索結果0件</a> /
-                <a href="./shop-partner/products.php?preview=date-error">更新日の入力エラー</a>
-              </span>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_PRODUCT_LIST.md</code></dd></div>
+                <div><dt>申し送り</dt><dd><code>docs/coding/HANDOFF_CLIENT_PRODUCT_LIST.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/products.php">通常</a> /
+                  <a href="./shop-partner/products.php?preview=pager-middle">途中のページ</a> /
+                  <a href="./shop-partner/products.php?preview=empty">データなし</a> /
+                  <a href="./shop-partner/products.php?preview=no-results">検索結果0件</a> /
+                  <a href="./shop-partner/products.php?preview=date-error">更新日の入力エラー</a>
+                </dd></div>
+              </dl>
             </div>
-            <span class="status">作業中</span>
+            <span class="status is-done">完成（引き渡し前）</span>
           </li>
           <li>
-            <span class="screen-name">商品詳細</span>
-            <span class="status">未着手</span>
-          </li>
-          <li>
-            <span class="screen-name">商品登録</span>
-            <span class="status">未着手</span>
+            <div>
+              <span class="screen-name">商品詳細（登録・編集）</span>
+              <dl class="screen-meta">
+                <div><dt>構成</dt><dd>商品登録と商品詳細を1つのフォームで作成</dd></div>
+                <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_PRODUCT_FORM.md</code>（作成予定）</dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">仕様検討中</span>
           </li>
           <li>
             <span class="screen-name">送料設定</span>
