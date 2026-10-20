@@ -1,5 +1,5 @@
 /* =======================================
- * 熊日モール Client 商品フォーム 状態連動（制作2-A）
+ * 熊日モール Client 商品フォーム 状態・画像・送信操作（制作2-A／2-B）
  * URL: /shop-partner/assets/js/product-form.js
  * Referenced in: /shop-partner/product-form.php
  * Created: 2026-10-20
@@ -168,5 +168,188 @@
   temperatureInputs.forEach((input) => input.addEventListener("change", updateShippingNow));
   updateShipping();
 
-  // 画像操作・送信中の制御・エラーまとめへの自動フォーカス・離脱警告は2-B。
+  // ===== 変更あり・送信・戻る（保存処理そのものはバックエンドが組み込む） =====
+  const saveButton = form.querySelector("#product-save");
+  const saveLabel = saveButton.textContent;
+  let hasChanges = false;
+  let submitting = false;
+  const warnBeforeLeaving = (event) => {
+    if (!hasChanges || submitting) return;
+    event.preventDefault();
+    event.returnValue = true;
+  };
+  const markChanged = () => {
+    hasChanges = true;
+    if (!submitting) window.addEventListener("beforeunload", warnBeforeLeaving);
+  };
+  form.addEventListener("input", markChanged);
+  form.addEventListener("change", markChanged);
+  form.addEventListener("submit", (event) => {
+    if (submitting) {
+      event.preventDefault();
+      return;
+    }
+    submitting = true;
+    window.removeEventListener("beforeunload", warnBeforeLeaving);
+    saveButton.disabled = true;
+    saveButton.textContent = "保存中…";
+    form.setAttribute("aria-busy", "true");
+  });
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    submitting = false;
+    saveButton.disabled = false;
+    saveButton.textContent = saveLabel;
+    form.removeAttribute("aria-busy");
+    // 復元された入力・画像は未保存のまま。再度離れる場合も警告する。
+    if (hasChanges) window.addEventListener("beforeunload", warnBeforeLeaving);
+  });
+
+  // ===== 商品画像（順番・削除は保存時に反映。名前・IDは制作用の仮契約） =====
+  const imageList = form.querySelector("#product-image-list");
+  const imageRow = form.querySelector("#product-images-row");
+  const fileInput = form.querySelector("#product-images");
+  const dropzone = form.querySelector("#product-image-dropzone");
+  const imageTemplate = form.querySelector("#product-image-template");
+  const imageDeleteFields = form.querySelector("#image-delete-fields");
+  const imageStatus = form.querySelector("#image-status");
+  // 要素にFileとObject URLを対応させ、newの番号はfilesの現在の順番に合わせる。
+  const newImages = new Map();
+  const imageItems = () => [...imageList.children];
+  const announceImages = (message) => { imageStatus.textContent = message; };
+
+  const syncImages = () => {
+    const items = imageItems();
+    const transfer = new DataTransfer();
+    let newIndex = 0;
+    items.forEach((item, index) => {
+      const newImage = newImages.get(item);
+      if (newImage) {
+        transfer.items.add(newImage.file);
+        // new:1はimages[0]。削除・並べ替えのたびに欠番なく採番する。
+        item.dataset.imageKey = "new:" + (++newIndex);
+      }
+      item.querySelector('input[name="image_order[]"]').value = item.dataset.imageKey;
+      item.querySelector("img").alt = "商品画像" + (index + 1);
+      let badge = item.querySelector(".main-image-label");
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "main-image-label";
+        badge.textContent = "メイン";
+        item.querySelector(".image-preview").append(badge);
+      }
+      badge.hidden = index !== 0;
+      const labels = { previous: "前へ", next: "後ろへ", delete: "削除" };
+      item.querySelectorAll("[data-image-action]").forEach((button) => {
+        const action = button.dataset.imageAction;
+        const label = "商品画像" + (index + 1) + "を" + labels[action];
+        button.setAttribute("aria-label", label);
+        button.title = label;
+        button.disabled = (action === "previous" && index === 0) || (action === "next" && index === items.length - 1);
+      });
+    });
+    // ファイル選択で置き換わったfilesも、追加済みの新規画像全体から作り直す。
+    fileInput.files = transfer.files;
+    imageRow.hidden = items.length === 0;
+  };
+
+  imageList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-image-action]");
+    if (!button || button.disabled) return;
+    const item = button.closest("li");
+    const items = imageItems();
+    const index = items.indexOf(item);
+    const action = button.dataset.imageAction;
+    if (action === "delete") {
+      const nextItem = items[index + 1];
+      const newImage = newImages.get(item);
+      if (newImage) {
+        URL.revokeObjectURL(newImage.url);
+        newImages.delete(item);
+      } else {
+        const deleted = document.createElement("input");
+        deleted.type = "hidden";
+        deleted.name = "image_delete[]";
+        deleted.value = item.dataset.imageKey.slice("existing:".length);
+        imageDeleteFields.append(deleted);
+      }
+      item.remove();
+      syncImages();
+      const nextButton = nextItem && [...nextItem.querySelectorAll("button")].find((control) => !control.disabled);
+      (nextButton || fileInput).focus();
+      announceImages("商品画像" + (index + 1) + "を削除しました。保存すると反映されます");
+    } else {
+      const targetIndex = index + (action === "previous" ? -1 : 1);
+      if (action === "previous") imageList.insertBefore(item, items[targetIndex]);
+      else imageList.insertBefore(items[targetIndex], item);
+      syncImages();
+      const focusButton = button.disabled
+        ? item.querySelector('[data-image-action="' + (action === "previous" ? "next" : "previous") + '"]')
+        : button;
+      focusButton.focus();
+      announceImages("商品画像" + (index + 1) + "を" + (targetIndex + 1) + "番目に移動しました");
+    }
+    markChanged();
+  });
+
+  const addImages = (files) => {
+    let added = 0;
+    let rejected = false;
+    files.forEach((file) => {
+      // 形式・容量・枚数の上限は未確定。画像かどうかの確認だけを行う。
+      if (!file.type.startsWith("image/")) {
+        rejected = true;
+        return;
+      }
+      const item = imageTemplate.content.firstElementChild.cloneNode(true);
+      const url = URL.createObjectURL(file);
+      item.querySelector("img").src = url;
+      newImages.set(item, { file, url });
+      imageList.append(item);
+      added += 1;
+    });
+    syncImages();
+    if (added) markChanged();
+    if (added || rejected) {
+      announceImages((added ? "画像を" + added + "枚追加しました。保存すると反映されます" : "") +
+        (rejected ? (added ? "。" : "") + "画像ファイルを選択してください" : ""));
+    }
+  };
+  fileInput.addEventListener("change", () => addImages([...fileInput.files]));
+  dropzone.addEventListener("click", (event) => {
+    if (!event.target.closest("label, input")) fileInput.click();
+  });
+  let dragDepth = 0;
+  const isFileDrag = (event) => [...(event.dataTransfer?.types || [])].includes("Files");
+  dropzone.addEventListener("dragenter", (event) => {
+    if (!isFileDrag(event)) return;
+    event.preventDefault();
+    dragDepth += 1;
+    dropzone.classList.add("is-dragover");
+  });
+  dropzone.addEventListener("dragover", (event) => {
+    if (!isFileDrag(event)) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+  });
+  dropzone.addEventListener("dragleave", () => {
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) dropzone.classList.remove("is-dragover");
+  });
+  dropzone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    dragDepth = 0;
+    dropzone.classList.remove("is-dragover");
+    const files = [...(event.dataTransfer?.files || [])];
+    if (files.length) addImages(files);
+    else announceImages("画像ファイルを選択してください");
+  });
+  window.addEventListener("pagehide", (event) => {
+    // bfcacheに入る場合はサムネイルも保持し、戻った画面で操作を続けられるようにする。
+    if (!event.persisted) newImages.forEach((image) => URL.revokeObjectURL(image.url));
+  });
+  syncImages();
+
+  // サーバーからの入力エラー表示を最初に伝える。保存完了メッセージには移動しない。
+  form.closest("main").querySelector("#product-errors")?.focus();
 })();

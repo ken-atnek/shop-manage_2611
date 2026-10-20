@@ -432,10 +432,21 @@
 }
 
 /* =================================
- * 商品画像（操作の実装は2回目）
+ * 商品画像（追加・並べ替え・削除）
  * ------------------------------ */
 .product-form {
+    #product-images-row[hidden],
+    .main-image-label[hidden] {
+        display: none;
+    }
+    #product-images-row[hidden] + .form-field {
+        margin-top: 0;
+    }
+    .image-status:empty {
+        display: none;
+    }
     .image-dropzone {
+        font-size: inherit;
         position: relative;
         padding: 2.4rem;
         text-align: center;
@@ -444,6 +455,10 @@
         background: $color-bg-subtle;
         &:hover {
             border-color: var(--color-brand-accent);
+        }
+        &.is-dragover {
+            border-color: var(--color-brand-accent);
+            background: var(--color-brand-subtle);
         }
         &:has(:focus-visible) {
             outline: 3px solid var(--color-brand-accent);

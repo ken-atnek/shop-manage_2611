@@ -131,7 +131,7 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
           <p class="save-status" role="status"><?= $isRegisteredState ? '商品を登録しました' : '保存しました' ?></p>
         <?php endif; ?>
         <?php if ($isErrorState): ?>
-          <!-- 自動フォーカスは2-B。ここではエラー結果の表示とページ内リンクだけを確認する。 -->
+          <!-- 表示時にproduct-form.jsがエラーのまとめへフォーカスを移す。 -->
           <section class="error-summary" id="product-errors" aria-labelledby="product-errors-heading" tabindex="-1">
             <h2 id="product-errors-heading">入力内容を確認してください（3件）</h2>
             <ul>
@@ -142,8 +142,8 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
           </section>
         <?php endif; ?>
 
-        <!-- action・name・valueは制作例。POST処理・保存・検証・画像転送は実装しない。 -->
-        <form class="product-form" method="post" action="#" novalidate>
+        <!-- action・name・valueは制作例。画像も保存時のPOSTへ含める仮決め。保存・検証処理はバックエンドが組み込む。 -->
+        <form class="product-form" method="post" action="#" enctype="multipart/form-data" novalidate>
           <section class="form-box" aria-labelledby="basic-heading">
             <h2 id="basic-heading"><span class="heading-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" />
   <path d="M12 16v-4" />
@@ -180,41 +180,60 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
   <path d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18" />
   <circle cx="12" cy="8" r="2" />
   <rect width="16" height="16" x="6" y="2" rx="2" /></svg></span>商品画像</h2>
-            <!-- 新規は画像なし、ほかの状態は3枚の表示例。画像操作は2-B。 -->
-            <?php if ($previewState !== 'new'): ?>
-              <div class="form-field form-row">
+            <!-- 既存画像のIDも制作例。Bladeでは保存済みIDへ置き換える。新規も追加先の一覧を残す。 -->
+              <div class="form-field form-row" id="product-images-row"<?= $previewState === 'new' ? ' hidden' : '' ?>>
                 <p class="form-label" id="registered-images-label">登録済みの画像</p>
                 <div class="field-control field-wide">
-                  <ol class="product-images" aria-labelledby="registered-images-label">
+                  <ol class="product-images" id="product-image-list" aria-labelledby="registered-images-label">
+                    <?php if ($previewState !== 'new'): ?>
                     <?php foreach (['photo_01.jpg', 'photo_02.jpg', 'photo_01.jpg'] as $imageIndex => $imageFile): ?>
-                      <li>
+                      <li data-image-key="existing:<?= 101 + $imageIndex ?>">
+                        <input type="hidden" name="image_order[]" value="existing:<?= 101 + $imageIndex ?>" />
                         <div class="image-preview">
                           <img src="assets/images/sample/<?= $imageFile ?>" width="160" height="160" alt="商品画像<?= $imageIndex + 1 ?>" />
                           <?php if ($imageIndex === 0): ?><span class="main-image-label">メイン</span><?php endif; ?>
                         </div>
                         <div class="image-actions">
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を前へ" title="商品画像<?= $imageIndex + 1 ?>を前へ"<?= $imageIndex === 0 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を後ろへ" title="商品画像<?= $imageIndex + 1 ?>を後ろへ"<?= $imageIndex === 2 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を削除" title="商品画像<?= $imageIndex + 1 ?>を削除"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
+                          <button type="button" data-image-action="previous" aria-label="商品画像<?= $imageIndex + 1 ?>を前へ" title="商品画像<?= $imageIndex + 1 ?>を前へ"<?= $imageIndex === 0 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+                          <button type="button" data-image-action="next" aria-label="商品画像<?= $imageIndex + 1 ?>を後ろへ" title="商品画像<?= $imageIndex + 1 ?>を後ろへ"<?= $imageIndex === 2 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+                          <button type="button" data-image-action="delete" aria-label="商品画像<?= $imageIndex + 1 ?>を削除" title="商品画像<?= $imageIndex + 1 ?>を削除"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
                         </div>
                       </li>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                   </ol>
                 </div>
               </div>
-            <?php endif; ?>
-            <!-- ドロップ領域の外観だけを制作。ドラッグによる追加は2-B。 -->
             <div class="form-field form-row">
               <p class="form-label">画像を追加</p>
-              <div class="field-control field-wide image-dropzone">
+              <div class="field-control field-wide">
+                <div class="image-dropzone" id="product-image-dropzone">
                 <div class="image-drop-label" id="image-drop-help"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
     <path d="m14 19.5 3-3 3 3" />
     <path d="M17 22v-5.5" />
     <circle cx="9" cy="9" r="2" /></svg><span>ここに画像をドラッグ、またはクリックして選択</span></div>
-                <input type="file" id="product-images" name="images[]" aria-describedby="image-drop-help" multiple />
+                <input type="file" id="product-images" name="images[]" aria-describedby="image-drop-help image-status" multiple />
                 <label class="image-select-button" for="product-images">ファイルを選択</label>
+                </div>
+                <p class="form-help image-status" id="image-status" aria-live="polite" aria-atomic="true"></p>
               </div>
             </div>
+            <div id="image-delete-fields" hidden></div>
+            <!-- 新規画像用。既存画像と同じボタン・SVGを使い、番号と状態はJSで付ける。 -->
+            <template id="product-image-template">
+              <li data-image-key="">
+                <input type="hidden" name="image_order[]" value="" />
+                <div class="image-preview">
+                  <img width="160" height="160" alt="" />
+                  <span class="main-image-label" hidden>メイン</span>
+                </div>
+                <div class="image-actions">
+                  <button type="button" data-image-action="previous"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+                  <button type="button" data-image-action="next"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+                  <button type="button" data-image-action="delete"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
+                </div>
+              </li>
+            </template>
           </section>
 
           <section class="form-box" aria-labelledby="price-heading">
@@ -402,7 +421,7 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
           </section>
           <div class="save-bar">
             <a href="products.<?= $pageExtension ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>一覧へ戻る</a>
-            <button class="button-primary" type="submit">保存する</button>
+            <button class="button-primary" id="product-save" type="submit">保存する</button>
           </div>
         </form>
       </main>
