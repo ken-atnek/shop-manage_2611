@@ -27,16 +27,16 @@ $productPrice = $isNewState ? '' : '2800';
 $productStock = $previewState === 'new' ? '' : '24';
 $taxRate = ($isNewState || $isFoodTaxWarningState) ? '10' : ($isFoodState ? '8' : '10');
 $showFoodTaxWarning = $isFoodState && $taxRate === '10';
-// 食品表示の保存値を想定した表示例。販売店からのひな形挿入は別途仕様決定後に検討する。
+// 食品表示の保存値を想定した表示例。店舗情報を初期値に入れる案は取り下げ済み。パッケージの表示どおりに入力する。
 $foodLabelExample = "名称：焼き菓子\n原材料名：小麦粉（国内製造）、砂糖、バター、卵\n内容量：12個\n賞味期限：製造日より30日\n保存方法：直射日光・高温多湿を避けて保存\n製造者：〇〇";
 
-// 運送会社の規格は販売店画面と同じファイルを読む。規格の正はdocs/SPEC.md。
+// 運送会社の規格は店舗画面と同じファイルを読む。規格の正はdocs/SPEC.md。
 $carriers = require __DIR__ . '/includes/data_carriers.php';
-// 販売店・配送は制作確認用。Bladeでは同じJSONの形で実データを出す。
+// 店舗・配送は制作確認用。Bladeでは同じJSONの形で実データを出す。
 // coolSurchargeSetは空欄=false、0円も含む設定あり=true。実額は判定には渡さない。
 $storeShippingData = [
     '1' => [
-        'name' => '熊日モール サンプル販売店',
+        'name' => '熊日モール サンプル店舗',
         'carrierId' => 'yamato',
         'sizeBased' => true,
         'usedSizes' => [60, 80, 100, 120, 140, 160],
@@ -44,7 +44,7 @@ $storeShippingData = [
         'coolSurchargeSet' => false, // サイズ別なしの場合だけ参照する。
     ],
     '2' => [
-        'name' => '熊本ギフト サンプル販売店',
+        'name' => '熊本ギフト サンプル店舗',
         'carrierId' => 'yupack',
         'sizeBased' => false,
         'usedSizes' => [],
@@ -65,14 +65,14 @@ if ($isCoolWarningState) {
     $packingValues = ['length' => '40', 'width' => '40', 'height' => '45', 'weight' => '3'];
 }
 // 初期HTMLの表示例。読み込み時にJSが実際の現在値で判定し直す。Bladeへpreview分岐は移さない。
-$sizeResultExample = $selectedStoreId === '' ? '販売店を選ぶと判定します' : (
+$sizeResultExample = $selectedStoreId === '' ? '店舗を選ぶと判定します' : (
     $isCoolWarningState ? '判定：140サイズ（3辺合計125cm・3kg）' : (
-        ($isNoSizeStoreState || $isFrozenYupackState) ? 'この販売店はサイズ別の送料を使いません（3辺合計55cm・0.8kg）' : '判定：60サイズ（3辺合計55cm・0.8kg）'
+        ($isNoSizeStoreState || $isFrozenYupackState) ? 'この店舗はサイズ別の送料を使いません（3辺合計55cm・0.8kg）' : '判定：60サイズ（3辺合計55cm・0.8kg）'
     )
 );
 
 $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3辺合計120cm・15kgまでです' : (
-    $isFrozenYupackState ? 'この販売店の運送会社（ゆうパック）は冷凍に対応していません' : ''
+    $isFrozenYupackState ? 'この店舗の運送会社（ゆうパック）は冷凍に対応していません' : ''
 );
 
 ?>
@@ -149,12 +149,12 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
   <path d="M12 16v-4" />
   <path d="M12 8h.01" /></svg></span>基本情報</h2>
             <div class="form-field form-row">
-              <label class="form-label" for="product-store">販売店 <span class="required-label">必須</span></label>
+              <label class="form-label" for="product-store">店舗 <span class="required-label">必須</span></label>
               <div class="field-control field-medium">
                 <select id="product-store" name="store_id" aria-required="true">
                   <option value=""<?= $selectedStoreId === '' ? ' selected' : '' ?>>選択してください</option>
-                  <option value="1"<?= $selectedStoreId === '1' ? ' selected' : '' ?>>熊日モール サンプル販売店</option>
-                  <option value="2"<?= $selectedStoreId === '2' ? ' selected' : '' ?>>熊本ギフト サンプル販売店</option>
+                  <option value="1"<?= $selectedStoreId === '1' ? ' selected' : '' ?>>熊日モール サンプル店舗</option>
+                  <option value="2"<?= $selectedStoreId === '2' ? ' selected' : '' ?>>熊本ギフト サンプル店舗</option>
                 </select>
               </div>
             </div>
@@ -321,7 +321,7 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
                     </div>
                   <?php endforeach; ?>
                 </div>
-                <!-- 初期表示例。2-AのJSで入力・販売店・温度帯に合わせて更新する。 -->
+                <!-- 初期表示例。2-AのJSで入力・店舗・温度帯に合わせて更新する。 -->
                 <p class="size-result" id="shipping-size-result" aria-live="polite" aria-atomic="true"><?= $sizeResultExample ?></p>
               </div>
             </fieldset>

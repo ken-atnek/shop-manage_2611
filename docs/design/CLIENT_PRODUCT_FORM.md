@@ -8,7 +8,7 @@
 
 業務仕様は[仕様書](../SPEC.md)、一覧との関係は[Client商品一覧資料](CLIENT_PRODUCT_LIST.md)、見た目の基準は[デザイントークン](../../DESIGN_TOKENS.md)と[デザイン方針](DESIGN.md)を参照する。制作・共通部品は[実装連携ガイド](../coding/IMPLEMENTATION_REFERENCE.md)・[共通レイアウト](../coding/LAYOUT_TEMPLATE.md)・[Client共通申し送り](../coding/HANDOFF_CLIENT_COMMON.md)を参照する。制作時はCodexが依頼範囲を作成し、Kenが調整、Claudeが確認する。
 
-**呼び方の変更（2026-10-20）**：資料では「店舗」に統一する。商品フォームのラベル・選択肢・判定と注意の表示文言は次回変更する（PHP・JSと同時に対応）。以下の文言・JSONの名前の例も変更後の表記であり、現行画面とは一時的に異なる。`store_id`・`#product-store`・`store-shipping-data`・JSONのキーなど、コードの名前は変更しない。
+**呼び方の変更（2026-10-20）**：資料では「店舗」に統一する。商品フォームのラベル・選択肢・判定と注意の表示文言は「店舗」へ変更済み（2026-10-20）。以下の文言・JSONのサンプル名も現行画面と一致している。`store_id`・`#product-store`・`store-shipping-data`・JSONのキーなど、コードの名前は変更しない。
 
 ## 確定している前提（2026-10-20）
 
