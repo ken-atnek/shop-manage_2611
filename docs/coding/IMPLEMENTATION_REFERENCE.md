@@ -55,7 +55,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
 - バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
 
-商品フォームは`shop-partner/product-form.php`、専用Sassは`shop-partner/assets/scss/product-form.scss`→`shop-partner/assets/css/product-form.css`、固有JSは`shop-partner/assets/js/product-form.js`。JSはcommon.js→product-form.jsの順でbody末尾に読む。2-Aは食品・在庫・配送判定・クール便注意を担当し、2-Bの画像・送信・離脱制御と分ける。PHP／Bladeの販売店JSONの形と依存IDは[商品フォーム資料](../design/CLIENT_PRODUCT_FORM.md)を参照する。
+商品フォームは`shop-partner/product-form.php`、専用Sassは`shop-partner/assets/scss/product-form.scss`→`shop-partner/assets/css/product-form.css`、固有JSは`shop-partner/assets/js/product-form.js`。JSはcommon.js→product-form.jsの順でbody末尾に読む。2-Aは食品・在庫・配送判定・クール便注意を担当し、2-Bの画像・送信・離脱制御と分ける。PHP／Bladeの店舗JSONの形と依存IDは[商品フォーム資料](../design/CLIENT_PRODUCT_FORM.md)を参照する。
 
 ## クラス名とSCSSの書き方
 
