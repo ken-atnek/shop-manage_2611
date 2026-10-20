@@ -920,3 +920,25 @@
 - Kenの希望で、受注一覧の記録欄で使った「rowsなし＋field-sizing: content」をほかのページにも適用。common.scssのフォーム部品の節に`textarea`の共通指定（`--textarea-min-lines`既定2・`--textarea-max-lines`既定10・`--textarea-padding-block`既定1.2rem、min／max-heightを行数＋余白＋枠で計算）を追加し、order.scssの個別指定は削除
 - 商品フォーム：3つのtextareaから`rows`を外し、product-form.scssで最小3行（余白1rem）、商品説明だけ最小4行・最大20行（元のrows=4・3を最小行数として維持）。textareaの`min-height: 4.4rem`はselectだけに残した
 - Chromiumで1280・834pxを確認（商品説明131px→長文で566pxにて欄内スクロール、原材料名・製造者104px、受注一覧の記録欄は従来どおり）。IMPLEMENTATION_REFERENCEにtextareaのルールを追記。Gitコミットなし
+
+## 2026-10-20 食品表示を1つのtextareaへ変更し、個別入力をB案として保存
+
+- `kumanichi-admin-design`を使用。既存の個別項目・必須条件を今回のKenの決定で置き換え、旧構成はB案へ残すこと、販売店情報を個別欄の初期値にする案を本文のひな形へ変更することを作業前に共有した
+- `product-form.php`の食品fieldsetを、食品表示textarea（name=food_label）と既存のアレルゲンに整理。名称・原材料名・内容量・期限のラジオとテキスト・保存方法・製造者販売者・栄養成分5欄を削除。不要になった期限ラベルと栄養成分グリッドの専用Sassも削除した
+- 食品表示はrowsなし・aria-required=trueとし、0cdd190で入ったcommon.scssのtextareaの仕組みを利用。専用Sassでは--textarea-min-lines: 8・--textarea-max-lines: 20だけを追加し、文字16px・行間1.7・上下余白10px・最大幅720pxは既存を利用した
+- 見える補助文の先頭に「パッケージの表示どおりに入力してください。詰め合わせの場合は商品ごとに記載してください。」を置き、6項目の記入例を併記。aria-describedbyで関連付け、errorではエラー文も参照する。foodには記入例を6行で表示し、errorは空欄＋「食品表示を入力してください」。まとめのリンクを#food-labelへ更新
+- SPEC・商品フォーム資料の現行表は食品表示textarea必須＋アレルゲン必須へ更新。食品表示本文は空でないことだけを必須とし、個別項目の必須チェックはできないことを明記。アレルゲンの「1つ以上または該当なし」は維持。旧7項目の入力方法・必須任意は、未採用の「B案（項目ごとの入力。戻す可能性あり）」の表として両資料へ残した
+- 食品オン時に記入例の項目名と販売店情報を含むひな形をtextareaへ入れる案へ変更。2回目のJSで検討し、今回は動きを作らない。入力済み本文の上書き・販売店再選択時の更新、文字数上限、表示義務の範囲（熊日側に確認）は未確定のまま
+- `npm run sass`、DDEVのPHP構文確認、`git diff --check`を実施。1280×800・834×1194で通常・food・errorの6表示を確認。横はみ出しなし、食品fieldset内のtextareaが1つ・旧個別欄なし、通常のdisabled＋hidden、補助文とエラー文の参照先、エラーまとめからのフォーカス移動と共通3px枠を確認した
+- 最小8行は約239.6px、30行入力時は最大20行の約565.9pxで欄内スクロール、空へ戻すと最小高さへ戻ることを両幅で確認。確認ブラウザには0cdd190以前の共通CSSキャッシュが残っていたため、サーバー内と手元のCSSの一致を照合後、確認時だけ共通CSSのURLに識別子を付けて最新を取得した。確認後はPHPのCSSリンクを元へ戻した。共通Sass・CSS・JS・他画面への変更なし
+- 確認画像・測定結果は`/tmp/kumanichi-product-food-textarea/`に保存。判断に迷った点・不明な点：実装上はなし。指定の未確定事項を保持した。Gitコミットは行わない
+
+## 2026-10-20 食品チェックの左ラベルと記入例detailsを調整
+
+- `kumanichi-admin-design`を使用。資料には記入例を補助文に含めてtextareaへ関連付ける旧記述があることを作業前に説明し、画面資料に加えてSPECの該当文も最小限で同期した
+- `product-form.php`の食品チェック行の左ラベルを「食品」に変更。textareaのラベル「食品表示」は維持した
+- food-label-helpは「パッケージの表示どおりに入力してください。詰め合わせの場合は商品ごとに記載してください。」だけにし、記入例を補助文の下のdetails／summaryへ移した。summaryは「記入例を見る」、初期状態は閉じる。既存のfoodLabelExampleを使い、6項目を1行ずつ表示する。textareaのaria-describedbyは案内文だけとし、errorではエラー文の参照も保持。記入例は参照先に含めない
+- 専用Sassにdetailsの文字fz(14)・行間1.7・上余白8px、summaryの最小高さ44px・accent色、展開内容の補助背景と12px 16px余白を追加。ネイティブの開閉と共通resetのフォーカス枠を使い、JSや追加ARIAは作っていない
+- `npm run sass`、DDEVのPHP構文確認、`git diff --check`を確認。1280×800・834×1194のfood・errorの4表示で、初期closed・ラベル・案内文とエラー文の参照先・summaryへのTab移動・3pxフォーカス枠・Enter／Space双方の開閉・6行の記入例・横はみ出しなしを確認した。textareaは既存の最小8行を保持
+- 前回同様、確認ブラウザの古い共通CSSキャッシュを避けるため確認時だけURL識別子で最新CSSを読み込み、確認後はPHPのリンクを元へ戻した。共通Sass・CSS・JS・ほかの画面への変更なし。確認画像・測定結果は`/tmp/kumanichi-product-food-details/`に保存
+- 判断に迷った点・不明な点：なし。SPECの旧記述は該当2箇所のみ同期した。Gitコミットは行わない

@@ -22,6 +22,8 @@ $productDescription = $previewState === 'new' ? '' : ($isFoodState ? '熊本の�
 $productPrice = $previewState === 'new' ? '' : '2800';
 $productStock = $previewState === 'new' ? '' : '24';
 $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
+// 食品表示の保存値を想定した表示例。販売店からのひな形挿入は2回目に検討する。
+$foodLabelExample = "名称：焼き菓子\n原材料名：小麦粉（国内製造）、砂糖、バター、卵\n内容量：12個\n賞味期限：製造日より30日\n保存方法：直射日光・高温多湿を避けて保存\n製造者：〇〇";
 ?>
 <!doctype html>
 <!-- =======================================
@@ -84,7 +86,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <ul>
               <li><a href="#product-name">商品名を入力してください</a></li>
               <li><a href="#product-tax-8">消費税率を選択してください</a></li>
-              <li><a href="#food-ingredients">原材料名を入力してください</a></li>
+              <li><a href="#food-label">食品表示を入力してください</a></li>
             </ul>
           </section>
         <?php endif; ?>
@@ -254,7 +256,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <h2 id="upload-heading"><span class="heading-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
   <path d="M14 2v5a1 1 0 0 0 1 1h5" />
   <path d="M12 12v6" />
-  <path d="m15 15-3-3-3 3" /></svg></span>入稿</h2>
+  <path d="m15 15-3-3-3 3" /></svg></span>注文者からのデータ入稿</h2>
             <div class="form-field form-row upload-field">
               <p class="form-label">入稿</p>
               <div class="field-control">
@@ -276,7 +278,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
   <path d="M7 14h.01" />
   <path d="M9 8h.01" /></svg></span>商品仕様（食品表示）</h2>
             <div class="form-field form-row">
-              <p class="form-label">食品表示</p>
+              <p class="form-label">食品</p>
               <div class="field-control">
                 <label class="form-check" for="product-food"><input type="checkbox" id="product-food" name="is_food" value="1" aria-controls="food-fields"<?= $isFoodState ? ' checked' : '' ?> /><span>この商品は食品です</span></label>
               </div>
@@ -285,17 +287,16 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <fieldset class="food-fields" id="food-fields"<?= $isFoodState ? '' : ' disabled hidden' ?>>
               <legend class="sr-only">商品仕様（食品表示）</legend>
               <div class="form-field form-row">
-                <label class="form-label" for="food-name">名称 <span class="required-label">必須</span></label>
+                <label class="form-label" for="food-label">食品表示 <span class="required-label">必須</span></label>
                 <div class="field-control field-wide">
-                  <input type="text" id="food-name" name="food_name" value="<?= $isFoodState ? '焼き菓子' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-ingredients">原材料名 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <textarea id="food-ingredients" name="ingredients" aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="food-ingredients-error"' : '' ?>><?= $isFoodState && !$isErrorState ? '小麦粉（国内製造）、砂糖、バター、卵、牛乳' : '' ?></textarea>
+                  <textarea id="food-label" name="food_label" aria-required="true" aria-describedby="food-label-help<?= $isErrorState ? ' food-label-error' : '' ?>"<?= $isErrorState ? ' aria-invalid="true"' : '' ?>><?= $isFoodState && !$isErrorState ? htmlspecialchars($foodLabelExample, ENT_QUOTES, 'UTF-8') : '' ?></textarea>
+                  <p class="form-help" id="food-label-help">パッケージの表示どおりに入力してください。詰め合わせの場合は商品ごとに記載してください。</p>
+                  <details class="food-label-example">
+                    <summary>記入例を見る</summary>
+                    <p><?= nl2br(htmlspecialchars($foodLabelExample, ENT_QUOTES, 'UTF-8')) ?></p>
+                  </details>
                   <?php if ($isErrorState): ?>
-                    <p class="form-error" id="food-ingredients-error">原材料名を入力してください</p>
+                    <p class="form-error" id="food-label-error">食品表示を入力してください</p>
                   <?php endif; ?>
                 </div>
               </div>
@@ -324,48 +325,6 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
                   <div class="field-wide">
                     <label class="form-label" for="allergen-other">その他のアレルゲン</label>
                     <input type="text" id="allergen-other" name="allergens_other" value="" />
-                  </div>
-                </div>
-              </fieldset>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-quantity">内容量 <span class="required-label">必須</span></label>
-                <div class="field-control field-medium">
-                  <input type="text" id="food-quantity" name="quantity" value="<?= $isFoodState ? '12個' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <fieldset class="form-field form-row">
-                <legend class="form-label" id="expiry-label">期限 <span class="required-label">必須</span></legend>
-                <div class="field-control">
-                  <div class="check-group">
-                    <label class="form-check" for="expiry-best"><input type="radio" id="expiry-best" name="expiry_type" value="best_before"<?= $isFoodState ? ' checked' : '' ?> /><span>賞味期限</span></label>
-                    <label class="form-check" for="expiry-use"><input type="radio" id="expiry-use" name="expiry_type" value="use_by" /><span>消費期限</span></label>
-                  </div>
-                  <label class="form-label expiry-text-label" for="food-expiry">期限の内容 <span class="required-label">必須</span></label>
-                  <input class="field-medium" type="text" id="food-expiry" name="expiry" value="<?= $isFoodState ? '製造日より30日' : '' ?>" aria-required="true" />
-                </div>
-              </fieldset>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-storage">保存方法 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <input type="text" id="food-storage" name="storage" value="<?= $isFoodState ? '直射日光・高温多湿を避けて保存してください。' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-seller">製造者・販売者 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <textarea id="food-seller" name="food_seller" aria-required="true"><?= $isFoodState ? "熊日モール サンプル販売店\n熊本県熊本市中央区サンプル町1-1" : '' ?></textarea>
-                </div>
-              </div>
-              <fieldset class="form-field form-row">
-                <legend class="form-label">栄養成分表示 <span class="optional-label">任意</span></legend>
-                <div class="field-control">
-                  <div class="nutrition-fields">
-                    <?php foreach (['energy' => ['エネルギー', '120kcal'], 'protein' => ['たんぱく質', '2.0g'], 'fat' => ['脂質', '5.0g'], 'carbohydrate' => ['炭水化物', '17.0g'], 'salt' => ['食塩相当量', '0.1g']] as $nutritionKey => $nutrition): ?>
-                      <div>
-                        <label class="form-label" for="nutrition-<?= $nutritionKey ?>"><?= $nutrition[0] ?></label>
-                        <input type="text" id="nutrition-<?= $nutritionKey ?>" name="nutrition[<?= $nutritionKey ?>]" value="<?= $isFoodState ? $nutrition[1] : '' ?>" />
-                      </div>
-                    <?php endforeach; ?>
                   </div>
                 </div>
               </fieldset>

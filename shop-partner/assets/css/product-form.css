@@ -223,6 +223,10 @@
   --textarea-min-lines: 4;
   --textarea-max-lines: 20;
 }
+.product-form .form-field #food-label {
+  --textarea-min-lines: 8;
+  --textarea-max-lines: 20;
+}
 .product-form .form-field select {
   min-height: 4.4rem;
   appearance: auto;
@@ -385,8 +389,7 @@
   width: 18rem;
   max-width: 100%;
 }
-.product-form .stock-check,
-.product-form .expiry-text-label {
+.product-form .stock-check {
   margin-top: 1.2rem;
 }
 .product-form .upload-field .form-help {
@@ -415,14 +418,26 @@
   font-size: max(12px, 0.875em);
   font-weight: 500;
 }
-.product-form .nutrition-fields {
-  font-size: inherit;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 18rem));
-  gap: 1.6rem;
+.product-form .food-label-example {
+  font-size: max(12px, 0.875em);
+  margin-top: 0.8rem;
+  line-height: 1.7;
 }
-.product-form .nutrition-fields div {
+.product-form .food-label-example summary {
   font-size: inherit;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 4.4rem;
+  padding-block: 1rem;
+  color: var(--color-brand-accent);
+  list-style-position: inside;
+  cursor: pointer;
+}
+.product-form .food-label-example p {
+  font-size: inherit;
+  margin-top: 0.8rem;
+  padding: 1.2rem 1.6rem;
+  background: #f6f7f8;
 }
 
 /* =================================
