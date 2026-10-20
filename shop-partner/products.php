@@ -22,7 +22,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
  * Referenced in: /shop-partner/products.<?= $pageExtension . PHP_EOL ?>
  * 編集元: /shop-partner/products.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-19
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -150,7 +150,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">24</td>
                 <td><span class="publish-state">公開</span></td>
 <td class="product-updated"><time datetime="2026-10-19T14:30:00+09:00"><span>2026/10/19</span> <span>14:30</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="写真入りマグカップを編集" title="写真入りマグカップを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="写真入りマグカップを編集" title="写真入りマグカップを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
                 <td class="product-id">985</td>
@@ -160,7 +160,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">3<span class="stock-note">残りわずか</span></td>
                 <td><span class="publish-state">公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-19T13:15:00+09:00"><span>2026/10/19</span> <span>13:15</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="大切な記念日の写真でつくる オリジナルフォトパネル 木製スタンド付き ギフトボックス入りを編集" title="大切な記念日の写真でつくる オリジナルフォトパネル 木製スタンド付き ギフトボックス入りを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="大切な記念日の写真でつくる オリジナルフォトパネル 木製スタンド付き ギフトボックス入りを編集" title="大切な記念日の写真でつくる オリジナルフォトパネル 木製スタンド付き ギフトボックス入りを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
                 <td class="product-id">984</td>
@@ -170,7 +170,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">40</td>
                 <td><span class="publish-state is-private">非公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-18T16:40:00+09:00"><span>2026/10/18</span> <span>16:40</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="名入れタオルを編集" title="名入れタオルを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="名入れタオルを編集" title="名入れタオルを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
                 <td class="product-id">983</td>
@@ -180,7 +180,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">0<span class="stock-note">在庫切れ</span></td>
                 <td><span class="publish-state">公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-18T10:05:00+09:00"><span>2026/10/18</span> <span>10:05</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="フォトキーホルダーを編集" title="フォトキーホルダーを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="フォトキーホルダーを編集" title="フォトキーホルダーを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
                 <td class="product-id">982</td>
@@ -190,7 +190,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">12</td>
                 <td><span class="publish-state is-private">非公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-17T15:20:00+09:00"><span>2026/10/17</span> <span>15:20</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="オリジナルラベルギフトを編集" title="オリジナルラベルギフトを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="オリジナルラベルギフトを編集" title="オリジナルラベルギフトを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
                 <td class="product-id">981</td>
@@ -200,7 +200,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td class="product-stock">60</td>
                 <td><span class="publish-state">公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-17T09:00:00+09:00"><span>2026/10/17</span> <span>09:00</span></time></td>
-                <td class="product-edit"><a class="edit-link" href="#" aria-label="記念写真の卓上カレンダーを編集" title="記念写真の卓上カレンダーを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="記念写真の卓上カレンダーを編集" title="記念写真の卓上カレンダーを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
             </tbody>
           </table>

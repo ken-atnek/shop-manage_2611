@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= */
 
 /* =================================
@@ -461,7 +461,7 @@
             border-right: 1px solid $color-border-inner;
             h4 {
                 font-size: inherit;
-                font-weight: 500;
+                font-weight: 600;
                 overflow-wrap: anywhere;
             }
         }
@@ -516,32 +516,81 @@
                 }
             }
         }
-        .memo-form {
+        .detail-notes {
             font-size: inherit;
             flex: 1;
             min-width: 0;
+            h4 {
+                font-size: inherit;
+                font-weight: 600;
+                overflow-wrap: anywhere;
+            }
+        }
+        .customer-note {
+            font-size: inherit;
+            padding: 1.6rem;
+            p {
+                font-size: inherit;
+                margin-top: 0.8rem;
+                white-space: pre-wrap;
+                overflow-wrap: anywhere;
+            }
+        }
+        .detail-empty {
+            font-size: inherit;
+            padding: 1.6rem;
+            color: $color-text-secondary;
+        }
+        .customer-note + .cancel-record,
+        .detail-empty + .cancel-record {
+            border-top: 1px solid $color-border-inner;
+        }
+        .cancel-record {
+            font-size: inherit;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.8rem;
+            gap: 1.2rem;
             padding: 1.6rem;
+            // display:flexでhiddenの非表示を上書きしない。
+            &[hidden] {
+                display: none;
+            }
+            .record-reason,
+            .item-note {
+                font-size: inherit;
+                min-width: 0;
+            }
+            .record-reason label {
+                display: block;
+                margin-bottom: 0.8rem;
+            }
+            .item-note {
+                display: grid;
+                grid-template-columns: 14rem minmax(0, 1fr);
+                align-items: start;
+                gap: 0.8rem 1.2rem;
+                @include tb {
+                    grid-template-columns: minmax(0, 1fr);
+                }
+            }
             label {
                 font-size: inherit;
                 font-weight: 500;
+                overflow-wrap: anywhere;
             }
             textarea {
                 // 入力欄は16px固定（iOSのSafariの拡大を防ぐ）
                 font-size: 1.6rem;
                 width: 100%;
-                min-height: 10.4rem;
+                min-width: 0;
                 padding: 1.2rem;
                 border: 1px solid $color-border-default;
                 border-radius: $radius-sm;
+                color: $color-text-primary;
                 background: $pure-white;
                 resize: vertical;
             }
-            // 主ボタン（保存）
-            .memo-save {
+            .record-save {
                 @include button-base;
                 @include button-primary;
                 align-self: flex-end;

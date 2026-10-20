@@ -24,7 +24,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
  * Referenced in: /shop-partner/orders.<?= $pageExtension . PHP_EOL ?>
  * 編集元: /shop-partner/orders.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -299,8 +299,8 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       type="button"
                       aria-expanded="false"
                       aria-controls="order-detail-2610170112345"
-                      aria-label="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
-                      title="注文#2610170112345のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      aria-label="注文#2610170112345の詳細を開く（内容あり）"
+                      title="注文#2610170112345の詳細を開く（内容あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -360,14 +360,29 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                           </li>
                         </ul>
                       </section>
-                      <form class="memo-form" method="post" action="">
-                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
-                        <input type="hidden" name="order_id" value="2610170112345" />
-                        <!-- 複数の注文を開いても区別できるよう、読み上げ用に注文番号を補う。 -->
-                        <label for="memo-2610170112345">メモ<span class="sr-only">（注文#2610170112345）</span></label>
-                        <textarea id="memo-2610170112345" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2610170112345のメモ）</span></button>
-                      </form>
+                      <div class="detail-notes">
+                        <section class="customer-note" aria-labelledby="customer-note-2610170112345">
+                          <h4 id="customer-note-2610170112345">備考（お客様より）</h4>
+                          <p>マグカップの写真は明るめに補正をお願いします。</p>
+                        </section>
+                        <form class="cancel-record" method="post" action="" data-cancel-record hidden>
+                          <!-- name・明細ID・送信先は表示例。正式な項目名・注文の識別・保存処理はバックエンドで決める。 -->
+                          <h4>キャンセル・返品の記録</h4>
+                          <div class="record-reason">
+                            <label for="cancel-reason-2610170112345">理由・対応メモ<span class="sr-only">（注文#2610170112345）</span></label>
+                            <textarea id="cancel-reason-2610170112345" name="cancel_reason" rows="3"></textarea>
+                          </div>
+                          <div class="item-note">
+                            <label for="item-note-2610170112345-1">写真入りマグカップ<span class="sr-only">のメモ（注文#2610170112345）</span></label>
+                            <textarea id="item-note-2610170112345-1" name="item_notes[2610170112345-1]" rows="2" maxlength="100"></textarea>
+                          </div>
+                          <div class="item-note">
+                            <label for="item-note-2610170112345-2">名入れタオル<span class="sr-only">のメモ（注文#2610170112345）</span></label>
+                            <textarea id="item-note-2610170112345-2" name="item_notes[2610170112345-2]" rows="2" maxlength="100"></textarea>
+                          </div>
+                          <button class="record-save" type="submit">保存<span class="sr-only">（注文#2610170112345のキャンセル・返品の記録）</span></button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -422,21 +437,21 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                   <div class="order-progress">
                     <div class="select-customer-status" data-selectbox>
                       <button
-                        class="selectbox__head"
+                        class="selectbox__head status-return"
                         type="button"
-                        aria-label="注文#2026110300002のステータスを変更（現在：新規受付）"
+                        aria-label="注文#2026110300002のステータスを変更（現在：返品対応）"
                         aria-expanded="false"
                         aria-controls="status-panel-2026110300002"
                       >
-                        <span class="selectbox__value" data-selectbox-value>新規受付</span>
+                        <span class="selectbox__value" data-selectbox-value>返品対応</span>
                         <i aria-hidden="true"></i>
                       </button>
                       <!-- 表示例の選択値。保存・送信処理は未実装。 -->
-                      <input type="hidden" name="order-status[2026110300002]" value="1" data-selectbox-hidden />
+                      <input type="hidden" name="order-status[2026110300002]" value="4" data-selectbox-hidden />
                       <div class="list-wrapper" id="status-panel-2026110300002" hidden>
                         <ul class="selectbox__panel" role="radiogroup" aria-label="注文#2026110300002のステータス">
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300002" value="1" id="status-2026110300002-new" checked />
+                            <input type="radio" name="order-status-choice-2026110300002" value="1" id="status-2026110300002-new" />
                             <label for="status-2026110300002-new" class="status-new">新規受付</label>
                           </li>
                           <li role="presentation">
@@ -448,7 +463,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                             <label for="status-2026110300002-shipped" class="status-shipped">発送済</label>
                           </li>
                           <li role="presentation">
-                            <input type="radio" name="order-status-choice-2026110300002" value="4" id="status-2026110300002-return" />
+                            <input type="radio" name="order-status-choice-2026110300002" value="4" id="status-2026110300002-return" checked />
                             <label for="status-2026110300002-return" class="status-return">返品対応</label>
                           </li>
                           <li role="presentation">
@@ -464,8 +479,8 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       type="button"
                       aria-expanded="false"
                       aria-controls="order-detail-2026110300002"
-                      aria-label="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
-                      title="注文#2026110300002のメモ・入稿画像を開く（メモ・入稿画像あり）"
+                      aria-label="注文#2026110300002の詳細を開く（内容あり）"
+                      title="注文#2026110300002の詳細を開く（内容あり）"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -506,13 +521,25 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                           </li>
                         </ul>
                       </section>
-                      <form class="memo-form" method="post" action="">
-                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
-                        <input type="hidden" name="order_id" value="2026110300002" />
-                        <label for="memo-2026110300002">メモ<span class="sr-only">（注文#2026110300002）</span></label>
-                        <textarea id="memo-2026110300002" name="memo" rows="4">名入れの文字は「祝 還暦」で確定済み。</textarea>
-                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300002のメモ）</span></button>
-                      </form>
+                      <div class="detail-notes">
+                        <section class="customer-note" aria-labelledby="customer-note-2026110300002">
+                          <h4 id="customer-note-2026110300002">備考（お客様より）</h4>
+                          <p>名入れの文字は「祝 還暦」で確定済み。</p>
+                        </section>
+                        <form class="cancel-record" method="post" action="" data-cancel-record>
+                          <!-- name・明細ID・送信先は表示例。正式な項目名・注文の識別・保存処理はバックエンドで決める。 -->
+                          <h4>キャンセル・返品の記録</h4>
+                          <div class="record-reason">
+                            <label for="cancel-reason-2026110300002">理由・対応メモ<span class="sr-only">（注文#2026110300002）</span></label>
+                            <textarea id="cancel-reason-2026110300002" name="cancel_reason" rows="3">ラベルの印字不良のため返品対応。お客様と返送方法を確認済み。</textarea>
+                          </div>
+                          <div class="item-note">
+                            <label for="item-note-2026110300002-1">オリジナルラベルギフト<span class="sr-only">のメモ（注文#2026110300002）</span></label>
+                            <textarea id="item-note-2026110300002-1" name="item_notes[2026110300002-1]" rows="2" maxlength="100">印字部分を確認し、返品受付済み。</textarea>
+                          </div>
+                          <button class="record-save" type="submit">保存<span class="sr-only">（注文#2026110300002のキャンセル・返品の記録）</span></button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -609,8 +636,8 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                       type="button"
                       aria-expanded="false"
                       aria-controls="order-detail-2026110300003"
-                      aria-label="注文#2026110300003のメモ・入稿画像を開く"
-                      title="注文#2026110300003のメモ・入稿画像を開く"
+                      aria-label="注文#2026110300003の詳細を開く"
+                      title="注文#2026110300003の詳細を開く"
                     >
                       <svg width="22" height="18" viewBox="0 0 22 18" stroke-width="1.5" aria-hidden="true" focusable="false">
                         <rect x="1" y="1" width="20" height="16" />
@@ -621,13 +648,22 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                   </div>
                   <div class="order-detail" id="order-detail-2026110300003" inert>
                     <div class="order-detail-inner">
-                      <form class="memo-form" method="post" action="">
-                        <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
-                        <input type="hidden" name="order_id" value="2026110300003" />
-                        <label for="memo-2026110300003">メモ<span class="sr-only">（注文#2026110300003）</span></label>
-                        <textarea id="memo-2026110300003" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300003のメモ）</span></button>
-                      </form>
+                      <div class="detail-notes">
+                        <p class="detail-empty">備考・入稿画像はありません</p>
+                        <form class="cancel-record" method="post" action="" data-cancel-record hidden>
+                          <!-- name・明細ID・送信先は表示例。正式な項目名・注文の識別・保存処理はバックエンドで決める。 -->
+                          <h4>キャンセル・返品の記録</h4>
+                          <div class="record-reason">
+                            <label for="cancel-reason-2026110300003">理由・対応メモ<span class="sr-only">（注文#2026110300003）</span></label>
+                            <textarea id="cancel-reason-2026110300003" name="cancel_reason" rows="3"></textarea>
+                          </div>
+                          <div class="item-note">
+                            <label for="item-note-2026110300003-1">名入れタオル<span class="sr-only">のメモ（注文#2026110300003）</span></label>
+                            <textarea id="item-note-2026110300003-1" name="item_notes[2026110300003-1]" rows="2" maxlength="100"></textarea>
+                          </div>
+                          <button class="record-save" type="submit">保存<span class="sr-only">（注文#2026110300003のキャンセル・返品の記録）</span></button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </article>
