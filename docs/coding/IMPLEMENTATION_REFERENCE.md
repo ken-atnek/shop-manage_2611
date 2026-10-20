@@ -55,6 +55,8 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
 - バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
 
+商品フォームは`shop-partner/product-form.php`、専用Sassは`shop-partner/assets/scss/product-form.scss`→`shop-partner/assets/css/product-form.css`、固有JSは`shop-partner/assets/js/product-form.js`。JSはcommon.js→product-form.jsの順でbody末尾に読む。2-Aは食品・在庫・配送判定・クール便注意を担当し、2-Bの画像・送信・離脱制御と分ける。PHP／Bladeの販売店JSONの形と依存IDは[商品フォーム資料](../design/CLIENT_PRODUCT_FORM.md)を参照する。
+
 ## クラス名とSCSSの書き方
 
 - 既存HTMLのクラス名を優先する。`.admin-layout`・`.admin-sidebar`に加え、`.box-identity`・`.box-actions`・`.service-name`など、現在の短い名前とネストをそのまま使う
@@ -104,7 +106,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 | 商品フォーム：商品画像 | `images`（公式0.468.0版のSVG） | Client商品フォーム |
 | 商品フォーム：価格・在庫 | `japanese-yen` | Client商品フォーム |
 | 商品フォーム：配送 | `truck` | Client商品フォーム |
-| 商品フォーム：入稿 | `file-up` | Client商品フォーム |
+| 商品フォーム：注文者からのデータ入稿 | `file-up` | Client商品フォーム |
 | 商品フォーム：食品表示 | `cookie` | Client商品フォーム |
 | 商品フォーム：公開設定 | `eye` | Client商品フォーム |
 | 配送温度帯：常温 | `package` | Client商品フォーム |
@@ -114,6 +116,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 | 商品画像を後ろへ | `chevron-right` | Client商品フォーム |
 | 商品画像を削除 | `trash-2`（公式0.468.0版のSVG） | Client商品フォーム |
 | 商品フォーム：一覧へ戻る | `arrow-left` | Client商品フォーム |
+| 商品フォーム：クール便の注意 | `triangle-alert` | Client商品フォーム |
 | 商品画像の追加 | `image-up` | Client商品フォーム |
 | メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
 | 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
@@ -126,6 +129,8 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 商品画像の操作3種は2026-10-20に公式SVGを確認。 [chevron-left](https://github.com/lucide-icons/lucide/blob/main/icons/chevron-left.svg)・[chevron-right](https://github.com/lucide-icons/lucide/blob/main/icons/chevron-right.svg)はmain、[trash-2](https://github.com/lucide-icons/lucide/blob/0.468.0/icons/trash-2.svg)は公式0.468.0版を採用（mainの同名ファイルは取得できなかったため）。名前の変更なし。ボタンは44px角で、aria-labelとtitleに同じ操作名を付ける。
 
 商品フォームの戻るリンク用`arrow-left`は2026-10-20に[Lucide公式SVG](https://github.com/lucide-icons/lucide/blob/main/icons/arrow-left.svg)で存在と子要素を確認。装飾SVG＋実テキスト「一覧へ戻る」とし、a要素に副ボタンの見た目を適用する。
+
+商品フォームのクール便注意は、2026-10-20に[Lucide公式triangle-alert SVG](https://github.com/lucide-icons/lucide/blob/main/icons/triangle-alert.svg)で確認した形状を使う。SVGは装飾とし、意味は注意文で伝える。
 
 ## 制作環境と引き渡し
 
