@@ -208,7 +208,7 @@
         select {
             // エラーリンクで移動しても欄のラベル・legendが画面上端に隠れない余白。
             scroll-margin-block: 8rem 10rem;
-            &:hover:not(:disabled):not([aria-invalid="true"]) {
+            &:hover:not(:disabled):not([aria-invalid="true"]):not([type="radio"]) {
                 border-color: $color-border-hover;
             }
             &:disabled {
@@ -235,6 +235,43 @@
                 outline: none;
             }
         }
+        input[type="radio"] {
+            // Safariでも丸枠と選択点を同じ形にする。ネイティブの操作は保持。
+            -webkit-appearance: none;
+            appearance: none;
+            display: grid;
+            place-content: center;
+            width: 1.6rem;
+            height: 1.6rem;
+            padding: 0;
+            border: 1.5px solid $color-border-strong;
+            border-radius: 50%;
+            color: var(--color-brand-accent);
+            background: $pure-white;
+            &::before {
+                content: "";
+                width: 0.8rem;
+                height: 0.8rem;
+                border-radius: 50%;
+                background: currentColor;
+                transform: scale(0);
+            }
+            &[aria-invalid="true"] {
+                // エラーはカードで示し、ラジオ自身の丸枠は残す。
+                border: 1.5px solid $color-border-strong;
+            }
+            &:checked {
+                border-color: currentColor;
+                &::before {
+                    transform: scale(1);
+                }
+            }
+            &:disabled {
+                border-color: $color-border-strong;
+                color: $color-text-muted;
+                background: $color-bg-subtle;
+            }
+        }
     }
     .check-group {
         font-size: inherit;
@@ -245,7 +282,7 @@
     .form-check {
         min-height: 4.4rem;
         input {
-            // commonの入力欄用paddingを解除。ラジオ・チェックはネイティブ表示。
+            // commonの入力欄用paddingを解除。チェックはネイティブ表示を維持。
             padding: 0;
             width: 1.6rem;
             height: 1.6rem;
@@ -288,7 +325,7 @@
             outline-offset: 5px;
         }
         input:focus-visible {
-            // 枠はカード全体に出し、ラジオの選択印はネイティブのまま保つ。
+            // 枠はカード全体に出し、ラジオの丸枠・選択点と分ける。
             outline: none;
         }
     }
