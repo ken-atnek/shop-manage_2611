@@ -1,0 +1,144 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 店舗一覧 スタイル
+ * URL: /shop-partner/assets/scss/stores.scss
+ * Referenced in: /shop-partner/stores.php
+ * Created: 2026-10-20
+ * Last updated: 2026-10-20
+ * ======================================= */
+
+/* =================================
+ * 見出し・追加導線・取得失敗
+ * ------------------------------ */
+.admin-main {
+    .page-heading {
+        justify-content: space-between;
+        align-items: center;
+        @media (max-width: $tb) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+    .store-add {
+        @include button-base;
+        @include button-primary;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        text-decoration: none;
+    }
+    .list-error {
+        .message {
+            color: $color-error;
+        }
+        .error-help {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            color: $color-text-secondary;
+        }
+    }
+}
+
+/* =================================
+ * 店舗テーブル（商品一覧から転記。列幅等は調整案）
+ * ------------------------------ */
+.admin-main {
+    .stores-scroll {
+        font-size: inherit;
+        width: 100%;
+    }
+    .stores-table {
+        font-size: inherit;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+            font-size: inherit;
+        }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            text-align: left;
+            &:not(:first-child) {
+                border-left: 1px solid $color-border-inner;
+            }
+        }
+        th {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+            background: $color-bg-head;
+        }
+        td {
+            border-top: 1px solid $color-border-inner;
+        }
+        tbody tr:hover {
+            background: $color-bg-detail;
+        }
+        .store-name {
+            overflow-wrap: anywhere;
+        }
+        .store-carrier {
+            width: 12rem;
+            overflow-wrap: anywhere;
+        }
+        .store-shipping {
+            width: 11rem;
+            white-space: nowrap;
+        }
+        .store-products {
+            width: 8rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .store-updated {
+            width: 11rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            time {
+                font-size: fz(14);
+                span {
+                    font-size: inherit;
+                    display: block;
+                }
+            }
+        }
+        .store-edit {
+            width: 6.4rem;
+            text-align: center;
+        }
+        .edit-link {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            color: $color-text-secondary;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            transition:
+                color $transition-base,
+                background-color $transition-base,
+                border-color $transition-base;
+            &:hover {
+                color: $color-text-primary;
+                background: $pure-white;
+                border-color: $color-border-card;
+            }
+        }
+    }
+}
