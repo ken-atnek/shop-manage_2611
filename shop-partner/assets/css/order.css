@@ -767,11 +767,20 @@
   font-weight: 500;
   overflow-wrap: anywhere;
 }
+.admin-main .order-card .order-detail .cancel-record .item-note label {
+  font-size: max(12px, 0.875em);
+  padding-top: calc(1.2rem + 1px);
+}
+@media (max-width: 834px) and (orientation: portrait) {
+  .admin-main .order-card .order-detail .cancel-record .item-note label {
+    padding-top: 0;
+  }
+}
 .admin-main .order-card .order-detail .cancel-record textarea {
   font-size: 1.6rem;
   width: 100%;
   min-width: 0;
-  padding: 1.2rem;
+  padding: var(--textarea-padding-block);
   border: 1px solid #d9dde2;
   border-radius: 4px;
   color: #22272e;

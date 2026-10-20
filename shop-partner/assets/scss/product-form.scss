@@ -176,18 +176,30 @@
             display: block;
             width: 100%;
             min-width: 0;
-            min-height: 4.4rem;
             padding: 1rem 1.6rem;
             border: 1px solid $color-border-default;
             border-radius: $radius-sm;
             color: $color-text-primary;
             background: $pure-white;
         }
+        // 高さはcommon.scssの共通指定（内容に合わせて伸ばす）。行数・余白だけ変える。
         textarea {
+            --textarea-min-lines: 3;
+            --textarea-padding-block: 1rem;
             line-height: 1.7;
             resize: vertical;
         }
+        // 商品説明は長文になるため、4行から始めて20行まで伸ばす。
+        #product-description {
+            --textarea-min-lines: 4;
+            --textarea-max-lines: 20;
+        }
+        #food-label {
+            --textarea-min-lines: 8;
+            --textarea-max-lines: 20;
+        }
         select {
+            min-height: 4.4rem;
             appearance: auto;
             padding-right: 3.2rem;
         }
@@ -196,7 +208,7 @@
         select {
             // エラーリンクで移動しても欄のラベル・legendが画面上端に隠れない余白。
             scroll-margin-block: 8rem 10rem;
-            &:hover:not(:disabled):not([aria-invalid="true"]) {
+            &:hover:not(:disabled):not([aria-invalid="true"]):not([type="radio"]) {
                 border-color: $color-border-hover;
             }
             &:disabled {
@@ -223,6 +235,43 @@
                 outline: none;
             }
         }
+        input[type="radio"] {
+            // Safariでも丸枠と選択点を同じ形にする。ネイティブの操作は保持。
+            -webkit-appearance: none;
+            appearance: none;
+            display: grid;
+            place-content: center;
+            width: 1.6rem;
+            height: 1.6rem;
+            padding: 0;
+            border: 1.5px solid $color-border-strong;
+            border-radius: 50%;
+            color: var(--color-brand-accent);
+            background: $pure-white;
+            &::before {
+                content: "";
+                width: 0.8rem;
+                height: 0.8rem;
+                border-radius: 50%;
+                background: currentColor;
+                transform: scale(0);
+            }
+            &[aria-invalid="true"] {
+                // エラーはカードで示し、ラジオ自身の丸枠は残す。
+                border: 1.5px solid $color-border-strong;
+            }
+            &:checked {
+                border-color: currentColor;
+                &::before {
+                    transform: scale(1);
+                }
+            }
+            &:disabled {
+                border-color: $color-border-strong;
+                color: $color-text-muted;
+                background: $color-bg-subtle;
+            }
+        }
     }
     .check-group {
         font-size: inherit;
@@ -233,7 +282,7 @@
     .form-check {
         min-height: 4.4rem;
         input {
-            // commonの入力欄用paddingを解除。ラジオ・チェックはネイティブ表示。
+            // commonの入力欄用paddingを解除。チェックはネイティブ表示を維持。
             padding: 0;
             width: 1.6rem;
             height: 1.6rem;
@@ -276,7 +325,7 @@
             outline-offset: 5px;
         }
         input:focus-visible {
-            // 枠はカード全体に出し、ラジオの選択印はネイティブのまま保つ。
+            // 枠はカード全体に出し、ラジオの丸枠・選択点と分ける。
             outline: none;
         }
     }
@@ -334,6 +383,26 @@
         font-variant-numeric: tabular-nums;
         line-height: 1.7;
     }
+    .shipping-warning,
+    .tax-warning {
+        font-size: fz(14);
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        max-width: 72rem;
+        margin-top: 1.2rem;
+        padding: 1.2rem 1.6rem;
+        border: 1px solid $color-border-strong;
+        background: $color-bg-subtle;
+        line-height: 1.7;
+        svg {
+            flex: 0 0 2rem;
+            color: var(--color-brand-accent);
+        }
+        &[hidden] {
+            display: none;
+        }
+    }
     .price-input {
         font-size: inherit;
         display: flex;
@@ -345,8 +414,7 @@
             max-width: 100%;
         }
     }
-    .stock-check,
-    .expiry-text-label {
+    .stock-check {
         margin-top: 1.2rem;
     }
     .upload-field .form-help {
@@ -377,22 +445,45 @@
             font-weight: 500;
         }
     }
-    .nutrition-fields {
-        font-size: inherit;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(14rem, 18rem));
-        gap: 1.6rem;
-        div {
+    .food-label-example {
+        font-size: fz(14);
+        margin-top: 0.8rem;
+        line-height: 1.7;
+        summary {
             font-size: inherit;
+            width: fit-content;
+            max-width: 100%;
+            min-height: 4.4rem;
+            padding-block: 1rem;
+            color: var(--color-brand-accent);
+            list-style-position: inside;
+            cursor: pointer;
+        }
+        p {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            padding: 1.2rem 1.6rem;
+            background: $color-bg-subtle;
         }
     }
 }
 
 /* =================================
- * 商品画像（操作の実装は2回目）
+ * 商品画像（追加・並べ替え・削除）
  * ------------------------------ */
 .product-form {
+    #product-images-row[hidden],
+    .main-image-label[hidden] {
+        display: none;
+    }
+    #product-images-row[hidden] + .form-field {
+        margin-top: 0;
+    }
+    .image-status:empty {
+        display: none;
+    }
     .image-dropzone {
+        font-size: inherit;
         position: relative;
         padding: 2.4rem;
         text-align: center;
@@ -401,6 +492,10 @@
         background: $color-bg-subtle;
         &:hover {
             border-color: var(--color-brand-accent);
+        }
+        &.is-dragover {
+            border-color: var(--color-brand-accent);
+            background: var(--color-brand-subtle);
         }
         &:has(:focus-visible) {
             outline: 3px solid var(--color-brand-accent);

@@ -207,7 +207,6 @@
   display: block;
   width: 100%;
   min-width: 0;
-  min-height: 4.4rem;
   padding: 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
@@ -215,10 +214,21 @@
   background: #fff;
 }
 .product-form .form-field textarea {
+  --textarea-min-lines: 3;
+  --textarea-padding-block: 1rem;
   line-height: 1.7;
   resize: vertical;
 }
+.product-form .form-field #product-description {
+  --textarea-min-lines: 4;
+  --textarea-max-lines: 20;
+}
+.product-form .form-field #food-label {
+  --textarea-min-lines: 8;
+  --textarea-max-lines: 20;
+}
 .product-form .form-field select {
+  min-height: 4.4rem;
   appearance: auto;
   padding-right: 3.2rem;
 }
@@ -227,9 +237,9 @@
 .product-form .form-field select {
   scroll-margin-block: 8rem 10rem;
 }
-.product-form .form-field input:hover:not(:disabled):not([aria-invalid=true]),
-.product-form .form-field textarea:hover:not(:disabled):not([aria-invalid=true]),
-.product-form .form-field select:hover:not(:disabled):not([aria-invalid=true]) {
+.product-form .form-field input:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]),
+.product-form .form-field textarea:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]),
+.product-form .form-field select:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]) {
   border-color: #8a929c;
 }
 .product-form .form-field input:disabled,
@@ -260,6 +270,41 @@
 .product-form .form-field input[type=radio][aria-invalid=true]:not(:focus-visible),
 .product-form .form-field input[type=checkbox][aria-invalid=true]:not(:focus-visible) {
   outline: none;
+}
+.product-form .form-field input[type=radio] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 1.5px solid #aeb5be;
+  border-radius: 50%;
+  color: var(--color-brand-accent);
+  background: #fff;
+}
+.product-form .form-field input[type=radio]::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: currentColor;
+  transform: scale(0);
+}
+.product-form .form-field input[type=radio][aria-invalid=true] {
+  border: 1.5px solid #aeb5be;
+}
+.product-form .form-field input[type=radio]:checked {
+  border-color: currentColor;
+}
+.product-form .form-field input[type=radio]:checked::before {
+  transform: scale(1);
+}
+.product-form .form-field input[type=radio]:disabled {
+  border-color: #aeb5be;
+  color: #737b86;
+  background: #f6f7f8;
 }
 .product-form .check-group {
   font-size: inherit;
@@ -368,6 +413,28 @@
   font-variant-numeric: tabular-nums;
   line-height: 1.7;
 }
+.product-form .shipping-warning,
+.product-form .tax-warning {
+  font-size: max(12px, 0.875em);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  max-width: 72rem;
+  margin-top: 1.2rem;
+  padding: 1.2rem 1.6rem;
+  border: 1px solid #aeb5be;
+  background: #f6f7f8;
+  line-height: 1.7;
+}
+.product-form .shipping-warning svg,
+.product-form .tax-warning svg {
+  flex: 0 0 2rem;
+  color: var(--color-brand-accent);
+}
+.product-form .shipping-warning[hidden],
+.product-form .tax-warning[hidden] {
+  display: none;
+}
 .product-form .price-input {
   font-size: inherit;
   display: flex;
@@ -379,8 +446,7 @@
   width: 18rem;
   max-width: 100%;
 }
-.product-form .stock-check,
-.product-form .expiry-text-label {
+.product-form .stock-check {
   margin-top: 1.2rem;
 }
 .product-form .upload-field .form-help {
@@ -409,20 +475,43 @@
   font-size: max(12px, 0.875em);
   font-weight: 500;
 }
-.product-form .nutrition-fields {
-  font-size: inherit;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 18rem));
-  gap: 1.6rem;
+.product-form .food-label-example {
+  font-size: max(12px, 0.875em);
+  margin-top: 0.8rem;
+  line-height: 1.7;
 }
-.product-form .nutrition-fields div {
+.product-form .food-label-example summary {
   font-size: inherit;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 4.4rem;
+  padding-block: 1rem;
+  color: var(--color-brand-accent);
+  list-style-position: inside;
+  cursor: pointer;
+}
+.product-form .food-label-example p {
+  font-size: inherit;
+  margin-top: 0.8rem;
+  padding: 1.2rem 1.6rem;
+  background: #f6f7f8;
 }
 
 /* =================================
- * 商品画像（操作の実装は2回目）
+ * 商品画像（追加・並べ替え・削除）
  * ------------------------------ */
+.product-form #product-images-row[hidden],
+.product-form .main-image-label[hidden] {
+  display: none;
+}
+.product-form #product-images-row[hidden] + .form-field {
+  margin-top: 0;
+}
+.product-form .image-status:empty {
+  display: none;
+}
 .product-form .image-dropzone {
+  font-size: inherit;
   position: relative;
   padding: 2.4rem;
   text-align: center;
@@ -432,6 +521,10 @@
 }
 .product-form .image-dropzone:hover {
   border-color: var(--color-brand-accent);
+}
+.product-form .image-dropzone.is-dragover {
+  border-color: var(--color-brand-accent);
+  background: var(--color-brand-subtle);
 }
 .product-form .image-dropzone:has(:focus-visible) {
   outline: 3px solid var(--color-brand-accent);

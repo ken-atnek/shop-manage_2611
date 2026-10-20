@@ -55,6 +55,8 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
 - バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
 
+商品フォームは`shop-partner/product-form.php`、専用Sassは`shop-partner/assets/scss/product-form.scss`→`shop-partner/assets/css/product-form.css`、固有JSは`shop-partner/assets/js/product-form.js`。JSはcommon.js→product-form.jsの順でbody末尾に読む。2-Aは食品・在庫・配送判定・クール便注意を担当し、2-Bの画像・送信・離脱制御と分ける。PHP／Bladeの販売店JSONの形と依存IDは[商品フォーム資料](../design/CLIENT_PRODUCT_FORM.md)を参照する。
+
 ## クラス名とSCSSの書き方
 
 - 既存HTMLのクラス名を優先する。`.admin-layout`・`.admin-sidebar`に加え、`.box-identity`・`.box-actions`・`.service-name`など、現在の短い名前とネストをそのまま使う
@@ -65,6 +67,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
 - 例外として、入力欄（`input`・`textarea`）の文字は`1.6rem`（16px）固定とする。16px未満だとiOSのSafariがフォーカス時に画面を拡大するため
+- `textarea`には`rows`を書かない。高さは`common.scss`の共通指定（`field-sizing: content`で入力に合わせて伸ばす、最小2行・最大10行）に任せ、欄ごとの行数は`--textarea-min-lines`・`--textarea-max-lines`、上下の余白は`--textarea-padding-block`で変える。余白を`padding`で指定するときは`--textarea-padding-block`と同じ値にする（最小・最大の高さの計算に使うため）。`field-sizing`未対応の環境では既定の2行＋欄内スクロールになる
 - ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
 - アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
@@ -103,7 +106,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 | 商品フォーム：商品画像 | `images`（公式0.468.0版のSVG） | Client商品フォーム |
 | 商品フォーム：価格・在庫 | `japanese-yen` | Client商品フォーム |
 | 商品フォーム：配送 | `truck` | Client商品フォーム |
-| 商品フォーム：入稿 | `file-up` | Client商品フォーム |
+| 商品フォーム：注文者からのデータ入稿 | `file-up` | Client商品フォーム |
 | 商品フォーム：食品表示 | `cookie` | Client商品フォーム |
 | 商品フォーム：公開設定 | `eye` | Client商品フォーム |
 | 配送温度帯：常温 | `package` | Client商品フォーム |
@@ -113,6 +116,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 | 商品画像を後ろへ | `chevron-right` | Client商品フォーム |
 | 商品画像を削除 | `trash-2`（公式0.468.0版のSVG） | Client商品フォーム |
 | 商品フォーム：一覧へ戻る | `arrow-left` | Client商品フォーム |
+| 商品フォーム：クール便の注意 | `triangle-alert` | Client商品フォーム |
 | 商品画像の追加 | `image-up` | Client商品フォーム |
 | メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
 | 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
@@ -126,6 +130,8 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 
 商品フォームの戻るリンク用`arrow-left`は2026-10-20に[Lucide公式SVG](https://github.com/lucide-icons/lucide/blob/main/icons/arrow-left.svg)で存在と子要素を確認。装飾SVG＋実テキスト「一覧へ戻る」とし、a要素に副ボタンの見た目を適用する。
 
+商品フォームのクール便注意は、2026-10-20に[Lucide公式triangle-alert SVG](https://github.com/lucide-icons/lucide/blob/main/icons/triangle-alert.svg)で確認した形状を使う。SVGは装飾とし、意味は注意文で伝える。
+
 ## 制作環境と引き渡し
 
 - Sassの編集元、出力先、npmコマンドは`docs/SPEC.md`の「フォルダとSass」を参照する
@@ -133,7 +139,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
-- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)の申し送りで確認する
+- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)・[商品フォーム](HANDOFF_CLIENT_PRODUCT_FORM.md)の申し送りで確認する
 
 ## HTML要素の考え方
 

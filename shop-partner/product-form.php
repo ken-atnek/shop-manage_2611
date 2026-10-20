@@ -9,9 +9,13 @@ if ($staticExport ?? false) {
 }
 $isErrorState = $previewState === 'error';
 $isNewState = $previewState === 'new' || $isErrorState;
-$isFoodState = $previewState === 'food' || $isErrorState;
+$isFoodTaxWarningState = $previewState === 'food-tax-warning';
+$isFoodState = $previewState === 'food' || $isFoodTaxWarningState || $isErrorState;
 $isSavedState = $previewState === 'saved';
 $isRegisteredState = $previewState === 'registered';
+$isCoolWarningState = $previewState === 'cool-warning';
+$isNoSizeStoreState = $previewState === 'no-size-store';
+$isFrozenYupackState = $previewState === 'frozen-yupack';
 $currentPage = $isNewState ? 'product-new' : 'products';
 $pageTitle = $isNewState ? '商品登録' : '商品編集';
 
@@ -19,9 +23,58 @@ $pageTitle = $isNewState ? '商品登録' : '商品編集';
 // foodは食品入力欄の確認用に商品名等を差し替える。errorは新規入力途中の値の保持例。
 $productName = $isNewState ? '' : ($isFoodState ? '熊本の焼き菓子詰め合わせ' : '写真入りマグカップ');
 $productDescription = $previewState === 'new' ? '' : ($isFoodState ? '熊本の素材を使った焼き菓子を詰め合わせました。' : 'お気に入りの写真でつくるオリジナルマグカップです。贈り物にもおすすめです。');
-$productPrice = $previewState === 'new' ? '' : '2800';
+$productPrice = $isNewState ? '' : '2800';
 $productStock = $previewState === 'new' ? '' : '24';
-$taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
+$taxRate = ($isNewState || $isFoodTaxWarningState) ? '10' : ($isFoodState ? '8' : '10');
+$showFoodTaxWarning = $isFoodState && $taxRate === '10';
+// 食品表示の保存値を想定した表示例。販売店からのひな形挿入は別途仕様決定後に検討する。
+$foodLabelExample = "名称：焼き菓子\n原材料名：小麦粉（国内製造）、砂糖、バター、卵\n内容量：12個\n賞味期限：製造日より30日\n保存方法：直射日光・高温多湿を避けて保存\n製造者：〇〇";
+
+// 運送会社の規格は販売店画面と同じファイルを読む。規格の正はdocs/SPEC.md。
+$carriers = require __DIR__ . '/includes/data_carriers.php';
+// 販売店・配送は制作確認用。Bladeでは同じJSONの形で実データを出す。
+// coolSurchargeSetは空欄=false、0円も含む設定あり=true。実額は判定には渡さない。
+$storeShippingData = [
+    '1' => [
+        'name' => '熊日モール サンプル販売店',
+        'carrierId' => 'yamato',
+        'sizeBased' => true,
+        'usedSizes' => [60, 80, 100, 120, 140, 160],
+        'coolSurchargeSetBySize' => [60 => true, 80 => true, 100 => true, 120 => true, 140 => true, 160 => true],
+        'coolSurchargeSet' => false, // サイズ別なしの場合だけ参照する。
+    ],
+    '2' => [
+        'name' => '熊本ギフト サンプル販売店',
+        'carrierId' => 'yupack',
+        'sizeBased' => false,
+        'usedSizes' => [],
+        'coolSurchargeSetBySize' => (object) [],
+        'coolSurchargeSet' => true,
+    ],
+];
+foreach ($storeShippingData as &$storeShipping) {
+    $storeShipping['carrier'] = $carriers[$storeShipping['carrierId']];
+}
+unset($storeShipping);
+$selectedStoreId = $previewState === 'new' ? '' : (($isNoSizeStoreState || $isFrozenYupackState) ? '2' : '1');
+$temperature = $isCoolWarningState ? 'cold' : ($isFrozenYupackState ? 'frozen' : 'normal');
+$packingValues = $previewState === 'new'
+    ? ['length' => '', 'width' => '', 'height' => '', 'weight' => '']
+    : ['length' => '20', 'width' => '20', 'height' => '15', 'weight' => '0.8'];
+if ($isCoolWarningState) {
+    $packingValues = ['length' => '40', 'width' => '40', 'height' => '45', 'weight' => '3'];
+}
+// 初期HTMLの表示例。読み込み時にJSが実際の現在値で判定し直す。Bladeへpreview分岐は移さない。
+$sizeResultExample = $selectedStoreId === '' ? '販売店を選ぶと判定します' : (
+    $isCoolWarningState ? '判定：140サイズ（3辺合計125cm・3kg）' : (
+        ($isNoSizeStoreState || $isFrozenYupackState) ? 'この販売店はサイズ別の送料を使いません（3辺合計55cm・0.8kg）' : '判定：60サイズ（3辺合計55cm・0.8kg）'
+    )
+);
+
+$coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3辺合計120cm・15kgまでです' : (
+    $isFrozenYupackState ? 'この販売店の運送会社（ゆうパック）は冷凍に対応していません' : ''
+);
+
 ?>
 <!doctype html>
 <!-- =======================================
@@ -78,19 +131,19 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
           <p class="save-status" role="status"><?= $isRegisteredState ? '商品を登録しました' : '保存しました' ?></p>
         <?php endif; ?>
         <?php if ($isErrorState): ?>
-          <!-- 自動フォーカスは2回目。ここではエラー結果の表示とページ内リンクだけを確認する。 -->
+          <!-- 表示時にproduct-form.jsがエラーのまとめへフォーカスを移す。 -->
           <section class="error-summary" id="product-errors" aria-labelledby="product-errors-heading" tabindex="-1">
             <h2 id="product-errors-heading">入力内容を確認してください（3件）</h2>
             <ul>
               <li><a href="#product-name">商品名を入力してください</a></li>
-              <li><a href="#product-tax-8">消費税率を選択してください</a></li>
-              <li><a href="#food-ingredients">原材料名を入力してください</a></li>
+              <li><a href="#product-price">価格を入力してください</a></li>
+              <li><a href="#food-label">食品表示を入力してください</a></li>
             </ul>
           </section>
         <?php endif; ?>
 
-        <!-- action・name・valueは制作例。POST処理・保存・検証・画像転送は実装しない。 -->
-        <form class="product-form" method="post" action="#" novalidate>
+        <!-- action・name・valueは制作例。画像も保存時のPOSTへ含める仮決め。保存・検証処理はバックエンドが組み込む。 -->
+        <form class="product-form" method="post" action="#" enctype="multipart/form-data" novalidate>
           <section class="form-box" aria-labelledby="basic-heading">
             <h2 id="basic-heading"><span class="heading-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" />
   <path d="M12 16v-4" />
@@ -99,9 +152,9 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <label class="form-label" for="product-store">販売店 <span class="required-label">必須</span></label>
               <div class="field-control field-medium">
                 <select id="product-store" name="store_id" aria-required="true">
-                  <option value=""<?= $previewState === 'new' ? ' selected' : '' ?>>選択してください</option>
-                  <option value="1"<?= $previewState !== 'new' ? ' selected' : '' ?>>熊日モール サンプル販売店</option>
-                  <option value="2">熊本ギフト サンプル販売店</option>
+                  <option value=""<?= $selectedStoreId === '' ? ' selected' : '' ?>>選択してください</option>
+                  <option value="1"<?= $selectedStoreId === '1' ? ' selected' : '' ?>>熊日モール サンプル販売店</option>
+                  <option value="2"<?= $selectedStoreId === '2' ? ' selected' : '' ?>>熊本ギフト サンプル販売店</option>
                 </select>
               </div>
             </div>
@@ -117,7 +170,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <div class="form-field form-row">
               <label class="form-label" for="product-description">商品説明</label>
               <div class="field-control field-wide">
-                <textarea id="product-description" name="description" rows="4"><?= htmlspecialchars($productDescription, ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea id="product-description" name="description"><?= htmlspecialchars($productDescription, ENT_QUOTES, 'UTF-8') ?></textarea>
               </div>
             </div>
           </section>
@@ -127,41 +180,60 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
   <path d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18" />
   <circle cx="12" cy="8" r="2" />
   <rect width="16" height="16" x="6" y="2" rx="2" /></svg></span>商品画像</h2>
-            <!-- 新規は画像なし、ほかの状態は3枚の表示例。画像操作は2回目。 -->
-            <?php if ($previewState !== 'new'): ?>
-              <div class="form-field form-row">
+            <!-- 既存画像のIDも制作例。Bladeでは保存済みIDへ置き換える。新規も追加先の一覧を残す。 -->
+              <div class="form-field form-row" id="product-images-row"<?= $previewState === 'new' ? ' hidden' : '' ?>>
                 <p class="form-label" id="registered-images-label">登録済みの画像</p>
                 <div class="field-control field-wide">
-                  <ol class="product-images" aria-labelledby="registered-images-label">
+                  <ol class="product-images" id="product-image-list" aria-labelledby="registered-images-label">
+                    <?php if ($previewState !== 'new'): ?>
                     <?php foreach (['photo_01.jpg', 'photo_02.jpg', 'photo_01.jpg'] as $imageIndex => $imageFile): ?>
-                      <li>
+                      <li data-image-key="existing:<?= 101 + $imageIndex ?>">
+                        <input type="hidden" name="image_order[]" value="existing:<?= 101 + $imageIndex ?>" />
                         <div class="image-preview">
                           <img src="assets/images/sample/<?= $imageFile ?>" width="160" height="160" alt="商品画像<?= $imageIndex + 1 ?>" />
                           <?php if ($imageIndex === 0): ?><span class="main-image-label">メイン</span><?php endif; ?>
                         </div>
                         <div class="image-actions">
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を前へ" title="商品画像<?= $imageIndex + 1 ?>を前へ"<?= $imageIndex === 0 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を後ろへ" title="商品画像<?= $imageIndex + 1 ?>を後ろへ"<?= $imageIndex === 2 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
-                          <button type="button" aria-label="商品画像<?= $imageIndex + 1 ?>を削除" title="商品画像<?= $imageIndex + 1 ?>を削除"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
+                          <button type="button" data-image-action="previous" aria-label="商品画像<?= $imageIndex + 1 ?>を前へ" title="商品画像<?= $imageIndex + 1 ?>を前へ"<?= $imageIndex === 0 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+                          <button type="button" data-image-action="next" aria-label="商品画像<?= $imageIndex + 1 ?>を後ろへ" title="商品画像<?= $imageIndex + 1 ?>を後ろへ"<?= $imageIndex === 2 ? ' disabled' : '' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+                          <button type="button" data-image-action="delete" aria-label="商品画像<?= $imageIndex + 1 ?>を削除" title="商品画像<?= $imageIndex + 1 ?>を削除"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
                         </div>
                       </li>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                   </ol>
                 </div>
               </div>
-            <?php endif; ?>
-            <!-- ドロップ領域の外観だけを制作。ドラッグによる追加は2回目。 -->
             <div class="form-field form-row">
               <p class="form-label">画像を追加</p>
-              <div class="field-control field-wide image-dropzone">
+              <div class="field-control field-wide">
+                <div class="image-dropzone" id="product-image-dropzone">
                 <div class="image-drop-label" id="image-drop-help"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
     <path d="m14 19.5 3-3 3 3" />
     <path d="M17 22v-5.5" />
     <circle cx="9" cy="9" r="2" /></svg><span>ここに画像をドラッグ、またはクリックして選択</span></div>
-                <input type="file" id="product-images" name="images[]" aria-describedby="image-drop-help" multiple />
+                <input type="file" id="product-images" name="images[]" aria-describedby="image-drop-help image-status" multiple />
                 <label class="image-select-button" for="product-images">ファイルを選択</label>
+                </div>
+                <p class="form-help image-status" id="image-status" aria-live="polite" aria-atomic="true"></p>
               </div>
             </div>
+            <div id="image-delete-fields" hidden></div>
+            <!-- 新規画像用。既存画像と同じボタン・SVGを使い、番号と状態はJSで付ける。 -->
+            <template id="product-image-template">
+              <li data-image-key="">
+                <input type="hidden" name="image_order[]" value="" />
+                <div class="image-preview">
+                  <img width="160" height="160" alt="" />
+                  <span class="main-image-label" hidden>メイン</span>
+                </div>
+                <div class="image-actions">
+                  <button type="button" data-image-action="previous"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+                  <button type="button" data-image-action="next"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+                  <button type="button" data-image-action="delete"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg></button>
+                </div>
+              </li>
+            </template>
           </section>
 
           <section class="form-box" aria-labelledby="price-heading">
@@ -172,22 +244,24 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <label class="form-label" for="product-price">価格（税込） <span class="required-label">必須</span></label>
               <div class="field-control">
                 <div class="price-input">
-                  <input type="text" inputmode="numeric" id="product-price" name="price" value="<?= $productPrice ?>" aria-required="true" />
+                  <input type="text" inputmode="numeric" id="product-price" name="price" value="<?= $productPrice ?>" aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="product-price-error"' : '' ?> />
                   <span>円（税込）</span>
                 </div>
+                <?php if ($isErrorState): ?>
+                  <p class="form-error" id="product-price-error">価格を入力してください</p>
+                <?php endif; ?>
               </div>
             </div>
             <fieldset class="form-field form-row">
               <legend class="form-label" id="tax-label">消費税率 <span class="required-label">必須</span></legend>
               <div class="field-control">
                 <div class="check-group choice-cards">
-                  <label class="form-check choice-card" for="product-tax-8"><input type="radio" id="product-tax-8" name="tax_rate" value="8"<?= $taxRate === '8' ? ' checked' : '' ?><?= $isErrorState ? ' aria-invalid="true" aria-describedby="tax-help product-tax-error"' : '' ?> /><span>8%（軽減税率）</span></label>
-                  <label class="form-check choice-card" for="product-tax-10"><input type="radio" id="product-tax-10" name="tax_rate" value="10"<?= $taxRate === '10' ? ' checked' : '' ?><?= $isErrorState ? ' aria-invalid="true" aria-describedby="tax-help product-tax-error"' : '' ?> /><span>10%（標準税率）</span></label>
+                  <label class="form-check choice-card" for="product-tax-8"><input type="radio" id="product-tax-8" name="tax_rate" value="8"<?= $taxRate === '8' ? ' checked' : '' ?> aria-describedby="tax-warning" /><span>8%（軽減税率）</span></label>
+                  <label class="form-check choice-card" for="product-tax-10"><input type="radio" id="product-tax-10" name="tax_rate" value="10"<?= $taxRate === '10' ? ' checked' : '' ?> aria-describedby="tax-warning" /><span>10%（標準税率）</span></label>
                 </div>
-                <p class="form-help" id="tax-help">食品は通常8%です</p>
-                <?php if ($isErrorState): ?>
-                  <p class="form-error" id="product-tax-error">消費税率を選択してください</p>
-                <?php endif; ?>
+                <div id="tax-warning" aria-live="polite" aria-atomic="true">
+                  <p class="tax-warning"<?= $showFoodTaxWarning ? '' : ' hidden' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg><span data-tax-warning-text><?= $showFoodTaxWarning ? '食品は通常8%です。税率を確認してください' : '' ?></span></p>
+                </div>
               </div>
             </fieldset>
             <div class="form-field form-row">
@@ -209,12 +283,12 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <legend class="form-label" id="temperature-label">配送温度帯 <span class="required-label">必須</span></legend>
               <div class="field-control">
                 <div class="check-group choice-cards">
-                  <label class="form-check choice-card" for="temperature-normal"><input type="radio" id="temperature-normal" name="temperature" value="normal" checked /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+                  <label class="form-check choice-card" for="temperature-normal"><input type="radio" id="temperature-normal" name="temperature" value="normal" aria-describedby="cool-warning"<?= $temperature === 'normal' ? ' checked' : '' ?> /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
     <path d="M12 22V12" />
     <polyline points="3.29 7 12 12 20.71 7" />
     <path d="m7.5 4.27 9 5.15" /></svg></span><span>常温</span></span></label>
-                  <label class="form-check choice-card" for="temperature-cold"><input type="radio" id="temperature-cold" name="temperature" value="cold" /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg></span><span>冷蔵</span></span></label>
-                  <label class="form-check choice-card" for="temperature-frozen"><input type="radio" id="temperature-frozen" name="temperature" value="frozen" /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m10 20-1.25-2.5L6 18" />
+                  <label class="form-check choice-card" for="temperature-cold"><input type="radio" id="temperature-cold" name="temperature" value="cold" aria-describedby="cool-warning"<?= $temperature === 'cold' ? ' checked' : '' ?> /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg></span><span>冷蔵</span></span></label>
+                  <label class="form-check choice-card" for="temperature-frozen"><input type="radio" id="temperature-frozen" name="temperature" value="frozen" aria-describedby="cool-warning"<?= $temperature === 'frozen' ? ' checked' : '' ?> /><span class="choice-content"><span class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m10 20-1.25-2.5L6 18" />
     <path d="M10 4 8.75 6.5 6 6" />
     <path d="m14 20 1.25-2.5L18 18" />
     <path d="m14 4 1.25 2.5L18 6" />
@@ -227,6 +301,9 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
     <path d="m7 21 3-6-1.5-3" />
     <path d="m7 3 3 6h4" /></svg></span><span>冷凍</span></span></label>
                 </div>
+                <div id="cool-warning" aria-live="polite" aria-atomic="true">
+                  <p class="shipping-warning"<?= $coolWarningExample !== '' ? '' : ' hidden' ?>><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg><span data-cool-warning-text><?= htmlspecialchars($coolWarningExample, ENT_QUOTES, 'UTF-8') ?></span></p>
+                </div>
               </div>
             </fieldset>
             <fieldset class="form-field form-row">
@@ -234,18 +311,18 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <div class="field-control">
                 <p class="form-help packing-help" id="packing-help">梱包したときの大きさと重さを入力してください</p>
                 <div class="packing-fields">
-                  <?php foreach (['length' => ['縦', 'cm', '20'], 'width' => ['横', 'cm', '20'], 'height' => ['高さ', 'cm', '15'], 'weight' => ['重さ', 'kg', '0.8']] as $packingKey => $packing): ?>
+                  <?php foreach (['length' => ['縦', 'cm'], 'width' => ['横', 'cm'], 'height' => ['高さ', 'cm'], 'weight' => ['重さ', 'kg']] as $packingKey => $packing): ?>
                     <div class="packing-field">
                       <label class="form-label" for="packing-<?= $packingKey ?>"><?= $packing[0] ?><span class="sr-only">（<?= $packing[1] ?>）</span></label>
                       <div class="unit-input">
-                        <input type="text" inputmode="decimal" id="packing-<?= $packingKey ?>" name="packing[<?= $packingKey ?>]" value="<?= $previewState === 'new' ? '' : $packing[2] ?>" aria-describedby="packing-help" />
+                        <input type="text" inputmode="decimal" id="packing-<?= $packingKey ?>" name="packing[<?= $packingKey ?>]" value="<?= $packingValues[$packingKey] ?>" aria-describedby="packing-help" />
                         <span aria-hidden="true"><?= $packing[1] ?></span>
                       </div>
                     </div>
                   <?php endforeach; ?>
                 </div>
-                <!-- 計算しない固定の表示例。サイズ自動判定・販売店連動・クール便の注意は2回目。 -->
-                <p class="size-result"><?= $previewState === 'new' ? '縦・横・高さ・重さを入力すると判定します' : '判定：60サイズ（3辺合計55cm・0.8kg）' ?></p>
+                <!-- 初期表示例。2-AのJSで入力・販売店・温度帯に合わせて更新する。 -->
+                <p class="size-result" id="shipping-size-result" aria-live="polite" aria-atomic="true"><?= $sizeResultExample ?></p>
               </div>
             </fieldset>
           </section>
@@ -254,7 +331,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <h2 id="upload-heading"><span class="heading-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
   <path d="M14 2v5a1 1 0 0 0 1 1h5" />
   <path d="M12 12v6" />
-  <path d="m15 15-3-3-3 3" /></svg></span>入稿</h2>
+  <path d="m15 15-3-3-3 3" /></svg></span>注文者からのデータ入稿</h2>
             <div class="form-field form-row upload-field">
               <p class="form-label">入稿</p>
               <div class="field-control">
@@ -276,26 +353,25 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
   <path d="M7 14h.01" />
   <path d="M9 8h.01" /></svg></span>商品仕様（食品表示）</h2>
             <div class="form-field form-row">
-              <p class="form-label">食品表示</p>
+              <p class="form-label">食品</p>
               <div class="field-control">
                 <label class="form-check" for="product-food"><input type="checkbox" id="product-food" name="is_food" value="1" aria-controls="food-fields"<?= $isFoodState ? ' checked' : '' ?> /><span>この商品は食品です</span></label>
               </div>
             </div>
-            <!-- 1回目はPHPで状態を出す。チェック操作による切り替えは2回目のproduct-form.js（仮名）。toggleAccordionは使用しない。 -->
+            <!-- 初期状態はPHPで出す。2-Aのproduct-form.jsでdisabled・hiddenを同期し、入力値を保持する。 -->
             <fieldset class="food-fields" id="food-fields"<?= $isFoodState ? '' : ' disabled hidden' ?>>
               <legend class="sr-only">商品仕様（食品表示）</legend>
               <div class="form-field form-row">
-                <label class="form-label" for="food-name">名称 <span class="required-label">必須</span></label>
+                <label class="form-label" for="food-label">食品表示 <span class="required-label">必須</span></label>
                 <div class="field-control field-wide">
-                  <input type="text" id="food-name" name="food_name" value="<?= $isFoodState ? '焼き菓子' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-ingredients">原材料名 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <textarea id="food-ingredients" name="ingredients" rows="3" aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="food-ingredients-error"' : '' ?>><?= $isFoodState && !$isErrorState ? '小麦粉（国内製造）、砂糖、バター、卵、牛乳' : '' ?></textarea>
+                  <textarea id="food-label" name="food_label" aria-required="true" aria-describedby="food-label-help<?= $isErrorState ? ' food-label-error' : '' ?>"<?= $isErrorState ? ' aria-invalid="true"' : '' ?>><?= $isFoodState && !$isErrorState ? htmlspecialchars($foodLabelExample, ENT_QUOTES, 'UTF-8') : '' ?></textarea>
+                  <p class="form-help" id="food-label-help">パッケージの表示どおりに入力してください。詰め合わせの場合は商品ごとに記載してください。</p>
+                  <details class="food-label-example">
+                    <summary>記入例を見る</summary>
+                    <p><?= nl2br(htmlspecialchars($foodLabelExample, ENT_QUOTES, 'UTF-8')) ?></p>
+                  </details>
                   <?php if ($isErrorState): ?>
-                    <p class="form-error" id="food-ingredients-error">原材料名を入力してください</p>
+                    <p class="form-error" id="food-label-error">食品表示を入力してください</p>
                   <?php endif; ?>
                 </div>
               </div>
@@ -327,48 +403,6 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
                   </div>
                 </div>
               </fieldset>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-quantity">内容量 <span class="required-label">必須</span></label>
-                <div class="field-control field-medium">
-                  <input type="text" id="food-quantity" name="quantity" value="<?= $isFoodState ? '12個' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <fieldset class="form-field form-row">
-                <legend class="form-label" id="expiry-label">期限 <span class="required-label">必須</span></legend>
-                <div class="field-control">
-                  <div class="check-group">
-                    <label class="form-check" for="expiry-best"><input type="radio" id="expiry-best" name="expiry_type" value="best_before"<?= $isFoodState ? ' checked' : '' ?> /><span>賞味期限</span></label>
-                    <label class="form-check" for="expiry-use"><input type="radio" id="expiry-use" name="expiry_type" value="use_by" /><span>消費期限</span></label>
-                  </div>
-                  <label class="form-label expiry-text-label" for="food-expiry">期限の内容 <span class="required-label">必須</span></label>
-                  <input class="field-medium" type="text" id="food-expiry" name="expiry" value="<?= $isFoodState ? '製造日より30日' : '' ?>" aria-required="true" />
-                </div>
-              </fieldset>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-storage">保存方法 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <input type="text" id="food-storage" name="storage" value="<?= $isFoodState ? '直射日光・高温多湿を避けて保存してください。' : '' ?>" aria-required="true" />
-                </div>
-              </div>
-              <div class="form-field form-row">
-                <label class="form-label" for="food-seller">製造者・販売者 <span class="required-label">必須</span></label>
-                <div class="field-control field-wide">
-                  <textarea id="food-seller" name="food_seller" rows="3" aria-required="true"><?= $isFoodState ? "熊日モール サンプル販売店\n熊本県熊本市中央区サンプル町1-1" : '' ?></textarea>
-                </div>
-              </div>
-              <fieldset class="form-field form-row">
-                <legend class="form-label">栄養成分表示 <span class="optional-label">任意</span></legend>
-                <div class="field-control">
-                  <div class="nutrition-fields">
-                    <?php foreach (['energy' => ['エネルギー', '120kcal'], 'protein' => ['たんぱく質', '2.0g'], 'fat' => ['脂質', '5.0g'], 'carbohydrate' => ['炭水化物', '17.0g'], 'salt' => ['食塩相当量', '0.1g']] as $nutritionKey => $nutrition): ?>
-                      <div>
-                        <label class="form-label" for="nutrition-<?= $nutritionKey ?>"><?= $nutrition[0] ?></label>
-                        <input type="text" id="nutrition-<?= $nutritionKey ?>" name="nutrition[<?= $nutritionKey ?>]" value="<?= $isFoodState ? $nutrition[1] : '' ?>" />
-                      </div>
-                    <?php endforeach; ?>
-                  </div>
-                </div>
-              </fieldset>
             </fieldset>
           </section>
 
@@ -387,11 +421,13 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
           </section>
           <div class="save-bar">
             <a href="products.<?= $pageExtension ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>一覧へ戻る</a>
-            <button class="button-primary" type="submit">保存する</button>
+            <button class="button-primary" id="product-save" type="submit">保存する</button>
           </div>
         </form>
       </main>
     </div>
+    <script type="application/json" id="store-shipping-data"><?= json_encode($storeShippingData, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR) ?></script>
     <script src="assets/js/common.js"></script>
+    <script src="assets/js/product-form.js"></script>
   </body>
 </html>

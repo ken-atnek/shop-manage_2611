@@ -286,6 +286,19 @@ html.sidebar-collapsed .admin-sidebar {
 /* =================================
  * フォーム部品（共通候補）
  * ------------------------------ */
+// 複数行の入力欄（全画面共通）。rowsは指定せず、入力に合わせて高さを伸ばす。
+// field-sizing未対応の環境では既定の2行＋欄内スクロールになる。
+// 行数は欄ごとに--textarea-min-lines・--textarea-max-lines、上下の余白は--textarea-padding-blockで変える。
+// border-boxのため、行数分の高さに上下の余白と枠（1px×2）を足す。
+textarea {
+    --textarea-min-lines: 2;
+    --textarea-max-lines: 10;
+    --textarea-padding-block: 1.2rem;
+    field-sizing: content;
+    padding-block: var(--textarea-padding-block);
+    min-height: calc(var(--textarea-min-lines) * 1lh + var(--textarea-padding-block) * 2 + 2px);
+    max-height: calc(var(--textarea-max-lines) * 1lh + var(--textarea-padding-block) * 2 + 2px);
+}
 .form-field {
     font-size: inherit;
     min-width: 0;
