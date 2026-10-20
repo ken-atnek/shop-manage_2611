@@ -913,3 +913,10 @@
 - 共通Sass・reset・common.scss・common.js・既存SPECの変更がないことをハッシュで照合。資料の旧メモの現行記述と申し送り§7・§8・§9・§10を更新し、過去の実装記録は旧仕様と明示。判断に迷った点・不明な点：mixin名の差異、仮の明細ID／送信先／注文識別、834pxの既存最小幅（上記対応）。Gitコミットなし
 - 追記（同日、Claude確認後）：`.item-note`の`@media (max-width: 834px)`を既存mixin`@include tb`へ置き換え。展開行のh4（入稿画像・備考・キャンセル／返品の記録）を500→600にし、ラベル（500）と見出しの強弱を付けた（Kenの了承）
 - 834pxで約13pxの横スクロールが出るというCodexの報告は、Chromium（オーバーレイ型スクロールバー）では0pxで再現せず。常時表示のスクロールバー分（約15px）で、一覧の最小幅704pxに対して本文の内側706pxが足りなくなるためと推定。今回の変更ではなく、ページ全体スクロールへの統一以降の状態
+- 追記（同日、Kenの提案）：記録欄のtextareaから`rows`を外し、Sassで`field-sizing: content`（2026年6月にBaseline。Chrome・Edge 123、Safari 26.2、Firefox 152）＋`min-height: calc(2lh + 2.4rem + 2px)`（border-boxのため余白・枠を加算）＋`max-height`10行分。未対応環境は既定の2行＋スクロール。商品ごとのメモのラベル（商品名）をfz(14)にし、PCでは入力欄の1行目に高さをそろえた
+
+## 2026-10-20 textareaの高さを全画面で共通化
+
+- Kenの希望で、受注一覧の記録欄で使った「rowsなし＋field-sizing: content」をほかのページにも適用。common.scssのフォーム部品の節に`textarea`の共通指定（`--textarea-min-lines`既定2・`--textarea-max-lines`既定10・`--textarea-padding-block`既定1.2rem、min／max-heightを行数＋余白＋枠で計算）を追加し、order.scssの個別指定は削除
+- 商品フォーム：3つのtextareaから`rows`を外し、product-form.scssで最小3行（余白1rem）、商品説明だけ最小4行・最大20行（元のrows=4・3を最小行数として維持）。textareaの`min-height: 4.4rem`はselectだけに残した
+- Chromiumで1280・834pxを確認（商品説明131px→長文で566pxにて欄内スクロール、原材料名・製造者104px、受注一覧の記録欄は従来どおり）。IMPLEMENTATION_REFERENCEにtextareaのルールを追記。Gitコミットなし

@@ -510,6 +510,16 @@ html.sidebar-collapsed .admin-sidebar .nav-label {
 /* =================================
  * フォーム部品（共通候補）
  * ------------------------------ */
+textarea {
+  --textarea-min-lines: 2;
+  --textarea-max-lines: 10;
+  --textarea-padding-block: 1.2rem;
+  field-sizing: content;
+  padding-block: var(--textarea-padding-block);
+  min-height: calc(var(--textarea-min-lines) * 1lh + var(--textarea-padding-block) * 2 + 2px);
+  max-height: calc(var(--textarea-max-lines) * 1lh + var(--textarea-padding-block) * 2 + 2px);
+}
+
 .form-field {
   font-size: inherit;
   min-width: 0;

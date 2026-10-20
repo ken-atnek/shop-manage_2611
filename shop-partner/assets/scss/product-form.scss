@@ -176,18 +176,26 @@
             display: block;
             width: 100%;
             min-width: 0;
-            min-height: 4.4rem;
             padding: 1rem 1.6rem;
             border: 1px solid $color-border-default;
             border-radius: $radius-sm;
             color: $color-text-primary;
             background: $pure-white;
         }
+        // 高さはcommon.scssの共通指定（内容に合わせて伸ばす）。行数・余白だけ変える。
         textarea {
+            --textarea-min-lines: 3;
+            --textarea-padding-block: 1rem;
             line-height: 1.7;
             resize: vertical;
         }
+        // 商品説明は長文になるため、4行から始めて20行まで伸ばす。
+        #product-description {
+            --textarea-min-lines: 4;
+            --textarea-max-lines: 20;
+        }
         select {
+            min-height: 4.4rem;
             appearance: auto;
             padding-right: 3.2rem;
         }

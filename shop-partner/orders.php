@@ -370,15 +370,15 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                           <h4>キャンセル・返品の記録</h4>
                           <div class="record-reason">
                             <label for="cancel-reason-2610170112345">理由・対応メモ<span class="sr-only">（注文#2610170112345）</span></label>
-                            <textarea id="cancel-reason-2610170112345" name="cancel_reason" rows="3"></textarea>
+                            <textarea id="cancel-reason-2610170112345" name="cancel_reason"></textarea>
                           </div>
                           <div class="item-note">
                             <label for="item-note-2610170112345-1">写真入りマグカップ<span class="sr-only">のメモ（注文#2610170112345）</span></label>
-                            <textarea id="item-note-2610170112345-1" name="item_notes[2610170112345-1]" rows="2" maxlength="100"></textarea>
+                            <textarea id="item-note-2610170112345-1" name="item_notes[2610170112345-1]" maxlength="100"></textarea>
                           </div>
                           <div class="item-note">
                             <label for="item-note-2610170112345-2">名入れタオル<span class="sr-only">のメモ（注文#2610170112345）</span></label>
-                            <textarea id="item-note-2610170112345-2" name="item_notes[2610170112345-2]" rows="2" maxlength="100"></textarea>
+                            <textarea id="item-note-2610170112345-2" name="item_notes[2610170112345-2]" maxlength="100"></textarea>
                           </div>
                           <button class="record-save" type="submit">保存<span class="sr-only">（注文#2610170112345のキャンセル・返品の記録）</span></button>
                         </form>
@@ -531,11 +531,11 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                           <h4>キャンセル・返品の記録</h4>
                           <div class="record-reason">
                             <label for="cancel-reason-2026110300002">理由・対応メモ<span class="sr-only">（注文#2026110300002）</span></label>
-                            <textarea id="cancel-reason-2026110300002" name="cancel_reason" rows="3">ラベルの印字不良のため返品対応。お客様と返送方法を確認済み。</textarea>
+                            <textarea id="cancel-reason-2026110300002" name="cancel_reason">ラベルの印字不良のため返品対応。お客様と返送方法を確認済み。</textarea>
                           </div>
                           <div class="item-note">
                             <label for="item-note-2026110300002-1">オリジナルラベルギフト<span class="sr-only">のメモ（注文#2026110300002）</span></label>
-                            <textarea id="item-note-2026110300002-1" name="item_notes[2026110300002-1]" rows="2" maxlength="100">印字部分を確認し、返品受付済み。</textarea>
+                            <textarea id="item-note-2026110300002-1" name="item_notes[2026110300002-1]" maxlength="100">印字部分を確認し、返品受付済み。</textarea>
                           </div>
                           <button class="record-save" type="submit">保存<span class="sr-only">（注文#2026110300002のキャンセル・返品の記録）</span></button>
                         </form>
@@ -655,11 +655,11 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                           <h4>キャンセル・返品の記録</h4>
                           <div class="record-reason">
                             <label for="cancel-reason-2026110300003">理由・対応メモ<span class="sr-only">（注文#2026110300003）</span></label>
-                            <textarea id="cancel-reason-2026110300003" name="cancel_reason" rows="3"></textarea>
+                            <textarea id="cancel-reason-2026110300003" name="cancel_reason"></textarea>
                           </div>
                           <div class="item-note">
                             <label for="item-note-2026110300003-1">名入れタオル<span class="sr-only">のメモ（注文#2026110300003）</span></label>
-                            <textarea id="item-note-2026110300003-1" name="item_notes[2026110300003-1]" rows="2" maxlength="100"></textarea>
+                            <textarea id="item-note-2026110300003-1" name="item_notes[2026110300003-1]" maxlength="100"></textarea>
                           </div>
                           <button class="record-save" type="submit">保存<span class="sr-only">（注文#2026110300003のキャンセル・返品の記録）</span></button>
                         </form>

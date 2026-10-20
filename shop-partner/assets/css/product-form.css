@@ -207,7 +207,6 @@
   display: block;
   width: 100%;
   min-width: 0;
-  min-height: 4.4rem;
   padding: 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
@@ -215,10 +214,17 @@
   background: #fff;
 }
 .product-form .form-field textarea {
+  --textarea-min-lines: 3;
+  --textarea-padding-block: 1rem;
   line-height: 1.7;
   resize: vertical;
 }
+.product-form .form-field #product-description {
+  --textarea-min-lines: 4;
+  --textarea-max-lines: 20;
+}
 .product-form .form-field select {
+  min-height: 4.4rem;
   appearance: auto;
   padding-right: 3.2rem;
 }

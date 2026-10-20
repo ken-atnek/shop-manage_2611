@@ -117,7 +117,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
             <div class="form-field form-row">
               <label class="form-label" for="product-description">商品説明</label>
               <div class="field-control field-wide">
-                <textarea id="product-description" name="description" rows="4"><?= htmlspecialchars($productDescription, ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea id="product-description" name="description"><?= htmlspecialchars($productDescription, ENT_QUOTES, 'UTF-8') ?></textarea>
               </div>
             </div>
           </section>
@@ -293,7 +293,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <div class="form-field form-row">
                 <label class="form-label" for="food-ingredients">原材料名 <span class="required-label">必須</span></label>
                 <div class="field-control field-wide">
-                  <textarea id="food-ingredients" name="ingredients" rows="3" aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="food-ingredients-error"' : '' ?>><?= $isFoodState && !$isErrorState ? '小麦粉（国内製造）、砂糖、バター、卵、牛乳' : '' ?></textarea>
+                  <textarea id="food-ingredients" name="ingredients" aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="food-ingredients-error"' : '' ?>><?= $isFoodState && !$isErrorState ? '小麦粉（国内製造）、砂糖、バター、卵、牛乳' : '' ?></textarea>
                   <?php if ($isErrorState): ?>
                     <p class="form-error" id="food-ingredients-error">原材料名を入力してください</p>
                   <?php endif; ?>
@@ -353,7 +353,7 @@ $taxRate = $isNewState ? '' : ($isFoodState ? '8' : '10');
               <div class="form-field form-row">
                 <label class="form-label" for="food-seller">製造者・販売者 <span class="required-label">必須</span></label>
                 <div class="field-control field-wide">
-                  <textarea id="food-seller" name="food_seller" rows="3" aria-required="true"><?= $isFoodState ? "熊日モール サンプル販売店\n熊本県熊本市中央区サンプル町1-1" : '' ?></textarea>
+                  <textarea id="food-seller" name="food_seller" aria-required="true"><?= $isFoodState ? "熊日モール サンプル販売店\n熊本県熊本市中央区サンプル町1-1" : '' ?></textarea>
                 </div>
               </div>
               <fieldset class="form-field form-row">

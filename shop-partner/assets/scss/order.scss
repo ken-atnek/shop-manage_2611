@@ -578,12 +578,21 @@
                 font-weight: 500;
                 overflow-wrap: anywhere;
             }
+            // 商品名は見出し・理由のラベルより一段小さくし、入力欄の1行目に高さをそろえる
+            .item-note label {
+                font-size: fz(14);
+                padding-top: calc(1.2rem + 1px);
+                @include tb {
+                    padding-top: 0;
+                }
+            }
             textarea {
                 // 入力欄は16px固定（iOSのSafariの拡大を防ぐ）
                 font-size: 1.6rem;
                 width: 100%;
                 min-width: 0;
-                padding: 1.2rem;
+                // 高さ（最小2行・最大10行・内容に合わせて伸ばす）はcommon.scssの共通指定。
+                padding: var(--textarea-padding-block);
                 border: 1px solid $color-border-default;
                 border-radius: $radius-sm;
                 color: $color-text-primary;
