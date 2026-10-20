@@ -1073,3 +1073,50 @@
 - ブラウザ1280×800で通常・new・no-size-store・frozen-yupackを確認。ラベル・選択肢・判定・注意は新しい呼び方で、店舗切り替えによるサイズ再判定と冷凍非対応注意の表示／解除も正常。コンソールエラーは0件。古いJSキャッシュはブラウザの強制再読み込みで解消し、コードにはキャッシュ対策を追加していない。確認画像は`/tmp/kumanichi-store-wording/frozen-yupack.png`
 - 差分と開始時のファイルを照合し、変更は指定のコード3ファイル・資料5ファイル・本記録のみ。既存のMEMORYは保持。Sass・CSS・index.html・ほかの画面・backend/・docs/backend/・.ddev/config.local.yamlは変更せず、Gitコミットも行っていない
 - 判断に迷った点・不明な点：上記の旧コメントとサイドバーの記述を整理した。その他はなし
+
+## 2026-10-20 Client店舗一覧を制作
+
+- `kumanichi-admin-design`を使用。作業前に既存の商品一覧・受注一覧に取得失敗の部品がないことを共有し、共通の空状態の箱を基に店舗用エラー表示を作る方針とした。資料に残る見出し・6列・検索なし・空状態文言等の案は今回の指定を優先。従来の「資料のみ／制作前」は前段階の記録として扱い、対象の店舗一覧資料を制作中へ更新した
+- shop-partner/stores.phpとassets/scss/stores.scssを新規作成。商品一覧と同じhead・共通ヘッダー／サイドバー・page-heading・表の構造を基準に、6列・登録順の3店舗・右揃えの商品数・2行の更新日時・店舗名入りの編集アイコンを配置した。表示例・previewはBladeへ移さない制作専用と明記
+- 見出し右の「店舗を追加」は既存のprimaryボタンとLucideのplus、834px以下では下段左へ配置。新規リンクはstore-form.php、編集はstore-form.php?id={ID}。フォームは次段階で制作するため現在のリンク切れは依頼どおり許容した
+- preview=emptyは「店舗がまだ登録されていません」と追加導線、preview=errorは取得失敗文・補助文・再読み込みを表示。取得失敗を0件と混同せず表を出さない。エラーにはrole=alert、再読み込みは通常URLへのリンクを置いた。店舗専用JSは作らずcommon.jsだけを読み込む
+- inc_sidebar.phpの送料設定を店舗へ変更し、stores.phpへのリンク・Lucideのstore・店舗一覧のaria-currentを追加。Referenced inへ商品フォーム・店舗一覧を補い、Last updatedは2026-10-20を維持。公式LucideのSVGを確認し、既存のサイズ・線幅・装飾属性へ揃えた
+- stores.scssへ商品一覧の表の罫線・文字・ホバー、日時2行、数値の桁揃え、編集リンクのスタイルを転記。共通化候補として記録し、common.scssは変更していない。送料列は「サイズ共通」が折り返さない11remとし、店舗名は残り幅で省略せず折り返す。列幅・余白・エラーの文言等の細部は画面資料の「案」に記載した
+- scripts/export-html.phpの$pagesへ追加。index.htmlの店舗を制作中とし通常・empty・errorのリンクを追加。CLIENT_STORE_LIST.mdの一覧制作を完了にし、制作ファイル・URL・preview・共通化候補を記録した。未確定の購入画面への店舗名表示、削除・停止、Master等の業務判断は変更していない
+- npm run sass、DDEVのphp -l（stores.php・inc_sidebar.php・export-html.php）、静的HTML4ページの書き出し、git diff --checkが成功。stores.htmlの6列・静的リンク・現在地・CSS参照、資料の相対リンク・節アンカー18件を確認した。静的HTMLとCSSマップはGit管理外
+- Chromeで1280×800・834×1194の通常・empty・errorを確認。横はみ出しなし、長い店舗名の折り返し、PC右／タブレット下の追加ボタン、サイドバーの現在地、ナビ・追加・編集・空状態追加・再読み込みのキーボードフォーカスを確認。再読み込みをEnterで実行し通常状態へ戻ることも確認した。コンソールエラー0件。確認画像と検証記録は`/tmp/kumanichi-stores/`、一時的な表示幅設定は解除した
+- 開始時のファイルハッシュと照合し、既存画面のPHP・Sass・JS、common.scss・common.js、backend/・docs/backend/・.ddev/config.local.yamlに変更なし。既存MEMORYは保持。既存画面の静的HTMLは指定の書き出しによって共通サイドバーが更新されたがGit管理外。Gitコミットは行っていない
+- 判断に迷った点・不明な点：取得失敗部品が未実装だったため、上記の表示を案として制作した。列幅等もKenの調整待ちの案。その他はなし
+
+## 2026-10-20 商品フォームの配送に運送会社の表示を追加
+
+- `kumanichi-admin-design`を使用。AGENTS・仕様・商品フォーム資料・申し送り・PHP／JS／Sassと店舗JSONを確認し、依頼との食い違いなしと共有した。既存の店舗一覧制作の差分と、作業中に追記された作業記録は保持した
+- product-form.phpの配送の先頭、配送温度帯の上に「運送会社」の読み取り専用行を追加。選択中の店舗のcarrier.nameから初期HTMLを出力し、店舗1はヤマト運輸、店舗2はゆうパック、newは「店舗を選ぶと表示します」とした。補助文「店舗の設定で決まります」は店舗選択時だけ表示。入力欄・送信name・店舗設定へのリンクは追加していない
+- product-form.jsの既存updateShipping内でshipping-carrierとshipping-carrier-helpを初期表示・店舗変更時に同期。名前は常設のaria-live=polite・aria-atomic=trueとし、既存setTextで同じ文言の再設定を避ける。店舗未選択時は補助文をhiddenにする。梱包サイズの判定・クール便注意の条件は変更していない
+- product-form.scssへcarrier-nameの文字継承・最小高さ44px・行間1.7を追加し、既存form-rowでPCの左ラベル／右表示、タブレットの縦並びへ合わせた。生成CSSへ反映。CLIENT_PRODUCT_FORM.mdの項目表・実装メモ・依存先表、HANDOFF_CLIENT_PRODUCT_FORM.mdのcarrier.nameの用途とJS依存先表を更新した
+- npm run sass、node --check、DDEVのphp -l、git diff --checkが成功。PHP出力だけでも全10previewを照合し、選択中の店舗と運送会社名・補助文の表示有無が一致した
+- ブラウザで店舗1→店舗2→未選択を切り替え、ヤマト運輸／ゆうパック／未選択の案内と補助文の表示有無、polite領域、設定画面リンクが0件であることを確認。new・error・no-size-store・frozen-yupackの初期表示を照合し、既存のサイズ判定・冷凍非対応注意も維持。1280×800・834×1194で行の配置と横はみ出しなしを確認し、コンソールのエラー・警告は0件。確認画像は/tmp/kumanichi-carrier-display/へ保存し、画面幅の一時設定は解除した
+- 判断に迷った点・不明な点：なし。共通Sass・共通JS・ほかの画面は今回変更せず、Gitコミットは行わない
+
+## 2026-10-20 店舗一覧の先頭にID列を追加
+
+- `kumanichi-admin-design`を使用。作業前にSPECに残る「6列・検索なしの案」を指摘し、今回のKenの決定に合わせ7列の確定事項へ移す方針を共有した
+- stores.phpの先頭列にIDを追加し、表示例は登録順の1・2・3をそのまま表示。商品一覧と同じproduct-idクラス・thのscope=col・td内の数字の書き方に合わせた。既存の店舗名以下の列・リンク・状態分岐は変更していない
+- products.scssからID列の幅6.4rem・右揃え・font-variant-numeric: tabular-nums・white-space: nowrapをstores.scssへ転記し、生成CSSへ反映。ID列を今後の共通化候補に追加した。PHP・SassのLast updatedは2026-10-20を維持
+- CLIENT_STORE_LIST.mdを「ID／店舗名／運送会社／送料／商品数／更新日時／編集」の7列へ更新。「商品一覧と揃える・登録順の根拠が見える・やり取りで店舗を特定できる」という追加理由を記載。SPECの旧6列の案を除き、一覧の確定事項に7列として反映した
+- npm run sass、DDEVのphp -l（stores.php）、git diff --checkが成功。Chromeの1280×800・834×1194で通常表示を確認し、7列の順序・IDの1〜3・64px幅・右揃え・桁揃え・長い店舗名の折り返しを照合。横はみ出しなし、コンソールエラー0件。古いCSSキャッシュは確認用タブの強制再読み込みで解消し、一時的な画面幅設定は解除。確認画像は`/tmp/kumanichi-stores-id/`
+- 開始時のファイル内容と照合し、今回の変更は店舗一覧PHP・Sass・生成CSS・SPEC・店舗一覧資料・本記録のみ。商品フォームのPHP・JS・Sass・生成CSSを含む既存の未コミット変更は保持。ほかの画面、共通部品、backend/・docs/backend/・.ddev/config.local.yamlは変更していない。既存MEMORYを保持し、Gitコミットは行っていない
+- 判断に迷った点・不明な点：なし。ID列は依頼に合わせ、店舗固有の別名を作らず商品一覧のproduct-idクラスを使用した
+
+## 2026-10-20 商品フォームのアレルゲンをテキストエリアへ変更
+
+- `kumanichi-admin-design`を使用。作業前に従来の「1つ以上または該当なし」・品目マスタ出力の仕様を今回のKenの決定で置き換えることを共有。食品開閉はfieldset全体のdisabled／hiddenを制御する既存JSで対応でき、errorのアレルゲンには表示例を入れて従来の3件のエラーを維持する方針とした
+- パッケージどおりの表記、詰め合わせごとの違い、製造ラインの注意書きに対応するため、product-form.phpの特定原材料・推奨品目・該当なしのチェックとその他欄を、食品表示とは別のtextarea（id／name=allergens）1つへ置換。食品オン時に本文が空でないことを必須とし、含まない場合は「なし」と記入する。aria-required=trueと、allergens-helpへのaria-describedbyを付けた
+- 補助文は依頼どおり「パッケージのアレルゲン表示どおりに入力してください。含まない場合は『なし』と入力してください。」。food・food-tax-warning・errorは「小麦・卵・乳」の表示例。newは空欄かつ食品オフ。errorのまとめ・エラー文は商品名・価格・食品表示の3件のまま。食品表示のdetailsの記入例は変更していない
+- product-form.scssで共通textarea方式の最小3行・最大8行を指定し、未使用になったallergen-groupの指定を削除。文字16px・行間1.7・幅720pxまで・既存のフォーカスを維持し、生成CSSへ反映。product-form.jsは変更せず、既存の食品開閉で値を保持しつつ送信・Tab対象を切り替える
+- SPEC・CLIENT_PRODUCT_FORM・HANDOFF_CLIENT_PRODUCT_FORMの現行項目・必須条件・送信内容をallergens本文1つへ統一。配列のallergens[]とallergens_otherは現行の送信から除去。購入画面でのアレルゲン絞り込み・アイコン表示は今は予定なしと記録した
+- チェックボックス方式は「B案（購入画面で絞り込み・アイコン表示をする場合）」としてSPEC・画面資料に残し、申し送りから参照。品目マスタ・該当なしの排他・その他欄の検証と送信形式は再採用時だけ検討する事項へ移した。既存の食品表示の項目別入力B案とは分け、文字数上限・表示義務・食品オフ保存への確認は継続した
+- npm run sass、node --check、DDEVのphp -l、git diff --checkが成功。変更した3仕様資料の相対リンク・節アンカー63件を確認しリンク切れなし。現行PHPと3資料に旧送信名の残存なし。開始時のファイルハッシュを照合し、変更は依頼のPHP・専用Sass・生成CSS／マップと4資料のみ。JS・共通部品・他画面は変更なし
+- ブラウザでfood・error・newの表示を確認。foodは小麦・卵・乳、errorは同じ値を保持し3件のリンクとproduct-errorsへの初期フォーカスを維持、newは食品オフで有効な食品入力が0件。食品オフではallergensが:disabledとなり送信対象外・hidden、Tabは公開へ移り、再オンで入力した複数行の本文が保持されることを確認。補助文の参照・label・aria-requiredも照合した
+- 1280×800・834×1194でフォーカス・ラベル配置・横はみ出しなしを確認。長文で高さが3行分から8行分まで伸び、上限後は欄内スクロールになることを実測。newを食品オンにして「なし」を入力できること、food／error／newのコンソールにエラー・警告がないことを確認。確認画像は/tmp/kumanichi-allergens/へ保存し、画面幅の一時設定は解除した
+- 判断に迷った点・不明な点：なし。任意のdetailsへの注意書き例の追加は行わず、既存の食品表示の記入例を維持した。Gitコミットは行わない

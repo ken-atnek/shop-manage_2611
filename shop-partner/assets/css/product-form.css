@@ -227,6 +227,10 @@
   --textarea-min-lines: 8;
   --textarea-max-lines: 20;
 }
+.product-form .form-field #allergens {
+  --textarea-min-lines: 3;
+  --textarea-max-lines: 8;
+}
 .product-form .form-field select {
   min-height: 4.4rem;
   appearance: auto;
@@ -381,6 +385,13 @@
   color: #4f5863;
   line-height: 1.7;
 }
+.product-form .carrier-name {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  min-height: 4.4rem;
+  line-height: 1.7;
+}
 .product-form .packing-help {
   margin: 0 0 1.6rem;
 }
@@ -463,17 +474,6 @@
 }
 .product-form .food-fields[hidden] {
   display: none;
-}
-.product-form .allergen-group {
-  font-size: inherit;
-  min-width: 0;
-  border: 0;
-  padding: 0;
-  margin-top: 1.6rem;
-}
-.product-form .allergen-group legend {
-  font-size: max(12px, 0.875em);
-  font-weight: 500;
 }
 .product-form .food-label-example {
   font-size: max(12px, 0.875em);

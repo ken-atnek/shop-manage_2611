@@ -198,6 +198,10 @@
             --textarea-min-lines: 8;
             --textarea-max-lines: 20;
         }
+        #allergens {
+            --textarea-min-lines: 3;
+            --textarea-max-lines: 8;
+        }
         select {
             min-height: 4.4rem;
             appearance: auto;
@@ -351,6 +355,13 @@
         color: $color-text-secondary;
         line-height: 1.7;
     }
+    .carrier-name {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        min-height: 4.4rem;
+        line-height: 1.7;
+    }
     .packing-help {
         margin: 0 0 1.6rem;
     }
@@ -432,17 +443,6 @@
         // hiddenをレイアウト指定で上書きしない。
         &[hidden] {
             display: none;
-        }
-    }
-    .allergen-group {
-        font-size: inherit;
-        min-width: 0;
-        border: 0;
-        padding: 0;
-        margin-top: 1.6rem;
-        legend {
-            font-size: fz(14);
-            font-weight: 500;
         }
     }
     .food-label-example {

@@ -57,6 +57,7 @@ foreach ($storeShippingData as &$storeShipping) {
 }
 unset($storeShipping);
 $selectedStoreId = $previewState === 'new' ? '' : (($isNoSizeStoreState || $isFrozenYupackState) ? '2' : '1');
+$selectedCarrierName = $storeShippingData[$selectedStoreId]['carrier']['name'] ?? '';
 $temperature = $isCoolWarningState ? 'cold' : ($isFrozenYupackState ? 'frozen' : 'normal');
 $packingValues = $previewState === 'new'
     ? ['length' => '', 'width' => '', 'height' => '', 'weight' => '']
@@ -279,6 +280,13 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
   <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
   <circle cx="17" cy="18" r="2" />
   <circle cx="7" cy="18" r="2" /></svg></span>配送</h2>
+            <div class="form-field form-row">
+              <p class="form-label">運送会社</p>
+              <div class="field-control field-wide">
+                <p class="carrier-name" id="shipping-carrier" aria-live="polite" aria-atomic="true"><?= htmlspecialchars($selectedCarrierName !== '' ? $selectedCarrierName : '店舗を選ぶと表示します', ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="form-help" id="shipping-carrier-help"<?= $selectedCarrierName === '' ? ' hidden' : '' ?>>店舗の設定で決まります</p>
+              </div>
+            </div>
             <fieldset class="form-field form-row">
               <legend class="form-label" id="temperature-label">配送温度帯 <span class="required-label">必須</span></legend>
               <div class="field-control">
@@ -375,34 +383,13 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
                   <?php endif; ?>
                 </div>
               </div>
-              <fieldset class="form-field form-row" aria-describedby="allergen-help">
-                <legend class="form-label">アレルゲン <span class="required-label">必須</span></legend>
-                <div class="field-control">
-                  <p class="form-help" id="allergen-help">1つ以上、または「該当なし」を選択してください。</p>
-                  <!-- 品目・区分は一部の表示例。正式な一覧はバックエンドのマスタから出力する。 -->
-                  <fieldset class="allergen-group">
-                    <legend>特定原材料</legend>
-                    <div class="check-group">
-                      <label class="form-check" for="allergen-wheat"><input type="checkbox" id="allergen-wheat" name="allergens[]" value="wheat"<?= $isFoodState ? ' checked' : '' ?> /><span>小麦</span></label>
-                      <label class="form-check" for="allergen-egg"><input type="checkbox" id="allergen-egg" name="allergens[]" value="egg"<?= $isFoodState ? ' checked' : '' ?> /><span>卵</span></label>
-                      <label class="form-check" for="allergen-milk"><input type="checkbox" id="allergen-milk" name="allergens[]" value="milk"<?= $isFoodState ? ' checked' : '' ?> /><span>乳</span></label>
-                    </div>
-                  </fieldset>
-                  <fieldset class="allergen-group">
-                    <legend>推奨品目</legend>
-                    <div class="check-group">
-                      <label class="form-check" for="allergen-soy"><input type="checkbox" id="allergen-soy" name="allergens[]" value="soy" /><span>大豆</span></label>
-                      <label class="form-check" for="allergen-apple"><input type="checkbox" id="allergen-apple" name="allergens[]" value="apple" /><span>りんご</span></label>
-                      <label class="form-check" for="allergen-sesame"><input type="checkbox" id="allergen-sesame" name="allergens[]" value="sesame" /><span>ごま</span></label>
-                    </div>
-                  </fieldset>
-                  <label class="form-check" for="allergen-none"><input type="checkbox" id="allergen-none" name="allergens[]" value="none" /><span>該当なし</span></label>
-                  <div class="field-wide">
-                    <label class="form-label" for="allergen-other">その他のアレルゲン</label>
-                    <input type="text" id="allergen-other" name="allergens_other" value="" />
-                  </div>
+              <div class="form-field form-row">
+                <label class="form-label" for="allergens">アレルゲン <span class="required-label">必須</span></label>
+                <div class="field-control field-wide">
+                  <textarea id="allergens" name="allergens" aria-required="true" aria-describedby="allergens-help"><?= $isFoodState ? '小麦・卵・乳' : '' ?></textarea>
+                  <p class="form-help" id="allergens-help">パッケージのアレルゲン表示どおりに入力してください。含まない場合は『なし』と入力してください。</p>
                 </div>
-              </fieldset>
+              </div>
             </fieldset>
           </section>
 
