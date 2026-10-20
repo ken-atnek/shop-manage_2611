@@ -25,24 +25,32 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - バックエンド処理は実装しないが、送信単位と繰り返し単位は明記する
 - 実装難易度を理由にデザインを簡略化しない
 
-## Client受注一覧の制作単位
+## Client画面の制作単位
 
-受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。ユーザーが独立させた共通部分は`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→`order.css`の順に読み込む。
+受注一覧の編集・制作確認は`shop-partner/orders.php`、固有スタイルは`shop-partner/assets/scss/order.scss`→`shop-partner/assets/css/order.css`とする。Client画面で共用するスタイルは`shop-partner/assets/scss/common.scss`→`shop-partner/assets/css/common.css`とし、PHP画面と静的HTMLのどちらも`common.css`→ページ別CSSの順に読み込む。
 
-`_reset.scss`は`common.scss`だけで読み込み、`order.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
+商品一覧の編集・制作確認は`shop-partner/products.php`、固有スタイルは`shop-partner/assets/scss/products.scss`→`shop-partner/assets/css/products.css`。`common.css`→`products.css`の順に読み込み、検索条件の配置と商品テーブルの仮の見た目だけを`products.scss`に置く。
+
+`_reset.scss`は`common.scss`だけで読み込み、`order.scss`・`products.scss`では重複させない。共通Sassへの参照は、エディタからも参照先を開けるよう相対パスで記載する。
 
 - ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、画面スタイルは各管理画面側へ置く
-- `common.scss`は現在の`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー`の構成を基準とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
-- `order.scss`は`@use → コメントヘッダー → ページ固有のセクション`とする。今後追加するKPI・検索・注文・展開行は画面の並びに沿って整理し、共通のBrand・Layoutは戻さない
+- `common.scss`は`@use → コメントヘッダー → body・レイアウト等の基礎 → HEADER → サイドメニュー → フォーム部品 → ページ見出し → 検索 → 一覧見出し → 一覧の状態 → ページ送り`の順とする。ブランド用CSSカスタムプロパティは現在どおり`body`へ設定する
+- `order.scss`は`@use → コメントヘッダー → 受注一覧固有のセクション`とする。KPI、受注一覧だけの検索条件配置、列見出し、注文の箱、商品明細、進捗状況、操作、展開行、拡大表示を置き、共通部分は戻さない
 - `common.scss`＋ページ別Sassの構成を継続し、受注一覧完成後も`admin.scss`への再編を前提にしない
 - 既存の関数・mixinを利用し、Codexは依頼なく新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない
+
+Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面固有の操作はページ別JSへ置く。受注一覧は`common.js`→`order.js`の順に`</body>`直前で読み込み、`order.js`は`common.js`の`toggleAccordion`を展開行に使用する。
+
+商品一覧は`common.js`だけを読み込む。`products.js`は作成しない。詳細検索の対象は`aria-controls="product-search-panel"`で指定し、条件クリア後は先頭の「公開」チェックボックスへフォーカスする。
+
+Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC（1194pxより広い）は開閉で本文幅を変更し、`kumanichi-client-sidebar`へ状態を保存。タブレットは初期状態を畳み、開くと本文に重ねる。両PHPのheadには同一の初期化スクリプトを`common.css`より前に置き、htmlの`.sidebar-collapsed`を初期描画前に反映する。保存拒否時のtry/catch、幅の判定値、依存class・属性の詳細は[共通申し送り§2・§3](HANDOFF_CLIENT_COMMON.md#2-headの読み込みと初期化)を参照する。
 
 ### 制作用PHPのインクルード
 
 - PHPインクルードはユーザー承認済みの制作補助。Laravel・DB・認証・受注処理等は作らず、バックエンド担当者が後からBladeのレイアウト・`@include`等へ組み込む
-- 編集するファイルは`shop-partner/orders.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。共通部品は`inc_`で始め、`require __DIR__ . '/includes/…';`で読み込む。見た目のためのラッパーは追加しない
-- 各ページで`$currentPage`を設定する。受注一覧は`orders`とし、サイドバーの該当リンクだけに`aria-current="page"`を付ける。未作成画面のリンクは引き続き`#`のまま
-- 制作確認用のURLは`/shop-partner/orders.php`。PHP版のリンク・検索フォームは`.php`へ向け、静的出力では`.html`へ切り替える。外部入力でinclude先や現在地を決めない
+- 編集するファイルは`shop-partner/orders.php`・`shop-partner/products.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。共通部品は`inc_`で始め、`require __DIR__ . '/includes/…';`で読み込む。見た目のためのラッパーは追加しない
+- 各ページで`$currentPage`を設定する。受注一覧は`orders`、商品一覧は`products`とし、サイドバーの該当リンクだけに`aria-current="page"`を付ける。未作成画面のリンクは引き続き`#`のまま
+- 制作確認用のURLは`/shop-partner/orders.php`・`/shop-partner/products.php`。PHP版のリンク・検索フォームは`.php`へ向け、静的出力では`.html`へ切り替える。外部入力でinclude先や現在地を決めない
 - 静的HTMLは常設しない。PHPが動かない環境で見せる必要がある場合だけ、プロジェクトルートで`ddev exec php scripts/export-html.php`を実行して書き出す。出力したHTMLはGit管理外（`.gitignore`）で、直接編集しない。ページ追加時はスクリプトの`$pages`へ対象を明示的に追加する
 - NodeによるHTMLの組み立て・新しいnpmパッケージ・PHPフレームワークは追加しない。Sassのコンパイル方法は既存のまま
 - バックエンド担当者へは制作用PHPと共通部品（`includes/`）・Sass・CSSを引き渡す。静的HTMLは納品しない
@@ -57,17 +65,45 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - `scss/_reset.scss`の`* { font-size: 62.5% }`は流動フォント方式の前提として維持する。文字を含む要素には必ず`font-size: inherit`か`fz()`を指定する。未指定の要素は親の62.5%になる（`div`・`p`・`h1`〜`h4`・`dl`・`table`・`td`・`th`・`label`等に注意。`span`・`strong`・`em`・`small`・`time`はリセットで1em）
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
 - 例外として、入力欄（`input`・`textarea`）の文字は`1.6rem`（16px）固定とする。16px未満だとiOSのSafariがフォーカス時に画面を拡大するため
-- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
+- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
 - アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
   - 線のアイコン：`fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`の属性を書かない（リセットの「fill属性のないsvg＝文字色の線・丸い角」が効く）。`stroke-width`と`width`・`height`・`viewBox`は書く
   - 塗りのアイコン：`fill`属性を書く（リセットで文字色の塗りになる）
   - すべてのアイコンに`aria-hidden="true" focusable="false"`を付け、意味はボタンの`aria-label`で伝える。色は`color`で変える
 - フォーカス枠は`scss/_reset.scss`の共通指定（`:where(...)`で詳細度0、幅3px・`--color-brand-accent`）を基本とし、枠が切れる・埋もれる箇所だけ個別に上書きする
-- フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;700&display=swap`の`stylesheet`を置く
+- フォントはNoto Sans JPをGoogle Fontsから読み込む。各HTMLの`<head>`で、`common.css`より前に`fonts.googleapis.com`・`fonts.gstatic.com`の`preconnect`と`family=Noto+Sans+JP:wght@400;500;600&display=swap`の`stylesheet`を置く
+- 文字の太さは見出し・強調数値・現在地・サービス名が600、フォーム／表のラベル・ボタン・塗りのバッジ／受注ステータスが500、本文・表の中身が400。700は使用しない（Kenの決定、2026-10-19）。詳細な対象は`DESIGN_TOKENS.md`の「文字の太さ」を参照する
 - 余白・幅・罫線・角丸などは、現在のように`px`・`rem`・`em`の直接指定も認める。すべての数値の変数化や、削除済みの`$space-*`・`$font-size-*`等の復活は行わない
 - 共通で調整する必要がある値だけ、既存変数を利用する。新しい変数の追加は必要になった箇所に限定する。色は既存の色変数とブランド用CSSカスタムプロパティを優先する
 - サイズの旧仮案よりユーザーが調整した現行SCSSを優先し、実装時は読みやすさ・タップ領域・画面幅をブラウザで確認する。小さい文字や操作しにくい箇所は、構成を変えず個別に調整する
+
+### アイコンセット
+
+- 操作用の線アイコンはLucide（ISC License）を基本とする。LICENSEの一覧にあるFeather由来のアイコン（受注一覧で使用する4種が該当）は、MITの通知も含めて保持する。SVGコードだけをインラインで使い、npmパッケージ・Iconify等の外部スクリプトは読み込まない。ライセンス全文は`docs/design/reference/LUCIDE_LICENSE`
+- LucideのSVGは公式の子要素（`path`・`circle`・`line`等）の形を変えず、外側の`svg`を`width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"`にそろえる
+- `fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`属性は付けず、`scss/_reset.scss`の線色・線端・角の指定を効かせる。用途名はSVGではなく操作するボタン・リンクの`aria-label`と`title`で伝える。ナビのリンクは実テキスト`.nav-label`を読み上げ名とし、畳んだときだけ視覚的に隠す（同じ名前のtitleも付ける）
+
+| 用途 | Lucideの名前 | 使っている画面 |
+|---|---|---|
+| 入稿画像の拡大 | `zoom-in` | Client受注一覧 |
+| 入稿画像のダウンロード | `download` | Client受注一覧 |
+| ページ送り「前へ」 | `chevron-left` | Client受注一覧・商品一覧 |
+| ページ送り「次へ」 | `chevron-right` | Client受注一覧・商品一覧 |
+| 商品詳細への編集 | `pencil` | Client商品一覧 |
+| メニュー：受注一覧 | `clipboard-list` | Client共通ナビ |
+| メニュー：商品一覧 | `package` | Client共通ナビ |
+| メニュー：商品登録 | `package-plus` | Client共通ナビ |
+| メニュー：送料設定 | `truck` | Client共通ナビ |
+| メニュー：顧客管理 | `users` | Client共通ナビ |
+| メニュー：集計 | `chart-column` | Client共通ナビ |
+| メニューを畳む | `panel-left-close` | Client共通ナビ |
+| メニューを開く | `panel-left-open` | Client共通ナビ |
+| メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
+| 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
+| ステータスの開閉 | Lucideではない（`scss/_ui.scss`の背景SVG） | Client受注一覧 |
+
+メニュー用の8種は2026-10-19に[Lucide公式SVG](https://github.com/lucide-icons/lucide/tree/main/icons)で存在と子要素を確認済み。代替アイコンへの変更なし。
 
 ## 制作環境と引き渡し
 
@@ -76,6 +112,7 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
+- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)の申し送りで確認する
 
 ## HTML要素の考え方
 

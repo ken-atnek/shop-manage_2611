@@ -65,7 +65,7 @@ Figmaは必須工程とせず、必要な場合のみ使用する。
 
 - 制作の流れ：Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。ユーザーが調整した箇所は、Codexが次回以降の作業で元に戻さない
 - Codexはプロンプトで依頼された画面・範囲だけを作成・変更する。依頼のない画面のPHP・HTMLを作らない
-- Clientの制作・編集元は`shop-partner/orders.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。PHPは共通部品の読み込み・現在地・静的出力時のリンク切り替えだけに使い、Laravelや業務処理は実装しない
+- Clientの制作・編集元は`shop-partner/orders.php`・`shop-partner/products.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。固有Sassは`shop-partner/assets/scss/order.scss`・`shop-partner/assets/scss/products.scss`。PHPは共通部品の読み込み・現在地・静的出力時のリンク切り替えと制作確認用の表示分岐に使い、Laravelや業務処理は実装しない
 - バックエンド担当者への納品はPHPのみとし、静的HTMLは納品・Git管理しない（`.gitignore`で`shop-partner/*.html`・`shop-master/*.html`を除外）。PHPが動かない環境で見せる必要がある場合だけ、`ddev exec php scripts/export-html.php`で書き出す。HTMLの組み立てにNodeは使わない
 - 仕様資料では、実装時に必要な要素、状態、命名候補を整理する
 - `form`、`input`、`button`、`label`など、本来の用途に合う要素を提案する
@@ -75,7 +75,7 @@ Figmaは必須工程とせず、必要な場合のみ使用する。
 
 - ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、各管理画面のSassから相対パスの`@use`で読み込む
 - `shop-master/assets/scss/`から`shop-master/assets/css/`へ、`shop-partner/assets/scss/`から`shop-partner/assets/css/`へコンパイルする
-- Clientは現在の`common.scss`（共通部分）＋`order.scss`（受注一覧固有）の構成を継続し、`common.css`→`order.css`の順に読み込む。resetは`common.scss`だけで読み込む。`admin.scss`への再編は前提にしない
+- Clientは`common.scss`（共通部分）＋ページ別Sass（受注一覧は`order.scss`、商品一覧は`products.scss`）の構成を継続し、`common.css`→ページ別CSSの順に読み込む。resetは`common.scss`だけで読み込む。`admin.scss`への再編は前提にしない
 - クラス名・ネスト・セクションコメントは既存コードを優先する。`.admin-*`／`.order-*`の接頭辞やBEMを強制せず、依頼なく一括改名しない
 - サイズは既存の`fz()`・流動フォント設定を使い、余白・幅・罫線などは`px`・`rem`・`em`の直接指定も認める。すべての数値を変数化せず、削除済みのサイズ変数を資料の旧仮案に合わせて復活させない
 - Node.js環境でnpmパッケージの`sass`を使用し、`node-sass`は使用しない

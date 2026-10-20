@@ -2,6 +2,20 @@
 // 制作確認用。業務処理は持たず、現在地と静的出力時のリンクだけ切り替える。
 $currentPage = 'orders';
 $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
+
+// 制作時の表示確認専用。Laravel・Bladeでは使用せず、バックエンド側の状態分岐へ置き換える。
+$previewState = $_GET['preview'] ?? '';
+if ($staticExport ?? false) {
+    $previewState = '';
+}
+$isEmptyState = $previewState === 'empty';
+$isNoResultsState = $previewState === 'no-results';
+$isDateErrorState = $previewState === 'date-error';
+$isPagerMiddleState = $previewState === 'pager-middle';
+$listCount = ($isEmptyState || $isNoResultsState) ? 0 : 8;
+// KPIは検索条件に関係なく全体の件数を表す。データなしのときだけ0件にする。
+$kpiCounts = $isEmptyState ? ['all' => 0, 'new' => 0, 'waiting' => 0] : ['all' => 8, 'new' => 3, 'waiting' => 2];
+$filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
 ?>
 <!doctype html>
 <!-- =======================================
@@ -10,7 +24,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
  * Referenced in: /shop-partner/orders.<?= $pageExtension . PHP_EOL ?>
  * 編集元: /shop-partner/orders.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -20,9 +34,21 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- 初期描画前に共通サイドバーの状態を反映。1194pxはcommon.scssの$tbwとそろえる。 -->
+    <script>
+      (() => {
+        let collapsed = window.matchMedia("(max-width: 1194px)").matches;
+        try {
+          collapsed = collapsed || localStorage.getItem("kumanichi-client-sidebar") === "collapsed";
+        } catch {
+          // localStorageが使えなくても初期表示を継続する。
+        }
+        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+      })();
+    </script>
     <link rel="stylesheet" href="assets/css/common.css" />
     <link rel="stylesheet" href="assets/css/order.css" />
   </head>
@@ -41,19 +67,19 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
           <li>
             <button type="button" aria-pressed="true">
               <span class="label">すべて</span>
-              <span class="count"><strong>8</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['all'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
           <li>
             <button type="button" aria-pressed="false">
               <span class="label">未着手</span>
-              <span class="count"><strong>3</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['new'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
           <li>
             <button type="button" aria-pressed="false">
               <span class="label">発送待ち</span>
-              <span class="count"><strong>2</strong><span class="unit">件</span></span>
+              <span class="count"><strong><?= $kpiCounts['waiting'] ?></strong><span class="unit">件</span></span>
             </button>
           </li>
         </ul>
@@ -70,13 +96,13 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
             <button
               class="detail-toggle"
               type="button"
-              aria-expanded="false"
+              aria-expanded="<?= $isDateErrorState ? 'true' : 'false' ?>"
               aria-controls="order-search-panel"
             >
               詳細検索
             </button>
           </div>
-          <div class="search-panel" id="order-search-panel" inert>
+          <div class="search-panel" id="order-search-panel"<?= $isDateErrorState ? '' : ' inert' ?>>
             <div class="search-panel-inner">
               <div class="search-fields">
                 <!-- nameは表示例。バックエンドの正式な項目名を決めるものではない。 -->
@@ -84,15 +110,19 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                   <legend class="form-label">注文日</legend>
                   <div class="date-range">
                     <label class="sr-only" for="order-date-from">開始日</label>
-                    <input class="form-input" type="date" id="order-date-from" name="date_from" />
+                    <input class="form-input" type="date" id="order-date-from" name="date_from"<?= $isDateErrorState ? ' value="2026-10-20" aria-invalid="true" aria-describedby="order-date-error"' : '' ?> />
                     <span aria-hidden="true">〜</span>
                     <label class="sr-only" for="order-date-to">終了日</label>
-                    <input class="form-input" type="date" id="order-date-to" name="date_to" />
+                    <input class="form-input" type="date" id="order-date-to" name="date_to"<?= $isDateErrorState ? ' value="2026-10-10" aria-invalid="true" aria-describedby="order-date-error"' : '' ?> />
                   </div>
+                  <?php if ($isDateErrorState): ?>
+                    <!-- エラー時だけ出力する。日付範囲の判定はバックエンドで行う。 -->
+                    <p class="form-error" id="order-date-error">終了日は開始日以降の日付を指定してください</p>
+                  <?php endif; ?>
                 </fieldset>
                 <fieldset class="form-field status-field">
                   <legend class="form-label">ステータス</legend>
-                  <div class="status-checks">
+                  <div class="check-group">
                     <label class="form-check" for="search-status-new">
                       <input type="checkbox" id="search-status-new" name="status[]" value="new" />
                       <span>新規受付</span>
@@ -121,7 +151,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                 </div>
                 <div class="form-field">
                   <label class="form-label" for="order-email">メールアドレス</label>
-                  <input class="form-input" type="email" id="order-email" name="email" />
+                  <input class="form-input" type="email" id="order-email" name="email" spellcheck="false" />
                 </div>
                 <div class="form-field product-field">
                   <label class="form-label" for="order-product">商品名</label>
@@ -137,12 +167,24 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
         </form>
         <div class="list-heading" aria-live="polite" aria-atomic="true">
           <h2>注文一覧</h2>
-          <span class="count">8件</span>
-          <p class="filter-note">すべてを表示</p>
+          <span class="count"><?= $listCount ?>件</span>
+          <p class="filter-note"><?= $filterNote ?></p>
         </div>
 
-        <!-- 列見出しと注文の箱を同じ領域で横スクロールさせる。 -->
-        <div class="orders-scroll" role="region" aria-label="注文一覧（横スクロール対応）" tabindex="0">
+        <?php if ($isEmptyState || $isNoResultsState): ?>
+          <div class="list-empty">
+            <p class="message"><?= $isEmptyState ? 'まだ注文はありません' : '条件に一致する注文はありません' ?></p>
+            <?php if ($isNoResultsState): ?>
+              <div class="empty-actions">
+                <a class="show-all" href="orders.<?= $pageExtension ?>">すべての注文を表示</a>
+                <!-- 仮リンク。検索条件を解除する遷移先はバックエンド実装時に決める。 -->
+                <a href="#">条件をクリア</a>
+              </div>
+            <?php endif; ?>
+          </div>
+        <?php else: ?>
+        <!-- 列見出しと注文の箱をまとめる。スクロールは縦横ともページ全体で行う。 -->
+        <div class="orders-scroll">
           <div class="orders-board">
             <div class="column-head" aria-hidden="true">
               <span class="column-label">注文・お届け先</span>
@@ -281,13 +323,17 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                                 <span class="file-name">photo_01.jpg</span>
                                 <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_01.jpg" data-image-alt="写真入りマグカップの入稿画像 photo_01.jpg" data-file-name="photo_01.jpg" aria-label="photo_01.jpgを拡大表示" title="photo_01.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <circle cx="10" cy="10" r="6" />
-                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" x2="16.65" y1="21" y2="16.65" />
+                                    <line x1="11" x2="11" y1="8" y2="14" />
+                                    <line x1="8" x2="14" y1="11" y2="11" />
                                   </svg>
                                 </button>
                                 <a class="file-download" href="assets/images/sample/photo_01.jpg" download="photo_01.jpg" aria-label="photo_01.jpgをダウンロード" title="photo_01.jpgをダウンロード">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                    <path d="M12 15V3" />
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <path d="m7 10 5 5 5-5" />
                                   </svg>
                                 </a>
                               </li>
@@ -296,13 +342,17 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                                 <span class="file-name">photo_02.jpg</span>
                                 <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_02.jpg" data-image-alt="写真入りマグカップの入稿画像 photo_02.jpg" data-file-name="photo_02.jpg" aria-label="photo_02.jpgを拡大表示" title="photo_02.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <circle cx="10" cy="10" r="6" />
-                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" x2="16.65" y1="21" y2="16.65" />
+                                    <line x1="11" x2="11" y1="8" y2="14" />
+                                    <line x1="8" x2="14" y1="11" y2="11" />
                                   </svg>
                                 </button>
                                 <a class="file-download" href="assets/images/sample/photo_02.jpg" download="photo_02.jpg" aria-label="photo_02.jpgをダウンロード" title="photo_02.jpgをダウンロード">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                    <path d="M12 15V3" />
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <path d="m7 10 5 5 5-5" />
                                   </svg>
                                 </a>
                               </li>
@@ -313,9 +363,10 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2610170112345" />
-                        <label for="memo-2610170112345">メモ</label>
+                        <!-- 複数の注文を開いても区別できるよう、読み上げ用に注文番号を補う。 -->
+                        <label for="memo-2610170112345">メモ<span class="sr-only">（注文#2610170112345）</span></label>
                         <textarea id="memo-2610170112345" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2610170112345のメモ）</span></button>
                       </form>
                     </div>
                   </div>
@@ -437,13 +488,17 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                                 <span class="file-name">photo_02.jpg</span>
                                 <button class="image-preview" type="button" data-image-src="assets/images/sample/photo_02.jpg" data-image-alt="オリジナルラベルギフトの入稿画像 photo_02.jpg" data-file-name="photo_02.jpg" aria-label="photo_02.jpgを拡大表示" title="photo_02.jpgを拡大表示" aria-haspopup="dialog" aria-controls="submission-preview">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <circle cx="10" cy="10" r="6" />
-                                    <path d="m14.5 14.5 6 6M7 10h6M10 7v6" />
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" x2="16.65" y1="21" y2="16.65" />
+                                    <line x1="11" x2="11" y1="8" y2="14" />
+                                    <line x1="8" x2="14" y1="11" y2="11" />
                                   </svg>
                                 </button>
                                 <a class="file-download" href="assets/images/sample/photo_02.jpg" download="photo_02.jpg" aria-label="photo_02.jpgをダウンロード" title="photo_02.jpgをダウンロード">
                                   <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false">
-                                    <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+                                    <path d="M12 15V3" />
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <path d="m7 10 5 5 5-5" />
                                   </svg>
                                 </a>
                               </li>
@@ -454,9 +509,9 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2026110300002" />
-                        <label for="memo-2026110300002">メモ</label>
+                        <label for="memo-2026110300002">メモ<span class="sr-only">（注文#2026110300002）</span></label>
                         <textarea id="memo-2026110300002" name="memo" rows="4">名入れの文字は「祝 還暦」で確定済み。</textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300002のメモ）</span></button>
                       </form>
                     </div>
                   </div>
@@ -569,9 +624,9 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
                       <form class="memo-form" method="post" action="">
                         <!-- nameは表示例。バックエンドの項目名・保存処理を確定するものではない。 -->
                         <input type="hidden" name="order_id" value="2026110300003" />
-                        <label for="memo-2026110300003">メモ</label>
+                        <label for="memo-2026110300003">メモ<span class="sr-only">（注文#2026110300003）</span></label>
                         <textarea id="memo-2026110300003" name="memo" rows="4"></textarea>
-                        <button class="memo-save" type="submit">保存</button>
+                        <button class="memo-save" type="submit">保存<span class="sr-only">（注文#2026110300003のメモ）</span></button>
                       </form>
                     </div>
                   </div>
@@ -580,6 +635,49 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
             </ol>
           </div>
         </div>
+        <!-- 表示確認用。実際は1ページ50件で、総件数・現在ページ・番号・URLをバックエンドが決める。通常表示の8件にページ送りは不要。 -->
+        <!-- hrefとpageパラメータ名は仮。バックエンドのルーティングに合わせて置き換える。 -->
+        <nav class="pagination" aria-label="注文一覧のページ">
+          <ul class="pagination-list" role="list">
+            <?php if ($isPagerMiddleState): ?>
+              <li>
+                <a href="?page=9">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg>
+                  <span class="sr-only">前のページ</span>
+                </a>
+              </li>
+              <li><a href="?page=1">1<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=9">9<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=10" aria-current="page">10<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=11">11<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=20">20<span class="sr-only">ページ</span></a></li>
+              <li>
+                <a href="?page=11">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg>
+                  <span class="sr-only">次のページ</span>
+                </a>
+              </li>
+            <?php else: ?>
+              <li><a href="?page=1" aria-current="page">1<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=2">2<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=3">3<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=4">4<span class="sr-only">ページ</span></a></li>
+              <li><a href="?page=5">5<span class="sr-only">ページ</span></a></li>
+              <li><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+              <li><a href="?page=20">20<span class="sr-only">ページ</span></a></li>
+              <li>
+                <a href="?page=2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg>
+                  <span class="sr-only">次のページ</span>
+                </a>
+              </li>
+            <?php endif; ?>
+          </ul>
+          <p class="page-status"><?= $isPagerMiddleState ? '10' : '1' ?> / 20<span class="sr-only">ページ</span></p>
+        </nav>
+        <?php endif; ?>
       </main>
     </div>
     <!-- すべての入稿画像で共用する拡大表示。内容は押したボタンのdata属性から設定する。 -->
@@ -590,6 +688,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
         <button class="dialog-close" type="button" autofocus>閉じる</button>
       </div>
     </dialog>
+    <script src="assets/js/common.js"></script>
     <script src="assets/js/order.js"></script>
   </body>
 </html>

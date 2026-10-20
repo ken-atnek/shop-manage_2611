@@ -612,3 +612,141 @@
 - order.scss：ボタンの共通指定をファイル内mixin `order-button`・`order-button-primary`にまとめ、検索・この条件で検索・保存・閉じるで使用（Sass分割時に_ui.scssへ移す候補）。`.order-detail`の2か所の指定を展開行の節へ統合し、古い「ステップ5で作る」コメントを削除。拡大・ダウンロードボタンの重複border-radiusを削除。生成CSSの実効値は変更なし（宣言の並び・まとまりのみ変化）
 - order.js：documentのclickリスナー2つを1つへ統合し、注文番号取得`getOrderNumber`、アコーディオン開閉`toggleAccordion`（aria-expanded・inert）を展開行と詳細検索で共用。動作は変更なし
 - npm run sass警告なし、node --check成功。Playwright（PHP書き出しHTML・1280幅）でKPI初期状態、ステータスの矢印＋Enter・ポインタ選択・外側クリック・Esc、展開行の開閉と名前・inert・高さ、画像dialogのEsc・フォーカス復帰、詳細検索の開閉・クリア・開始日への復帰を回帰確認。ファイル分割・Gitコミットなし
+
+## 2026-10-19 ステータスメニュー内のフォーカス表示を修正（レビュー指摘#1）
+
+- `docs/reviews/CLIENT_ORDER_LIST_REVIEW_2026-10-19.md`のP1#1への対応。radioはlabelの下に隠れ、共通のフォーカス枠（外側5px）も`.list-wrapper`・`.selectbox__panel`の`overflow: hidden`で切れていたため、矢印キーで移動しても位置が見えなかった
+- Kenの依頼により`scss/_ui.scss`の`select-status-box`へ`input[type="radio"]:focus-visible + label { outline: 2px solid #fff; outline-offset: -4px; }`を追加。ステータス5色はいずれも白と5:1以上で、ブランド緑より色面の上で見分けやすい。DESIGN_TOKENSのフォーカスの個別指定に追記
+- マウスで開いた場合も、JSが選択中のradioへフォーカスを移すため、現在の選択肢に白枠が出る（Chromiumで確認）。現在値の目印として残す
+- npm run sass警告なし。Playwright（Chromium）で1280・1024・834pxの矢印キー移動・Enterで閉じてボタンへ戻る動作と白枠の表示を確認。Safari・Firefoxは未確認。Gitコミットなし
+
+## 2026-10-19 保存・一覧の状態・ページ送り・入力エラーの方針を決定（レビュー指摘#2〜#4）
+
+- Kenの決定：発送状況は選択時に即時保存（保存中・成功・失敗の表示を用意）、KPIの切り替え方式はバックエンド側で調整、データなし・検索0件の表示とページ送りを構築、入力エラーは`$color-error`＝`#D21F3C`の枠＋fz(14)の文＋`aria-invalid`・`aria-describedby`
+- 要確認：ステータス変更時に注文者へメールが送られるか（確認ダイアログの対象が変わる）、1ページの件数と並び順（仮50件・新しい注文順）
+- CLIENT_ORDER_LISTに決定事項の節を追加し、SPECの確定事項・DESIGN_TOKENSのエラー色を更新。DESIGN_TOKENSに残っていた削除済み`$color-nav-hover`の行を削除。コード変更・Gitコミットなし
+- 追記（同日）：ステータス変更では注文者へメールを送らない（Kenの回答）。確認ダイアログは「キャンセル」選択時だけとした。1ページは50件で進める。並び順（新しい注文順）は仮のまま
+
+## 2026-10-19 一覧状態・ページ送り・注文日の入力エラーを実装
+
+- `orders.php`へ制作確認専用の`preview`切り替えを追加。通常・`pager-middle`は既存の注文3件とページ送り、`empty`はデータなし、`no-results`は検索結果0件と2つの導線、`date-error`は詳細検索を開いた逆転日付のエラー例を表示する。静的HTMLは通常状態だけを書き出す
+- 空状態は一覧とページ送りを白い案内箱へ置き換える。ページ送りはページ番号・省略記号を最大7項目とし、先頭・途中・末尾の表示規則と前へ／次への出力条件を`CLIENT_ORDER_LIST.md`へ記録した。通常8件に20ページを表示するのは制作確認用の例で、実際のページ数・URLはバックエンドが決める
+- 共通フォーム候補として、`aria-invalid="true"`の入力枠と`.form-error`に新設した`$color-error: #D21F3C`を適用。注文日の開始・終了欄から同じエラー文を`aria-describedby`で参照する
+- `npm run sass`は警告・エラーなし。ホストにPHPがないためDDEVのPHP 8.4で`php -l shop-partner/orders.php`を実行し、構文エラーなし。静的HTMLも通常状態だけで書き出せること、`node --check`・`git diff --check`が正常であることを確認
+- Chromiumで通常・途中ページ・データなし・検索結果0件・日付エラーの5状態を1280×800・1024×768・834×1194で確認。ページ全体の横はみ出しはなく、834pxでも途中ページのページ送りは1行に収まり、ブラウザコンソールに警告・エラーなし
+- ページ送りの全リンクにキーボードフォーカスと共通枠が表示され、省略記号とページ位置表示にはTabが止まらない。日付2欄の`aria-invalid`と同じエラー文への`aria-describedby`、ステータスの矢印キー＋Enter、展開行、画像dialogのEsc・フォーカス復帰、詳細検索の開閉・クリアを確認。JavaScriptは変更していない。ステータス保存状態とキャンセル確認ダイアログは今回の対象外
+
+## 2026-10-19 ページ送りの見た目をA案へ
+
+- Kenが「単調」と判断し、3案（A：KPIと同じ選択表現、B：白い箱＋下線、C：区切り付きボタン列）を実画面に当てて比較。A案に決定
+- order.scssのページ送り：現在ページを`--color-brand-accent`の2px枠＋文字・太字・白い面、ホバーを`$color-bg-head`の面、角丸`$radius-sm`。Tab移動時に隣のフォーカス枠が現在ページの枠と接して紛らわしかったため、間隔を0.4→0.8rem、ページ送り内のフォーカス枠offsetを2pxにした
+- Playwright（Chromium）で1280・834pxの途中ページを確認。1行に収まり、各項目44px四方、横はみ出しなし。CLIENT_ORDER_LIST・DESIGN_TOKENSに記録。Gitコミットなし
+- 追記（同日）：確認用の`?preview=empty`ではKPIも0件にした（検索結果0件ではKPIは全体件数のまま）。`$color-error`に用途とコントラストのコメントを追加
+
+## 2026-10-19 レビューのP3を整理
+
+- `scss/_ui.scss`の`select-status-box`から無効な`width: 3var (--corner-radius);`を削除（Kenの了承済み。表示はapply-status-boxの36pxで変わらない）
+- order.scssの未使用`@keyframes status-menu-open`を削除
+- メモのlabel「メモ」と保存ボタン「保存」に、読み上げ用の注文番号（sr-only）を追加。見た目は変えない
+- 詳細検索のメール欄に`spellcheck="false"`を追加。`autocomplete="off"`は入力履歴が再検索に役立つ可能性があるため見送り
+- npm run sass警告なし、PHP構文正常。Gitコミットなし
+
+## 2026-10-19 バックエンドへの申し送り資料を作成
+
+- `docs/coding/HANDOFF_CLIENT_ORDER_LIST.md`を新規作成。`docs/backend/`はバックエンド担当者のフォルダでフロントは依頼なく編集しないルールのため、引き渡し資料の置き場の`docs/coding/`に置いた
+- 内容：Bladeへ移さない制作用の変数、一覧の3状態、ページ送りの表示ルールとURL（条件の引き継ぎ）、KPI方式の差し替え方法、詳細検索パネルの初期状態とエラー出力、ステータスの即時保存とキャンセル時の確認、hiddenがformの外にあること、メモ、縮小サムネイル＋lazy・download属性の注意、JSが依存するclass・属性・id、未確定項目
+- docs/README.mdの一覧とIMPLEMENTATION_REFERENCE.mdの引き渡しの節から参照。コード変更・Gitコミットなし
+
+## 2026-10-19 受注一覧の操作アイコンをLucideへ統一
+
+- `orders.php`の入稿画像の拡大をLucide `zoom-in`、ダウンロードを`download`、ページ送りの前後を`chevron-left`／`chevron-right`へ置換。ボタン・リンク側のclass・属性・動作は変えず、SVGは20×20px・viewBox 24・線幅1.5、線色・線端は共通リセットに任せた
+- LucideはISC License。今回の4種はFeather由来でMITの通知も公式LICENSEに含まれるため、全文を`docs/design/reference/LUCIDE_LICENSE`へ保存し、使用ルールと用途一覧を`IMPLEMENTATION_REFERENCE.md`へ記録した。npmパッケージ・外部スクリプトは追加していない
+- 展開ボタンは独自アイコンのまま維持。Lucideの`panel-bottom-open`・`panel-bottom-close`は存在するが、公式形状を使う場合は現行の単一`.panel-chevron`の上下反転ではなく、状態ごとに2つのSVGまたはパスを切り替える必要がある。中身あり／なし・開閉の比較画像を`docs/design/proposals/2026-10-19/client-order-panel-icon-comparison-lucide.jpg`へ保存
+- `npm run sass`は警告・エラーなし、DDEV内のPHP構文確認と`git diff --check`は正常。Chromiumで1280×800・1024×768・834×1194を確認し、SVGは20×20px・線幅1.5px・丸い線端・ボタン中央に一致。834pxでもページ全体の横はみ出しはなく、一覧内だけ横スクロールする
+- 拡大dialogの開閉・Esc後のフォーカス復帰、ダウンロードの実保存、ページ送りの前へリンクの遷移、リンクと拡大ボタンのフォーカス枠、ダウンロードリンクのホバーを確認。ブラウザ警告・エラーなし。比較画像は既存の`.gitignore`によりGit管理外で、ローカルに保存。Gitコミットなし
+- 追記（同日）：`IMPLEMENTATION_REFERENCE.md`のアイコンセット節をSCSSの書き方の末尾へ移し、Feather由来とMIT通知の説明をLICENSE一覧に基づく表現へ変更。`CLIENT_ORDER_LIST.md`の旧サイドバー配色を現行の深い緑・選択中・ホバーの指定へ訂正。資料のみ変更
+
+## 2026-10-19 Client受注一覧の共通部分を商品一覧向けに整理
+
+- 見た目と動作を変えず、商品一覧で再利用する準備として置き場所と名前だけを整理。商品一覧のPHP・Sassは未作成
+- `order.scss`内の`order-button`・`order-button-primary`を`scss/_ui.scss`へ移し、`button-base`・`button-primary`へ改名。条件クリアの直書き指定を`button-secondary`へまとめた。新しいmixin・関数・パーシャルは、この3つ以外に追加していない
+- ページ見出し、検索、一覧見出し、一覧の状態、ページ送りを`order.scss`から`common.scss`のフォーム部品の後へ移動。KPI、注文日・ステータスの全幅指定、タブレット縦の商品名の全幅指定と、受注一覧本体・展開行・dialogは`order.scss`に残した
+- 汎用classへ変更：`.orders-empty`→`.list-empty`、`.show-all-orders`→`.show-all`、`.status-checks`→`.check-group`。ほかのclass・id・name・JS依存属性は変更していない
+- `shop-partner/assets/js/common.js`を新設し、`toggleAccordion`と詳細検索の開閉・クリアを`order.js`から移動。詳細検索パネルは`.detail-toggle`の`aria-controls`から取得し、クリア後はパネル内の最初の`input`へフォーカスする。`.detail-toggle`がないページでもエラーにならないことを確認。`orders.php`は`common.js`→`order.js`の順に読み込む
+- 作業前は通常・`pager-middle`・`empty`・`no-results`・`date-error`を1280×800・1024×768・834×1194で撮影。作業後も同じ15条件をChromiumで撮影し、主要状態を見比べた。生成CSSは新旧class名を正規化して全250ルールを比較し、宣言の増減0件
+- 詳細検索の開閉・全入力のクリア・開始日へのフォーカス、ステータスの矢印キー選択→Enter・表示／hidden値・フォーカス復帰、展開行のinert解除、画像dialogのEsc・フォーカス復帰を確認。`npm run sass`、`node --check`、DDEV PHP 8.4の`php -l`、`git diff --check`は正常。Gitコミットなし
+- 追記（2026-10-19）：`common.js`の詳細検索処理をブロックスコープにし、`toggleAccordion`は外に維持。作業用`index.html`のリンクなし画面名を本文色の`.screen-name`へ変更し、申し送り§9にJS・CSSのURLバージョン付与と`common.js`・`order.js`の同時更新を追記。Gitコミットなし
+
+## 2026-10-19 Client商品一覧の画面資料を作成
+
+- Kenの決定を基に`docs/design/CLIENT_PRODUCT_LIST.md`を新規作成。8列のtable、検索条件、更新が新しい順・50件、空状態・日付エラー、共通部品の再利用を確定事項として整理。公開切り替えと入稿の設定・確認は商品詳細へ集約し、規格・商品コード・KPIは設けない
+- 公開状態・在庫ラベル・ホバー・列幅はKenが実画面で調整する案に分けた。在庫管理なし・基準値・一致方法・更新契機・セール価格・登録導線・文字入稿・Master展開などは未確定として記録し、検索区分の重なり等も確定扱いにしない
+- `docs/README.md`の資料一覧と`docs/SPEC.md`の確定事項・未確定事項を更新。編集用Lucide `pencil`のアイコン表追加、制作ファイル・サイドバー・静的出力・作業用一覧の更新は今後の予定として記載した
+- 資料だけの作業。PHP・HTML・Sass・CSS・JSは作成・変更せず、ブラウザ確認・コンパイルは未実施。Gitコミットなし
+- 追記（2026-10-19）：商品一覧資料に横スクロール領域の属性とtableの名前付けを追記し、画像なしの具体表現を案へ移動。ページ見出しは「商品一覧」だけで日付なしと明記し、確認事項の見出しを変更。画像なし・日付なしの扱いを`SPEC.md`にも反映。資料のみ変更、Gitコミットなし
+
+## 2026-10-19 Client商品一覧の制作用PHP・Sassを作成
+
+- `shop-partner/products.php`・`shop-partner/assets/scss/products.scss`・生成CSSを作成。受注一覧と同じPHP構成で、共通の見出し・検索・フォーム・空状態・ページ送りを再利用し、JSは`common.js`だけを読み込む
+- 8列のtableに架空の6商品を掲載。長い商品名・画像なし・在庫切れ・残りわずか・非公開を含め、編集はLucide `pencil`＋仮リンク。公開状態の点、在庫ラベル、画像なしの面、行ホバー、列幅はKenが調整する仮案
+- 表の最小幅は960px。通常・途中ページ・データなし・検索結果0件・更新日エラーを1280×800・1024×768・834×1194で撮影・目視確認。ページ全体の横はみ出しなし、1024px・834pxでは表の領域内だけ横スクロール
+- 詳細検索の開閉・クリア（キーワード維持、チェック解除、日付消去、先頭の公開チェックへフォーカス）、閉じたパネルのTab除外、日付エラーの関連付け、表の名前・列見出し、編集の名前・title・40px領域・フォーカス枠、ページ送りを確認。受注一覧の操作回帰はChromeで確認し、詳細検索・ステータス・展開行・画像dialogも正常
+- サイドバーの商品一覧リンクと現在地、静的書き出し対象、作業用`index.html`のリンク・5状態・「作業中」を更新。`CLIENT_PRODUCT_LIST.md`に実装メモ、`IMPLEMENTATION_REFERENCE.md`に制作単位とアイコン、`AGENTS.md`・`SPEC.md`に編集元を追記
+- `npm run sass`、DDEVの変更PHPの`php -l`、両画面の静的HTML書き出し、`git diff --check`が正常。ブラウザコンソールの警告・エラーなし。書き出したHTMLと確認画像はGit管理外
+- 受注一覧のPHP・Sass・JS、共通Sass・JS、ルート`scss/`は変更していない。共通化の候補は40pxのアイコンリンクと横スクロール領域だけ記録し、今回は商品一覧側へ記述。業務処理・ページ固有JS・新しいmixin等の追加なし、Gitコミットなし
+
+## 2026-10-19 Client商品一覧の在庫・日時・公開バッジを調整
+
+- Kenの決定を反映。在庫ラベルを数字の下の行に右揃えで配置し、文字サイズ・補助色は維持。全行の数字の右端を統一し、在庫列を140pxから90pxへ縮小
+- 更新日時は1つの`time`・`datetime`を維持して日付と時刻の2つの`span`へ分け、2行・右揃え・等幅数字にした。日時列は164pxから110pxへ縮小
+- 公開状態の点を削除し、高さ28px・左右12px・角丸999px・`fz(14)`太字・白文字・枠なしのバッジに変更。`scss/_colors.scss`に`$color-publish-public: #3A5F95`（白と6.46:1）・`$color-publish-private: #6B7079`（白と4.98:1）を追加。ホバー色を変えずカーソルはdefault、非公開行も薄くしない
+- 公開状態列はバッジを収める100px、表の最小幅は960pxから860pxへ。最小幅で商品名264pxを残した。1024×768で領域765pxに対して95px不足（縦スクロールバーが幅を取らない場合は領域780pxで80px不足）。無理に詰めず、サイドバー折り畳み案の検討材料として記録
+- 1280×800・1024×768・834×1194で表示と寸法を確認。ページ全体の横はみ出しなし。バッジのホバー不変・日時2行・在庫の右端揃え・コンソール警告／エラーなしを確認。受注一覧は変更前後の表示と算出スタイルを比較し、CSSの宣言も一致
+- `DESIGN_TOKENS.md`・`CLIENT_PRODUCT_LIST.md`・`SPEC.md`に確定事項と測定結果を反映。`npm run sass`とDDEVのPHP構文確認は正常。共通カラーに規約のコメントヘッダーを追加したため`common.css`・`order.css`にもコメントだけ出力されるが、見た目の指定は変更なし。Gitコミットなし
+
+## 2026-10-19 Client画面の文字の太さを整理
+
+- Kenの決定に従い、`_ui.scss`・`common.scss`・`order.scss`・`products.scss`の700を用途別に600（見出し・強調数値・現在地・サービス名）／500（列見出し・主ボタン）へ変更。`button-base`は既存の500を維持し、公開バッジを500に指定。Kenの`apply-status-box`には`font-weight: 500`の1行だけを追加し、表示値・全選択肢への継承を確認した
+- 両PHPのGoogle Fontsを400・500・600へ変更。Chrome DevToolsの両画面のh1で、計算済み600に加え、レンダリングフォントがネットワークリソースの`NotoSansJP-Thin_SemiBold`（4グリフ）であることを確認した
+- 変更前後を1280×800・834×1194で撮影・確認。商品表の列幅・行高と注文カードの高さは同一で、折り返しの崩れ・ページ全体の横はみ出しなし。両画面に計算済み700はなく、コンソールの警告・エラーなし
+- 作業開始時のソースと比較し、Sassは`font-weight`以外、PHPはGoogle Fontsのウェイト以外が不変であることを確認。Kenが調整した商品一覧の日時サイズ・バッジ幅／透明度・編集リンク等は維持。`DESIGN_TOKENS.md`・`IMPLEMENTATION_REFERENCE.md`・`SPEC.md`を更新し、`npm run sass`・DDEVの両PHPの`php -l`・`git diff --check`は正常。Gitコミットなし
+
+## 2026-10-19 受注一覧・商品一覧をページ全体スクロールへ変更
+
+- Kenの決定で縦横ともページ全体のスクロールへ変更。`.orders-scroll`・`.products-scroll`の`overflow-x: auto`とスクロール領域用の`role`・`aria-label`・`tabindex`を外し、ラッパー・一覧の構造・tableや注文の名前付けは維持
+- `.order-detail-inner`・`.search-panel-inner`に`position: relative`を追加し、閉じた内容の絶対配置`.sr-only`を内側でクリップ。修正前の受注一覧834pxでは表示高574px／スクロール高749pxだったものが、修正後は574px／574pxとなった
+- `common.scss`内でresetのhtml・bodyの横方向の抑止を解除し、body・メインを`min-width: min-content`、サイドバーを縮まない18rem幅にした。ヘッダーの幅をページ幅に、サイドバー下端をページ下端に揃え、背景と下線の途切れを防ぐ。ルートの`scss/`・JSは今回変更していない
+- 1280×800・1024×768・834×1194で両画面を撮影・目視確認し、通常時の一覧ラッパーは幅・高さともclientとscrollが一致。受注一覧は順に1021×636・765×760・704×574px、商品一覧は1021×483・860×498・860×484px。受注834pxのページ幅は948px、商品1024／834pxは1104pxでページ全体が横スクロールする。受注1024pxは一覧が収まるため横スクロールなし
+- 最後のステータスメニューは全3サイズで切れず、下余白19.2remを削除。展開行の開閉・画像dialogの拡大とEsc終了・フォーカス復帰、両画面の詳細検索の開閉・クリアと先頭入力へのフォーカスを確認。横スクロール・縦スクロールの実操作でラッパーのscrollLeft／scrollTopは0のまま、ページだけが移動することを確認
+- 両画面資料・申し送り・SPECを更新。`npm run sass`、DDEVの両PHPの`php -l`、`git diff --check`は正常。ブラウザコンソールの警告・エラーなし。確認画像はGit管理外、Gitコミットなし
+
+## 2026-10-19 Client共通サイドバーの開閉を追加
+
+- Kenの決定で、共通サイドバーを開く18rem／畳む6.4remへ。メニュー6種と開閉2種は指定のLucide公式SVGを確認して採用。深い緑の面・グラデーション・現在地の面と左バーを維持し、畳んでも読み上げ名・title・44px以上の操作領域・白いフォーカス枠を残した
+- 1194pxより広いPCは初期値を開き、開閉で本文幅を変える。localStorageの`kumanichi-client-sidebar`に`expanded`／`collapsed`を保存。1194px以下は向きに関係なく毎ページ畳み、開くと本文に重ねる。タブレットの状態は保存せず、Esc・外側クリック・ボタンで閉じたらボタンへフォーカス復帰。影は使わず境界線で区切る
+- `common.scss`・`common.js`・`inc_sidebar.php`と両PHPのheadを変更。headの同一インラインスクリプトでCSSより前にhtmlの状態classを反映し、保存拒否はtry/catchで保護。幅のtransitionは動きを減らさない設定のときだけ0.2秒。ページ全体スクロールとbody／mainのmin-contentは維持
+- 実装前に商品バッジ資料を現行Sassへ同期：500・幅5em・中央ぞろえ、非公開opacity 0.7・白文字実表示約2.8:1をKen指定の例外として明記。編集アイコンのホバー1px枠・transitionも記録。`products.scss`・`order.scss`・`order.js`・ルートscssは変更なし
+- 2画面×3サイズ×2状態を撮影・寸法確認。ページ横スクロールは受注が全条件0px、商品は1280／1024pxが0px、834pxのみ154px（ページ幅988px）。1024pxの商品表は896pxで収まる。全条件で一覧ラッパーのclient／scroll幅・高さが一致、ヘッダー幅＝ページ幅・サイドバー下端＝ページ下端。測定環境のスクロールバー占有幅は0px
+- PCの保存と画面移動、タブレットの再読み込み・Esc・外側クリック・ボタンのフォーカス復帰、PC幅へ戻した際の保存状態復元を確認。受注の末尾ステータスメニュー（3サイズ）・選択、展開行、画像dialog、両画面の詳細検索・クリア・先頭入力フォーカスも確認。閉じた検索・展開行はinertを維持
+- Nodeの模擬DOMで保存領域の読み書きが例外になるPC／タブレットを検証し、headの同一性も確認。`npm run sass`・`node --check`・DDEVの両PHPと共通サイドバーの`php -l`は正常。確認用ブラウザの旧キャッシュ回避に一時的なURLクエリを付けて検証し、確認後は元のURLへ戻した。ブラウザのJS警告／エラーなし。確認画像はGit管理外、Gitコミットなし
+
+## 2026-10-19 Clientの申し送りを共通・受注一覧・商品一覧へ分離
+
+- `HANDOFF_CLIENT_COMMON.md`を新規作成し、受注一覧の申し送りから共通内容を移動（移動元の重複説明は削除）。共通レイアウト・head／CSP・サイドバー・詳細検索／toggleAccordion・エラー・空状態・ページ送り・読み込み順／キャッシュ対策・ページ全体スクロールを集約した
+- `HANDOFF_CLIENT_ORDER_LIST.md`は共通資料への参照を冒頭へ追加し、KPI・保存処理・メモ・入稿画像・注文ごとの識別子・固有の表示例を残した。KPIとステータス保存・メモ・入稿画像の本文（旧§4・§6〜§8）は変更せず保持
+- `HANDOFF_CLIENT_PRODUCT_LIST.md`を新規作成。表示例の除外、商品テーブルの構造・書式・状態、編集リンク、縮小画像とlazy、検索項目と未確定の細則、固定の並び順、共通JSのみの構成を現行PHPと画面資料に合わせて整理。業務仕様は新たに確定していない
+- READMEと実装連携ガイドに3資料を案内し、レイアウト資料・両画面資料のサイドバー参照先も共通申し送りへ変更した
+- 移動前の全10節を以下の表で突き合わせ、共通／受注のどちらからも説明が抜け落ちていないことを確認。旧資料のコード識別子の包含、保持する節の本文一致、相対リンクと節アンカー、差分も確認した。資料だけの変更のためブラウザ確認・Sassコンパイルは実施せず、PHP・Sass・CSS・JSは未変更。Gitコミットなし
+
+| 移動前の受注申し送り | 整理後の所在 |
+|---|---|
+| §1 制作用PHPのうちBladeへ移さないもの | 共通§1（includes・現在地・静的出力・previewの扱い）、受注§1（previewの種類・変数・表示例） |
+| §2 一覧の表示状態 | 共通§1（スクロール）、§4（search-panel-inner）、§6（空状態・見出し・解除URL・サーバー描画）、受注§2（文言・KPI・order-detail-inner・末尾メニューの余白） |
+| §3 ページ送り | 共通§7（50件・表示ルール・マークアップ・URL・1ページ時の未確定）、受注§3（仮の並び順） |
+| §4 KPIの切り替え | 受注§4に保持 |
+| §5 詳細検索と入力エラー | 共通§4・§5（初期状態・値復元・エラー表示）、受注§5（検索項目名・固有id・エラー表示例） |
+| §6 ステータスの保存 | 受注§6に保持 |
+| §7 メモ | 受注§7に保持 |
+| §8 入稿画像 | 受注§8に保持 |
+| §9 JSの依存先・読み込み順・共通サイドバーの初期化と保存 | 共通§2・§3（head・CSP・保存・サイドバー依存先）、§4（詳細検索・共通関数）、§8（読み込み・キャッシュ）、受注§9（order.js依存先・注文ごとのid／radio名） |
+| §10 未確定事項 | 共通§9（1ページ時のページ送り）、受注§10（受注固有の未確定事項） |

@@ -1,0 +1,184 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 商品一覧 スタイル
+ * URL: /shop-partner/assets/scss/products.scss
+ * Referenced in: /shop-partner/products.php
+ * Created: 2026-10-19
+ * Last updated: 2026-10-19
+ * ======================================= */
+
+/* =================================
+ * 商品一覧だけの検索条件配置
+ * ------------------------------ */
+.admin-main {
+    // KPIがないため、ページ見出しの下余白だけを使う。
+    .search-box {
+        margin-top: 0;
+        .search-panel {
+            .search-fields {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .updated-field {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+}
+
+/* =================================
+ * 商品テーブル（公開バッジ・在庫と日時の2行は確定。列幅等は調整値）
+ * ------------------------------ */
+.admin-main {
+    .products-scroll {
+        font-size: inherit;
+        width: 100%;
+        margin-top: 1.6rem;
+    }
+    .products-table {
+        font-size: inherit;
+        width: 100%;
+        min-width: 86rem;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+            font-size: inherit;
+        }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            text-align: left;
+            &:not(:first-child) {
+                border-left: 1px solid $color-border-inner;
+            }
+        }
+        th {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+            background: $color-bg-head;
+        }
+        td {
+            border-top: 1px solid $color-border-inner;
+        }
+        tbody tr:hover {
+            background: $color-bg-detail;
+        }
+        .product-id {
+            width: 6.4rem;
+        }
+        .product-image {
+            width: 7.4rem;
+            img {
+                display: block;
+                width: 48px;
+                height: 48px;
+                object-fit: cover;
+                border: 1px solid $color-border-inner;
+            }
+        }
+        .product-name {
+            overflow-wrap: anywhere;
+        }
+        .product-price {
+            width: 9.2rem;
+        }
+        .product-stock {
+            width: 9rem;
+        }
+        .product-id,
+        .product-price,
+        .product-stock {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .product-publish {
+            width: 10rem;
+        }
+        .product-updated {
+            width: 11rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            time {
+                font-size: fz(14);
+                span {
+                    font-size: inherit;
+                    display: block;
+                }
+            }
+        }
+        .product-edit {
+            width: 6.4rem;
+            text-align: center;
+        }
+        .no-image {
+            font-size: fz(12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: 1px solid $color-border-inner;
+            color: $color-text-secondary;
+            background: $color-bg-subtle;
+            white-space: nowrap;
+        }
+        .stock-note {
+            font-size: fz(12);
+            display: block;
+            color: $color-text-secondary;
+        }
+        .publish-state {
+            // Ken決定：表示専用のバッジ。ホバー色・操作用カーソルは付けない。
+            font-size: fz(14);
+            font-weight: 500;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 2.8rem;
+            padding-inline: 1.2rem;
+            border: 0;
+            width: 5em;
+            border-radius: 100vmax;
+            color: $pure-white;
+            background: $color-publish-public;
+            cursor: default;
+            white-space: nowrap;
+            &.is-private {
+                background: $color-publish-private;
+                opacity: 0.7;
+            }
+        }
+        .edit-link {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            color: $color-text-secondary;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            transition:
+                color $transition-base,
+                background-color $transition-base,
+                border-color $transition-base;
+            &:hover {
+                color: $color-text-primary;
+                background: $pure-white;
+                border-color: $color-border-card;
+            }
+        }
+    }
+}

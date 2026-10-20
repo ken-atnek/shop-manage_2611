@@ -10,8 +10,48 @@
  * URL: /scss/_ui.scss
  * Referenced in: /scss/_index.scss
  * Created: 不明
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
+/*=========================================
+ボタン
+-----------------------------------------*/
+@mixin button-base {
+    font-size: inherit;
+    font-weight: 500;
+    min-height: 4.4rem;
+    padding: 1rem 1.6rem;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    color: $color-text-primary;
+    background: $pure-white;
+    white-space: nowrap;
+    &:hover {
+        background: $color-bg-subtle;
+    }
+}
+
+// 主ボタン（検索・この条件で検索・保存）。button-baseの後に重ねる
+@mixin button-primary {
+    font-weight: 500;
+    border-color: $color-button-primary-border;
+    color: $color-button-primary-text;
+    background: $color-button-primary-bg;
+    &:hover {
+        background: $color-button-primary-bg-hover;
+    }
+}
+
+// 副ボタン（条件をクリア）。button-baseの後に重ねる
+@mixin button-secondary {
+    border-color: $color-button-secondary-bg;
+    color: $color-text-primary;
+    background: $color-button-secondary-bg;
+    &:hover {
+        border-color: $color-button-secondary-bg-hover;
+        background: $color-button-secondary-bg-hover;
+    }
+}
+
 /*=========================================
 中央寄せ
 -----------------------------------------*/
@@ -88,7 +128,7 @@
         i {
             display: block;
             align-self: stretch;
-            width: 3var (--corner-radius);
+            // 幅は呼び出し側で指定する（apply-status-boxでは36px）。無効だった`3var (--corner-radius)`は削除
             background-color: #fff;
             border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
             border: 1px solid $color-border-default;
@@ -128,6 +168,12 @@
                     position: absolute;
                     inset: 0;
                     pointer-events: none;
+                }
+                // radioはlabelの下に隠れ、外側の共通フォーカス枠もoverflow: hiddenで切れる。
+                // キーボード操作時だけ、色面の上でも見える白枠をlabelの内側に出す。
+                input[type="radio"]:focus-visible + label {
+                    outline: 2px solid #fff;
+                    outline-offset: -4px;
                 }
                 label {
                     position: relative;
@@ -187,6 +233,7 @@
  受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
 --------------------------------*/
 @mixin apply-status-box {
+    font-weight: 500;
     width: 120px;
     @include select-status-box(
         $height: 3.6rem,

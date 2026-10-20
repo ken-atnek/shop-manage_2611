@@ -15,6 +15,7 @@ ECサイト管理画面の共通構造を整理するためのテンプレート
 │   ├── 補助ナビゲーション
 │   └── アカウントメニュー
 ├── サイドバー
+│   ├── 開閉ボタン（Client）
 │   └── メインナビゲーション
 └── メイン
     ├── パンくず（必要な場合）
@@ -28,7 +29,7 @@ ECサイト管理画面の共通構造を整理するためのテンプレート
 
 ## HTML構造の参考
 
-HTMLはユーザーが実装するため、以下は構造を検討するための参考とする。
+以下は共通構造の参考。Clientの制作・編集元は制作用PHPと共通インクルードで、依頼された範囲をCodexが作成しKenが調整する。
 
 ```html
 <body class="admin-page">
@@ -38,9 +39,15 @@ HTMLはユーザーが実装するため、以下は構造を検討するため�
 
   <div class="admin-layout">
     <aside class="admin-sidebar">
-      <nav aria-label="管理メニュー">
-        <!-- メインナビゲーション -->
-      </nav>
+      <div class="sidebar-content">
+        <button class="sidebar-toggle" type="button" aria-expanded="true"
+          aria-controls="client-navigation" aria-label="メニューを畳む" title="メニューを畳む">
+          <!-- panel-left-close / panel-left-open（装飾扱いのSVG） -->
+        </button>
+        <nav id="client-navigation" aria-label="管理メニュー">
+          <!-- 各リンク：Lucide SVG＋.nav-label、同じ名前のtitle。現在地だけaria-current="page" -->
+        </nav>
+      </div>
     </aside>
 
     <main class="admin-main">
@@ -61,6 +68,14 @@ HTMLはユーザーが実装するため、以下は構造を検討するため�
   </div>
 </body>
 ```
+
+## Clientサイドバー（確定、2026-10-19）
+
+- PC（1194pxより広い）：18remの開いた状態を初期値とし、6.4remへ畳むと本文幅が広がる。保存した開閉状態をページ間で共有する
+- タブレット（1194px以下、縦横共通）：ページを開くたびに6.4remへ畳む。開くと`.sidebar-content`を18remで絶対配置し本文に重ねる。`.admin-sidebar`の確保幅は6.4remのまま、開いた状態は保存しない
+- Esc・本文側クリック・開閉ボタンで重ね表示を閉じ、開閉ボタンへフォーカスを戻す。ナビの境界は1px線、影なし。畳んでも文字は読み上げに残し、各リンクのtitle・現在地・白いフォーカス枠を維持する
+- body・`.admin-main`の`min-width: min-content`とサイドバーの固定幅を保つ。縦横ともページ全体でスクロールし、一覧内部にスクロールを作らない。ヘッダー・サイドバーの面をページの右端・下端まで続ける
+- 共通Sassと`common.js`で制御し、両PHPのheadに同一の初期化スクリプトをCSSより前に置く。依存class・保存キー・読み込み順は[共通申し送り](HANDOFF_CLIENT_COMMON.md)の§2・§3・§8を参照
 
 ## 画面ごとに確認する項目
 

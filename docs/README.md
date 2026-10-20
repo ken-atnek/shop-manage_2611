@@ -21,10 +21,14 @@
 | `MEMORY.md` | フロントの作業・判断の履歴 | フロント |
 | `design/DESIGN.md` | デザイン方針 | フロント |
 | `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更は共有） |
+| `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
 | `coding/IMPLEMENTATION_REFERENCE.md` | 制作用PHP・Sassの書き方と、バックエンドへの引き渡し方 | フロント |
+| `coding/HANDOFF_CLIENT_COMMON.md` | Client共通のBlade組み込み申し送り（レイアウト・head・サイドバー・検索・空状態・ページ送り・読み込み順） | フロント |
+| `coding/HANDOFF_CLIENT_ORDER_LIST.md` | Client受注一覧固有の申し送り（KPI・ステータス保存・メモ・入稿画像・order.jsの依存先） | フロント |
+| `coding/HANDOFF_CLIENT_PRODUCT_LIST.md` | Client商品一覧固有の申し送り（テーブル・状態・画像・編集リンク・検索細則・未確定事項） | フロント |
 | `backend/` | API・DB・ルーティング・Blade組み込み等の資料 | バックエンド |
 | `../backend/`（リポジトリのルート） | Laravel等のバックエンドのコード | バックエンド |
 
@@ -32,6 +36,6 @@
 
 - バックエンドのコードはリポジトリのルートの `backend/`、資料は `docs/backend/` に置く。中の構成は担当者が決める
 - フロントの資料は `design/`（見た目・画面）と `coding/`（実装・引き渡し）に置く
-- 画面が増えたら、画面資料は `design/` に画面ごとに1ファイル作る（2画面目に入る時点で `design/screens/` へまとめるか判断する）
+- 画面資料は `design/` 直下に `CLIENT_画面名.md`・`MASTER_画面名.md` で置く
 - 業務仕様（保存方式・ステータスの選択肢・集計条件など）を決めたら、どちらの担当でも `SPEC.md` と該当する画面資料へ反映する。`backend/` や `MEMORY.md` だけに書かない
 - 相手の担当の資料を変える必要がある場合は、直接書き換えずに相手へ確認する

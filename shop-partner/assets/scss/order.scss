@@ -6,58 +6,8 @@
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
-
-// ===== このファイル内のボタン共通（Sass分割時に_ui.scssへ移す候補） =====
-@mixin order-button {
-    font-size: inherit;
-    font-weight: 500;
-    min-height: 4.4rem;
-    padding: 1rem 1.6rem;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-sm;
-    color: $color-text-primary;
-    background: $pure-white;
-    white-space: nowrap;
-    &:hover {
-        background: $color-bg-subtle;
-    }
-}
-
-// 主ボタン（検索・この条件で検索・保存）。order-buttonの後に重ねる
-@mixin order-button-primary {
-    font-weight: 700;
-    border-color: $color-button-primary-border;
-    color: $color-button-primary-text;
-    background: $color-button-primary-bg;
-    &:hover {
-        background: $color-button-primary-bg-hover;
-    }
-}
-
-/* =================================
- * ページ見出し
- * ------------------------------ */
-.admin-main {
-    min-width: 0;
-    .page-heading {
-        font-size: inherit;
-        display: flex;
-        align-items: baseline;
-        gap: 1.6rem 2.4rem;
-        margin-bottom: 2.4rem;
-        h1 {
-            font-size: fz(28);
-            font-weight: 700;
-        }
-        time {
-            font-size: inherit;
-            color: $color-text-primary;
-            white-space: nowrap;
-        }
-    }
-}
 
 /* =================================
  * KPI
@@ -96,7 +46,7 @@
                 white-space: nowrap;
                 strong {
                     font-size: fz(30);
-                    font-weight: 700;
+                    font-weight: 600;
                     font-variant-numeric: tabular-nums;
                 }
                 .unit {
@@ -120,89 +70,13 @@
 }
 
 /* =================================
- * 検索
+ * 受注一覧だけの検索条件配置
  * ------------------------------ */
 .admin-main {
     .search-box {
-        font-size: inherit;
-        margin-top: 2.4rem;
-        .filter-bar {
-            font-size: inherit;
-            display: flex;
-            align-items: center;
-            gap: 1.6rem;
-            label {
-                font-size: inherit;
-            }
-            input {
-                // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
-                font-size: 1.6rem;
-                min-height: 4.4rem;
-                padding: 1rem 1.6rem;
-                border: 1px solid $color-border-default;
-                border-radius: $radius-sm;
-                color: $color-text-primary;
-                background: $pure-white;
-                flex: 1;
-                min-width: 0;
-                // Safariの検索欄の角丸・独自余白を外す
-                appearance: none;
-                &::placeholder {
-                    color: $color-text-secondary;
-                    opacity: 1;
-                }
-            }
-            button {
-                @include order-button;
-                flex-shrink: 0;
-            }
-            // 主ボタン（検索）
-            button[type="submit"] {
-                @include order-button-primary;
-            }
-            .detail-toggle {
-                gap: 1.2rem;
-                &::after {
-                    content: "";
-                    width: 0.6rem;
-                    height: 0.6rem;
-                    border-right: 2px solid currentColor;
-                    border-bottom: 2px solid currentColor;
-                    transform: translateY(-0.2rem) rotate(45deg);
-                }
-                &[aria-expanded="true"]::after {
-                    transform: translateY(0.2rem) rotate(225deg);
-                }
-            }
-        }
         .search-panel {
-            font-size: inherit;
-            display: grid;
-            grid-template-rows: 0fr;
-            @media (prefers-reduced-motion: no-preference) {
-                transition: grid-template-rows 0.25s ease-out;
-            }
-            &:not([inert]) {
-                grid-template-rows: 1fr;
-            }
-            .search-panel-inner {
-                font-size: inherit;
-                min-height: 0;
-                overflow: hidden;
-            }
             .search-fields {
-                font-size: inherit;
-                display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 1.6rem 2.4rem;
-                // 装飾はクリップする内側へ置き、閉じたときの枠・余白残りを防ぐ。
-                margin-top: 1.6rem;
-                padding: 1.6rem;
-                border: 1px solid $color-border-card;
-                border-radius: $radius-sm;
-                background: $pure-white;
                 @include tb {
-                    grid-template-columns: repeat(2, minmax(0, 1fr));
                     .product-field {
                         grid-column: 1 / -1;
                     }
@@ -212,77 +86,6 @@
             .status-field {
                 grid-column: 1 / -1;
             }
-            .date-range {
-                font-size: inherit;
-                display: flex;
-                align-items: center;
-                gap: 1.2rem;
-                max-width: 56rem;
-                label,
-                span {
-                    font-size: inherit;
-                }
-                input {
-                    flex: 1;
-                }
-            }
-            .status-checks {
-                font-size: inherit;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.4rem 2.4rem;
-            }
-            .search-actions {
-                font-size: inherit;
-                grid-column: 1 / -1;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-                gap: 1.2rem;
-                button {
-                    @include order-button;
-                }
-                // 主ボタン（この条件で検索）
-                button[type="submit"] {
-                    @include order-button-primary;
-                }
-                // 副ボタン（条件をクリア）
-                .clear-conditions {
-                    border-color: $color-button-secondary-bg;
-                    color: $color-text-primary;
-                    background: $color-button-secondary-bg;
-                    &:hover {
-                        border-color: $color-button-secondary-bg-hover;
-                        background: $color-button-secondary-bg-hover;
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* =================================
- * 一覧見出し
- * ------------------------------ */
-.admin-main {
-    .list-heading {
-        font-size: inherit;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 0.8rem 1.2rem;
-        margin-top: 2.4rem;
-        h2 {
-            font-size: fz(22);
-            font-weight: 700;
-        }
-        .count {
-            font-size: inherit;
-            font-variant-numeric: tabular-nums;
-        }
-        .filter-note {
-            font-size: inherit;
-            color: $color-text-secondary;
         }
     }
 }
@@ -295,7 +98,6 @@
         font-size: inherit;
         width: 100%;
         margin-top: 1.6rem;
-        overflow-x: auto;
     }
     .orders-board {
         font-size: inherit;
@@ -324,7 +126,7 @@
             }
             .column-label {
                 font-size: fz(14);
-                font-weight: 700;
+                font-weight: 500;
                 color: $color-text-secondary;
                 display: flex;
                 align-items: center;
@@ -352,7 +154,7 @@
                     var(--item-subtotal-width);
                 span {
                     font-size: fz(14);
-                    font-weight: 700;
+                    font-weight: 500;
                     color: $color-text-secondary;
                     min-width: 0;
                     padding: 0.8rem 1.2rem;
@@ -416,7 +218,7 @@
             gap: 0.8rem 1.2rem;
             h3 {
                 font-size: fz(18);
-                font-weight: 700;
+                font-weight: 600;
                 font-variant-numeric: tabular-nums;
                 white-space: nowrap;
             }
@@ -439,7 +241,7 @@
                 overflow-wrap: anywhere;
             }
             .name {
-                font-weight: 700;
+                font-weight: 600;
             }
         }
     }
@@ -534,7 +336,7 @@
             }
             .total strong {
                 font-size: fz(20);
-                font-weight: 700;
+                font-weight: 600;
             }
         }
     }
@@ -575,21 +377,6 @@
     // 開いた注文を前へ出す。Kenのliのsibling-*指定はそのまま維持する。
     .order-list > li:has(.select-customer-status.is-open) {
         z-index: 10;
-    }
-    // 末尾メニュー（5項目×36px）と余白を、横スクロール領域内に収める。
-    .order-list:has(> li:last-child .select-customer-status.is-open) {
-        padding-bottom: 19.2rem;
-    }
-}
-
-@keyframes status-menu-open {
-    from {
-        opacity: 0;
-        transform: translateY(-0.4rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -652,6 +439,7 @@
             grid-template-rows: 1fr;
         }
         .order-detail-inner {
+            position: relative;
             font-size: inherit;
             min-height: 0;
             overflow: hidden;
@@ -754,8 +542,8 @@
             }
             // 主ボタン（保存）
             .memo-save {
-                @include order-button;
-                @include order-button-primary;
+                @include button-base;
+                @include button-primary;
                 align-self: flex-end;
             }
         }
@@ -788,7 +576,7 @@
         gap: 1.6rem;
         h2 {
             font-size: inherit;
-            font-weight: 700;
+            font-weight: 600;
             max-width: 100%;
             overflow-wrap: anywhere;
         }
@@ -800,7 +588,7 @@
             object-fit: contain;
         }
         .dialog-close {
-            @include order-button;
+            @include button-base;
         }
     }
 }

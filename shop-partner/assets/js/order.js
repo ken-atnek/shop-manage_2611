@@ -3,22 +3,13 @@
  * URL: /shop-partner/assets/js/order.js
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= */
 
 "use strict";
 
-// ===== 共通 =====
 function getOrderNumber(element) {
   return element.closest(".order-card").querySelector("h3").textContent.trim();
-}
-
-// grid 0fr/1fr のアコーディオン。閉じたパネルはinertで操作・読み上げの対象から外す。
-function toggleAccordion(button, panel) {
-  const open = button.getAttribute("aria-expanded") !== "true";
-  button.setAttribute("aria-expanded", String(open));
-  panel.inert = !open;
-  return open;
 }
 
 // ===== ステータス（radio・表示値・hiddenの同期） =====
@@ -162,24 +153,6 @@ imageDialog.addEventListener("click", (event) => {
 imageDialog.addEventListener("close", () => {
   imagePreviewOpener?.focus();
   imagePreviewOpener = null;
-});
-
-// ===== 詳細検索（パネル内だけをクリアし、キーワード・KPIは維持） =====
-const detailSearchButton = document.querySelector(".detail-toggle");
-const detailSearchPanel = document.getElementById("order-search-panel");
-
-// 開閉時にフォーカスは動かさず、詳細検索ボタンに残す。
-detailSearchButton.addEventListener("click", () => toggleAccordion(detailSearchButton, detailSearchPanel));
-
-detailSearchPanel.querySelector(".clear-conditions").addEventListener("click", () => {
-  detailSearchPanel.querySelectorAll("input").forEach((input) => {
-    if (input.type === "checkbox") {
-      input.checked = false;
-    } else {
-      input.value = "";
-    }
-  });
-  detailSearchPanel.querySelector('input[type="date"]').focus();
 });
 
 // ===== 一覧のクリック（注文が増えても1つのリスナーで扱う） =====

@@ -4,7 +4,7 @@
  * URL: /index.html
  * Referenced in: /index.html
  * Created: 2026-10-17
- * Last updated: 2026-10-17
+ * Last updated: 2026-10-19
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -116,6 +116,12 @@
         outline-offset: 4px;
       }
 
+      .screen-name {
+        color: #22272e;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
       .screen-path {
         display: block;
         margin-top: 4px;
@@ -163,15 +169,66 @@
       <section class="screen-group" aria-labelledby="client-heading">
         <div class="screen-group__header">
           <h2 id="client-heading">Client管理画面</h2>
-          <span class="screen-count">1画面</span>
+          <span class="screen-count">8画面</span>
         </div>
         <ul class="screen-list">
           <li>
-            <a class="screen-link" href="./shop-partner/orders.php">
-              受注一覧
-              <span class="screen-path">shop-partner/orders.php</span>
-            </a>
+            <div>
+              <a class="screen-link" href="./shop-partner/orders.php">
+                受注一覧
+                <span class="screen-path">shop-partner/orders.php</span>
+              </a>
+              <span class="screen-path">docs/design/CLIENT_ORDER_LIST.md</span>
+              <span class="screen-path">
+                <a href="./shop-partner/orders.php">通常</a> /
+                <a href="./shop-partner/orders.php?preview=pager-middle">途中のページ</a> /
+                <a href="./shop-partner/orders.php?preview=empty">データなし</a> /
+                <a href="./shop-partner/orders.php?preview=no-results">検索結果0件</a> /
+                <a href="./shop-partner/orders.php?preview=date-error">注文日の入力エラー</a>
+              </span>
+            </div>
+            <span class="status">完成（引き渡し前）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-partner/products.php">
+                商品一覧
+                <span class="screen-path">shop-partner/products.php</span>
+              </a>
+              <span class="screen-path">docs/design/CLIENT_PRODUCT_LIST.md</span>
+              <span class="screen-path">
+                <a href="./shop-partner/products.php">通常</a> /
+                <a href="./shop-partner/products.php?preview=pager-middle">途中のページ</a> /
+                <a href="./shop-partner/products.php?preview=empty">データなし</a> /
+                <a href="./shop-partner/products.php?preview=no-results">検索結果0件</a> /
+                <a href="./shop-partner/products.php?preview=date-error">更新日の入力エラー</a>
+              </span>
+            </div>
             <span class="status">作業中</span>
+          </li>
+          <li>
+            <span class="screen-name">商品詳細</span>
+            <span class="status">未着手</span>
+          </li>
+          <li>
+            <span class="screen-name">商品登録</span>
+            <span class="status">未着手</span>
+          </li>
+          <li>
+            <span class="screen-name">送料設定</span>
+            <span class="status">未着手</span>
+          </li>
+          <li>
+            <span class="screen-name">顧客管理</span>
+            <span class="status">未着手</span>
+          </li>
+          <li>
+            <span class="screen-name">集計</span>
+            <span class="status">未着手</span>
+          </li>
+          <li>
+            <span class="screen-name">ログイン</span>
+            <span class="status">未着手</span>
           </li>
         </ul>
       </section>
@@ -181,7 +238,7 @@
           <h2 id="master-heading">Master管理画面</h2>
           <span class="screen-count">0画面</span>
         </div>
-        <p class="empty-message">HTMLはまだ作成されていません。</p>
+        <p class="empty-message">まだ作成していません。</p>
       </section>
     </main>
   </body>
