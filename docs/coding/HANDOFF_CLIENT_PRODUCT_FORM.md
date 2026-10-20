@@ -147,7 +147,7 @@ formは`.product-form`、`method="post"`・`enctype="multipart/form-data"`・`no
 | `usedSizes` | 使用するサイズの数値配列。サイズ別ありで判定対象を絞る。サイズ別なしでは空配列とし、JSは運送会社の全サイズから取扱上限を確認する |
 | `coolSurchargeSetBySize` | サイズをキーとするbooleanのオブジェクト。例：`{"60": true, "80": false}`。サイズ別ありで使用する |
 | `coolSurchargeSet` | boolean。サイズ別なしの店舗の追加料金設定有無 |
-| `carrier.name` | 注意文に使う運送会社名 |
+| `carrier.name` | 配送の先頭の読み取り専用表示と、注意文に使う運送会社名 |
 | `carrier.sizes` | `{size, maxWeightKg}`の配列。sizeはサイズ番号かつ3辺合計の上限cm、maxWeightKgはそのサイズの重さ上限kg。値は数値型 |
 | `carrier.cool.refrigerated`・`.frozen` | それぞれ冷蔵・冷凍の条件。非対応は`null`。対応する場合は数値の`maxTotalCm`・`maxWeightKg`と、条件がある場合の`maxLongestCm`を持つ |
 
@@ -179,6 +179,7 @@ CSSは`common.css`→`product-form.css`。body末尾のJSONに続けて、`commo
 | `input[name="tax_rate"]` | 値8／10。各ラジオから`aria-describedby="tax-warning"`で注意領域を参照 |
 | `#tax-warning .tax-warning`・`[data-tax-warning-text]` | 外側は常設の`aria-live="polite" aria-atomic="true"`、内側をhiddenで切り替え本文を更新 |
 | `#product-store`・`#store-shipping-data` | selectのvalueでJSONの店舗設定を取得。scriptは`type="application/json"` |
+| `#shipping-carrier`・`#shipping-carrier-help`・`.carrier-name` | 配送の先頭の運送会社名と補助文。PHPも選択中の店舗のcarrier.nameで初期出力する。JSは初期表示・店舗変更で同期。名前は常設のpolite・atomic領域、未選択時は「店舗を選ぶと表示します」、補助文「店舗の設定で決まります」はhidden。入力・送信name・設定画面リンクは置かない |
 | `#packing-length`・`#packing-width`・`#packing-height`・`#packing-weight` | 4入力の現在値。nameは§3を参照 |
 | `input[name="temperature"]` | 値normal／cold／frozen。各ラジオから`aria-describedby="cool-warning"`で注意領域を参照 |
 | `#shipping-size-result` | 判定結果。`aria-live="polite" aria-atomic="true"`を維持 |

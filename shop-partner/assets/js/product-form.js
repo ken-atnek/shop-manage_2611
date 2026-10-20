@@ -47,6 +47,8 @@
 
   // ===== 配送（JSONはBladeで同じ形の実データへ置き換える） =====
   const storeSelect = form.querySelector("#product-store");
+  const carrierName = form.querySelector("#shipping-carrier");
+  const carrierHelp = form.querySelector("#shipping-carrier-help");
   const packingInputs = ["length", "width", "height", "weight"].map((key) =>
     form.querySelector("#packing-" + key)
   );
@@ -96,6 +98,8 @@
 
   const updateShipping = () => {
     const store = Object.hasOwn(shippingData, storeSelect.value) ? shippingData[storeSelect.value] : null;
+    setText(carrierName, store ? store.carrier.name : "店舗を選ぶと表示します");
+    carrierHelp.hidden = !store;
     const values = packingInputs.map((input) => parseMeasurement(input.value));
     let result = "店舗を選ぶと判定します";
     let notice = "";

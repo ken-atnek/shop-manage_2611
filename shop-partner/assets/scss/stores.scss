@@ -86,6 +86,10 @@
         tbody tr:hover {
             background: $color-bg-detail;
         }
+        // 商品一覧のID列と同じクラス・幅・数字の表示を使用する。
+        .product-id {
+            width: 6.4rem;
+        }
         .store-name {
             overflow-wrap: anywhere;
         }
@@ -99,6 +103,9 @@
         }
         .store-products {
             width: 8rem;
+        }
+        .product-id,
+        .store-products {
             text-align: right;
             font-variant-numeric: tabular-nums;
             white-space: nowrap;

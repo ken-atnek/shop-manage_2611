@@ -57,6 +57,7 @@ foreach ($storeShippingData as &$storeShipping) {
 }
 unset($storeShipping);
 $selectedStoreId = $previewState === 'new' ? '' : (($isNoSizeStoreState || $isFrozenYupackState) ? '2' : '1');
+$selectedCarrierName = $storeShippingData[$selectedStoreId]['carrier']['name'] ?? '';
 $temperature = $isCoolWarningState ? 'cold' : ($isFrozenYupackState ? 'frozen' : 'normal');
 $packingValues = $previewState === 'new'
     ? ['length' => '', 'width' => '', 'height' => '', 'weight' => '']
@@ -279,6 +280,13 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
   <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
   <circle cx="17" cy="18" r="2" />
   <circle cx="7" cy="18" r="2" /></svg></span>配送</h2>
+            <div class="form-field form-row">
+              <p class="form-label">運送会社</p>
+              <div class="field-control field-wide">
+                <p class="carrier-name" id="shipping-carrier" aria-live="polite" aria-atomic="true"><?= htmlspecialchars($selectedCarrierName !== '' ? $selectedCarrierName : '店舗を選ぶと表示します', ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="form-help" id="shipping-carrier-help"<?= $selectedCarrierName === '' ? ' hidden' : '' ?>>店舗の設定で決まります</p>
+              </div>
+            </div>
             <fieldset class="form-field form-row">
               <legend class="form-label" id="temperature-label">配送温度帯 <span class="required-label">必須</span></legend>
               <div class="field-control">

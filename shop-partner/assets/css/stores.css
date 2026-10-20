@@ -146,6 +146,9 @@
 .admin-main .stores-table tbody tr:hover {
   background: #f8f9fb;
 }
+.admin-main .stores-table .product-id {
+  width: 6.4rem;
+}
 .admin-main .stores-table .store-name {
   overflow-wrap: anywhere;
 }
@@ -159,6 +162,9 @@
 }
 .admin-main .stores-table .store-products {
   width: 8rem;
+}
+.admin-main .stores-table .product-id,
+.admin-main .stores-table .store-products {
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

@@ -76,6 +76,7 @@ $isErrorState = $previewState === 'error';
           <table class="stores-table" aria-labelledby="store-list-heading">
             <thead>
               <tr>
+                <th class="product-id" scope="col">ID</th>
                 <th class="store-name" scope="col">店舗名</th>
                 <th class="store-carrier" scope="col">運送会社</th>
                 <th class="store-shipping" scope="col">送料</th>
@@ -86,6 +87,7 @@ $isErrorState = $previewState === 'error';
             </thead>
             <tbody>
               <tr>
+                <td class="product-id">1</td>
                 <td class="store-name">熊日モール サンプル店舗</td>
                 <td class="store-carrier">ヤマト運輸</td>
                 <td class="store-shipping">サイズ別</td>
@@ -94,6 +96,7 @@ $isErrorState = $previewState === 'error';
                 <td class="store-edit"><a class="edit-link" href="store-form.<?= $pageExtension ?>?id=1" aria-label="熊日モール サンプル店舗を編集" title="熊日モール サンプル店舗を編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
+                <td class="product-id">2</td>
                 <td class="store-name">熊本ギフト サンプル店舗</td>
                 <td class="store-carrier">ゆうパック</td>
                 <td class="store-shipping">サイズ共通</td>
@@ -102,6 +105,7 @@ $isErrorState = $previewState === 'error';
                 <td class="store-edit"><a class="edit-link" href="store-form.<?= $pageExtension ?>?id=2" aria-label="熊本ギフト サンプル店舗を編集" title="熊本ギフト サンプル店舗を編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
               <tr>
+                <td class="product-id">3</td>
                 <td class="store-name">熊本の旬の味覚と地域の特産品を全国へお届けする 阿蘇・天草ふるさとギフト サンプル店舗</td>
                 <td class="store-carrier">佐川急便</td>
                 <td class="store-shipping">サイズ別</td>

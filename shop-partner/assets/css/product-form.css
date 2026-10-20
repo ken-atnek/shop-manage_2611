@@ -381,6 +381,13 @@
   color: #4f5863;
   line-height: 1.7;
 }
+.product-form .carrier-name {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  min-height: 4.4rem;
+  line-height: 1.7;
+}
 .product-form .packing-help {
   margin: 0 0 1.6rem;
 }

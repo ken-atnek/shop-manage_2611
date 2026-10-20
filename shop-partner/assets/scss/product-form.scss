@@ -351,6 +351,13 @@
         color: $color-text-secondary;
         line-height: 1.7;
     }
+    .carrier-name {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        min-height: 4.4rem;
+        line-height: 1.7;
+    }
     .packing-help {
         margin: 0 0 1.6rem;
     }
