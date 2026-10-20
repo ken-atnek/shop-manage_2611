@@ -3,7 +3,7 @@
  * URL: /shop-partner/assets/js/order.js
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= */
 
 "use strict";
@@ -40,6 +40,11 @@ function syncStatus(box) {
   head.classList.add(...[...label.classList].filter((name) => name.startsWith("status-")));
 
   head.setAttribute("aria-label", `注文${getOrderNumber(box)}のステータスを変更（現在：${value.textContent}）`);
+  const record = box.closest(".order-card").querySelector("[data-cancel-record]");
+  if (record) {
+    // 表示だけを同期する。入力内容・展開状態・フォーカス・保存済み判定は変えない。
+    record.hidden = !label.classList.contains("status-cancelled") && !label.classList.contains("status-return");
+  }
   // 保存方法が未確定のため、値と表示だけを同期し、通信・更新日時の変更はしない。
 }
 
@@ -110,13 +115,13 @@ document.addEventListener("keydown", (event) => {
   closeStatusBox(openStatusBox, true);
 });
 
-// ===== メモ／入稿画像の展開 =====
+// ===== 注文の詳細（備考・入稿画像・キャンセル／返品の記録）の展開 =====
 function toggleOrderDetail(button) {
   const panel = document.getElementById(button.getAttribute("aria-controls"));
   if (!panel) return;
   const open = toggleAccordion(button, panel);
-  const contentNote = button.classList.contains("has-content") ? "（メモ・入稿画像あり）" : "";
-  const name = `注文${getOrderNumber(button)}のメモ・入稿画像を${open ? "閉じる" : "開く"}${contentNote}`;
+  const contentNote = button.classList.contains("has-content") ? "（内容あり）" : "";
+  const name = `注文${getOrderNumber(button)}の詳細を${open ? "閉じる" : "開く"}${contentNote}`;
   button.setAttribute("aria-label", name);
   button.title = name;
 }

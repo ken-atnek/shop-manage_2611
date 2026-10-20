@@ -47,7 +47,7 @@
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-20
  * ======================================= */
 /* =================================
  * KPI
@@ -647,7 +647,7 @@
 }
 .admin-main .order-card .order-detail .submissions h4 {
   font-size: inherit;
-  font-weight: 500;
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 .admin-main .order-card .order-detail .submission-products,
@@ -703,31 +703,82 @@
   color: #22272e;
   background: #fff;
 }
-.admin-main .order-card .order-detail .memo-form {
+.admin-main .order-card .order-detail .detail-notes {
   font-size: inherit;
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.8rem;
+}
+.admin-main .order-card .order-detail .detail-notes h4 {
+  font-size: inherit;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .order-detail .customer-note {
+  font-size: inherit;
   padding: 1.6rem;
 }
-.admin-main .order-card .order-detail .memo-form label {
+.admin-main .order-card .order-detail .customer-note p {
+  font-size: inherit;
+  margin-top: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.admin-main .order-card .order-detail .detail-empty {
+  font-size: inherit;
+  padding: 1.6rem;
+  color: #4f5863;
+}
+.admin-main .order-card .order-detail .customer-note + .cancel-record,
+.admin-main .order-card .order-detail .detail-empty + .cancel-record {
+  border-top: 1px solid #e3e6ea;
+}
+.admin-main .order-card .order-detail .cancel-record {
+  font-size: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1.6rem;
+}
+.admin-main .order-card .order-detail .cancel-record[hidden] {
+  display: none;
+}
+.admin-main .order-card .order-detail .cancel-record .record-reason,
+.admin-main .order-card .order-detail .cancel-record .item-note {
+  font-size: inherit;
+  min-width: 0;
+}
+.admin-main .order-card .order-detail .cancel-record .record-reason label {
+  display: block;
+  margin-bottom: 0.8rem;
+}
+.admin-main .order-card .order-detail .cancel-record .item-note {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.8rem 1.2rem;
+}
+@media (max-width: 834px) and (orientation: portrait) {
+  .admin-main .order-card .order-detail .cancel-record .item-note {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.admin-main .order-card .order-detail .cancel-record label {
   font-size: inherit;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
-.admin-main .order-card .order-detail .memo-form textarea {
+.admin-main .order-card .order-detail .cancel-record textarea {
   font-size: 1.6rem;
   width: 100%;
-  min-height: 10.4rem;
+  min-width: 0;
   padding: 1.2rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
+  color: #22272e;
   background: #fff;
   resize: vertical;
 }
-.admin-main .order-card .order-detail .memo-form .memo-save {
+.admin-main .order-card .order-detail .cancel-record .record-save {
   font-size: inherit;
   font-weight: 500;
   min-height: 4.4rem;
@@ -738,19 +789,19 @@
   background: #fff;
   white-space: nowrap;
 }
-.admin-main .order-card .order-detail .memo-form .memo-save:hover {
+.admin-main .order-card .order-detail .cancel-record .record-save:hover {
   background: #f6f7f8;
 }
-.admin-main .order-card .order-detail .memo-form .memo-save {
+.admin-main .order-card .order-detail .cancel-record .record-save {
   font-weight: 500;
   border-color: #9db5d6;
   color: #1f4e8c;
   background: #e6edf7;
 }
-.admin-main .order-card .order-detail .memo-form .memo-save:hover {
+.admin-main .order-card .order-detail .cancel-record .record-save:hover {
   background: #d6e2f2;
 }
-.admin-main .order-card .order-detail .memo-form .memo-save {
+.admin-main .order-card .order-detail .cancel-record .record-save {
   align-self: flex-end;
 }
 

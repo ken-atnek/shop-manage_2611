@@ -1,7 +1,7 @@
 # Client受注一覧 バックエンドへの申し送り
 
 - 作成日：2026-10-19
-- 更新日：2026-10-19
+- 更新日：2026-10-20
 - 対象：`shop-partner/orders.php`（制作用PHP）、`shop-partner/assets/js/order.js`、`shop-partner/assets/scss/order.scss`
 - 作成：フロント（Ken・Claude）
 
@@ -61,18 +61,21 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 - 今の`order.js`は表示・hidden値・読み上げ名を同期するだけで、通信していない（`syncStatus`）。保存処理を足す位置はここ
 - `<input type="hidden" name="order-status[注文ID]" data-selectbox-hidden>`は**どのformにも入っていない**。非同期で送るなら値の参照元として使い、form送信にするなら配置を変える必要がある
 - 選択肢の値は表示例で`1`新規受付・`2`対応中・`3`発送済・`4`返品対応・`5`キャンセル。正式な値はバックエンドで決めてよい。ラベルのclass（`status-new`・`status-processing`・`status-shipped`・`status-return`・`status-cancelled`）は色の指定に使うので変えない
-- 最終更新日時はステータスの保存時だけ更新する。メモ保存・画像の確認やダウンロードでは更新しない
+- 最終更新日時はステータスの保存時だけ更新する。キャンセル・返品の記録の保存や画像の確認・ダウンロードでは更新しない
 
-## 7. メモ
+## 7. 備考・キャンセル／返品の記録（2026-10-20に仕様変更）
 
-- 注文ごとの`<form class="memo-form" method="post" action="">`。送信先・項目名（`order_id`・`memo`）は表示例
-- 保存処理・保存後の表示（成功・失敗）はバックエンドで実装する。表示方法の詳細は未確定
-- labelと保存ボタンには、読み上げ用の注文番号（`sr-only`）が入っている。ループで出力するときも残す
+- 旧`.memo-form`（textarea・保存ボタン・hiddenのorder_id）は削除済み。左に従来の`.submissions`（最大40%）、右に`.detail-notes`（残り幅）、画像なしは右が全幅。右は備考→記録の順で、間を内側罫線で区切る
+- 備考：`.customer-note`のh4とpによる表示専用。空ならsectionごと出力しない。改行を保持し、長い英数字も折り返す。出力時のエスケープはバックエンド側で行う
+- キャンセル・返品の記録：`form.cancel-record[method="post"][data-cancel-record]`。発送状況がキャンセル／返品対応のときだけhiddenを外す。SSR側もこの条件で初期hiddenを設定する。JSのsyncStatusは表示だけを同期し、内容を消したり展開行を自動で開いたりフォーカスを移したりしない
+- 理由・対応メモは任意・3行、全商品明細のメモは任意・2行・maxlength="100"（仮）。1つのsubmitで保存する形までで、通信・保存後表示は未実装。textareaは16px固定、保存は既存button-base＋button-primary。商品ラベルと入力はPC2列・834px以下1列。labelと保存ボタンのsr-onlyに注文番号を補う
+- `cancel_reason`・`item_notes[明細ID]`・明細ID・空のactionは表示例。旧order_idは残していないため、注文の識別・ルーティング・CSRF対策・正式な項目名・サーバー側検証・保存後表示はバックエンドで実装する。100文字の正式上限も確認する。保存成功前にhas-contentを更新しない
+- 備考・画像なしの注文は`.detail-empty`で「備考・入稿画像はありません」を表示し、記録欄が表示されてもこの文は残す。詳細は画面資料の2026-10-20の決定・実装メモを参照
 
 ## 8. 入稿画像
 
 - 注文内の商品明細ごとに紐づく。入稿のある商品だけを出力し、どの商品にも入稿がない注文は`.submissions`ごと出力しない
-- 展開ボタン`.order-toggle`は、メモまたは入稿画像があるときだけ`has-content`を付ける（濃い色と点で示す）。読み上げ名・`title`の末尾の「（メモ・入稿画像あり）」も同じ条件で付ける
+- 展開ボタン`.order-toggle`は、備考・入稿画像・保存済みのキャンセル／返品の記録のいずれかがあるときだけ`has-content`を付ける（濃い色と点）。読み上げ名・titleは「注文#{番号}の詳細を開く／閉じる」、同じ条件で末尾に「（内容あり）」を付ける。未保存入力では点を付けない
 - **サムネイルは縮小画像を出力し、`loading="lazy"`を付けてほしい**。今は表示例のため、拡大表示と同じ元画像を使っている。展開行は初期状態で閉じているため、元画像のままだと一覧を開いただけで全画像を読み込む
 - 拡大ボタン`.image-preview`の`data-image-src`（拡大用の画像）・`data-image-alt`・`data-file-name`をJSが共通のdialogへ渡す
 - ダウンロードリンクの`download`属性は、別ドメインから配信すると効かない。その場合はサーバー側で`Content-Disposition: attachment`を返してほしい
@@ -85,10 +88,11 @@ Bladeへ組み込むときは、次を変えないでほしい（変える場合
 |---|---|
 | `.select-customer-status[data-selectbox]`、`.selectbox__head`、`.list-wrapper`（`hidden`）、`[data-selectbox-value]`、`[data-selectbox-hidden]`、中のradioとlabel | ステータスの開閉・選択・表示の同期 |
 | `.order-card`内の`h3`のテキスト | 読み上げ名に使う注文番号 |
-| `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | メモ・入稿画像の展開。`order.js`から`common.js`の`toggleAccordion`を使う |
+| `.order-toggle`の`aria-controls`・`aria-expanded`・`has-content`、対応する`.order-detail`の`id`と`inert` | 詳細（備考・入稿画像・キャンセル／返品の記録）の展開。`order.js`から`common.js`の`toggleAccordion`を使う |
+| 同じ`.order-card`内の`[data-cancel-record]`と`hidden`、選択radioに対応するlabelの`status-cancelled`・`status-return` | syncStatusで記録フォームの表示を同期する。radioの数値ではなく状態classで判定する |
 | `.image-preview`の`data-*`、`#submission-preview`（dialog）、`.preview-image`、`#preview-file-name`、`.dialog-close` | 入稿画像の拡大表示（全注文で1つのdialogを共用） |
 
-- 注文ごとのidは注文IDから作っている（`order-{ID}`・`status-panel-{ID}`・`status-{ID}-{状態キー}`・`order-detail-{ID}`・`submissions-{ID}`・`memo-{ID}`）。ページ内で重複しないようにする
+- 注文ごとのidは注文IDから作っている（`order-{ID}`・`status-panel-{ID}`・`status-{ID}-{状態キー}`・`order-detail-{ID}`・`submissions-{ID}`・`customer-note-{ID}`・`cancel-reason-{ID}`）。商品メモの制作例は`item-note-{注文ID}-{枝番}`で、ページ内で重複しないようにする。正式な明細IDへの置換時もlabelのforと一致させる。旧memo-{ID}は削除済み
 - radioの`name`は注文ごと（`order-status-choice-{ID}`）に分ける
 
 ## 10. 未確定のまま残っている項目
@@ -98,7 +102,7 @@ Bladeへ組み込むときは、次を変えないでほしい（変える場合
 - 一覧の並び順
 - KPIの方式と集計条件、キーワード・詳細条件との組み合わせ
 - ステータスの通信方式と、保存中・成功・失敗の具体的な表示
-- メモの保存後の表示、文字数・閲覧権限
+- キャンセル・返品の記録の送信先・正式項目名・注文識別・保存後表示・理由の文字数・商品メモの正式上限・閲覧権限
 - 入稿画像の形式・容量・枚数の上限、ファイル名の規則
 - 送料の計算方法・送料無料の条件・消費税の表示・端数処理
 - 権限による操作不可の表示
