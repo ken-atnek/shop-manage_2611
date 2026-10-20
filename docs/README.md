@@ -23,6 +23,8 @@
 | `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更は共有） |
 | `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/CLIENT_PRODUCT_FORM.md` | Client商品詳細（登録・編集）の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
+| [design/CLIENT_STORE_LIST.md](design/CLIENT_STORE_LIST.md) | Client店舗一覧の画面資料（仕様検討中。確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
+| [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（仕様検討中。確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
@@ -30,7 +32,7 @@
 | `coding/HANDOFF_CLIENT_COMMON.md` | Client共通のBlade組み込み申し送り（レイアウト・head・サイドバー・検索・空状態・ページ送り・読み込み順） | フロント |
 | `coding/HANDOFF_CLIENT_ORDER_LIST.md` | Client受注一覧固有の申し送り（KPI・ステータス保存・メモ・入稿画像・order.jsの依存先） | フロント |
 | `coding/HANDOFF_CLIENT_PRODUCT_LIST.md` | Client商品一覧固有の申し送り（テーブル・状態・画像・編集リンク・検索細則・未確定事項） | フロント |
-| `coding/HANDOFF_CLIENT_PRODUCT_FORM.md` | Client商品フォーム固有の申し送り（新規／編集・送信項目・画像・エラー・販売店JSON・JS依存先・未確定事項） | フロント |
+| `coding/HANDOFF_CLIENT_PRODUCT_FORM.md` | Client商品フォーム固有の申し送り（新規／編集・送信項目・画像・エラー・店舗JSON・JS依存先・未確定事項） | フロント |
 | `backend/` | API・DB・ルーティング・Blade組み込み等の資料 | バックエンド |
 | `../backend/`（リポジトリのルート） | Laravel等のバックエンドのコード | バックエンド |
 
