@@ -59,7 +59,7 @@
     const data = JSON.parse(document.getElementById("store-shipping-data").textContent);
     if (data && typeof data === "object" && !Array.isArray(data)) shippingData = data;
   } catch {
-    // データがない場合も食品・在庫は動かし、配送は販売店の選択案内に戻す。
+    // データがない場合も食品・在庫は動かし、配送は店舗の選択案内に戻す。
   }
 
   // 正の十進数を扱う。全角数字・小数点を読み替え、入力値自体は書き換えない。
@@ -97,7 +97,7 @@
   const updateShipping = () => {
     const store = Object.hasOwn(shippingData, storeSelect.value) ? shippingData[storeSelect.value] : null;
     const values = packingInputs.map((input) => parseMeasurement(input.value));
-    let result = "販売店を選ぶと判定します";
+    let result = "店舗を選ぶと判定します";
     let notice = "";
 
     if (store) {
@@ -107,7 +107,7 @@
       const cool = coolKey ? carrier.cool?.[coolKey] : null;
       // 温度帯そのものの非対応は寸法未入力でも分かる。上限・追加料金より先に伝える。
       if (coolKey && !cool) {
-        notice = "この販売店の運送会社（" + carrier.name + "）は" +
+        notice = "この店舗の運送会社（" + carrier.name + "）は" +
           (temperature === "cold" ? "冷蔵" : "冷凍") + "に対応していません";
       }
       result = "縦・横・高さ・重さを入力すると判定します";
@@ -115,7 +115,7 @@
         const total = addDimensions(values.slice(0, 3));
         const weight = values[3];
         const detail = "（3辺合計" + formatMeasurement(total) + "cm・" + formatMeasurement(weight) + "kg）";
-        // 規格の重さ上限は運送会社から取得。その他はPHPで販売店の独自規格を結合する。
+        // 規格の重さ上限は運送会社から取得。その他はPHPで店舗の独自規格を結合する。
         const sizes = carrier.sizes.filter((entry) => !store.sizeBased || store.usedSizes.includes(entry.size));
         const size = [...sizes].sort((a, b) => a.size - b.size).find((entry) =>
           fits(total, entry.size) && fits(weight, entry.maxWeightKg)
@@ -127,7 +127,7 @@
         } else {
           result = !size ? "対応するサイズがありません" + detail : (
             store.sizeBased ? "判定：" + size.size + "サイズ" + detail :
-              "この販売店はサイズ別の送料を使いません" + detail
+              "この店舗はサイズ別の送料を使いません" + detail
           );
         }
         // クール便は判定サイズの番号ではなく、実際の3辺合計・重さを別に照合する。
@@ -138,7 +138,7 @@
             notice = carrier.name + "のクール便は最長辺" + cool.maxLongestCm + "cmまでです";
           } else if (size && !(store.sizeBased ? store.coolSurchargeSetBySize[size.size] : store.coolSurchargeSet)) {
             notice = store.sizeBased ? size.size + "サイズのクール便に対応していません" :
-              "この販売店はクール便に対応していません";
+              "この店舗はクール便に対応していません";
           }
         }
       }

@@ -2,13 +2,13 @@
 /* =======================================
  * 熊日モール Client 運送会社の規格（制作用データ）
  * URL: /shop-partner/includes/data_carriers.php
- * Referenced in: /shop-partner/product-form.php・/docs/SPEC.md・販売店画面（制作時）
+ * Referenced in: /shop-partner/product-form.php・/docs/SPEC.md・店舗画面（制作時）
  * Created: 2026-10-20
  * Last updated: 2026-10-20
  * ======================================= */
 
 // 制作用の表示例。Bladeでは本番のデータに置き換える。
-// 規格の正・公式出典・確認日はdocs/SPEC.md。「その他」だけ販売店側の設定を使う。
+// 規格の正・公式出典・確認日はdocs/SPEC.md。「その他」だけ店舗側の設定を使う。
 return [
     'yamato' => [
         'name' => 'ヤマト運輸',
@@ -59,7 +59,7 @@ return [
     ],
     'other' => [
         'name' => 'その他',
-        // 未設定の印。商品フォームへ渡す際は販売店の独自規格を結合する。
+        // 未設定の印。商品フォームへ渡す際は店舗の独自規格を結合する。
         'sizes' => [],
         'cool' => null,
     ],

@@ -23,8 +23,8 @@
 | `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更は共有） |
 | `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/CLIENT_PRODUCT_FORM.md` | Client商品詳細（登録・編集）の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
-| [design/CLIENT_STORE_LIST.md](design/CLIENT_STORE_LIST.md) | Client店舗一覧の画面資料（仕様検討中。確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
-| [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（仕様検討中。確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
+| [design/CLIENT_STORE_LIST.md](design/CLIENT_STORE_LIST.md) | Client店舗一覧の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
+| [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
