@@ -198,6 +198,10 @@
             --textarea-min-lines: 8;
             --textarea-max-lines: 20;
         }
+        #allergens {
+            --textarea-min-lines: 3;
+            --textarea-max-lines: 8;
+        }
         select {
             min-height: 4.4rem;
             appearance: auto;
@@ -439,17 +443,6 @@
         // hiddenをレイアウト指定で上書きしない。
         &[hidden] {
             display: none;
-        }
-    }
-    .allergen-group {
-        font-size: inherit;
-        min-width: 0;
-        border: 0;
-        padding: 0;
-        margin-top: 1.6rem;
-        legend {
-            font-size: fz(14);
-            font-weight: 500;
         }
     }
     .food-label-example {
