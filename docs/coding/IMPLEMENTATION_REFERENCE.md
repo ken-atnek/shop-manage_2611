@@ -99,11 +99,32 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 | メニュー：集計 | `chart-column` | Client共通ナビ |
 | メニューを畳む | `panel-left-close` | Client共通ナビ |
 | メニューを開く | `panel-left-open` | Client共通ナビ |
+| 商品フォーム：基本情報 | `info` | Client商品フォーム |
+| 商品フォーム：商品画像 | `images`（公式0.468.0版のSVG） | Client商品フォーム |
+| 商品フォーム：価格・在庫 | `japanese-yen` | Client商品フォーム |
+| 商品フォーム：配送 | `truck` | Client商品フォーム |
+| 商品フォーム：入稿 | `file-up` | Client商品フォーム |
+| 商品フォーム：食品表示 | `cookie` | Client商品フォーム |
+| 商品フォーム：公開設定 | `eye` | Client商品フォーム |
+| 配送温度帯：常温 | `package` | Client商品フォーム |
+| 配送温度帯：冷蔵 | `thermometer` | Client商品フォーム |
+| 配送温度帯：冷凍 | `snowflake` | Client商品フォーム |
+| 商品画像を前へ | `chevron-left` | Client商品フォーム |
+| 商品画像を後ろへ | `chevron-right` | Client商品フォーム |
+| 商品画像を削除 | `trash-2`（公式0.468.0版のSVG） | Client商品フォーム |
+| 商品フォーム：一覧へ戻る | `arrow-left` | Client商品フォーム |
+| 商品画像の追加 | `image-up` | Client商品フォーム |
 | メモ・入稿画像の展開 | Lucideではない（独自SVG） | Client受注一覧 |
 | 詳細検索の開閉 | Lucideではない（CSSの罫線） | Client受注一覧・商品一覧 |
 | ステータスの開閉 | Lucideではない（`scss/_ui.scss`の背景SVG） | Client受注一覧 |
 
 メニュー用の8種は2026-10-19に[Lucide公式SVG](https://github.com/lucide-icons/lucide/tree/main/icons)で存在と子要素を確認済み。代替アイコンへの変更なし。
+
+商品フォーム用11種は2026-10-20に[Lucide公式SVG](https://github.com/lucide-icons/lucide/tree/main/icons)の存在と子要素を確認。`images`は最新版の子要素にfill属性があるため、塗り属性を使わず公式形状を保てる[公式0.468.0版](https://github.com/lucide-icons/lucide/blob/0.468.0/icons/images.svg)を採用した。名前の変更なし。箱見出し・カードのアイコンは装飾とし、隣接する見出し／labelの文字で意味を伝える。
+
+商品画像の操作3種は2026-10-20に公式SVGを確認。 [chevron-left](https://github.com/lucide-icons/lucide/blob/main/icons/chevron-left.svg)・[chevron-right](https://github.com/lucide-icons/lucide/blob/main/icons/chevron-right.svg)はmain、[trash-2](https://github.com/lucide-icons/lucide/blob/0.468.0/icons/trash-2.svg)は公式0.468.0版を採用（mainの同名ファイルは取得できなかったため）。名前の変更なし。ボタンは44px角で、aria-labelとtitleに同じ操作名を付ける。
+
+商品フォームの戻るリンク用`arrow-left`は2026-10-20に[Lucide公式SVG](https://github.com/lucide-icons/lucide/blob/main/icons/arrow-left.svg)で存在と子要素を確認。装飾SVG＋実テキスト「一覧へ戻る」とし、a要素に副ボタンの見た目を適用する。
 
 ## 制作環境と引き渡し
 

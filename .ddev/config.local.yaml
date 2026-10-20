@@ -1,0 +1,3 @@
+# このMacのLAN内で制作画面を共有するための設定。
+bind_all_interfaces: true
+host_webserver_port: "8081"

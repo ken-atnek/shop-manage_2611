@@ -1,0 +1,614 @@
+@charset "UTF-8";
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
+/* =======================================
+ * 熊日モール 管理画面 共通カラー
+ * URL: /scss/_colors.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+/* =======================================
+ * ふもと旅館採用 SVG背景・アイコンmixin
+ * URL: /src/styles/foundation/_svg.scss
+ * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * Created: 2026-07-07
+ * Last updated: 2026-09-21
+ * Created source: ファイル作成日時（移植元由来）
+ * ======================================= */
+/* =======================================
+ * 熊日モール 共通UI mixin
+ * URL: /scss/_ui.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/*=========================================
+ボタン
+-----------------------------------------*/
+/*=========================================
+中央寄せ
+-----------------------------------------*/
+/*=========================================
+ドロップシャドウ
+-----------------------------------------*/
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+/* =======================================
+ * 熊日モール Client 商品詳細（登録・編集）スタイル
+ * URL: /shop-partner/assets/scss/product-form.scss
+ * Referenced in: /shop-partner/product-form.php
+ * Created: 2026-10-20
+ * Last updated: 2026-10-20
+ * ======================================= */
+/* =================================
+ * フォーム全体・読み取り専用情報・保存結果
+ * ------------------------------ */
+.product-form-page {
+  min-width: 0;
+}
+.product-form-page .product-meta {
+  font-size: max(12px, 0.875em);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2.4rem;
+  margin: -0.8rem 0 2.4rem;
+  color: #4f5863;
+}
+.product-form-page .product-meta div {
+  font-size: inherit;
+  display: flex;
+  gap: 0.8rem;
+}
+.product-form-page .product-meta dt,
+.product-form-page .product-meta dd {
+  font-size: inherit;
+}
+.product-form-page .product-meta dd {
+  font-variant-numeric: tabular-nums;
+}
+.product-form-page .save-status,
+.product-form-page .error-summary {
+  font-size: inherit;
+  margin-bottom: 2.4rem;
+  padding: 1.6rem 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.product-form-page .save-status {
+  border-left: 4px solid var(--color-brand-accent);
+}
+.product-form-page .error-summary {
+  border-color: #d21f3c;
+}
+.product-form-page .error-summary h2 {
+  font-size: inherit;
+  font-weight: 600;
+}
+.product-form-page .error-summary ul {
+  font-size: inherit;
+  margin-top: 1.2rem;
+  padding-left: 2rem;
+  list-style: disc;
+}
+.product-form-page .error-summary li {
+  font-size: inherit;
+  margin-top: 0.8rem;
+}
+.product-form-page .error-summary a {
+  font-size: inherit;
+  color: #d21f3c;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* =================================
+ * 7つの箱・フォーム部品（共通化候補はこのページ内で検証）
+ * ------------------------------ */
+.product-form {
+  font-size: inherit;
+  min-width: 0;
+}
+.product-form .form-box {
+  font-size: inherit;
+  padding: 2.4rem;
+  margin-bottom: 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.product-form .form-box h2 {
+  font-size: max(12px, 1.25em);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+.product-form .heading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 3.6rem;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  color: var(--color-brand-accent);
+  background: var(--color-brand-subtle);
+}
+.product-form .form-field + .form-field {
+  margin-top: 2.4rem;
+}
+.product-form .field-wide {
+  font-size: inherit;
+  width: 100%;
+  max-width: 72rem;
+}
+.product-form .field-medium {
+  font-size: inherit;
+  width: 100%;
+  max-width: 40rem;
+}
+.product-form .form-label .required-label,
+.product-form .form-label .optional-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-left: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #4f5863;
+  background: #f6f7f8;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.product-form .field-control {
+  font-size: inherit;
+  min-width: 0;
+}
+@media (width > 1194px) {
+  .product-form div.form-row {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    column-gap: 2.4rem;
+  }
+  .product-form .form-row > .form-label {
+    margin-bottom: 0;
+    padding-top: 1rem;
+  }
+  .product-form fieldset.form-row > legend {
+    float: left;
+    width: 20rem;
+  }
+  .product-form fieldset.form-row > .field-control {
+    margin-left: 22.4rem;
+  }
+}
+.product-form .form-field input[type=text] {
+  font-size: 1.6rem;
+}
+.product-form .form-field input[inputmode=numeric],
+.product-form .form-field input[inputmode=decimal] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.product-form .form-field textarea,
+.product-form .form-field select {
+  font-size: 1.6rem;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+}
+.product-form .form-field textarea {
+  line-height: 1.7;
+  resize: vertical;
+}
+.product-form .form-field select {
+  appearance: auto;
+  padding-right: 3.2rem;
+}
+.product-form .form-field input,
+.product-form .form-field textarea,
+.product-form .form-field select {
+  scroll-margin-block: 8rem 10rem;
+}
+.product-form .form-field input:hover:not(:disabled):not([aria-invalid=true]),
+.product-form .form-field textarea:hover:not(:disabled):not([aria-invalid=true]),
+.product-form .form-field select:hover:not(:disabled):not([aria-invalid=true]) {
+  border-color: #8a929c;
+}
+.product-form .form-field input:disabled,
+.product-form .form-field textarea:disabled,
+.product-form .form-field select:disabled {
+  color: #737b86;
+  background: #f6f7f8;
+  cursor: not-allowed;
+}
+.product-form .form-field input[readonly],
+.product-form .form-field textarea[readonly],
+.product-form .form-field select[readonly] {
+  background: #f6f7f8;
+}
+.product-form .form-field input[aria-invalid=true],
+.product-form .form-field textarea[aria-invalid=true],
+.product-form .form-field select[aria-invalid=true] {
+  border-color: #d21f3c;
+}
+.product-form .form-field input.input-number {
+  width: 14rem;
+  max-width: 100%;
+}
+.product-form .form-field input[type=radio][aria-invalid=true],
+.product-form .form-field input[type=checkbox][aria-invalid=true] {
+  border: 0;
+}
+.product-form .form-field input[type=radio][aria-invalid=true]:not(:focus-visible),
+.product-form .form-field input[type=checkbox][aria-invalid=true]:not(:focus-visible) {
+  outline: none;
+}
+.product-form .check-group {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 2.4rem;
+}
+.product-form .form-check {
+  min-height: 4.4rem;
+}
+.product-form .form-check input {
+  padding: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.product-form .form-check input:focus-visible {
+  outline: 3px solid var(--color-brand-accent);
+  outline-offset: 5px;
+}
+.product-form .form-help {
+  font-size: max(12px, 0.875em);
+  color: #4f5863;
+  margin-top: 0.8rem;
+  line-height: 1.7;
+}
+.product-form .choice-cards {
+  gap: 1.2rem;
+}
+.product-form .choice-card {
+  flex: 1 1 18rem;
+  min-width: 0;
+  max-width: 24rem;
+  padding: 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  background: #fff;
+}
+.product-form .choice-card:hover {
+  border-color: #8a929c;
+}
+.product-form .choice-card:has(:checked) {
+  border-color: var(--color-brand-accent);
+  background: var(--color-brand-subtle);
+}
+.product-form .choice-card:has([aria-invalid=true]) {
+  border-color: #d21f3c;
+}
+.product-form .choice-card:has(:focus-visible) {
+  outline: 3px solid var(--color-brand-accent);
+  outline-offset: 5px;
+}
+.product-form .choice-card input:focus-visible {
+  outline: none;
+}
+.product-form .choice-content {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.product-form .choice-icon {
+  display: inline-flex;
+  color: var(--color-brand-accent);
+}
+.product-form .choice-text {
+  font-size: inherit;
+  display: grid;
+  gap: 0.4rem;
+}
+.product-form .choice-description {
+  font-size: max(12px, 0.875em);
+  font-weight: 400;
+  color: #4f5863;
+  line-height: 1.7;
+}
+.product-form .packing-help {
+  margin: 0 0 1.6rem;
+}
+.product-form .packing-fields {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+.product-form .packing-field {
+  font-size: inherit;
+  max-width: 100%;
+}
+.product-form .unit-input {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.product-form .unit-input input {
+  width: 14rem;
+  min-width: 0;
+}
+.product-form .size-result {
+  font-size: inherit;
+  max-width: 72rem;
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.6rem;
+  background: #f6f7f8;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.7;
+}
+.product-form .price-input {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.product-form .price-input input {
+  width: 18rem;
+  max-width: 100%;
+}
+.product-form .stock-check,
+.product-form .expiry-text-label {
+  margin-top: 1.2rem;
+}
+.product-form .upload-field .form-help {
+  margin-left: 2.4rem;
+}
+.product-form .food-box h2 {
+  margin-bottom: 1.2rem;
+}
+.product-form .food-fields {
+  font-size: inherit;
+  min-width: 0;
+  border: 0;
+  padding: 2.4rem 0 0;
+}
+.product-form .food-fields[hidden] {
+  display: none;
+}
+.product-form .allergen-group {
+  font-size: inherit;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin-top: 1.6rem;
+}
+.product-form .allergen-group legend {
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+}
+.product-form .nutrition-fields {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 18rem));
+  gap: 1.6rem;
+}
+.product-form .nutrition-fields div {
+  font-size: inherit;
+}
+
+/* =================================
+ * 商品画像（操作の実装は2回目）
+ * ------------------------------ */
+.product-form .image-dropzone {
+  position: relative;
+  padding: 2.4rem;
+  text-align: center;
+  border: 1px dashed #aeb5be;
+  border-radius: 4px;
+  background: #f6f7f8;
+}
+.product-form .image-dropzone:hover {
+  border-color: var(--color-brand-accent);
+}
+.product-form .image-dropzone:has(:focus-visible) {
+  outline: 3px solid var(--color-brand-accent);
+  outline-offset: 5px;
+}
+.product-form .image-dropzone input[type=file] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.product-form .image-select-button {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.product-form .image-select-button:hover {
+  background: #f6f7f8;
+}
+.product-form .image-select-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.product-form .image-drop-label {
+  font-size: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  text-align: center;
+}
+.product-form .image-drop-label svg {
+  color: var(--color-brand-accent);
+}
+.product-form .product-images {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  list-style: none;
+}
+.product-form .product-images li {
+  font-size: inherit;
+  width: 22rem;
+  max-width: 100%;
+}
+.product-form .image-preview {
+  font-size: inherit;
+  position: relative;
+  padding: 1.2rem;
+  border: 1px solid #e3e6ea;
+  background: #f6f7f8;
+}
+.product-form .image-preview img {
+  display: block;
+  width: 100%;
+  height: 16rem;
+  object-fit: contain;
+}
+.product-form .main-image-label {
+  position: absolute;
+  inset: 0.8rem auto auto 0.8rem;
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #aeb5be;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+}
+.product-form .image-actions {
+  font-size: max(12px, 0.875em);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.product-form .image-actions button {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.product-form .image-actions button:hover {
+  background: #f6f7f8;
+}
+.product-form .image-actions button {
+  padding: 0;
+  flex: 0 0 4.4rem;
+  width: 4.4rem;
+  height: 4.4rem;
+}
+.product-form .image-actions button:disabled {
+  color: #737b86;
+  background: #f6f7f8;
+}
+
+/* =================================
+ * 保存バー（form内・サイドバーの重ね表示より下）
+ * ------------------------------ */
+.product-form .save-bar {
+  font-size: inherit;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem 2.4rem;
+  padding: 1.6rem 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.product-form .save-bar button,
+.product-form .save-bar a {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.product-form .save-bar button:hover,
+.product-form .save-bar a:hover {
+  background: #f6f7f8;
+}
+.product-form .save-bar button,
+.product-form .save-bar a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: 14rem;
+}
+.product-form .save-bar button {
+  font-weight: 500;
+  border-color: #9db5d6;
+  color: #1f4e8c;
+  background: #e6edf7;
+}
+.product-form .save-bar button:hover {
+  background: #d6e2f2;
+}
+.product-form .save-bar a {
+  border-color: #eceef1;
+  color: #22272e;
+  background: #eceef1;
+}
+.product-form .save-bar a:hover {
+  border-color: #e2e5e9;
+  background: #e2e5e9;
+}
+.product-form .save-bar a {
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=product-form.css.map */

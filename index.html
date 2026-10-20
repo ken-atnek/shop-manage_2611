@@ -267,13 +267,24 @@
           </li>
           <li>
             <div>
-              <span class="screen-name">商品詳細（登録・編集）</span>
+              <a class="screen-link" href="./shop-partner/product-form.php">
+                商品詳細（登録・編集）
+                <span class="screen-path">shop-partner/product-form.php</span>
+              </a>
               <dl class="screen-meta">
                 <div><dt>構成</dt><dd>商品登録と商品詳細を1つのフォームで作成</dd></div>
                 <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_PRODUCT_FORM.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/product-form.php">編集</a> /
+                  <a href="./shop-partner/product-form.php?preview=new">新規</a> /
+                  <a href="./shop-partner/product-form.php?preview=food">食品あり</a> /
+                  <a href="./shop-partner/product-form.php?preview=error">入力エラー</a> /
+                  <a href="./shop-partner/product-form.php?preview=saved">保存完了</a> /
+                  <a href="./shop-partner/product-form.php?preview=registered">登録完了</a>
+                </dd></div>
               </dl>
             </div>
-            <span class="status is-working">仕様検討中</span>
+            <span class="status is-working">作業中</span>
           </li>
           <li>
             <span class="screen-name">送料設定</span>

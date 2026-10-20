@@ -1,0 +1,531 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 商品詳細（登録・編集）スタイル
+ * URL: /shop-partner/assets/scss/product-form.scss
+ * Referenced in: /shop-partner/product-form.php
+ * Created: 2026-10-20
+ * Last updated: 2026-10-20
+ * ======================================= */
+
+/* =================================
+ * フォーム全体・読み取り専用情報・保存結果
+ * ------------------------------ */
+.product-form-page {
+    // 一覧の最小幅は継承せず、フォームの各欄は本文幅まで縮める。
+    min-width: 0;
+    .product-meta {
+        font-size: fz(14);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem 2.4rem;
+        margin: -0.8rem 0 2.4rem;
+        color: $color-text-secondary;
+        div {
+            font-size: inherit;
+            display: flex;
+            gap: 0.8rem;
+        }
+        dt,
+        dd {
+            font-size: inherit;
+        }
+        dd {
+            font-variant-numeric: tabular-nums;
+        }
+    }
+    .save-status,
+    .error-summary {
+        font-size: inherit;
+        margin-bottom: 2.4rem;
+        padding: 1.6rem 2.4rem;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+    }
+    .save-status {
+        border-left: 4px solid var(--color-brand-accent);
+    }
+    .error-summary {
+        border-color: $color-error;
+        h2 {
+            font-size: inherit;
+            font-weight: 600;
+        }
+        ul {
+            font-size: inherit;
+            margin-top: 1.2rem;
+            padding-left: 2rem;
+            list-style: disc;
+        }
+        li {
+            font-size: inherit;
+            margin-top: 0.8rem;
+        }
+        a {
+            font-size: inherit;
+            color: $color-error;
+            text-decoration: underline;
+            text-underline-offset: 0.2em;
+        }
+    }
+}
+
+/* =================================
+ * 7つの箱・フォーム部品（共通化候補はこのページ内で検証）
+ * ------------------------------ */
+.product-form {
+    font-size: inherit;
+    min-width: 0;
+    .form-box {
+        font-size: inherit;
+        padding: 2.4rem;
+        margin-bottom: 2.4rem;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        h2 {
+            font-size: fz(20);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2.4rem;
+        }
+    }
+    .heading-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 3.6rem;
+        width: 3.6rem;
+        height: 3.6rem;
+        border-radius: 50%;
+        color: var(--color-brand-accent);
+        background: var(--color-brand-subtle);
+    }
+    .form-field + .form-field {
+        margin-top: 2.4rem;
+    }
+    .field-wide {
+        font-size: inherit;
+        width: 100%;
+        max-width: 72rem;
+    }
+    .field-medium {
+        font-size: inherit;
+        width: 100%;
+        max-width: 40rem;
+    }
+    .form-label {
+        .required-label,
+        .optional-label {
+            display: inline-block;
+            font-size: fz(12);
+            font-weight: 400;
+            line-height: 1.5;
+            margin-left: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid $color-border-default;
+            border-radius: $radius-sm;
+            color: $color-text-secondary;
+            background: $color-bg-subtle;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    }
+    .field-control {
+        font-size: inherit;
+        min-width: 0;
+    }
+    // 箱は1列のまま。PCだけラベルと入力を分け、legendも同じ列に置く。
+    @media (width > 1194px) {
+        div.form-row {
+            display: grid;
+            grid-template-columns: 20rem minmax(0, 1fr);
+            column-gap: 2.4rem;
+        }
+        .form-row > .form-label {
+            margin-bottom: 0;
+            padding-top: 1rem;
+        }
+        fieldset.form-row {
+            > legend {
+                float: left;
+                width: 20rem;
+            }
+            > .field-control {
+                margin-left: 22.4rem;
+            }
+        }
+    }
+    // inputはcommon.scssの指定を使い、新規の入力部品だけ同じ値を試す。
+    .form-field {
+        input[type="text"] {
+            // 幅調整classが付いたinputも16pxを保つ。
+            font-size: 1.6rem;
+        }
+        input[inputmode="numeric"],
+        input[inputmode="decimal"] {
+            // 数値6欄は一覧の価格・在庫と同じ右揃え。共通化候補。
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        textarea,
+        select {
+            font-size: 1.6rem;
+            display: block;
+            width: 100%;
+            min-width: 0;
+            min-height: 4.4rem;
+            padding: 1rem 1.6rem;
+            border: 1px solid $color-border-default;
+            border-radius: $radius-sm;
+            color: $color-text-primary;
+            background: $pure-white;
+        }
+        textarea {
+            line-height: 1.7;
+            resize: vertical;
+        }
+        select {
+            appearance: auto;
+            padding-right: 3.2rem;
+        }
+        input,
+        textarea,
+        select {
+            // エラーリンクで移動しても欄のラベル・legendが画面上端に隠れない余白。
+            scroll-margin-block: 8rem 10rem;
+            &:hover:not(:disabled):not([aria-invalid="true"]) {
+                border-color: $color-border-hover;
+            }
+            &:disabled {
+                color: $color-text-muted;
+                background: $color-bg-subtle;
+                cursor: not-allowed;
+            }
+            &[readonly] {
+                background: $color-bg-subtle;
+            }
+            &[aria-invalid="true"] {
+                border-color: $color-error;
+            }
+        }
+        input.input-number {
+            width: 14rem;
+            max-width: 100%;
+        }
+        input[type="radio"][aria-invalid="true"],
+        input[type="checkbox"][aria-invalid="true"] {
+            // 入力欄用の枠を打ち消す。エラーはカード枠と説明文で示す。
+            border: 0;
+            &:not(:focus-visible) {
+                outline: none;
+            }
+        }
+    }
+    .check-group {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 2.4rem;
+    }
+    .form-check {
+        min-height: 4.4rem;
+        input {
+            // commonの入力欄用paddingを解除。ラジオ・チェックはネイティブ表示。
+            padding: 0;
+            width: 1.6rem;
+            height: 1.6rem;
+            &:focus-visible {
+                outline: 3px solid var(--color-brand-accent);
+                outline-offset: 5px;
+            }
+        }
+    }
+    .form-help {
+        font-size: fz(14);
+        color: $color-text-secondary;
+        margin-top: 0.8rem;
+        line-height: 1.7;
+    }
+    // ラジオは見えるまま、label全体を操作・フォーカスの単位にする。
+    .choice-cards {
+        gap: 1.2rem;
+    }
+    .choice-card {
+        flex: 1 1 18rem;
+        min-width: 0;
+        max-width: 24rem;
+        padding: 1.6rem;
+        border: 1px solid $color-border-default;
+        border-radius: $radius-sm;
+        background: $pure-white;
+        &:hover {
+            border-color: $color-border-hover;
+        }
+        &:has(:checked) {
+            border-color: var(--color-brand-accent);
+            background: var(--color-brand-subtle);
+        }
+        &:has([aria-invalid="true"]) {
+            border-color: $color-error;
+        }
+        &:has(:focus-visible) {
+            outline: 3px solid var(--color-brand-accent);
+            outline-offset: 5px;
+        }
+        input:focus-visible {
+            // 枠はカード全体に出し、ラジオの選択印はネイティブのまま保つ。
+            outline: none;
+        }
+    }
+    .choice-content {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+    .choice-icon {
+        display: inline-flex;
+        color: var(--color-brand-accent);
+    }
+    .choice-text {
+        font-size: inherit;
+        display: grid;
+        gap: 0.4rem;
+    }
+    .choice-description {
+        font-size: fz(14);
+        font-weight: 400;
+        color: $color-text-secondary;
+        line-height: 1.7;
+    }
+    .packing-help {
+        margin: 0 0 1.6rem;
+    }
+    .packing-fields {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.6rem;
+    }
+    .packing-field {
+        font-size: inherit;
+        max-width: 100%;
+    }
+    .unit-input {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        input {
+            width: 14rem;
+            min-width: 0;
+        }
+    }
+    .size-result {
+        font-size: inherit;
+        max-width: 72rem;
+        margin-top: 1.6rem;
+        padding: 1.2rem 1.6rem;
+        background: $color-bg-subtle;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.7;
+    }
+    .price-input {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        input {
+            width: 18rem;
+            max-width: 100%;
+        }
+    }
+    .stock-check,
+    .expiry-text-label {
+        margin-top: 1.2rem;
+    }
+    .upload-field .form-help {
+        // 補助文はチェックの文字位置にそろえ、既存の小さい文字・補助色を使う。
+        margin-left: 2.4rem;
+    }
+    .food-box h2 {
+        margin-bottom: 1.2rem;
+    }
+    .food-fields {
+        font-size: inherit;
+        min-width: 0;
+        border: 0;
+        padding: 2.4rem 0 0;
+        // hiddenをレイアウト指定で上書きしない。
+        &[hidden] {
+            display: none;
+        }
+    }
+    .allergen-group {
+        font-size: inherit;
+        min-width: 0;
+        border: 0;
+        padding: 0;
+        margin-top: 1.6rem;
+        legend {
+            font-size: fz(14);
+            font-weight: 500;
+        }
+    }
+    .nutrition-fields {
+        font-size: inherit;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 18rem));
+        gap: 1.6rem;
+        div {
+            font-size: inherit;
+        }
+    }
+}
+
+/* =================================
+ * 商品画像（操作の実装は2回目）
+ * ------------------------------ */
+.product-form {
+    .image-dropzone {
+        position: relative;
+        padding: 2.4rem;
+        text-align: center;
+        border: 1px dashed $color-border-strong;
+        border-radius: $radius-sm;
+        background: $color-bg-subtle;
+        &:hover {
+            border-color: var(--color-brand-accent);
+        }
+        &:has(:focus-visible) {
+            outline: 3px solid var(--color-brand-accent);
+            outline-offset: 5px;
+        }
+        input[type="file"] {
+            // sr-only相当。標準UIだけを隠し、Tab・読み上げ・label操作は残す。
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            min-height: 0;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+            border: 0;
+        }
+    }
+    .image-select-button {
+        @include button-base;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    .image-drop-label {
+        font-size: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        text-align: center;
+        svg {
+            color: var(--color-brand-accent);
+        }
+    }
+    .product-images {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.6rem;
+        list-style: none;
+        li {
+            font-size: inherit;
+            width: 22rem;
+            max-width: 100%;
+        }
+    }
+    .image-preview {
+        font-size: inherit;
+        position: relative;
+        padding: 1.2rem;
+        border: 1px solid $color-border-inner;
+        background: $color-bg-subtle;
+        img {
+            display: block;
+            width: 100%;
+            height: 16rem;
+            object-fit: contain;
+        }
+    }
+    .main-image-label {
+        position: absolute;
+        inset: 0.8rem auto auto 0.8rem;
+        font-size: fz(14);
+        font-weight: 500;
+        padding: 0.4rem 0.8rem;
+        border: 1px solid $color-border-strong;
+        border-radius: $radius-sm;
+        color: $color-text-primary;
+        background: $pure-white;
+    }
+    .image-actions {
+        font-size: fz(14);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.8rem;
+        button {
+            @include button-base;
+            padding: 0;
+            flex: 0 0 4.4rem;
+            width: 4.4rem;
+            height: 4.4rem;
+            &:disabled {
+                color: $color-text-muted;
+                background: $color-bg-subtle;
+            }
+        }
+    }
+}
+
+/* =================================
+ * 保存バー（form内・サイドバーの重ね表示より下）
+ * ------------------------------ */
+.product-form {
+    .save-bar {
+        font-size: inherit;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1.2rem 2.4rem;
+        padding: 1.6rem 2.4rem;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        button,
+        a {
+            @include button-base;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            min-width: 14rem;
+        }
+        button {
+            @include button-primary;
+        }
+        a {
+            @include button-secondary;
+            text-decoration: none;
+        }
+    }
+}
