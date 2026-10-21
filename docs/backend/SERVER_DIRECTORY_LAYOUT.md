@@ -21,7 +21,7 @@
 - Laravel公式資料では13.xの対応PHPは8.3〜8.5、セキュリティ修正期限は2028-03-17。確認元：[リリース・サポート方針](https://laravel.com/framework/docs/13.x/releases#support-policy)、[サーバー要件](https://laravel.com/framework/docs/13.x/deployment#server-requirements)（2026-10-20確認）
 - サーバー側のDBはMariaDB 10.11.xを使用する（担当者からの共有：2026-10-20）。[Laravel 13.x公式のDB対応条件](https://laravel.com/framework/docs/13.x/database#introduction)を満たすことを確認
 - 管理画面には[Laravel標準のセッション認証](https://laravel.com/framework/docs/13.x/authentication#laravels-built-in-browser-authentication-services)を採用し、ログイン後の状態をサーバー側で管理する（担当者決定：2026-10-20）。セッションの保存先・有効期限・Master／Client間の共有方法は未確定。ログイン入力項目をフロント方針に合わせる決定は維持する
-- SPEC「バックエンドへの確認事項」6の回答欄には、2026-10-20に担当者の了承を得て技術構成と未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
+- SPEC「バックエンドへの確認事項」6（現在は[QA No.6](../QA_BACKEND.md#no6-技術構成)）の回答欄には、2026-10-20に担当者の了承を得て技術構成と未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
 
 ## バックエンドのローカル開発環境（方針決定：2026-10-20）
 
@@ -33,7 +33,7 @@
 - ローカルURLは`http://demo-kumanichi-shop-manage.test`とする（担当者決定：2026-10-20）。VirtualHostの`ServerName`は`demo-kumanichi-shop-manage.test`とし、Windowsの`hosts`で同名を`127.0.0.1`に対応付ける。Master／ClientのローカルでのURL振り分けは別途決める
 - ApacheとWindowsの`hosts`の具体的な設定は環境構築時に行う。既存VirtualHostと使用ポートの競合は設定前に確認する。今回XAMPP・DDEVの設定変更やLaravel構築は行わない
 - 生成CSS・JS・画面用画像はLaravelの`public`配下へコピーして取り込む方式を採用する（担当者決定：2026-10-20）。取り込み運用の詳細は次節を参照
-- SPEC「バックエンドへの確認事項」7の回答欄には、2026-10-20に担当者の了承を得てローカル環境・アセット取り込み方針と未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
+- SPEC「バックエンドへの確認事項」7（現在は[QA No.7](../QA_BACKEND.md#no7-ddev生成css)）の回答欄には、2026-10-20に担当者の了承を得てローカル環境・アセット取り込み方針と未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
 
 ## CSS・JS・画面用画像の取り込み（確定部分：2026-10-20）
 
@@ -43,7 +43,7 @@
 - フロント更新時は差分を確認して再度取り込む。Laravel連携のために修正したJSは、その変更内容を確認して取り込み内容を調整する
 - 今回は仕様の記録のみを行い、ファイルのコピー・Bladeの修正・コピー用スクリプトの作成は行わない。自動化の有無・具体的な手順は未確定
 - この取り込み対象は画面の静的アセット。アップロードされた商品画像・入稿画像の保存方針とは区別する
-- 根拠：担当者の承認、`../SPEC.md`「フォルダとSass」「バックエンドへの確認事項」7、`../coding/IMPLEMENTATION_REFERENCE.md`「制作環境と引き渡し」、`../../backend/README.md`「バックエンド担当者と決めること」
+- 根拠：担当者の承認、`../SPEC.md`「フォルダとSass」、[QA No.7](../QA_BACKEND.md#no7-ddev生成css)、`../coding/IMPLEMENTATION_REFERENCE.md`「制作環境と引き渡し」、`../../backend/README.md`「バックエンド担当者と決めること」
 
 ## Laravel本体（公開ディレクトリの外）
 
