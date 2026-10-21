@@ -2,7 +2,7 @@
 
 2026-10-20。実装前の論理設計。DBはMariaDB 10.11.xを前提とし、`bigint`は符号なし、金額は円の整数、日時は`datetime`。PKは各表の`id bigint`、共通で`created_at`・`updated_at datetime`を置く案。FKは原則削除制限とし、注文履歴は物理削除しない。括弧内の必須は保存時の条件であり、未確定条件は下記に明記する。
 
-サーバー側の実装環境はLaravel 13.x・PHP 8.3.35・MariaDB 10.11.xで確定（2026-10-20）。ローカルはXAMPPを使用予定で、PHPは8.3.30、DBはMariaDB 10.4.32（担当者共有：2026-10-20）。ローカルとサーバーのDBバージョン差による機能・照合順序等の影響は実装時に確認する。個別テーブルの型・制約は引き続き設計案とする。実行環境の記録は`SERVER_DIRECTORY_LAYOUT.md`を参照。
+サーバー側の実装環境はLaravel 13.x・PHP 8.3.35・MariaDB 10.11.xで確定（2026-10-20）。ローカルはXAMPPを使用し、PHPは8.3.31（2026-10-21確認）、DBはMariaDB 10.4.32（担当者共有：2026-10-20）。ローカルとサーバーのDBバージョン差による機能・照合順序等の影響は実装時に確認する。個別テーブルの型・制約は引き続き設計案とする。実行環境の記録は`SERVER_DIRECTORY_LAYOUT.md`を参照。
 
 参照略号：S販＝`../SPEC.md`「店舗と送料の確定事項」、S商＝同「Client商品詳細（登録・編集）の確定事項」、S受＝同「Client受注一覧の確定事項」、D商＝`../design/CLIENT_PRODUCT_FORM.md`、D受＝`../design/CLIENT_ORDER_LIST.md`、H商＝`../coding/HANDOFF_CLIENT_PRODUCT_FORM.md`。
 
