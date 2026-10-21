@@ -104,28 +104,25 @@
                         <tr>
                             <td class="product-id">{{ $product->id }}</td>
                             <td class="product-image">
-                                @if ($product->image_url)
-                                    <img src="{{ $product->image_url }}" width="48" height="48" alt="" loading="lazy" />
-                                @else
-                                    <span class="no-image">画像なし</span>
-                                @endif
+                                {{-- TODO: product_images の作業でサムネイルを出す（申し送り§4：縮小画像・loading="lazy"・width/height 48） --}}
+                                <span class="no-image">画像なし</span>
                             </td>
                             <td class="product-name">{{ $product->name }}</td>
-                            <td class="product-price">¥{{ number_format($product->price) }}</td>
+                            <td class="product-price">¥{{ number_format($product->price_incl_tax_yen) }}</td>
                             <td class="product-stock">
-                                @if ($product->stock_state === 'empty')
-                                    {{ $product->stock }}<span class="stock-note">在庫切れ</span>
-                                @elseif ($product->stock_state === 'low')
-                                    {{ $product->stock }}<span class="stock-note">残りわずか</span>
-                                @elseif ($product->stock_state === 'unmanaged')
+                                @if ($product->stockState === 'empty')
+                                    {{ $product->stock_quantity }}<span class="stock-note">在庫切れ</span>
+                                @elseif ($product->stockState === 'low')
+                                    {{ $product->stock_quantity }}<span class="stock-note">残りわずか</span>
+                                @elseif ($product->stockState === 'unmanaged')
                                     {{-- TODO: フロントに確認 --}}
                                     <span aria-hidden="true">—</span><span class="sr-only">在庫管理なし</span>
                                 @else
-                                    {{ $product->stock }}
+                                    {{ $product->stock_quantity }}
                                 @endif
                             </td>
                             <td>
-                                @if ($product->is_published)
+                                @if ($product->publish_status === 'public')
                                     <span class="publish-state">公開</span>
                                 @else
                                     <span class="publish-state is-private">非公開</span>

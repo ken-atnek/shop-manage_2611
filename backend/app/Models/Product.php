@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\ProductFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,6 +52,24 @@ class Product extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    protected function stockState(): Attribute
+    {
+        return Attribute::make(
+            get: function (): ?string {
+                if ($this->no_stock_management) {
+                    return 'unmanaged';
+                }
+
+                if ($this->stock_quantity !== null && (int) $this->stock_quantity === 0) {
+                    return 'empty';
+                }
+
+                // TODO: 残りわずか（low）は基準値が決まってから判定する
+                return null;
+            },
+        );
     }
 
     public function store(): BelongsTo

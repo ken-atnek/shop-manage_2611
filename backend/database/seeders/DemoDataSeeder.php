@@ -17,10 +17,12 @@ class DemoDataSeeder extends Seeder
     public function run(): void
     {
         if (!app()->environment('local')) {
+            $this->command?->warn('ローカル環境ではないため、確認用データは作成しません。');
             return;
         }
 
         if (Partner::query()->exists()) {
+            $this->command?->warn('partners に既存データがあるため、確認用データは作成しません。');
             return;
         }
 
@@ -35,8 +37,8 @@ class DemoDataSeeder extends Seeder
         }
 
         DB::transaction(function () use ($carriers) {
-            $partner1 = Partner::factory()->create();
-            $partner2 = Partner::factory()->create();
+            $partner1 = Partner::factory()->create(['name' => 'くまもとギフト工房']);
+            $partner2 = Partner::factory()->create(['name' => '阿蘇の贈りもの']);
 
             $yamatoStore = Store::factory()->for($partner1)->create([
                 'carrier_id' => $carriers->get('yamato')->getKey(),
