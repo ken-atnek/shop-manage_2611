@@ -14,7 +14,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $projectRoot = dirname(__DIR__);
-$pages = ['shop-partner/orders', 'shop-partner/products', 'shop-partner/product-form', 'shop-partner/stores', 'shop-partner/store-form', 'shop-partner/customers'];
+$pages = ['shop-partner/orders', 'shop-partner/products', 'shop-partner/product-form', 'shop-partner/stores', 'shop-partner/store-form', 'shop-partner/customers', 'shop-partner/customer-detail'];
 
 // 新しい画面は、制作を始めた時点で上の一覧へ明示的に追加する。
 foreach ($pages as $page) {

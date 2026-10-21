@@ -1,0 +1,295 @@
+@charset "UTF-8";
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
+/* =======================================
+ * 熊日モール 管理画面 共通カラー
+ * URL: /scss/_colors.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+/* =======================================
+ * ふもと旅館採用 SVG背景・アイコンmixin
+ * URL: /src/styles/foundation/_svg.scss
+ * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * Created: 2026-07-07
+ * Last updated: 2026-09-21
+ * Created source: ファイル作成日時（移植元由来）
+ * ======================================= */
+/* =======================================
+ * 熊日モール 共通UI mixin
+ * URL: /scss/_ui.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/*=========================================
+ボタン
+-----------------------------------------*/
+/*=========================================
+中央寄せ
+-----------------------------------------*/
+/*=========================================
+ドロップシャドウ
+-----------------------------------------*/
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+/* =======================================
+ * 熊日モール Client 顧客詳細 スタイル
+ * URL: /shop-partner/assets/scss/customer-detail.scss
+ * Referenced in: /shop-partner/customer-detail.php
+ * Created: 2026-10-21
+ * Last updated: 2026-10-21
+ * ======================================= */
+/* =================================
+ * 見出し・白い箱・読み取り専用情報
+ * ------------------------------ */
+.customer-detail-page {
+  min-width: 0;
+}
+.customer-detail-page .page-heading {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.4rem;
+}
+.customer-detail-page .back-link {
+  font-size: inherit;
+  color: var(--color-brand-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.customer-detail-page .form-box {
+  font-size: inherit;
+  min-width: 0;
+  padding: 2.4rem;
+  margin-bottom: 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.customer-detail-page h2 {
+  font-size: max(12px, 1.25em);
+  font-weight: 600;
+}
+.customer-detail-page .profile-help {
+  font-size: inherit;
+  margin-top: 1.2rem;
+  color: #4f5863;
+}
+.customer-detail-page .profile-list {
+  font-size: inherit;
+  margin-top: 2.4rem;
+}
+.customer-detail-page .profile-list > div {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 1.2rem;
+  font-size: inherit;
+}
+.customer-detail-page .profile-list > div + div {
+  margin-top: 1.2rem;
+}
+.customer-detail-page .profile-list dt,
+.customer-detail-page .profile-list dd {
+  min-width: 0;
+  font-size: inherit;
+}
+.customer-detail-page .profile-list dt {
+  font-weight: 500;
+  color: #4f5863;
+}
+.customer-detail-page .profile-list dd {
+  overflow-wrap: anywhere;
+}
+.customer-detail-page .postal-code {
+  display: block;
+  font-size: inherit;
+}
+.customer-detail-page .tax-note {
+  display: inline-block;
+  font-size: inherit;
+  white-space: nowrap;
+}
+.customer-detail-page .purchase-summary {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem 2.4rem;
+  margin-top: 2.4rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid #e3e6ea;
+}
+.customer-detail-page .purchase-summary > div,
+.customer-detail-page .purchase-summary dt,
+.customer-detail-page .purchase-summary dd {
+  min-width: 0;
+  font-size: inherit;
+}
+.customer-detail-page .purchase-summary dt {
+  color: #4f5863;
+  font-weight: 500;
+}
+.customer-detail-page .purchase-summary dd {
+  margin-top: 0.8rem;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =================================
+ * 注文ごとの履歴・表示専用の発送状況
+ * ------------------------------ */
+.customer-detail-page .customer-history {
+  font-size: inherit;
+}
+.customer-detail-page .customer-history > h2 {
+  margin-bottom: 1.6rem;
+}
+.customer-detail-page .history-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem 2.4rem;
+}
+.customer-detail-page .history-heading h3 {
+  font-size: max(12px, 1.125em);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.customer-detail-page .order-status,
+.customer-detail-page .order-status dd {
+  font-size: inherit;
+}
+.customer-detail-page .shipping-status {
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  min-height: 3.6rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  color: #fff;
+  white-space: nowrap;
+}
+.customer-detail-page .shipping-status.status-new {
+  background: #c2410c;
+}
+.customer-detail-page .shipping-status.status-processing {
+  background: #8a3fd1;
+}
+.customer-detail-page .shipping-status.status-shipped {
+  background: #3d7a1f;
+}
+.customer-detail-page .shipping-status.status-return {
+  background: #d21f3c;
+}
+.customer-detail-page .shipping-status.status-cancelled {
+  background: #3a3f46;
+}
+.customer-detail-page .order-summary {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem 2.4rem;
+  margin-top: 1.6rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid #e3e6ea;
+}
+.customer-detail-page .order-summary > div,
+.customer-detail-page .order-summary dt,
+.customer-detail-page .order-summary dd {
+  min-width: 0;
+  font-size: inherit;
+}
+.customer-detail-page .order-summary dt {
+  color: #4f5863;
+  font-weight: 500;
+}
+.customer-detail-page .order-summary dd {
+  margin-top: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.customer-detail-page .order-summary time {
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.customer-detail-page .order-summary .order-amount dd {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.customer-detail-page .order-addresses {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.4rem;
+  margin-top: 2.4rem;
+  font-size: inherit;
+}
+.customer-detail-page .order-addresses .address-group {
+  min-width: 0;
+  font-size: max(12px, 0.875em);
+}
+.customer-detail-page .order-addresses h4 {
+  font-size: inherit;
+  font-weight: 500;
+}
+.customer-detail-page .order-addresses .contact-lines {
+  font-size: inherit;
+  margin-top: 1.6rem;
+}
+.customer-detail-page .order-addresses .contact-lines p {
+  font-size: inherit;
+  overflow-wrap: anywhere;
+}
+.customer-detail-page .order-addresses .contact-lines p + p {
+  margin-top: 0.4rem;
+}
+@media (max-width: 834px) {
+  .customer-detail-page .order-addresses {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.customer-detail-page .order-actions {
+  font-size: inherit;
+  margin-top: 2.4rem;
+  text-align: right;
+}
+.customer-detail-page .order-actions a {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.customer-detail-page .order-actions a:hover {
+  background: #f6f7f8;
+}
+.customer-detail-page .order-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.customer-detail-page .list-error .message {
+  color: #d21f3c;
+}
+.customer-detail-page .list-error .error-help {
+  font-size: inherit;
+  margin-top: 0.8rem;
+  color: #4f5863;
+}
+
+/*# sourceMappingURL=customer-detail.css.map */
