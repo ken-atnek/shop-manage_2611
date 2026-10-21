@@ -139,7 +139,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない
-- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)・[商品フォーム](HANDOFF_CLIENT_PRODUCT_FORM.md)の申し送りで確認する
+- 組み込み時の注意点は[Client共通の申し送り](HANDOFF_CLIENT_COMMON.md)を先に読み、画面ごとの差分を[受注一覧](HANDOFF_CLIENT_ORDER_LIST.md)・[商品一覧](HANDOFF_CLIENT_PRODUCT_LIST.md)・[商品フォーム](HANDOFF_CLIENT_PRODUCT_FORM.md)・[店舗一覧](HANDOFF_CLIENT_STORE_LIST.md)・[店舗フォーム](HANDOFF_CLIENT_STORE_FORM.md)の申し送りで確認する
 
 ## HTML要素の考え方
 

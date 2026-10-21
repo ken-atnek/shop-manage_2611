@@ -1233,3 +1233,27 @@
 - CLIENT_STORE_FORMに動作・JS依存先と初期タブの変更を記録。今回の変更はstore-form.js・CLIENT_STORE_FORM.md・MEMORY.mdの3ファイルのみで、Sass／CSS・PHP・他画面・共通ファイル・backend/・docs/backend/・.ddev/config.local.yamlは今回触れていない。既存MEMORYはそのまま追記した
 - 1280×800・834×1194のpreview=errorで、初期100タブとまとめフォーカス、全4リンクの移動、帯・ラベル・欄の非重複、横はみ出しなし・コンソールエラー0を確認。Tab補正は一時コピーの位置準備ボタンで境界状態を作り、実際のTabキーで確認した。ラベル上端約40px→約72pxとなり、固定タブ下端56pxより下へ復帰。検証用処理は本番に追加していない。画像・一時コピーは`/tmp/kumanichi-store-error-focus/`に保存
 - node --check、git diff --check、相対リンク・節アンカー、作業前ハッシュとの変更範囲照合を確認。Gitコミットは行わない。判断に迷った点・不明な点：なし
+
+
+## 2026-10-21 Client店舗フォーム・一括入力後の補助欄クリア
+
+- `kumanichi-admin-design`を使用。既存コメント・画面資料の「補助入力欄を書き換えない」を今回の決定で更新する旨を作業前に共有。ほかの食い違いはなし
+- store-form.jsで県の欄への反映直後に、押したボタンのdata-bulk-inputが示す入力欄だけを空にする1行を追加。不正値のreturnより後で行うため、空・範囲外・整数でない入力はそのまま残る。件数通知・押したボタンのフォーカス・markChangedは維持
+- docs/SPEC.mdの「配送・送料の変更と送信」に、保存しない一度きりの補助操作である理由と成功時のクリア・不正値保持を記録。CLIENT_STORE_FORMの操作・JS依存先・旧記述を更新し、動作と確認結果を追記した
+- ブラウザ1280×800で全国47件へ900円、北東北3件へ全角１２００から1200円を入力し、使用した補助欄だけが空になることを確認。通知は47件／3件、フォーカスは押したボタンのまま。他44県・他サイズは維持。全国・地方それぞれで空・100000・1.5・abcの値保持、県の欄の無変更、従来の案内を確認。コンソールエラー0。画像・結果は`/tmp/kumanichi-store-bulk-clear/`へ保存
+- node --check・git diff --checkが成功。変更はstore-form.js・SPEC.md・CLIENT_STORE_FORM.md・MEMORY.mdの4ファイルのみ。見た目・name・送信対象・ほかの操作・他画面・共通ファイル・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。既存MEMORYを維持し、Gitコミットは行わない
+- 判断に迷った点・不明な点：なし
+
+
+## 2026-10-21 Client店舗一覧・店舗フォームの申し送り整備
+
+- `kumanichi-admin-design`を使用。商品一覧・商品フォームの申し送りの構成に合わせ、`docs/coding/HANDOFF_CLIENT_STORE_LIST.md`・`HANDOFF_CLIENT_STORE_FORM.md`を作成。共通レイアウト・head・エラー基本形・読み込みの基本はHANDOFF_CLIENT_COMMONへの参照にまとめた
+- 作業前に、店舗一覧資料の「フォーム未制作・リンク切れ」、DB設計の送料無料0円の旧記述、商品フォームの温度帯別JSONを未対応とする旧記述を確認・共有。最新SPECと実コードを正として資料へ反映し、DB資料は変更していない。QA No.4は運送会社規格の回答であり、都道府県コードの置き換えはDB設計を根拠として区別した。stores.phpの旧制作コメントはコード変更対象外のため残し、申し送りで現状を補足
+- 一覧は7列の値・集計・更新契機・追加／編集導線・空と取得失敗の区別・両画面のサイドバー現在地・制作専用部分を整理。フォームは送信項目と対象外領域、QA No.3の保存済み料金保持、クール便対象判定、エラーのまとめと全使用タブの値保持、JSON・JS依存先、送信・離脱・復帰を記録した
+- DB対応表には会社コード→ID、cm値→規格ID・店舗サイズID、ネスト送料→送料表／都道府県料金、refrigerated→cold、規格の数値型変換、送料無料チェックと閾値NULLの対応を記載。送料無料オフ保存後の金額再利用、会社別DB規格IDと画面のcm別共用表の復元、非送信の未保存値の復元など、未確定の実装詳細を勝手に確定しない。商品フォームの温度帯別JSONは対応済み・本番契約確認は継続として分けた
+- CLIENT_STORE_LIST・CLIENT_STORE_FORM、README、SPECの制作状況、index.htmlの店舗グループ（一覧・フォーム共通）の状態を「完成（引き渡し前）」へ同期。両画面資料に引き渡しの資料整備完了行・申し送りリンクを追加。IMPLEMENTATION_REFERENCEの引き渡し参照先にも追加した。担当者への送信・実際の引き渡し・Blade組み込みは行っていない
+- DDEVで既存PHPを読み取り実行し、通常・new・no-size・sagawa・error・saved・registeredの7状態を一時ファイルへ出力。申し送りのname全16パターンを500の一意名に展開し、出力との漏れ・余分なしを確認（newは会社未選択でused_sizes[]候補がない）。3社すべてのJSON例をPHP出力と値・形・数値／文字列／nullの型まで照合した
+- JSの直接参照ID16種・検索class8種・data属性12種と動的ID／ARIA／name依存先を照合。更新資料の相対リンク・節アンカー156件に欠落なし。git diff --checkと新規2ファイルの空白検査も成功
+- 実ブラウザの標準離脱ダイアログ表示・取消と実bfcache復帰は、既存制作時の一時テストで確認した範囲を申し送りに明示した。今回は資料だけの作業でブラウザ再検証・コードの再ビルドは行っていない
+- 今回の変更は新規申し送り2件、画面資料2件、README、IMPLEMENTATION_REFERENCE、SPEC、MEMORY、index.htmlの9ファイル。index.htmlは既存状態表示1か所の文言・is-doneだけ。開始時ハッシュと照合しPHP・Sass・CSS・JS・backend/・docs/backend/の追加変更なし。git diff --statに出るstore-form.jsの差分は前回の未コミット分で、今回触れていない。既存MEMORYを保持して追記し、.ddev/config.local.yamlは触れず、Gitコミットは行わない
+- 判断に迷った点・不明な点：資料上の旧記述は最新SPEC・実コードで解消。本番の送信契約・DB対応と上記の復元詳細は確認事項として残す。業務仕様の追加決定はしていない
