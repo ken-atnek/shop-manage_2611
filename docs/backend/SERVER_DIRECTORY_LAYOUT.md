@@ -79,6 +79,7 @@
 - 制作用PHPから移さないもの：`$pageExtension`・`$staticExport`・`?preview=` の状態分岐。現在地の判定は `$currentPage` の代わりに `request()->routeIs()` を使う
 - まだBlade化していない画面へのリンク（受注一覧・商品登録・店舗）と、「サイトを確認」・ログアウトは仮に `href="#"`／`action="#"` とし、Bladeに TODO コメントを残している。ログイン必須にするのはログインの作業で行う
 - Client商品一覧（`partner/products/index.blade.php`、`App\Http\Controllers\Partner\ProductController`）をBladeにした（2026-10-21）。データはDB（`products`）から所属店舗を通して取得する。ログイン（⑤）までは仮にパートナーID=1に限定し、⑤でログインユーザーの所属へ置き換える。並び順は`updated_at`降順、同じ日時は仮に`id`降順（順序は未確定）。画像は未対応で全件「画像なし」とし、`product_images`の作業で対応する。絞り込みは[QA No.13](../QA_BACKEND.md#no13-商品一覧の絞り込みの細則)の細則で実装した（2026-10-21）
+- Client商品一覧の Feature テストは `tests/Feature/Partner/ProductIndexTest.php`（SQLite・メモリDB。2026-10-21）。実行はユーザーの手元で `php artisan test`
 - ページ送りは共通部品 `partner/partials/pagination.blade.php`（受け取る変数：`$paginator`・`$label`）。表示ルールは[共通申し送り§7](../coding/HANDOFF_CLIENT_COMMON.md#7-ページ送り)。ページ番号のパラメータは `page`、検索条件はURLに引き継ぐ。1ページだけのときは出さない（未確定のため、フロントの案で仮に実装）
 - 範囲外のページ（最終ページより大きい page）は、検索条件を引き継いで最終ページへリダイレクトする（2026-10-21、担当者決定）
 - GETの検索フォームの入力チェックは `Validator::make` で行い、リダイレクトせずに同じ一覧へエラーを表示する（`$request->validate()` は前のページへ戻るため使わない）。エラーのときは条件を使わずに一覧を表示し、入力値を戻して詳細検索パネルを開く
