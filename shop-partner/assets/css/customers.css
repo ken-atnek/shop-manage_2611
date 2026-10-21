@@ -81,7 +81,7 @@
 .admin-main .customers-table {
   font-size: inherit;
   width: 100%;
-  min-width: 68rem;
+  min-width: 70.4rem;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -116,6 +116,12 @@
 }
 .admin-main .customers-table tbody tr:hover {
   background: #f8f9fb;
+}
+.admin-main .customers-table .customer-id {
+  width: 6.4rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .admin-main .customers-table .customer-name {
   width: 14.4rem;

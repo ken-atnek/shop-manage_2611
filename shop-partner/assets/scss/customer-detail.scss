@@ -25,6 +25,27 @@
         text-decoration: underline;
         text-underline-offset: 0.2em;
     }
+    // 商品・店舗フォームの編集画面と同じ読み取り専用メタ情報。
+    .customer-meta {
+        font-size: fz(14);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem 2.4rem;
+        margin: -0.8rem 0 2.4rem;
+        color: $color-text-secondary;
+        div {
+            font-size: inherit;
+            display: flex;
+            gap: 0.8rem;
+        }
+        dt,
+        dd {
+            font-size: inherit;
+        }
+        dd {
+            font-variant-numeric: tabular-nums;
+        }
+    }
     // 店舗フォームの.form-boxを基準にし、入力欄は置かない。
     .form-box {
         font-size: inherit;
@@ -179,16 +200,89 @@
             font-variant-numeric: tabular-nums;
         }
     }
-    .order-addresses {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 2.4rem;
-        margin-top: 2.4rem;
+    // 受注一覧の.item-tableと同じ列・内側の罫線・右揃えを使う。
+    // 展開用のJSや受注一覧固有の高さ配分は持ち込まない。
+    .item-table {
         font-size: inherit;
-        .address-group {
-            min-width: 0;
-            font-size: fz(14);
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 2.4rem;
+        border: 1px solid $color-border-inner;
+        thead,
+        tbody,
+        tfoot,
+        tr,
+        th,
+        td {
+            font-size: inherit;
         }
+        col.quantity { width: 5.2rem; }
+        col.subtotal { width: 12rem; }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: top;
+        }
+        thead th {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+            background: $color-bg-head;
+            text-align: left;
+        }
+        th.quantity,
+        td.quantity {
+            // 5.2remの列内に「個数」を1行で収める。
+            padding-inline: 0.8rem;
+            white-space: nowrap;
+        }
+        th + th,
+        td + td {
+            border-left: 1px solid $color-border-inner;
+        }
+        tbody td,
+        tfoot th,
+        tfoot td {
+            border-top: 1px solid $color-border-inner;
+        }
+        .item-name {
+            font-size: fz(14);
+            overflow-wrap: anywhere;
+        }
+        .item-note {
+            // 届け先と同じfz(14)のセルから継承し、入れ子で縮小しない。
+            font-size: inherit;
+            margin-top: 0.4rem;
+            color: $color-text-secondary;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+        .quantity,
+        .subtotal,
+        tfoot th,
+        tfoot td {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        tbody .quantity,
+        tbody .subtotal,
+        tfoot td {
+            white-space: nowrap;
+        }
+        tfoot th {
+            font-size: fz(14);
+            color: $color-text-secondary;
+        }
+        tfoot td {
+            border-left: 1px solid $color-border-inner;
+        }
+    }
+    .address-group {
+        min-width: 0;
+        margin-top: 2.4rem;
+        font-size: fz(14);
         h4 {
             font-size: inherit;
             font-weight: 500;
@@ -204,20 +298,24 @@
                 }
             }
         }
-        @media (max-width: $tb) {
-            grid-template-columns: minmax(0, 1fr);
-        }
     }
-    .order-actions {
-        font-size: inherit;
+    .customer-note,
+    .cancel-record {
+        min-width: 0;
         margin-top: 2.4rem;
-        text-align: right;
-        a {
-            @include button-base;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
+        font-size: fz(14);
+        h4 {
+            font-size: inherit;
+            font-weight: 500;
+        }
+        p {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+        .record-label {
+            color: $color-text-secondary;
         }
     }
     .list-error {

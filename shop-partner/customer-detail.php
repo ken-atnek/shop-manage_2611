@@ -7,7 +7,12 @@ $isSingleState = $previewState === 'single';
 $isNotFoundState = $previewState === 'not-found';
 $isErrorState = $previewState === 'error';
 
-// すべて架空の表示例。一覧の実データやIDには連動していない。
+// 架空の表示例。IDは表示確認用の候補だけを受け付け、DBの識別・権限判定には使わない。
+// 顧客テーブル方式はバックエンド回答待ち。仮URLはcustomer-detail.php?id={顧客ID}で、本番の形は未確定。
+$sampleCustomerIds = ['1042', '87', '615', '2308', '319', '1705'];
+$requestedId = ($staticExport ?? false) ? '1042' : ($_GET['id'] ?? ($isSingleState ? '87' : '1042'));
+$customerId = in_array($requestedId, $sampleCustomerIds, true) ? $requestedId : '1042';
+// 各IDの基本情報・履歴は同じ固定例。実データとの連動はバックエンドで行う。
 $latestBuyer = [
     'name' => 'サンプル 顧客詳細の表示確認用の購入者',
     'postal' => '000-0000',
@@ -33,13 +38,40 @@ $longRecipient = [
     'phone' => '000-0000-0033',
 ];
 $customerEmail = 'customer.detail@example.com';
+// destinationSameBuyerは制作確認用の判定済み値。本番の判定はバックエンドで行う。
+// 購入時の「注文者と同じ住所に届ける」の選択を注文に記録する方法が望ましい。
+// 記録がない場合は、その注文時点の注文者情報と届け先を比較する。基本情報（最新）とは比較しない。
 $orders = [
-    ['number' => '2610210112345', 'datetime' => '2026-10-21T10:30:00+09:00', 'dateLabel' => '2026/10/21 10:30', 'store' => 'サンプル店舗A', 'amount' => '¥12,800', 'status' => 'new', 'statusLabel' => '新規受付', 'buyer' => $latestBuyer, 'destination' => $latestBuyer],
-    ['number' => '2610200112346', 'datetime' => '2026-10-20T14:15:00+09:00', 'dateLabel' => '2026/10/20 14:15', 'store' => 'サンプル店舗B', 'amount' => '¥5,600', 'status' => 'processing', 'statusLabel' => '対応中', 'buyer' => $latestBuyer, 'destination' => $giftRecipient],
-    ['number' => '2609150212347', 'datetime' => '2026-09-15T09:45:00+09:00', 'dateLabel' => '2026/09/15 09:45', 'store' => 'サンプル店舗A', 'amount' => '¥24,000', 'status' => 'shipped', 'statusLabel' => '発送済', 'buyer' => $previousBuyer, 'destination' => $longRecipient],
-    ['number' => '2608010212348', 'datetime' => '2026-08-01T16:00:00+09:00', 'dateLabel' => '2026/08/01 16:00', 'store' => 'サンプル店舗B', 'amount' => '¥3,200', 'status' => 'return', 'statusLabel' => '返品対応', 'buyer' => $previousBuyer, 'destination' => $previousBuyer],
-    ['number' => '2606010112349', 'datetime' => '2026-06-01T11:20:00+09:00', 'dateLabel' => '2026/06/01 11:20', 'store' => 'サンプル店舗A', 'amount' => '¥3,000', 'status' => 'cancelled', 'statusLabel' => 'キャンセル', 'buyer' => $previousBuyer, 'destination' => $giftRecipient],
+    ['number' => '2610210112345', 'datetime' => '2026-10-21T10:30:00+09:00', 'dateLabel' => '2026/10/21 10:30', 'store' => 'サンプル店舗A', 'amount' => '¥12,800', 'status' => 'new', 'statusLabel' => '新規受付', 'destination' => $latestBuyer, 'shipping' => 800, 'items' => [
+        ['name' => 'サンプル 写真入りマグカップ', 'quantity' => 2, 'subtotal' => 6000],
+        ['name' => 'サンプル 長い商品名の折り返しを確認するための名入れギフトセット・サンプル限定パッケージ詰め合わせ', 'quantity' => 1, 'subtotal' => 6000],
+    ]],
+    ['number' => '2610200112346', 'datetime' => '2026-10-20T14:15:00+09:00', 'dateLabel' => '2026/10/20 14:15', 'store' => 'サンプル店舗B', 'amount' => '¥5,600', 'status' => 'processing', 'statusLabel' => '対応中', 'destination' => $giftRecipient, 'shipping' => 800, 'items' => [
+        ['name' => 'サンプル 名入れタオルセット', 'quantity' => 2, 'subtotal' => 4800],
+    ]],
+    ['number' => '2609150212347', 'datetime' => '2026-09-15T09:45:00+09:00', 'dateLabel' => '2026/09/15 09:45', 'store' => 'サンプル店舗A', 'amount' => '¥24,000', 'status' => 'shipped', 'statusLabel' => '発送済', 'destination' => $longRecipient, 'shipping' => 0, 'items' => [
+        ['name' => 'サンプル 記念プレート', 'quantity' => 2, 'subtotal' => 12000],
+        ['name' => 'サンプル フォトフレーム', 'quantity' => 1, 'subtotal' => 6000],
+        ['name' => 'サンプル ギフト用ハンカチ', 'quantity' => 3, 'subtotal' => 6000],
+    ]],
+    ['number' => '2608010212348', 'datetime' => '2026-08-01T16:00:00+09:00', 'dateLabel' => '2026/08/01 16:00', 'store' => 'サンプル店舗B', 'amount' => '¥3,200', 'status' => 'return', 'statusLabel' => '返品対応', 'destination' => $previousBuyer, 'shipping' => 800, 'items' => [
+        ['name' => 'サンプル デザインノート', 'quantity' => 1, 'subtotal' => 2400],
+    ]],
+    ['number' => '2606010112349', 'datetime' => '2026-06-01T11:20:00+09:00', 'dateLabel' => '2026/06/01 11:20', 'store' => 'サンプル店舗A', 'amount' => '¥3,000', 'status' => 'cancelled', 'statusLabel' => 'キャンセル', 'destination' => $giftRecipient, 'shipping' => 800, 'items' => [
+        ['name' => 'サンプル メッセージカード', 'quantity' => 2, 'subtotal' => 1400],
+        ['name' => 'サンプル ギフトバッグ', 'quantity' => 1, 'subtotal' => 800],
+    ]],
 ];
+
+// 架空の備考・記録の表示例。注文・商品メモの保存処理や届け先の比較処理は実装しない。
+$orders[0]['destinationSameBuyer'] = true;
+$orders[3]['destinationSameBuyer'] = true;
+$orders[0]['note'] = "表示確認用の備考です。ギフト包装はせず、商品ごとにサンプルの説明カードを同封してください。長い文章が省略されず、画面幅に応じて折り返すことを確認するための架空のご希望です。\nサンプル建物の受付窓口へお届けください。複数の商品が入る場合は、箱の中で動かないように緩衝材を入れていただけると助かります。";
+$orders[1]['note'] = '表示確認用：ギフトのため、金額が分かるものは同封しないでください。';
+$orders[3]['record'] = "表示確認用：表紙の印刷に不備があったため返品対応。\nお客様へ返送方法をご案内し、サンプル店舗で商品の状態を確認済みです。";
+$orders[3]['items'][0]['note'] = '表紙の印刷不備を確認。返品を受け付けました。';
+$orders[4]['record'] = '表示確認用：お客様のご都合によるキャンセル。発送前に受付し、返金のご案内を完了しました。';
+$orders[4]['items'][0]['note'] = '制作前のためキャンセルを受け付けました。';
 
 // 回数・合計は表示確認用の固定値。キャンセル・返品の集計対象や回数の単位を確定するものではない。
 $purchaseCount = '5';
@@ -105,10 +137,11 @@ if ($isSingleState) {
             <p class="message">顧客詳細を取得できませんでした</p>
             <p class="error-help">時間をおいて、もう一度読み込んでください。</p>
             <div class="empty-actions">
-              <a class="show-all" href="customer-detail.<?= $pageExtension ?>">再読み込み</a>
+              <a class="show-all" href="customer-detail.<?= $pageExtension ?>?id=<?= $customerId ?>">再読み込み</a>
             </div>
           </div>
         <?php else: ?>
+          <dl class="customer-meta"><div><dt>顧客ID</dt><dd><?= $customerId ?></dd></div></dl>
           <section class="form-box customer-profile" aria-labelledby="customer-profile-heading">
             <h2 id="customer-profile-heading">基本情報（最新）</h2>
             <p class="profile-help">閲覧できる注文のうち、最新の注文で確定した注文者情報です。</p>
@@ -130,6 +163,7 @@ if ($isSingleState) {
           <section class="customer-history" aria-labelledby="customer-history-heading">
             <h2 id="customer-history-heading">注文履歴</h2>
             <?php foreach ($orders as $order): ?>
+              <?php $hasCancelRecord = in_array($order['status'], ['cancelled', 'return'], true) && trim($order['record'] ?? '') !== ''; ?>
               <section class="form-box history-order" aria-labelledby="history-<?= $order['number'] ?>">
                 <div class="history-heading">
                   <h3 id="history-<?= $order['number'] ?>">#<?= $order['number'] ?></h3>
@@ -141,20 +175,53 @@ if ($isSingleState) {
                   <div><dt>店舗</dt><dd><?= htmlspecialchars($order['store'], ENT_QUOTES, 'UTF-8') ?></dd></div>
                   <div class="order-amount"><dt>合計金額<span class="tax-note">（税込）</span></dt><dd><?= $order['amount'] ?></dd></div>
                 </dl>
-                <div class="order-addresses">
-                  <?php foreach (['buyer' => '注文者情報（その注文時点）', 'destination' => '届け先'] as $group => $heading): ?>
-                    <section class="address-group" aria-labelledby="<?= $group ?>-<?= $order['number'] ?>">
-                      <h4 id="<?= $group ?>-<?= $order['number'] ?>"><?= $heading ?></h4>
-                      <div class="contact-lines">
-                        <p><?= htmlspecialchars($order[$group]['name'], ENT_QUOTES, 'UTF-8') ?></p>
-                        <p>〒<?= htmlspecialchars($order[$group]['postal'], ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars($order[$group]['address'], ENT_QUOTES, 'UTF-8') ?></p>
-                        <p><?= htmlspecialchars($order[$group]['phone'], ENT_QUOTES, 'UTF-8') ?></p>
-                      </div>
-                    </section>
-                  <?php endforeach; ?>
-                </div>
-                <?php // 仮URL。orders.php?keyword={注文番号}で開く案。顧客IDと本番URL・検索の契約は未確定。 ?>
-                <p class="order-actions"><a href="orders.<?= $pageExtension ?>?keyword=<?= rawurlencode($order['number']) ?>">受注一覧で見る<span class="sr-only">（注文番号 <?= $order['number'] ?>）</span></a></p>
+                <!-- 受注一覧の商品明細と送料の構成を参考にした表示専用テーブル。合計は概要だけに表示する。 -->
+                <table class="item-table" aria-label="注文<?= $order['number'] ?>の商品明細と送料">
+                  <colgroup><col /><col class="quantity" /><col class="subtotal" /></colgroup>
+                  <thead><tr><th scope="col">商品名</th><th class="quantity" scope="col">個数</th><th class="subtotal" scope="col">小計<span class="tax-note">（税込）</span></th></tr></thead>
+                  <tbody>
+                    <?php foreach ($order['items'] as $item): ?>
+                      <tr>
+                        <td class="item-name">
+                          <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
+                          <?php if ($hasCancelRecord && trim($item['note'] ?? '') !== ''): ?>
+                            <p class="item-note"><span class="sr-only">商品ごとのメモ：</span><?= htmlspecialchars($item['note'], ENT_QUOTES, 'UTF-8') ?></p>
+                          <?php endif; ?>
+                        </td>
+                        <td class="quantity"><?= $item['quantity'] ?></td>
+                        <td class="subtotal">¥<?= number_format($item['subtotal']) ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                  <tfoot><tr><th scope="row" colspan="2">送料<?= $order['shipping'] === 0 ? '（送料無料）' : '' ?></th><td>¥<?= number_format($order['shipping']) ?></td></tr></tfoot>
+                </table>
+                <?php // 注文時点の注文者情報はDBに残す前提だが、この画面の注文履歴では表示しない。 ?>
+                <?php if ($order['destinationSameBuyer'] ?? false): ?>
+                  <p class="address-group same-destination">届け先：注文者と同じ</p>
+                <?php else: ?>
+                  <section class="address-group" aria-labelledby="destination-<?= $order['number'] ?>">
+                    <h4 id="destination-<?= $order['number'] ?>">届け先</h4>
+                    <div class="contact-lines">
+                      <p><?= htmlspecialchars($order['destination']['name'], ENT_QUOTES, 'UTF-8') ?></p>
+                      <p>〒<?= htmlspecialchars($order['destination']['postal'], ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars($order['destination']['address'], ENT_QUOTES, 'UTF-8') ?></p>
+                      <p><?= htmlspecialchars($order['destination']['phone'], ENT_QUOTES, 'UTF-8') ?></p>
+                    </div>
+                  </section>
+                <?php endif; ?>
+                <?php if (trim($order['note'] ?? '') !== ''): ?>
+                  <section class="customer-note" aria-labelledby="customer-note-<?= $order['number'] ?>">
+                    <h4 id="customer-note-<?= $order['number'] ?>">備考（お客様より）</h4>
+                    <p><?= htmlspecialchars($order['note'], ENT_QUOTES, 'UTF-8') ?></p>
+                  </section>
+                <?php endif; ?>
+                <?php if ($hasCancelRecord): ?>
+                  <!-- 受注一覧と同じ記録を表示するだけ。form・textarea・保存操作・入稿画像は置かない。 -->
+                  <section class="cancel-record" aria-labelledby="cancel-record-<?= $order['number'] ?>">
+                    <h4 id="cancel-record-<?= $order['number'] ?>">キャンセル・返品の記録</h4>
+                    <p class="record-label">理由・対応メモ</p>
+                    <p class="record-reason"><?= htmlspecialchars($order['record'], ENT_QUOTES, 'UTF-8') ?></p>
+                  </section>
+                <?php endif; ?>
               </section>
             <?php endforeach; ?>
           </section>

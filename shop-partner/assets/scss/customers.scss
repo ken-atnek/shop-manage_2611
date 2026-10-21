@@ -48,7 +48,7 @@
     .customers-table {
         font-size: inherit;
         width: 100%;
-        min-width: 68rem;
+        min-width: 70.4rem;
         table-layout: fixed;
         border-collapse: separate;
         border-spacing: 0;
@@ -81,6 +81,13 @@
         }
         tbody tr:hover {
             background: $color-bg-detail;
+        }
+        .customer-id {
+            // 商品一覧のID列と同じ幅・数字の揃え方。
+            width: 6.4rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
         }
         .customer-name {
             width: 14.4rem;
