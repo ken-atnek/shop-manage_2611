@@ -25,26 +25,15 @@
         text-decoration: underline;
         text-underline-offset: 0.2em;
     }
-    // 商品・店舗フォームの編集画面と同じ読み取り専用メタ情報。
+    .customer-profile h2 {
+        overflow-wrap: anywhere;
+    }
+    // 箱内の氏名の下に置く配置案。氏名や連絡先より一段小さく表示する。
     .customer-meta {
         font-size: fz(14);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem 2.4rem;
-        margin: -0.8rem 0 2.4rem;
+        margin-top: 0.8rem;
         color: $color-text-secondary;
-        div {
-            font-size: inherit;
-            display: flex;
-            gap: 0.8rem;
-        }
-        dt,
-        dd {
-            font-size: inherit;
-        }
-        dd {
-            font-variant-numeric: tabular-nums;
-        }
+        font-variant-numeric: tabular-nums;
     }
     // 店舗フォームの.form-boxを基準にし、入力欄は置かない。
     .form-box {
@@ -59,39 +48,16 @@
         font-size: fz(20);
         font-weight: 600;
     }
-    .profile-help {
+    .profile-contact {
         font-size: inherit;
-        margin-top: 1.2rem;
-        color: $color-text-secondary;
-    }
-    .profile-list {
-        font-size: inherit;
-        margin-top: 2.4rem;
-        > div {
-            display: grid;
-            grid-template-columns: 12rem minmax(0, 1fr);
-            gap: 1.2rem;
+        margin-top: 1.6rem;
+        p {
             font-size: inherit;
-            + div {
-                margin-top: 1.2rem;
+            overflow-wrap: anywhere;
+            + p {
+                margin-top: 0.4rem;
             }
         }
-        dt,
-        dd {
-            min-width: 0;
-            font-size: inherit;
-        }
-        dt {
-            font-weight: 500;
-            color: $color-text-secondary;
-        }
-        dd {
-            overflow-wrap: anywhere;
-        }
-    }
-    .postal-code {
-        display: block;
-        font-size: inherit;
     }
     .tax-note {
         display: inline-block;
