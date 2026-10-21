@@ -13,6 +13,9 @@ class Product extends Model
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
+    // 残りわずかの基準値（全商品共通、QA No.13）
+    public const LOW_STOCK_THRESHOLD = 5;
+
     /**
      * @var list<string>
      */
@@ -66,7 +69,10 @@ class Product extends Model
                     return 'empty';
                 }
 
-                // TODO: 残りわずか（low）は基準値が決まってから判定する
+                if ($this->stock_quantity >= 1 && $this->stock_quantity <= self::LOW_STOCK_THRESHOLD) {
+                    return 'low';
+                }
+
                 return null;
             },
         );

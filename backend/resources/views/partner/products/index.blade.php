@@ -115,7 +115,6 @@
                                 @elseif ($product->stockState === 'low')
                                     {{ $product->stock_quantity }}<span class="stock-note">残りわずか</span>
                                 @elseif ($product->stockState === 'unmanaged')
-                                    {{-- TODO: フロントに確認 --}}
                                     <span aria-hidden="true">—</span><span class="sr-only">在庫管理なし</span>
                                 @else
                                     {{ $product->stock_quantity }}
@@ -128,7 +127,6 @@
                                     <span class="publish-state is-private">非公開</span>
                                 @endif
                             </td>
-                            {{-- TODO: 表示タイムゾーンは未確定 --}}
                             <td class="product-updated"><time datetime="{{ $product->updated_at->toIso8601String() }}"><span>{{ $product->updated_at->format('Y/m/d') }}</span> <span>{{ $product->updated_at->format('H:i') }}</span></time></td>
                             {{-- TODO: 商品フォームのBlade化のときに編集URLを設定 --}}
                             <td class="product-edit"><a class="edit-link" href="#" aria-label="{{ $product->name }}を編集" title="{{ $product->name }}を編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
