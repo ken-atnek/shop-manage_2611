@@ -1,0 +1,497 @@
+@charset "UTF-8";
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
+/* =======================================
+ * 熊日モール 管理画面 共通カラー
+ * URL: /scss/_colors.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+/* =======================================
+ * ふもと旅館採用 SVG背景・アイコンmixin
+ * URL: /src/styles/foundation/_svg.scss
+ * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * Created: 2026-07-07
+ * Last updated: 2026-09-21
+ * Created source: ファイル作成日時（移植元由来）
+ * ======================================= */
+/* =======================================
+ * 熊日モール 共通UI mixin
+ * URL: /scss/_ui.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 不明
+ * Last updated: 2026-10-19
+ * ======================================= */
+/*=========================================
+ボタン
+-----------------------------------------*/
+/*=========================================
+中央寄せ
+-----------------------------------------*/
+/*=========================================
+ドロップシャドウ
+-----------------------------------------*/
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+/* =======================================
+ * 熊日モール Client 店舗の登録・編集 スタイル
+ * URL: /shop-partner/assets/scss/store-form.scss
+ * Referenced in: /shop-partner/store-form.php
+ * Created: 2026-10-21
+ * Last updated: 2026-10-21
+ * ======================================= */
+/* =================================
+ * フォーム全体・読み取り専用情報（商品フォームから転記）
+ * ------------------------------ */
+.store-form-page {
+  min-width: 0;
+}
+.store-form-page .store-meta {
+  font-size: max(12px, 0.875em);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2.4rem;
+  margin: -0.8rem 0 2.4rem;
+  color: #4f5863;
+}
+.store-form-page .store-meta div {
+  font-size: inherit;
+  display: flex;
+  gap: 0.8rem;
+}
+.store-form-page .store-meta dt, .store-form-page .store-meta dd {
+  font-size: inherit;
+}
+.store-form-page .store-meta dd {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =================================
+ * 箱・フォーム部品（共通化は後工程）
+ * ------------------------------ */
+.store-form {
+  font-size: inherit;
+  min-width: 0;
+}
+.store-form .form-box {
+  font-size: inherit;
+  padding: 2.4rem;
+  margin-bottom: 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.store-form .form-box h2 {
+  font-size: max(12px, 1.25em);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+.store-form .heading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 3.6rem;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  color: var(--color-brand-accent);
+  background: var(--color-brand-subtle);
+}
+.store-form .form-field + .form-field {
+  margin-top: 2.4rem;
+}
+.store-form .field-wide, .store-form .field-medium {
+  font-size: inherit;
+  width: 100%;
+}
+.store-form .field-wide {
+  max-width: 72rem;
+}
+.store-form .field-medium {
+  max-width: 40rem;
+}
+.store-form .field-control {
+  font-size: inherit;
+  min-width: 0;
+}
+.store-form .form-label .required-label, .store-form .form-label .optional-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-left: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #4f5863;
+  background: #f6f7f8;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+@media (width > 1194px) {
+  .store-form div.form-row {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    column-gap: 2.4rem;
+  }
+  .store-form .form-row > .form-label {
+    margin-bottom: 0;
+    padding-top: 1rem;
+  }
+}
+.store-form .form-field {
+  min-width: 0;
+}
+.store-form .form-field input[type=text], .store-form .form-field input[type=tel] {
+  font-size: 1.6rem;
+}
+.store-form .form-field input[inputmode=numeric] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.store-form .form-field select {
+  font-size: 1.6rem;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 4.4rem;
+  padding: 1rem 3.2rem 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  appearance: auto;
+}
+.store-form .form-field input, .store-form .form-field select {
+  scroll-margin-block: 8rem 10rem;
+}
+.store-form .form-field input:hover:not(:disabled), .store-form .form-field select:hover:not(:disabled) {
+  border-color: #8a929c;
+}
+.store-form .form-field input:disabled, .store-form .form-field select:disabled {
+  color: #737b86;
+  background: #f6f7f8;
+  cursor: not-allowed;
+}
+.store-form .check-group {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 2.4rem;
+}
+.store-form .form-check {
+  min-height: 4.4rem;
+}
+.store-form .form-check input {
+  padding: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.store-form .form-check input:focus-visible {
+  outline: 3px solid var(--color-brand-accent);
+  outline-offset: 5px;
+}
+.store-form .form-help {
+  font-size: max(12px, 0.875em);
+  color: #4f5863;
+  margin-top: 0.8rem;
+  line-height: 1.7;
+}
+.store-form .contact-help {
+  margin: 2.4rem 0 1.6rem;
+}
+.store-form .price-input {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+.store-form .price-input input {
+  width: 14rem;
+  max-width: 100%;
+  min-width: 0;
+}
+.store-form .price-input span {
+  font-size: max(12px, 0.875em);
+  white-space: nowrap;
+}
+.store-form .used-sizes, .store-form .shipping-mode {
+  font-size: inherit;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.store-form [hidden] {
+  display: none;
+}
+
+/* =================================
+ * 運送会社の規格（入力欄とは別の読み取り専用の面）
+ * ------------------------------ */
+.store-form .carrier-rules {
+  font-size: inherit;
+  margin-block: 2.4rem;
+  padding: 1.6rem 2.4rem;
+  border-left: 3px solid #aeb5be;
+  background: #f6f7f8;
+}
+.store-form .carrier-rules h3 {
+  font-size: max(12px, 1em);
+  font-weight: 500;
+}
+.store-form .carrier-rules h3 span {
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 0.8rem;
+  color: #4f5863;
+}
+.store-form .carrier-rules dl, .store-form .carrier-rules div, .store-form .carrier-rules dt, .store-form .carrier-rules dd {
+  font-size: max(12px, 0.875em);
+}
+.store-form .carrier-rules .carrier-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem 2.4rem;
+  margin-top: 1.6rem;
+}
+.store-form .carrier-rules .carrier-sizes div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+}
+.store-form .carrier-rules .carrier-sizes dd {
+  color: #4f5863;
+}
+.store-form .carrier-rules .carrier-cool {
+  margin-top: 1.6rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid #e3e6ea;
+}
+.store-form .carrier-rules .carrier-cool div {
+  display: flex;
+  gap: 1.6rem;
+}
+.store-form .carrier-rules .carrier-cool div + div {
+  margin-top: 0.8rem;
+}
+.store-form .carrier-rules .carrier-cool dt {
+  flex: 0 0 auto;
+}
+@media (max-width: 1194px) {
+  .store-form .carrier-rules .carrier-sizes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =================================
+ * サイズタブ・一括入力・地方別の送料表
+ * ------------------------------ */
+.store-form .shipping-help {
+  margin-bottom: 2.4rem;
+}
+.store-form .size-tabs {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 2.4rem;
+}
+.store-form .size-tabs button {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.store-form .size-tabs button:hover {
+  background: #f6f7f8;
+}
+.store-form .size-tabs button {
+  border-color: #eceef1;
+  color: #22272e;
+  background: #eceef1;
+}
+.store-form .size-tabs button:hover {
+  border-color: #e2e5e9;
+  background: #e2e5e9;
+}
+.store-form .size-tabs button {
+  min-width: 9.6rem;
+  scroll-margin-block: 8rem 10rem;
+}
+.store-form .size-tabs button[aria-selected=true] {
+  color: var(--color-brand-accent);
+  border-color: var(--color-brand-accent);
+  background: var(--color-brand-subtle);
+  box-shadow: inset 0 -3px 0 var(--color-brand-accent);
+}
+.store-form .shipping-table {
+  font-size: inherit;
+}
+.store-form .bulk-controls {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.6rem;
+}
+.store-form .bulk-controls .price-input input {
+  width: 10rem;
+}
+.store-form .bulk-button {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.store-form .bulk-button:hover {
+  background: #f6f7f8;
+}
+.store-form .bulk-button {
+  border-color: #eceef1;
+  color: #22272e;
+  background: #eceef1;
+}
+.store-form .bulk-button:hover {
+  border-color: #e2e5e9;
+  background: #e2e5e9;
+}
+.store-form .bulk-button {
+  scroll-margin-block: 8rem 10rem;
+}
+.store-form .national-entry {
+  padding: 1.6rem 2.4rem;
+  background: #f6f7f8;
+}
+.store-form .shipping-region {
+  font-size: inherit;
+  margin-top: 2.4rem;
+}
+.store-form .shipping-region h3 {
+  font-size: max(12px, 1em);
+  font-weight: 500;
+}
+.store-form .region-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem 2.4rem;
+  padding-block: 1.2rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 1px solid #e3e6ea;
+}
+.store-form .prefecture-grid {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem 2.4rem;
+}
+.store-form .prefecture-grid .form-field {
+  margin: 0;
+}
+.store-form .prefecture-grid .price-input input {
+  width: 100%;
+}
+@media (max-width: 1194px) {
+  .store-form .prefecture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.store-form .cool-surcharges {
+  font-size: inherit;
+  margin-top: 3.2rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid #c4cad2;
+}
+.store-form .cool-surcharges h3 {
+  font-size: max(12px, 1em);
+  font-weight: 500;
+}
+.store-form .cool-surcharges .cool-grid {
+  margin-top: 1.6rem;
+}
+
+/* =================================
+ * 保存バー（商品フォームから転記。送信処理は3回目）
+ * ------------------------------ */
+.store-form .save-bar {
+  font-size: inherit;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem 2.4rem;
+  padding: 1.6rem 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.store-form .save-bar button, .store-form .save-bar a {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.store-form .save-bar button:hover, .store-form .save-bar a:hover {
+  background: #f6f7f8;
+}
+.store-form .save-bar button, .store-form .save-bar a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: 14rem;
+}
+.store-form .save-bar button {
+  font-weight: 500;
+  border-color: #9db5d6;
+  color: #1f4e8c;
+  background: #e6edf7;
+}
+.store-form .save-bar button:hover {
+  background: #d6e2f2;
+}
+.store-form .save-bar a {
+  border-color: #eceef1;
+  color: #22272e;
+  background: #eceef1;
+}
+.store-form .save-bar a:hover {
+  border-color: #e2e5e9;
+  background: #e2e5e9;
+}
+.store-form .save-bar a {
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=store-form.css.map */
