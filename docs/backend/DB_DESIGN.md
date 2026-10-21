@@ -182,4 +182,5 @@
 - `PartnerFactory`・`StoreFactory`・`ProductFactory`を追加した。名称はFactory内の日本語固定リストから選び、Fakerは数値・真偽値の乱数だけに使用する
 - `DemoDataSeeder`はローカル専用で、`app()->environment('local')`でない場合、または`partners`に既存データがある場合は何もせず終了する。既存データは削除しない。運送会社3件が不足するときは`CarrierSeeder`を先に実行するよう表示して終了する
 - 作成するデータはパートナー2件・店舗3件・商品1,016件。パートナー1はヤマト運輸・ゆうパックの2店舗に493件ずつ（合計986件）、パートナー2は佐川急便の1店舗に30件。パートナーIDは自動採番（新規DBで1・2を想定）とし、パートナー1の5商品は同じ更新日時にする
-- `DemoDataSeeder`は`DatabaseSeeder`から呼び出さない。今回の作業では実行しておらず、担当者が`php artisan db:seed --class=DemoDataSeeder`で実行する
+- `DemoDataSeeder`は`DatabaseSeeder`から呼び出さない。2026-10-21に担当者がローカルで`php artisan db:seed --class=DemoDataSeeder`を実行し、パートナー2件・店舗3件・商品1,016件を作成した
+- `Product::stockState`は`no_stock_management`がtrueなら`unmanaged`、それ以外で`stock_quantity`が0なら`empty`、それ以外はnullを返す。残りわずか（`low`）は基準値が未確定のため未実装とする
