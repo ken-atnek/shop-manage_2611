@@ -1,7 +1,7 @@
 # サーバー側ディレクトリ構成（案）
 
 更新日：2026-10-21  
-状態：Master／ClientのLaravel共通化と商品画像の保存先は確定（2026-10-20）。その他の配置方針は検討案で、サブドメイン設定とLaravelの公開入口の接続方法は未確定。
+状態：Master／ClientのLaravel共通化と商品画像の保存先は確定（2026-10-20）。アセットの配置先は確定（2026-10-21）。ローカルのURLは仮に /partner/ を付ける（2026-10-21）。その他の配置方針は検討案で、サブドメイン設定とLaravelの公開入口の接続方法は未確定。
 
 ## 前提
 
@@ -44,6 +44,7 @@
 - セッション・キャッシュ・キューは、ローカルではLaravelの初期値のDB保存（`database`）を仮に使う（担当者決定：2026-10-21）。要確認：本番の保存先・有効期限、Master／Client間の共有方法。`SESSION_DOMAIN`は`null`（未設定）のまま（アクセスしたホストだけにCookieを送る）とする案
 - `php artisan migrate`でLaravel標準のテーブル（users・password_reset_tokens・sessions・cache・cache_locks・jobs・job_batches・failed_jobs）を作成した（2026-10-21）。`users`は管理画面ユーザーの仮のテーブルで、認証用ユーザーテーブルの設計（`DB_DESIGN.md`）が決まったら追加のマイグレーションで変更する
 - Laravel付属のREADMEは`backend/README.laravel.md`として残した。`backend/.gitattributes`（Laravel付属）により、`backend/`配下の改行コードはLFで管理する
+- 2026-10-21、担当者決定によりアプリのタイムゾーンを`Asia/Tokyo`に変更した。保存・表示・更新日の検索を日本時間でそろえ、変換をなくすため。フロント資料上の表示タイムゾーンは未確定のままとする
 - XAMPPのVirtualHost・Windowsの`hosts`は担当者が設定し、2026-10-21に`http://demo-kumanichi-shop-manage.test:8082/`でLaravelの初期画面の表示を確認した。`.env`の`APP_URL`はこのURLにする（`.env.example`は`http://localhost`のまま）。設定例：
 
 ```apache
@@ -62,12 +63,25 @@
 ## CSS・JS・画面用画像の取り込み（確定部分：2026-10-20）
 
 - フロント側で生成したCSS、JS、画面用画像を、バックエンド担当者がLaravelの`public`配下へコピーする方式を採用する（担当者決定：2026-10-20）
-- Master用とClient用はフォルダを分けて配置し、Bladeから読み込む。具体的な配置パスは組み込み時に決める
+- Master用とClient用はフォルダを分けて配置し、Bladeから読み込む。配置先はClient用が`backend/public/assets/partner/`（css/・js/・images/）、Master用が`backend/public/assets/master/`（2026-10-21、担当者決定）。images/は最初に画像を取り込むときに作る
 - Sassは既存のフロント側の編集元・出力先で管理し、生成後のCSSを取り込む。フロントのSass出力先をLaravel側へ変更する方式は採らない
 - フロント更新時は差分を確認して再度取り込む。Laravel連携のために修正したJSは、その変更内容を確認して取り込み内容を調整する
-- 今回は仕様の記録のみを行い、ファイルのコピー・Bladeの修正・コピー用スクリプトの作成は行わない。自動化の有無・具体的な手順は未確定
+- 2026-10-21にClient用の3ファイルを初めて取り込んだ。取り込みのたびの記録は[ASSET_IMPORT_LOG.md](ASSET_IMPORT_LOG.md)に残す。コピー用スクリプト・自動化は作っていない（自動化するかどうかは未確定）
 - この取り込み対象は画面の静的アセット。アップロードされた商品画像・入稿画像の保存方針とは区別する
 - 根拠：担当者の承認、`../SPEC.md`「フォルダとSass」、[QA No.7](../QA_BACKEND.md#no7-ddev生成css)、`../coding/IMPLEMENTATION_REFERENCE.md`「制作環境と引き渡し」、`../../backend/README.md`「バックエンド担当者と決めること」
+
+## Bladeの構成（2026-10-21）
+
+- 2026-10-21に、Client共通レイアウトをBladeにした。元にしたのはフロントの shop-partner/products.php・includes/inc_header.php・inc_sidebar.php
+- 置き場所：共通レイアウトは `backend/resources/views/layouts/partner.blade.php`、共通部品は `backend/resources/views/partner/partials/`（header・sidebar）、画面は `backend/resources/views/partner/{画面}/`（例：`partner/products/index.blade.php`）。Master用は `layouts/master.blade.php`・`master/` とする想定
+- レイアウトの読み込み：画面別のCSSは `@push('styles')`、JSは `@push('scripts')` で入れる。読み込み順は common.css → 画面別CSS、common.js → 画面別JS（[共通申し送り§8](../coding/HANDOFF_CLIENT_COMMON.md#8-cssjsの読み込み順とキャッシュ対策)）
+- キャッシュ対策：CSS・JSのURLに、ファイルの更新日時を `?v=` で付ける（`filemtime(public_path(…))`）
+- 制作用PHPから移さないもの：`$pageExtension`・`$staticExport`・`?preview=` の状態分岐。現在地の判定は `$currentPage` の代わりに `request()->routeIs()` を使う
+- まだBlade化していない画面へのリンク（受注一覧・商品登録・店舗）と、「サイトを確認」・ログアウトは仮に `href="#"`／`action="#"` とし、Bladeに TODO コメントを残している。ログイン必須にするのはログインの作業で行う
+- Client商品一覧（`partner/products/index.blade.php`、`App\Http\Controllers\Partner\ProductController`）をBladeにした（2026-10-21）。データはDB（`products`）から所属店舗を通して取得する。ログイン（⑤）までは仮にパートナーID=1に限定し、⑤でログインユーザーの所属へ置き換える。並び順は`updated_at`降順、同じ日時は仮に`id`降順（順序は未確定）。画像は未対応で全件「画像なし」とし、`product_images`の作業で対応する。絞り込みは引き続き未実装（検索の細則が未確定のため）
+- ページ送りは共通部品 `partner/partials/pagination.blade.php`（受け取る変数：`$paginator`・`$label`）。表示ルールは[共通申し送り§7](../coding/HANDOFF_CLIENT_COMMON.md#7-ページ送り)。ページ番号のパラメータは `page`、検索条件はURLに引き継ぐ。1ページだけのときは出さない（未確定のため、フロントの案で仮に実装）
+- 範囲外のページ（最終ページより大きい page）は、検索条件を引き継いで最終ページへリダイレクトする（2026-10-21、担当者決定）
+- GETの検索フォームの入力チェックは `Validator::make` で行い、リダイレクトせずに同じ一覧へエラーを表示する（`$request->validate()` は前のページへ戻るため使わない）。エラーのときは条件を使わずに一覧を表示し、入力値を戻して詳細検索パネルを開く
 
 ## Laravel本体（公開ディレクトリの外）
 
@@ -116,7 +130,7 @@
 - 環境ごとの違い（URL・DB接続・保存先など）は、各環境の `.env` で切り替える。`.env` はリポジトリに含めない
 - 要確認：サーバーの公開フォルダとLaravel本体をつなぐ方法（公開フォルダを `public/` に直接向ける、入口の `index.php` だけを置く、シンボリックリンクでつなぐ等）。XServerの設定・制限を確認して決める（下記「配置前の確認事項」2）
 - 要確認：商品画像の公開URLに使う `php artisan storage:link`（シンボリックリンク）がXServerで使えるか
-- 要確認：ローカルでのMaster／PartnerのURLの分け方（サーバーはサブドメインで分ける。[QA No.7](../QA_BACKEND.md#no7-ddev生成css)）
+- ローカルでは仮に、Partner（Client）画面のURLに `/partner/` を付ける（例：`/partner/products`、ルート名は `partner.` で始める。2026-10-21、担当者決定）。Masterも同じ形で `/master/` を付ける想定。要確認：サーバーではサブドメインで分ける予定のため、切り替える方法（`Route::domain` など）と時期（[QA No.7](../QA_BACKEND.md#no7-ddev生成css)）
 
 ## Web公開フォルダ（想定）
 

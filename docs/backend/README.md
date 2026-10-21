@@ -7,6 +7,7 @@
 - API・ルーティング
 - DB設計
 - [サーバー側ディレクトリ構成（案）](SERVER_DIRECTORY_LAYOUT.md)
+- [画面アセットの取り込み記録](ASSET_IMPORT_LOG.md)
 - Laravel・Bladeへの組み込み方法（フロントの制作用PHP・`includes/` の対応先）
 - 保存・認証・権限などの実装メモ
 

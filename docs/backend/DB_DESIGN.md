@@ -165,3 +165,22 @@
 | `image_delete[]` | 削除する既存画像IDの配列を採用（確定：2026-10-20）。商品保存成功時に削除を確定。入力エラー時は削除予定を保持し、元の画像は残す。H商§4と一致 |
 
 `image_order[]`・`image_delete[]`の既存ID改ざん、同一画像重複、添付の保存失敗をサーバー側で検証する。画面の店舗JSONは上記テーブルから組み立て、送料金額は含めない（H商§6）。
+
+## 実装記録
+
+- 2026-10-21、`partners`・`carriers`・`stores`・`products`の4テーブルを作成するマイグレーションを実装した。型・列名は上の設計案に従う。2026-10-21、担当者がローカルDBへ`php artisan migrate`を適用し、`CarrierSeeder`を2回実行して3件のまま重複がないことを確認した
+- 作成したマイグレーション：
+  - `2026_10_21_100000_create_partners_table.php`
+  - `2026_10_21_100100_create_carriers_table.php`
+  - `2026_10_21_100200_create_stores_table.php`
+  - `2026_10_21_100300_create_products_table.php`
+- 仮の列`partners.status`・`carriers.revision`は作成しない。`products`は設計案の全列を作成する
+- `carrier_sizes`・`carrier_cool_rules`・`store_sizes`・`store_shipping_*`（`store_shipping_rates`・`store_shipping_tables`）・`product_images`・`temporary_product_images`は後の作業で作成する
+- 共通の`created_at`・`updated_at`は`datetime`型・NOT NULLとし、`timestamps()`は使用しない。DB側の初期値は設定しない
+- `CarrierSeeder`は`yamato`＝ヤマト運輸、`sagawa`＝佐川急便、`yupack`＝ゆうパックの3件を登録する。表示名は`shop-partner/includes/data_carriers.php`を参照し、`code`をキーにした`updateOrCreate`で繰り返し実行しても重複しない。`DatabaseSeeder::run()`に呼び出しを追加した
+- アプリのタイムゾーンは`Asia/Tokyo`とし、`datetime`列は日本時間で保存する。タイムゾーン変更前に登録した`carriers`3件の日時はUTCのままで、既存値の変換は行わない
+- `PartnerFactory`・`StoreFactory`・`ProductFactory`を追加した。名称はFactory内の日本語固定リストから選び、Fakerは数値・真偽値の乱数だけに使用する
+- `DemoDataSeeder`はローカル専用で、`app()->environment('local')`でない場合、または`partners`に既存データがある場合は何もせず終了する。既存データは削除しない。運送会社3件が不足するときは`CarrierSeeder`を先に実行するよう表示して終了する
+- 作成するデータはパートナー2件・店舗3件・商品1,016件。パートナー1はヤマト運輸・ゆうパックの2店舗に493件ずつ（合計986件）、パートナー2は佐川急便の1店舗に30件。パートナーIDは自動採番（新規DBで1・2を想定）とし、パートナー1の5商品は同じ更新日時にする
+- `DemoDataSeeder`は`DatabaseSeeder`から呼び出さない。2026-10-21に担当者がローカルで`php artisan db:seed --class=DemoDataSeeder`を実行し、パートナー2件・店舗3件・商品1,016件を作成した
+- `Product::stockState`は`no_stock_management`がtrueなら`unmanaged`、それ以外で`stock_quantity`が0なら`empty`、それ以外はnullを返す。残りわずか（`low`）は基準値が未確定のため未実装とする
