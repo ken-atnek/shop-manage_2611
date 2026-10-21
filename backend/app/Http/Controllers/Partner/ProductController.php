@@ -3,15 +3,31 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $products = $this->sampleProducts();
+        $sampleProducts = $this->sampleProducts();
+        $perPage = 50; // 1ページ50件（SPEC確定）
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        // TODO: DBから取得するときは paginate(50) に置き換える
+        $products = new LengthAwarePaginator(
+            $sampleProducts->forPage($page, $perPage)->values(),
+            $sampleProducts->count(),
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ],
+        );
 
         return view('partner.products.index', ['products' => $products]);
     }
@@ -23,7 +39,7 @@ class ProductController extends Controller
      */
     private function sampleProducts(): Collection
     {
-        return collect([
+        $products = collect([
             (object) [
                 'id' => 986,
                 'name' => '写真入りマグカップ',
@@ -95,5 +111,17 @@ class ProductController extends Controller
                 'updated_at' => Carbon::parse('2026-10-16 18:00:00', 'Asia/Tokyo'),
             ],
         ]);
+
+        $templates = $products->all();
+        $start = Carbon::parse('2026-10-16 18:00:00', 'Asia/Tokyo');
+
+        for ($index = 0; $index < 979; $index++) {
+            $product = clone $templates[$index % count($templates)];
+            $product->id = 979 - $index;
+            $product->updated_at = $start->copy()->subHours($index + 1);
+            $products->push($product);
+        }
+
+        return $products;
     }
 }

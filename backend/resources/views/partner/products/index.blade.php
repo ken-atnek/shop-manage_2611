@@ -1,7 +1,7 @@
 {{-- =======================================
- * 熊日モール Client 商品一覧（確認用）
+ * 熊日モール Client 商品一覧
  * URL: /backend/resources/views/partner/products/index.blade.php
- * Referenced in: /backend/resources/views/partner/products/index.blade.php・/backend/app/Http/Controllers/Partner/ProductController.php
+ * Referenced in: /backend/resources/views/partner/products/index.blade.php・/backend/app/Http/Controllers/Partner/ProductController.php・/backend/resources/views/partner/partials/pagination.blade.php
  * 元: /shop-partner/products.php
  * Created: 2026-10-21
  * Last updated: 2026-10-21
@@ -65,11 +65,11 @@
     <div class="list-heading" aria-live="polite" aria-atomic="true">
         <h2 id="product-list-heading">商品一覧</h2>
         {{-- TODO: 検索中は「検索結果」と件数を出し分ける --}}
-        <span class="count">{{ $products->count() }}件</span>
+        <span class="count">{{ $products->total() }}件</span>
         <p class="filter-note">すべてを表示</p>
     </div>
     {{-- TODO: 検索結果0件の表示と全件表示・条件解除のリンクは次の作業で組み込む --}}
-    @if ($products->isEmpty())
+    @if ($products->total() === 0)
         <div class="list-empty">
             <p class="message">まだ商品はありません</p>
         </div>
@@ -129,6 +129,6 @@
                 </tbody>
             </table>
         </div>
+        @include('partner.partials.pagination', ['paginator' => $products, 'label' => '商品一覧のページ'])
     @endif
-    {{-- TODO: ページ送りは次の作業で組み込む --}}
 @endsection
