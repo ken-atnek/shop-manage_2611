@@ -222,6 +222,7 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                           <h3 id="<?= $prefix ?>-<?= $regionKey ?>-heading"><?= $region['name'] ?></h3>
                           <div class="bulk-controls form-field">
                             <label class="sr-only" for="<?= $prefix ?>-<?= $regionKey ?>-bulk"><?= $region['name'] ?>の一括入力金額</label>
+                            <span class="bulk-label" aria-hidden="true">一括入力</span>
                             <div class="price-input"><input type="text" inputmode="numeric" id="<?= $prefix ?>-<?= $regionKey ?>-bulk" pattern="[0-9]{1,5}" /><span>円（税込）</span></div>
                             <button class="bulk-button" type="button" data-bulk-scope="region" data-bulk-input="<?= $prefix ?>-<?= $regionKey ?>-bulk">この地方に入力</button>
                           </div>

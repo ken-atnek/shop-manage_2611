@@ -1196,3 +1196,14 @@
 - 今回の変更はstore-form.php、store-form.scss、生成store-form.css、CLIENT_STORE_FORM.md、MEMORY.mdの5ファイル。配送・送料・送料無料の箱とstore-form.js、他画面・共通ファイル・backend/・docs/backend/・.ddev/config.local.yamlは変更していない
 - npm run sass、DDEVのphp -l、git diff --checkが成功。ブラウザの旧CSSキャッシュを検証用タブだけで更新し、1280×800・834×1194の通常／newの計4状態を確認。小見出しと4項目の見た目、ラベルのforと入力idの対応、任意バッジ・電話番号の補助文参照を確認し、参照切れ・横はみ出し・コンソールエラーなし。変更前との比較で入力属性と配送以降のコードが一致した。確認画像・結果は`/tmp/kumanichi-store-contact/`へ保存
 - 既存MEMORYは書き換えず追記。Gitコミットは行わない。判断に迷った点・不明な点：なし
+
+## 2026-10-21 Client店舗フォーム・地方別送料のカード化
+
+- `kumanichi-admin-design`を使用し、作業前に資料・既存コードとの矛盾がないことを共有。既存の角丸変数は4pxのため、地方カードにはKen指定の0.8remを直接使うことを説明した
+- `.shipping-region`を通常枠線色1px・角丸0.8rem・overflow: hiddenのカードにし、カード間は1.6rem。地方名と一括入力を全国一律と同じ淡い背景の帯にまとめ、余白を上下0.6rem・左2rem・右1.6rem、下枠線1pxへ変更。地方名600と自然な折り返しを維持した
+- PHPには見える「一括入力」のspanだけを追加し、aria-hidden=trueで二重読み上げを防いだ。既存の「○○の一括入力金額」の読み上げ用label・for・inputのname／id／属性は変更していない
+- 全国・地方の一括入力ボタンを白地と濃い枠線に変更。ホバー・フォーカスの既存仕様を継承し、帯内の入力欄・ボタンのみoutline-offsetを2pxにしてカード内で枠が切れないようにした。カード内の都道府県gridに上1.6rem・左右2rem・下2remの余白を追加し、3列／2列と欄間隔を維持。クール便のgrid、タブ・パネル見出し・発送元の小見出しは変更していない
+- CLIENT_STORE_FORMに見た目の確定記録を追加。変更はstore-form.php、store-form.scss、生成CSS、CLIENT_STORE_FORM.md、MEMORY.mdの5ファイルのみ。store-form.js・共通ファイル・他画面・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。新しい色・余白トークンの追加なし
+- npm run sass、DDEVのphp -l、git diff --checkが成功。1280×800・834×1194で通常／no-size／newの6状態を確認。カード13枚・帯・白い全国／地方ボタン・44pxの操作高さ・PC3列／タブレット2列・読み上げlabelの維持と装飾ラベルの非読み上げを確認。横はみ出し・コンソールエラーなし。両画面幅で固定タブの下をカードが自然に流れることも確認した
+- サイズ別とサイズ共通の表で全国47件の入力と通知、その後の北東北3件の上書きと通知を確認し、他44件の金額が維持されることを照合。画像と確認結果は`/tmp/kumanichi-store-regions/`に保存。既存MEMORYはそのまま保持し、Gitコミットは行わない
+- 判断に迷った点・不明な点：なし
