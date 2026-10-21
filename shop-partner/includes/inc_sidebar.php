@@ -2,7 +2,7 @@
 /* =======================================
  * 熊日モール Client 共通サイドバー
  * URL: /shop-partner/includes/inc_sidebar.php
- * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php
+ * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php・/shop-partner/store-form.php
  * Created: 2026-10-17
  * Last updated: 2026-10-20
  * ======================================= */
