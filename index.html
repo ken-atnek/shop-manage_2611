@@ -317,8 +317,24 @@
             <span class="status is-done">完成（引き渡し前）</span>
           </li>
           <li>
-            <span class="screen-name">顧客管理</span>
-            <span class="status">仕様検討中</span>
+            <div>
+              <a class="screen-link" href="./shop-partner/customers.php">
+                顧客一覧
+                <span class="screen-path">shop-partner/customers.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_CUSTOMER_LIST.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/customers.php">通常</a> /
+                  <a href="./shop-partner/customers.php?preview=pager-middle">途中のページ</a> /
+                  <a href="./shop-partner/customers.php?preview=empty">購入者なし</a> /
+                  <a href="./shop-partner/customers.php?preview=no-results">検索結果0件</a> /
+                  <a href="./shop-partner/customers.php?preview=date-error">最終購入日の入力エラー</a> /
+                  <a href="./shop-partner/customers.php?preview=error">取得失敗</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status">制作中</span>
           </li>
           <li>
             <span class="screen-name">集計</span>
