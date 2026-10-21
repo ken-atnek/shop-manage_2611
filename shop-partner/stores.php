@@ -15,7 +15,7 @@ $isErrorState = $previewState === 'error';
  * Referenced in: /docs/design/CLIENT_STORE_LIST.md・/index.html
  * 編集元: /shop-partner/stores.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-21
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -51,7 +51,7 @@ $isErrorState = $previewState === 'error';
       <main class="admin-main">
         <div class="page-heading">
           <h1 id="store-list-heading">店舗一覧</h1>
-          <a class="store-add" href="store-form.<?= $pageExtension ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12h14" /><path d="M12 5v14" /></svg>店舗を追加</a>
+          <a class="store-add" href="store-form.<?= $pageExtension ?>?preview=new"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12h14" /><path d="M12 5v14" /></svg>店舗を追加</a>
         </div>
         <?php if ($isErrorState): ?>
           <!-- 取得失敗は0件と区別する。再読み込み先は制作確認用の通常表示。 -->
@@ -66,7 +66,7 @@ $isErrorState = $previewState === 'error';
           <div class="list-empty">
             <p class="message">店舗がまだ登録されていません</p>
             <div class="empty-actions">
-              <a class="store-add show-all" href="store-form.<?= $pageExtension ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12h14" /><path d="M12 5v14" /></svg>店舗を追加</a>
+              <a class="store-add show-all" href="store-form.<?= $pageExtension ?>?preview=new"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12h14" /><path d="M12 5v14" /></svg>店舗を追加</a>
             </div>
           </div>
         <?php else: ?>
