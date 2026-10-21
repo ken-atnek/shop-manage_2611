@@ -44,6 +44,7 @@
 - セッション・キャッシュ・キューは、ローカルではLaravelの初期値のDB保存（`database`）を仮に使う（担当者決定：2026-10-21）。要確認：本番の保存先・有効期限、Master／Client間の共有方法。`SESSION_DOMAIN`は`null`（未設定）のまま（アクセスしたホストだけにCookieを送る）とする案
 - `php artisan migrate`でLaravel標準のテーブル（users・password_reset_tokens・sessions・cache・cache_locks・jobs・job_batches・failed_jobs）を作成した（2026-10-21）。`users`は管理画面ユーザーの仮のテーブルで、認証用ユーザーテーブルの設計（`DB_DESIGN.md`）が決まったら追加のマイグレーションで変更する
 - Laravel付属のREADMEは`backend/README.laravel.md`として残した。`backend/.gitattributes`（Laravel付属）により、`backend/`配下の改行コードはLFで管理する
+- 2026-10-21、担当者決定によりアプリのタイムゾーンを`Asia/Tokyo`に変更した。保存・表示・更新日の検索を日本時間でそろえ、変換をなくすため。フロント資料上の表示タイムゾーンは未確定のままとする
 - XAMPPのVirtualHost・Windowsの`hosts`は担当者が設定し、2026-10-21に`http://demo-kumanichi-shop-manage.test:8082/`でLaravelの初期画面の表示を確認した。`.env`の`APP_URL`はこのURLにする（`.env.example`は`http://localhost`のまま）。設定例：
 
 ```apache
