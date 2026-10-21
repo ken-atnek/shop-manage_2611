@@ -97,6 +97,15 @@
 
 ### 食品表示の入力と保存（確定部分：2026-10-20）
 
+2026-10-21変更（アレルゲン欄の分離、QA No.2）。この節のうち、アレルゲンを食品表示本文にまとめるという記述は、この変更で置き換える
+
+- フロントの決定（2026-10-20）を受け入れる（2026-10-21、バックエンド担当者）
+- アレルゲンは`food_label`とは別のテキストエリア（name="allergens"）で入力し、`products.allergens`（`text`、本文）に保存する
+- 必須は、食品オンのときだけ「本文が空でないこと」。食品オフのときは検証しない
+- 食品オフのときは`food_label`と同じB方式とする。オフにする直前の編集値も商品保存時に保存し、オフの間は非表示、再オン時に再表示する。送られなかったことを削除指示として扱わない
+- チェックボックス群・「該当なし」・その他欄・アレルゲンマスタ・中間テーブル・専用フラグは、引き続き設けない
+- 要確認：`allergens`の文字数上限（`food_label`と同じく未確定）
+
 - 成分・生産者・アレルギーなどを含む食品表示全体を、1つのテキストエリア（現行name=`food_label`）にまとめて記入・表示し、DBでは`products.food_label`に1つの本文として保存する（確定：2026-10-20）。それぞれの個別入力欄・DB項目・項目別の記載有無チェックは設けない
 - 既存SPECの食品表示本文の必須条件を維持し、食品オン時は本文が空でないことを検証する。本文を成分・生産者・アレルギー等へ自動分解して検証しない。文字数上限は未確定
 - アレルゲン専用のチェックボックス群・「該当なし」・その他自由記入欄を前提とした旧案は採用しない。独立したアレルゲンマスタ・中間テーブル・専用フラグ・その他欄のDB設計案も取り下げる。これは設計資料の修正であり、実DBの削除・変更は行わない
@@ -112,11 +121,11 @@
 
 | テーブル | 項目（型・必須） | 関連・制約／根拠 |
 |---|---|---|
-| `products` | `store_id bigint` 必須、`name varchar(255)` 必須、`description text` 任意、`price_incl_tax_yen int` 必須、`tax_rate_percent tinyint` 必須（8/10）、`no_stock_management boolean` 必須、`stock_quantity int` 任意、`temperature varchar(10)` 必須（normal/cold/frozen）、`packing_length_cm decimal(6,1)` 任意、`packing_width_cm decimal(6,1)` 任意、`packing_height_cm decimal(6,1)` 任意、`packing_weight_kg decimal(6,2)` 任意、`accepts_upload boolean` 必須、`is_food boolean` 必須、`food_label text` 任意（条件付き必須）、`publish_status varchar(10)` 必須（public/private） | FK→stores。stockは管理なしならNULL。梱包4項目の必須条件・精度は未確定。判定サイズは保存せず規格と寸法から再計算。アレルゲンもfood_label本文に記入し、食品オフでもオフ直前の編集値を商品保存時に保存（確定：2026-10-20）。S商・H商の独立アレルゲン欄から変更が必要 |
+| `products` | `store_id bigint` 必須、`name varchar(255)` 必須、`description text` 任意、`price_incl_tax_yen int` 必須、`tax_rate_percent tinyint` 必須（8/10）、`no_stock_management boolean` 必須、`stock_quantity int` 任意、`temperature varchar(10)` 必須（normal/cold/frozen）、`packing_length_cm decimal(6,1)` 任意、`packing_width_cm decimal(6,1)` 任意、`packing_height_cm decimal(6,1)` 任意、`packing_weight_kg decimal(6,2)` 任意、`accepts_upload boolean` 必須、`is_food boolean` 必須、`food_label text` 任意（条件付き必須）、`allergens text` 任意（条件付き必須）、`publish_status varchar(10)` 必須（public/private） | FK→stores。stockは管理なしならNULL。梱包4項目の必須条件・精度は未確定。判定サイズは保存せず規格と寸法から再計算。food_label・allergensは、食品オフでもオフ直前の編集値を商品保存時に保存（確定：2026-10-20、allergensは2026-10-21追加） |
 | `product_images` | `product_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 任意、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`sort_order smallint` 必須 | FK→products、(product_id,sort_order)一意。1枚目がメイン。当面1商品あたり0～10枚。0枚の場合は用意されたNG画像を表示。保存先・許可形式・容量は上記確定方針を参照。S商・H商§4 |
 | `temporary_product_images`（名称・項目・型は案） | `uploaded_by_user_id bigint` 必須、`storage_disk varchar(40)` 必須、`storage_path varchar(1024)` 必須、`original_name varchar(255)` 任意、`mime_type varchar(100)` 必須、`size_bytes bigint` 必須、`uploaded_at datetime` 必須、`expires_at datetime` 必須 | 共通PKのidを一時画像IDとして使用する案。アップロードしたユーザーへのFK先は認証設計後に確定。expires_atはアップロードから24時間後。所有者確認・期限切れ削除に使う。本保存済み画像を期限切れ削除から除外するためのレコード整理方法は実装設計時に決める。根拠：2026-10-20の専用テーブル採用決定 |
 
-旧案の`allergens`・`product_allergens`・`products.allergens_none`・`products.allergens_other`は、食品表示本文への統合により今回の設計から除外する。価格は税込の入力値を正として保持し、注文時に税抜・税額を確定する。商品の価格・税率・店舗の後日変更が注文に波及しないよう注文明細へ写す。
+旧案の`allergens`（マスタテーブル）・`product_allergens`・`products.allergens_none`・`products.allergens_other`は、今回の設計から除外する。アレルゲンの本文は`products.allergens`列で持つ（2026-10-21）。価格は税込の入力値を正として保持し、注文時に税抜・税額を確定する。商品の価格・税率・店舗の後日変更が注文に波及しないよう注文明細へ写す。
 
 ## 注文・入稿
 
@@ -149,7 +158,7 @@
 | `packing[length]` / `[width]` / `[height]` / `[weight]` | `products.packing_*`。cm/kg、精度未確定 |
 | `upload` | `products.accepts_upload`。未送信はfalse |
 | `is_food` / `food_label` | `products.is_food` / `food_label`。食品オフでもオフ直前の編集値を商品保存時に保存するB方式（確定：2026-10-20）。現行disabledによる未送信からの契約変更が必要 |
-| `allergens[]` / `allergens_other` | 現行フロントの旧契約。本番では独立項目を使わず、アレルゲンも`food_label`本文にまとめる（確定：2026-10-20）。フロントの入力欄・送信契約の変更が必要 |
+| `allergens` | `products.allergens`。食品オンのときだけ必須（本文が空でないこと）。食品オフでもB方式で保存（2026-10-21、QA No.2）。旧契約の`allergens[]`・`allergens_other`は使わない |
 | `publish` | `products.publish_status` |
 | `images[]` | 一時アップロード用の新規ファイル配列として採用（確定：2026-10-20）。画像選択時に一時保存用の送信先へ送信し、商品保存時は再送しない。H商§4から送信タイミング・送信先の変更が必要 |
 | `image_order[]` | 本番契約は`existing:{画像ID}`／`temp:{一時画像ID}`の最終表示順配列（確定：2026-10-20）。現行の`new:{番号}`から変更が必要 |
