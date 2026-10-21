@@ -3,7 +3,7 @@
  * URL: /shop-partner/assets/js/product-form.js
  * Referenced in: /shop-partner/product-form.php
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-21
  * ======================================= */
 
 "use strict";
@@ -19,7 +19,7 @@
   const stockInput = form.querySelector("#product-stock");
 
   const syncFood = () => {
-    foodFields.disabled = !foodCheck.checked;
+    // 食品オフでも編集値を送る。非表示だけにし、必須判定はサーバー側で食品オン時に行う。
     foodFields.hidden = !foodCheck.checked;
   };
   const syncStock = () => {
@@ -140,9 +140,10 @@
             notice = carrier.name + "のクール便は3辺合計" + cool.maxTotalCm + "cm・" + cool.maxWeightKg + "kgまでです";
           } else if (cool.maxLongestCm && values.slice(0, 3).some((value) => !fits(value, cool.maxLongestCm))) {
             notice = carrier.name + "のクール便は最長辺" + cool.maxLongestCm + "cmまでです";
-          } else if (size && !(store.sizeBased ? store.coolSurchargeSetBySize[size.size] : store.coolSurchargeSet)) {
-            notice = store.sizeBased ? size.size + "サイズのクール便に対応していません" :
-              "この店舗はクール便に対応していません";
+          } else if (size && !(store.sizeBased ? store.coolSurchargeSetBySize[size.size]?.[coolKey] : store.coolSurchargeSet[coolKey])) {
+            const serviceName = temperature === "cold" ? "冷蔵便" : "冷凍便";
+            notice = store.sizeBased ? "この店舗では" + size.size + "サイズの" + serviceName + "に対応していません" :
+              "この店舗は" + serviceName + "に対応していません";
           }
         }
       }
