@@ -75,6 +75,40 @@
 .store-form-page .store-meta dd {
   font-variant-numeric: tabular-nums;
 }
+.store-form-page .save-status,
+.store-form-page .error-summary {
+  font-size: inherit;
+  margin-bottom: 2.4rem;
+  padding: 1.6rem 2.4rem;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.store-form-page .save-status {
+  border-left: 4px solid var(--color-brand-accent);
+}
+.store-form-page .error-summary {
+  border-color: #d21f3c;
+}
+.store-form-page .error-summary h2 {
+  font-size: inherit;
+  font-weight: 600;
+}
+.store-form-page .error-summary ul {
+  font-size: inherit;
+  margin-top: 1.2rem;
+  padding-left: 2rem;
+  list-style: disc;
+}
+.store-form-page .error-summary li {
+  font-size: inherit;
+  margin-top: 0.8rem;
+}
+.store-form-page .error-summary a {
+  font-size: inherit;
+  color: #d21f3c;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
 
 /* =================================
  * 箱・フォーム部品（共通化は後工程）
@@ -391,6 +425,17 @@
     contain: inline-size;
   }
 }
+.store-form .tab-error {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0 0.4rem;
+  border: 1px solid #d21f3c;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d21f3c;
+  vertical-align: middle;
+}
 .store-form .shipping-table {
   font-size: inherit;
   min-width: 0;
@@ -528,7 +573,7 @@
 }
 
 /* =================================
- * 保存バー（商品フォームから転記。送信処理は3回目）
+ * 保存バー（商品フォームから転記。保存処理はバックエンドが組み込む）
  * ------------------------------ */
 .store-form .save-bar {
   font-size: inherit;

@@ -1207,3 +1207,29 @@
 - npm run sass、DDEVのphp -l、git diff --checkが成功。1280×800・834×1194で通常／no-size／newの6状態を確認。カード13枚・帯・白い全国／地方ボタン・44pxの操作高さ・PC3列／タブレット2列・読み上げlabelの維持と装飾ラベルの非読み上げを確認。横はみ出し・コンソールエラーなし。両画面幅で固定タブの下をカードが自然に流れることも確認した
 - サイズ別とサイズ共通の表で全国47件の入力と通知、その後の北東北3件の上書きと通知を確認し、他44件の金額が維持されることを照合。画像と確認結果は`/tmp/kumanichi-store-regions/`に保存。既存MEMORYはそのまま保持し、Gitコミットは行わない
 - 判断に迷った点・不明な点：なし
+
+
+## 2026-10-21 Client店舗フォーム・制作3回目（保存・エラー・離脱）
+
+- `kumanichi-admin-design`を使用し、商品フォーム2-Bと申し送りの保存・エラー・離脱の仕組みを照合。依頼のヤマト160冷蔵欄は規格外でdisabledになるため、作業前に矛盾を指摘した。Kenの回答により冷蔵エラー例を100へ移し、120の都道府県2件を維持。まとめは4行、個別欄は5件とした
+- `store-form.php`の保存ボタンをsubmitへ変更し、action="#"・通常POST・novalidateは維持。JSで送信中のdisabled・「保存中…」・aria-busyと二重submit停止を追加。保存処理・入力検証・成功画面への遷移は実装していない
+- input／changeと成功した一括入力で変更ありを記録し、未保存時だけbeforeunloadで標準確認を要求。保存送信時は解除し、pageshow.persistedでボタンと送信状態を戻し、未保存なら警告を付け直す。商品フォームと同様、入力を元に戻しただけでは変更ありを解除しない
+- errorは新規入力途中、店舗名空・100冷蔵abc・120北海道／沖縄空・送料無料0の表示例。各欄に共通form-error・aria-invalid・aria-describedbyを追加。まとめは送料表ごとに1行とし、初期フォーカスを移す。タブに「! 件数」と読み上げ名を追加し、まとめのリンクでactivateTabを使って対象欄へ移動。disabledの欄はまとめ・タブ件数・文の表示から除外し、修正しただけではエラーを消さない
+- saved／registeredは編集見出し・ID・更新日時と、role=statusの「保存しました」／「店舗を登録しました」。通知へフォーカスを移さない。商品フォームのsave-status・error-summaryのスタイルを店舗Sassへ転記し、タブのエラー印だけを追加した。共通化の候補はこの通知・エラーまとめ。既存のタブ・カード・送信name・2回目の操作は維持
+- index.htmlへerror・saved・registeredのリンクを追加。CLIENT_STORE_FORMに3回目完了、表示例の調整、ID・属性・JS依存先・送信の流れ・確認結果を記録。HANDOFF_CLIENT_STORE_FORMは依頼どおり作成していない
+- 1280×800・834×1194でerror／saved／registered、まとめ4リンクからの移動と固定タブの非重複、タブの印・件数、disabled除外、修正後の印保持、通知の文言・ID、横はみ出しなし・コンソールエラー0を確認。実ページのPOSTも確認した
+- 一時表示コピーで両画面幅の送信中・二重送信停止・未変更時の警告なし・変更時の警告・送信時の解除を確認。会社変更だけ／一括入力だけでも実際のbeforeunloadが発火しキャンセル要求を出すことを記録した。標準ダイアログ自体は自動操作環境では保持されなかった。bfcacheの実復帰は確実に再現できず、検証用にpageshow.persistedを発生させて復帰と警告の再登録を確認。検証処理は本番へ追加していない
+- 実FormDataは305項目、うちサイズ別送料290項目で、非表示の使用タブを含み規格外の140／160温度帯は含まない。方式・使用サイズ・送料無料の切り替えに応じた送信対象も維持。検証ページ・結果・確認画像は`/tmp/kumanichi-store-stage3/`に保存した
+- npm run sass、node --check、DDEVのphp -l、scripts/export-html.php、相対リンク／節アンカー、git diff --checkを確認。変更はstore-form.php・store-form.js・store-form.scss・生成CSS・index.html・CLIENT_STORE_FORM.md・MEMORY.mdの7ファイル。既存MEMORYは追記前の内容を保持。他画面・共通ファイル・data_carriers／data_prefectures・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。Gitコミットは行わない
+- 判断に迷った点・不明な点：当初の160冷蔵エラー例はKenの回答で100へ変更して解消。未解決の仕様判断はなし。実bfcache復帰と標準ダイアログの表示保持は上記の検証制約あり
+
+
+## 2026-10-21 Client店舗フォーム・エラー移動時の表示改善
+
+- `kumanichi-admin-design`を使用。既存の「最初は60サイズ」「欄の上端基準のスクロール」を今回の決定で更新する旨を作業前に共有。その他の食い違いはなし。制作3回目の未コミット変更を維持して作業した
+- store-form.jsのまとめリンクで、対象タブを開いた後、地方カード内はregion-headingの帯、カード外は見えるラベルを基準にスクロールし、focusのpreventScrollで欄へ移動。地方名・都道府県名／冷蔵等のラベルを固定タブの下に残すようにした
+- 普段のTab移動でもラベル上端が固定タブに隠れた場合に補正し、既存scroll-margin-topをラベルの上に確保する。sr-onlyのラベルは位置基準から除外し、ラベルがないボタン等は要素自身を使う。遅延したfocusin補正は現在フォーカス中の要素だけに適用する
+- 初期表示では有効なエラーを持つ最初のサイズパネルを選択。preview=errorは100タブになり、フォーカスはまとめへ維持。文言・まとめ4行／個別5欄・印、送信・離脱・保存後通知・name・送信対象は変更していない
+- CLIENT_STORE_FORMに動作・JS依存先と初期タブの変更を記録。今回の変更はstore-form.js・CLIENT_STORE_FORM.md・MEMORY.mdの3ファイルのみで、Sass／CSS・PHP・他画面・共通ファイル・backend/・docs/backend/・.ddev/config.local.yamlは今回触れていない。既存MEMORYはそのまま追記した
+- 1280×800・834×1194のpreview=errorで、初期100タブとまとめフォーカス、全4リンクの移動、帯・ラベル・欄の非重複、横はみ出しなし・コンソールエラー0を確認。Tab補正は一時コピーの位置準備ボタンで境界状態を作り、実際のTabキーで確認した。ラベル上端約40px→約72pxとなり、固定タブ下端56pxより下へ復帰。検証用処理は本番に追加していない。画像・一時コピーは`/tmp/kumanichi-store-error-focus/`に保存
+- node --check、git diff --check、相対リンク・節アンカー、作業前ハッシュとの変更範囲照合を確認。Gitコミットは行わない。判断に迷った点・不明な点：なし

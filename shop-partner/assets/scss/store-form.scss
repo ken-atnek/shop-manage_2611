@@ -34,6 +34,40 @@
             font-variant-numeric: tabular-nums;
         }
     }
+    .save-status,
+    .error-summary {
+        font-size: inherit;
+        margin-bottom: 2.4rem;
+        padding: 1.6rem 2.4rem;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+    }
+    .save-status {
+        border-left: 4px solid var(--color-brand-accent);
+    }
+    .error-summary {
+        border-color: $color-error;
+        h2 {
+            font-size: inherit;
+            font-weight: 600;
+        }
+        ul {
+            font-size: inherit;
+            margin-top: 1.2rem;
+            padding-left: 2rem;
+            list-style: disc;
+        }
+        li {
+            font-size: inherit;
+            margin-top: 0.8rem;
+        }
+        a {
+            font-size: inherit;
+            color: $color-error;
+            text-decoration: underline;
+            text-underline-offset: 0.2em;
+        }
+    }
 }
 
 /* =================================
@@ -331,6 +365,17 @@
             contain: inline-size;
         }
     }
+    .tab-error {
+        display: inline-block;
+        margin-left: 0.6rem;
+        padding: 0 0.4rem;
+        border: 1px solid $color-error;
+        border-radius: $radius-sm;
+        font-size: fz(12);
+        font-weight: 600;
+        color: $color-error;
+        vertical-align: middle;
+    }
     .shipping-table {
         font-size: inherit;
         min-width: 0;
@@ -448,7 +493,7 @@
 }
 
 /* =================================
- * 保存バー（商品フォームから転記。送信処理は3回目）
+ * 保存バー（商品フォームから転記。保存処理はバックエンドが組み込む）
  * ------------------------------ */
 .store-form .save-bar {
     font-size: inherit;
