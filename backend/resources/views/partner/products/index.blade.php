@@ -1,7 +1,7 @@
 {{-- =======================================
  * 熊日モール Client 商品一覧
  * URL: /backend/resources/views/partner/products/index.blade.php
- * Referenced in: /backend/resources/views/partner/products/index.blade.php・/backend/app/Http/Controllers/Partner/ProductController.php・/backend/resources/views/partner/partials/pagination.blade.php
+ * Referenced in: /backend/app/Http/Controllers/Partner/ProductController.php
  * 元: /shop-partner/products.php
  * Created: 2026-10-21
  * Last updated: 2026-10-21
@@ -19,40 +19,46 @@
         <h1>商品一覧</h1>
     </div>
     <form class="search-box" action="{{ route('partner.products.index') }}" method="get" aria-label="商品の検索">
-        {{-- TODO: 入力値の復元・日付の入力エラー・詳細パネルを開いた表示は次の作業で行う。name は表示例のまま --}}
+        {{-- name は表示例のまま --}}
         <div class="filter-bar">
             <label class="sr-only" for="product-keyword">商品名・IDで検索</label>
-            <input type="search" id="product-keyword" name="keyword" placeholder="商品名・IDで検索" />
+            <input type="search" id="product-keyword" name="keyword" value="{{ $filters['keyword'] }}" placeholder="商品名・IDで検索" />
             <button type="submit">検索</button>
-            <button class="detail-toggle" type="button" aria-expanded="false" aria-controls="product-search-panel">詳細検索</button>
+            <button class="detail-toggle" type="button" aria-expanded="{{ $detailOpen ? 'true' : 'false' }}" aria-controls="product-search-panel">詳細検索</button>
         </div>
-        <div class="search-panel" id="product-search-panel" inert>
+        <div class="search-panel" id="product-search-panel"@if (!$detailOpen) inert @endif>
             <div class="search-panel-inner">
                 <div class="search-fields">
                     <fieldset class="form-field publish-field">
                         <legend class="form-label">公開状態</legend>
                         <div class="check-group">
-                            <label class="form-check" for="search-publish-public"><input type="checkbox" id="search-publish-public" name="publish[]" value="public" /><span>公開</span></label>
-                            <label class="form-check" for="search-publish-private"><input type="checkbox" id="search-publish-private" name="publish[]" value="private" /><span>非公開</span></label>
+                            <label class="form-check" for="search-publish-public"><input type="checkbox" id="search-publish-public" name="publish[]" value="public" @checked(in_array('public', $filters['publish'], true)) /><span>公開</span></label>
+                            <label class="form-check" for="search-publish-private"><input type="checkbox" id="search-publish-private" name="publish[]" value="private" @checked(in_array('private', $filters['publish'], true)) /><span>非公開</span></label>
                         </div>
                     </fieldset>
                     <fieldset class="form-field stock-field">
                         <legend class="form-label">在庫の状態</legend>
                         <div class="check-group">
-                            <label class="form-check" for="search-stock-available"><input type="checkbox" id="search-stock-available" name="stock[]" value="available" /><span>在庫あり</span></label>
-                            <label class="form-check" for="search-stock-low"><input type="checkbox" id="search-stock-low" name="stock[]" value="low" /><span>残りわずか</span></label>
-                            <label class="form-check" for="search-stock-empty"><input type="checkbox" id="search-stock-empty" name="stock[]" value="empty" /><span>在庫切れ</span></label>
+                            <label class="form-check" for="search-stock-available"><input type="checkbox" id="search-stock-available" name="stock[]" value="available" @checked(in_array('available', $filters['stock'], true)) /><span>在庫あり</span></label>
+                            <label class="form-check" for="search-stock-low"><input type="checkbox" id="search-stock-low" name="stock[]" value="low" @checked(in_array('low', $filters['stock'], true)) /><span>残りわずか</span></label>
+                            <label class="form-check" for="search-stock-empty"><input type="checkbox" id="search-stock-empty" name="stock[]" value="empty" @checked(in_array('empty', $filters['stock'], true)) /><span>在庫切れ</span></label>
                         </div>
                     </fieldset>
+                    @php
+                        $hasDateErrors = $errors->has('updated_from') || $errors->has('updated_to');
+                    @endphp
                     <fieldset class="form-field updated-field">
                         <legend class="form-label">更新日</legend>
                         <div class="date-range">
                             <label class="sr-only" for="product-updated-from">開始日</label>
-                            <input class="form-input" type="date" id="product-updated-from" name="updated_from" />
+                            <input class="form-input" type="date" id="product-updated-from" name="updated_from" value="{{ $filters['updated_from'] }}"@if ($hasDateErrors) aria-invalid="true" aria-describedby="product-date-error"@endif />
                             <span aria-hidden="true">〜</span>
                             <label class="sr-only" for="product-updated-to">終了日</label>
-                            <input class="form-input" type="date" id="product-updated-to" name="updated_to" />
+                            <input class="form-input" type="date" id="product-updated-to" name="updated_to" value="{{ $filters['updated_to'] }}"@if ($hasDateErrors) aria-invalid="true" aria-describedby="product-date-error"@endif />
                         </div>
+                        @if ($hasDateErrors)
+                            <p class="form-error" id="product-date-error">{{ $errors->first('updated_to') ?: $errors->first('updated_from') }}</p>
+                        @endif
                     </fieldset>
                     <div class="search-actions">
                         <button class="clear-conditions" type="button">条件をクリア</button>
@@ -64,14 +70,19 @@
     </form>
     <div class="list-heading" aria-live="polite" aria-atomic="true">
         <h2 id="product-list-heading">商品一覧</h2>
-        {{-- TODO: 検索中は「検索結果」と件数を出し分ける --}}
         <span class="count">{{ $products->total() }}件</span>
-        <p class="filter-note">すべてを表示</p>
+        <p class="filter-note">{{ $hasConditions ? '検索結果' : 'すべてを表示' }}</p>
     </div>
-    {{-- TODO: 検索結果0件の表示と全件表示・条件解除のリンクは次の作業で組み込む --}}
     @if ($products->total() === 0)
         <div class="list-empty">
-            <p class="message">まだ商品はありません</p>
+            <p class="message">{{ $hasConditions ? '条件に一致する商品はありません' : 'まだ商品はありません' }}</p>
+            @if ($hasConditions)
+                <div class="empty-actions">
+                    <a class="show-all" href="{{ route('partner.products.index') }}">すべての商品を表示</a>
+                    {{-- TODO: 遷移先・解除対象は未確定（共通申し送り§6・§9） --}}
+                    <a href="#">条件をクリア</a>
+                </div>
+            @endif
         </div>
     @else
         <div class="products-scroll">
