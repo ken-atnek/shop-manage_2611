@@ -208,8 +208,20 @@
   margin-top: 0.8rem;
   line-height: 1.7;
 }
-.store-form .contact-help {
-  margin: 2.4rem 0 1.6rem;
+.store-form .store-contact {
+  font-size: inherit;
+  min-width: 0;
+  margin-top: 2.4rem;
+  padding: 0;
+  border: 0;
+}
+.store-form .store-contact legend {
+  width: 100%;
+  font-size: max(12px, 1em);
+  font-weight: 600;
+  padding-top: 1.6rem;
+  margin-bottom: 1.6rem;
+  border-top: 1px solid #e3e6ea;
 }
 .store-form .price-input {
   font-size: inherit;
@@ -303,10 +315,15 @@
 }
 .store-form .size-tabs {
   font-size: inherit;
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-  margin-bottom: 2.4rem;
+  padding-top: 1.2rem;
+  background: #fff;
+  box-shadow: inset 0 -1px 0 #aeb5be;
 }
 .store-form .size-tabs button {
   font-size: inherit;
@@ -333,19 +350,64 @@
 }
 .store-form .size-tabs button {
   min-width: 9.6rem;
+  flex-shrink: 0;
+  border: 1px solid #aeb5be;
+  border-top: 3px solid transparent;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
   scroll-margin-block: 8rem 10rem;
+}
+.store-form .size-tabs button:focus-visible {
+  outline-offset: -4px;
 }
 .store-form .size-tabs button[aria-selected=true] {
   color: var(--color-brand-accent);
-  border-color: var(--color-brand-accent);
-  background: var(--color-brand-subtle);
-  box-shadow: inset 0 -3px 0 var(--color-brand-accent);
+  border-color: #aeb5be;
+  border-top-color: var(--color-brand-accent);
+  background: #fff;
+  font-weight: 600;
+}
+@media (max-width: 834px) {
+  .store-form .size-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .store-form .size-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .store-form .size-tabs {
+    contain: inline-size;
+  }
 }
 .store-form .shipping-table {
   font-size: inherit;
   min-width: 0;
   padding: 0;
   border: 0;
+}
+.store-form .shipping-table[role=tabpanel] {
+  border: 1px solid #aeb5be;
+  border-top: 0;
+  padding: 2.4rem;
+}
+.store-form .shipping-table[role=tabpanel] input, .store-form .shipping-table[role=tabpanel] button {
+  scroll-margin-top: calc(var(--store-tabs-height, 8rem) + 1.6rem);
+}
+.store-form .shipping-size-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.6rem;
+  margin-bottom: 2.4rem;
+}
+.store-form .shipping-size-heading h3 {
+  font-size: max(12px, 1.125em);
+  font-weight: 600;
+}
+.store-form .shipping-size-heading .form-help {
+  margin: 0;
 }
 .store-form .bulk-controls {
   font-size: inherit;

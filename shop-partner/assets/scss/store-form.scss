@@ -149,7 +149,21 @@
         margin-top: 0.8rem;
         line-height: 1.7;
     }
-    .contact-help { margin: 2.4rem 0 1.6rem; }
+    .store-contact {
+        font-size: inherit;
+        min-width: 0;
+        margin-top: 2.4rem;
+        padding: 0;
+        border: 0;
+        legend {
+            width: 100%;
+            font-size: fz(16);
+            font-weight: 600;
+            padding-top: 1.6rem;
+            margin-bottom: 1.6rem;
+            border-top: 1px solid $color-border-inner;
+        }
+    }
     .price-input {
         font-size: inherit;
         display: flex;
@@ -212,24 +226,65 @@
     .shipping-help { margin-bottom: 2.4rem; }
     .size-tabs {
         font-size: inherit;
+        position: sticky;
+        top: 0;
+        z-index: 5;
         display: flex;
         flex-wrap: wrap;
         gap: 0.8rem;
-        margin-bottom: 2.4rem;
+        padding-top: 1.2rem;
+        background: $pure-white;
+        // 選択タブの白い面で下線を覆い、パネルとつなぐ。横スクロール時も線が切れない。
+        box-shadow: inset 0 -1px 0 $color-border-strong;
         button {
             @include button-base;
             @include button-secondary;
             min-width: 9.6rem;
+            flex-shrink: 0;
+            border: 1px solid $color-border-strong;
+            border-top: 3px solid transparent;
+            border-bottom: 0;
+            border-radius: $radius-sm $radius-sm 0 0;
             scroll-margin-block: 8rem 10rem;
+            &:focus-visible { outline-offset: -4px; }
             &[aria-selected="true"] {
                 color: var(--color-brand-accent);
-                border-color: var(--color-brand-accent);
-                background: var(--color-brand-subtle);
-                box-shadow: inset 0 -3px 0 var(--color-brand-accent);
+                border-color: $color-border-strong;
+                border-top-color: var(--color-brand-accent);
+                background: $pure-white;
+                font-weight: 600;
             }
+        }
+        @media (max-width: $tb) {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            // スクロールバーの厚みでタブとパネルの接続が離れないようにする。
+            scrollbar-width: none;
+            &::-webkit-scrollbar { display: none; }
+            // 全タブの合計幅をページのmin-content幅に含めない。
+            contain: inline-size;
         }
     }
     .shipping-table { font-size: inherit; min-width: 0; padding: 0; border: 0; }
+    .shipping-table[role="tabpanel"] {
+        border: 1px solid $color-border-strong;
+        border-top: 0;
+        padding: 2.4rem;
+        input, button {
+            // JSで実測したタブ高。デザイン用の余白トークンではない。
+            scroll-margin-top: calc(var(--store-tabs-height, 8rem) + 1.6rem);
+        }
+    }
+    .shipping-size-heading {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.8rem 1.6rem;
+        margin-bottom: 2.4rem;
+        h3 { font-size: fz(18); font-weight: 600; }
+        .form-help { margin: 0; }
+    }
     .bulk-controls {
         font-size: inherit;
         display: flex;

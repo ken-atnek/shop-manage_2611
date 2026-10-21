@@ -99,26 +99,28 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
               <label class="form-label" for="store-name">店舗名 <span class="required-label">必須</span></label>
               <div class="field-control field-wide"><input type="text" id="store-name" name="name" maxlength="50" value="<?= htmlspecialchars($storeName, ENT_QUOTES, 'UTF-8') ?>" required aria-required="true" /></div>
             </div>
-            <p class="form-help contact-help" id="store-contact-help">以下の発送元情報は任意です。社内の連絡用として入力してください。</p>
-            <div class="form-field form-row">
-              <label class="form-label" for="store-postal-code">発送元の郵便番号 <span class="optional-label">任意</span></label>
-              <div class="field-control field-medium"><input type="text" id="store-postal-code" name="postal_code" value="<?= $isNewState ? '' : '860-0000' ?>" aria-describedby="store-contact-help" /></div>
-            </div>
-            <div class="form-field form-row">
-              <label class="form-label" for="store-address">発送元の住所 <span class="optional-label">任意</span></label>
-              <div class="field-control field-wide"><input type="text" id="store-address" name="address" value="<?= $isNewState ? '' : '熊本県熊本市 サンプル住所' ?>" aria-describedby="store-contact-help" /></div>
-            </div>
-            <div class="form-field form-row">
-              <label class="form-label" for="store-contact-name">発送元の担当者 <span class="optional-label">任意</span></label>
-              <div class="field-control field-medium"><input type="text" id="store-contact-name" name="contact_name" maxlength="50" value="<?= $isNewState ? '' : 'サンプル担当者' ?>" aria-describedby="store-contact-help" /></div>
-            </div>
-            <div class="form-field form-row">
-              <label class="form-label" for="store-phone">発送元の電話番号 <span class="optional-label">任意</span></label>
-              <div class="field-control field-medium">
-                <input type="tel" id="store-phone" name="phone" value="<?= $isNewState ? '' : '096-000-0000' ?>" aria-describedby="store-contact-help store-phone-help" />
-                <p class="form-help" id="store-phone-help">ハイフンの有無はどちらでも入力できます。</p>
+            <fieldset class="store-contact">
+              <legend>発送元（社内の連絡用・任意）</legend>
+              <div class="form-field form-row">
+                <label class="form-label" for="store-postal-code">郵便番号 <span class="optional-label">任意</span></label>
+                <div class="field-control field-medium"><input type="text" id="store-postal-code" name="postal_code" value="<?= $isNewState ? '' : '860-0000' ?>" /></div>
               </div>
-            </div>
+              <div class="form-field form-row">
+                <label class="form-label" for="store-address">住所 <span class="optional-label">任意</span></label>
+                <div class="field-control field-wide"><input type="text" id="store-address" name="address" value="<?= $isNewState ? '' : '熊本県熊本市 サンプル住所' ?>" /></div>
+              </div>
+              <div class="form-field form-row">
+                <label class="form-label" for="store-contact-name">担当者 <span class="optional-label">任意</span></label>
+                <div class="field-control field-medium"><input type="text" id="store-contact-name" name="contact_name" maxlength="50" value="<?= $isNewState ? '' : 'サンプル担当者' ?>" /></div>
+              </div>
+              <div class="form-field form-row">
+                <label class="form-label" for="store-phone">電話番号 <span class="optional-label">任意</span></label>
+                <div class="field-control field-medium">
+                  <input type="tel" id="store-phone" name="phone" value="<?= $isNewState ? '' : '096-000-0000' ?>" aria-describedby="store-phone-help" />
+                  <p class="form-help" id="store-phone-help">ハイフンの有無はどちらでも入力できます。</p>
+                </div>
+              </div>
+            </fieldset>
           </section>
 
           <section class="form-box" aria-labelledby="delivery-heading">
@@ -198,6 +200,14 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                     $hasExampleAmounts = !$isNewState && $activeMode && $isUsedSize;
                 ?>
                   <fieldset class="shipping-table" data-shipping-size="<?= $size ?? 'common' ?>"<?= $isSizeMode ? ' role="tabpanel" id="shipping-panel-' . $size . '"' . ($isUsedSize ? ' aria-labelledby="shipping-tab-' . $size . '"' : ' aria-label="' . $size . 'サイズ"') : ' id="shipping-common-table"' ?><?= $isUsedSize ? '' : ' disabled' ?><?= $isSizeMode && $size !== ($usedSizes[0] ?? null) ? ' hidden' : '' ?>>
+                    <?php if ($isSizeMode):
+                        $sizeDefinition = array_column($carrier['sizes'] ?? [], null, 'size')[$size] ?? null;
+                    ?>
+                      <div class="shipping-size-heading">
+                        <h3><?= $size ?>サイズの送料</h3>
+                        <p class="form-help" data-size-spec<?= $sizeDefinition === null ? ' hidden' : '' ?>><?= $sizeDefinition !== null ? '3辺合計' . $size . 'cm・' . $sizeDefinition['maxWeightKg'] . 'kgまで' : '' ?></p>
+                      </div>
+                    <?php endif; ?>
                     <div class="bulk-entry national-entry form-field">
                       <label class="form-label" for="<?= $prefix ?>-all">全国一律</label>
                       <div class="bulk-controls">
@@ -229,7 +239,7 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                       </section>
                     <?php endforeach; ?>
                     <section class="cool-surcharges" aria-labelledby="<?= $prefix ?>-cool-heading">
-                      <h3 id="<?= $prefix ?>-cool-heading">クール便の追加料金</h3>
+                      <h3 id="<?= $prefix ?>-cool-heading"><?= $isSizeMode ? $size . 'サイズの' : '' ?>クール便の追加料金</h3>
                       <?php $hasCoolFields = $canUseCool($carrier, $size, 'refrigerated') || $canUseCool($carrier, $size, 'frozen'); ?>
                       <p class="form-help" data-cool-unselected<?= $carrier === null ? '' : ' hidden' ?>>運送会社を選ぶと表示します</p>
                       <p class="form-help" data-cool-unavailable<?= $carrier !== null && !$hasCoolFields ? '' : ' hidden' ?>>このサイズはクール便の規格外です</p>
