@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -28,7 +30,6 @@ class ProductController extends Controller
 
         $validator = Validator::make($filters, $dateRules, [
             'updated_to.after_or_equal' => '終了日は開始日以降の日付を指定してください',
-            // TODO: 形式エラーの文言はフロントに確認
             'date_format' => '日付を正しく入力してください',
         ]);
         $hasErrors = $validator->fails();
@@ -42,11 +43,15 @@ class ProductController extends Controller
         // TODO: ⑤でログインユーザーの所属パートナーに置き換える
         $partnerId = 1;
 
-        // TODO: 絞り込みはDBの作業で行う（一致方法・在庫区分などの細則が未確定）
+        $query = Product::query()
+            ->whereHas('store', fn ($query) => $query->where('partner_id', $partnerId));
+
+        if (!$hasErrors) {
+            $this->applyFilters($query, $filters);
+        }
+
         // TODO: 同じ更新日時のときのid降順は仮（順序は未確定）
-        $products = Product::query()
-            ->whereHas('store', fn ($query) => $query->where('partner_id', $partnerId))
-            ->orderByDesc('updated_at')
+        $products = $query->orderByDesc('updated_at')
             ->orderByDesc('id')
             ->paginate(50) // 1ページ50件（SPEC確定）
             ->withQueryString();
@@ -67,6 +72,64 @@ class ProductController extends Controller
         }
 
         return $view;
+    }
+
+    /**
+     * @param array{keyword: string, publish: array, stock: array, updated_from: string, updated_to: string} $filters
+     */
+    private function applyFilters(Builder $query, array $filters): void
+    {
+        if ($filters['keyword'] !== '') {
+            // LIKEの特殊文字をリテラルとして検索する（!自体もエスケープする）。
+            $keyword = strtr($filters['keyword'], ['!' => '!!', '%' => '!%', '_' => '!_', '\\' => '!\\']);
+            $query->where(function (Builder $keywordQuery) use ($filters, $keyword) {
+                $keywordQuery->whereRaw("name LIKE ? ESCAPE '!'", ['%'.$keyword.'%']);
+
+                if (ctype_digit($filters['keyword'])) {
+                    $keywordQuery->orWhere('id', $filters['keyword']);
+                }
+            });
+        }
+
+        if ($filters['publish'] !== []) {
+            $query->whereIn('publish_status', $filters['publish']);
+        }
+
+        if ($filters['stock'] !== []) {
+            $query->where(function (Builder $stockQuery) use ($filters) {
+                if (in_array('available', $filters['stock'], true)) {
+                    $stockQuery->orWhere(function (Builder $availableQuery) {
+                        $availableQuery->where('no_stock_management', true)
+                            ->orWhere(function (Builder $managedQuery) {
+                                $managedQuery->where('no_stock_management', false)
+                                    ->where('stock_quantity', '>', Product::LOW_STOCK_THRESHOLD);
+                            });
+                    });
+                }
+
+                if (in_array('low', $filters['stock'], true)) {
+                    $stockQuery->orWhere(function (Builder $lowQuery) {
+                        $lowQuery->where('no_stock_management', false)
+                            ->whereBetween('stock_quantity', [1, Product::LOW_STOCK_THRESHOLD]);
+                    });
+                }
+
+                if (in_array('empty', $filters['stock'], true)) {
+                    $stockQuery->orWhere(function (Builder $emptyQuery) {
+                        $emptyQuery->where('no_stock_management', false)
+                            ->where('stock_quantity', 0);
+                    });
+                }
+            });
+        }
+
+        if ($filters['updated_from'] !== '') {
+            $query->where('updated_at', '>=', Carbon::parse($filters['updated_from'], config('app.timezone'))->startOfDay());
+        }
+
+        if ($filters['updated_to'] !== '') {
+            $query->where('updated_at', '<', Carbon::parse($filters['updated_to'], config('app.timezone'))->startOfDay()->addDay());
+        }
     }
 
     /**
