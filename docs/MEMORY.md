@@ -1288,3 +1288,27 @@
 - SPECの想定ユーザーは顧客情報が閲覧のみと分かる表現に変更。Client受注一覧と顧客管理の確定事項から相互参照し、顧客管理は注文者情報、受注一覧の氏名・電話・メールの表示元は別に決めることを明記した
 - 今回は`docs/SPEC.md`・`docs/design/CLIENT_CUSTOMER_LIST.md`・`CLIENT_CUSTOMER_DETAIL.md`・`docs/QA_BACKEND.md`・本MEMORYだけを変更。PHP・HTML・Sass・CSS・JS・`backend/`・`docs/backend/`・`.ddev/config.local.yaml`は変更せず、Gitコミットは行わない
 - 判断に迷った点・不明な点：なし。購入回数の集計単位、キャンセル・返品時の基本情報、顧客の識別方法、受注一覧へ移るURLの形は、決定せず未確定またはバックエンド回答待ちとして残した
+
+## 2026-10-21 Client顧客一覧・制作1回目
+
+- `kumanichi-admin-design`を使用。作業前にSPECの顧客管理、顧客一覧資料、商品一覧、店舗一覧の`.list-error`を確認した。画面資料の「未制作」は今回の制作で更新し、詳細URLは未確定のまま仮の`customer-detail.php`を使うこと、商品一覧では834px幅で表内スクロールを許容する一方、今回はページ全体の横はみ出しを避ける調整を行うことを共有した
+- `shop-partner/customers.php`・`assets/scss/customers.scss`・生成`assets/css/customers.css`を新規作成。見出し、氏名・メールアドレス・電話番号のキーワード検索、最終購入日の詳細検索、6列の顧客表、1ページ50件・20ページのページ送りを商品一覧の部品に合わせた。共通Sass・共通JSは変更せず、`common.css`→`customers.css`と`common.js`だけを読み込む
+- 通常は氏名を仮の顧客詳細へリンクし、`link=column`ではLucideの`arrow-right`を使う7列目の詳細リンクへ切り替える。リンクには氏名を含む読み上げ名を付け、URLにメールアドレスを含めていない。顧客ID・本番URLは未確定としてPHPコメントと画面資料に残した
+- 通常・`pager-middle`・`empty`・`no-results`・`date-error`・`error`を制作確認用に追加し、すべて`link=column`と組み合わせられる。購入者なしと検索結果0件の文言を分け、取得失敗は店舗一覧の`.list-error`を参考に`role="alert"`を付け、表を出さない。日付エラーは詳細検索を開き、両日付欄を共通エラー文へ関連付けた
+- ダミー6件は`example.com`、000始まりの電話番号、長い氏名・メール、購入1回、7桁金額を含む。購入回数・金額・日付は右揃え・`tabular-nums`、金額は`¥`＋3桁区切り、日付は日付だけの`time`要素とした
+- `inc_sidebar.php`の顧客管理を`customers.php`／`customers.html`へつなぎ、`$currentPage = 'customers'`で現在地を表示。`scripts/export-html.php`へ追加し、`index.html`を制作中へ更新して各previewと詳細列案のリンクを追加。CLIENT_CUSTOMER_LISTへURL・class・列幅・制作確認結果を記録した
+- 1280×800・834×1194の6状態×2導線案、計24条件で、6列／7列、空状態、エラー、ページ送り、ページ全体の横はみ出しなしを確認。834pxで金額見出しが隣列へ重なる点は、見出しの折り返しを許可し数値セルだけ改行なしに限定して解消した。詳細検索の開閉・クリア、氏名リンクと詳細リンクのフォーカス表示、読み上げ名、サイドバー現在地、コンソール・通信エラーなしも確認した
+- `npm run sass`、DDEVの`php -l`、静的HTML書き出し、`git diff --check`を確認。PHP・Sass・CSS以外のJS、共通Sass・共通JS、他画面、`backend/`・`docs/backend/`・`.ddev/config.local.yaml`は変更していない。開始時からあった`AGENTS.md`の未コミット差分は触れずに保持し、Gitコミットは行わない
+- 判断に迷った点・不明な点：詳細導線はKenが通常案と7列目案を画面比較して決める。7列目案は834pxで氏名の折り返しが増えるため、採用時に列幅を再調整する余地がある。顧客ID・本番URL、集計対象、購入回数の単位、キャンセル・返品時の最新情報は未確定のまま
+
+## 2026-10-21 Client顧客一覧・制作2回目
+
+- `kumanichi-admin-design`を使用。現行の電話番号列・導線比較は今回のKenの決定で更新することを作業前に共有した。最長メールは@前だけでも狭いメール列を超えるため追加確認し、Kenの回答「長すぎる部分を省略し、全文はtitleで確認する」を採用した
+- `customers.php`の電話番号列を外し、氏名・メールアドレス・購入回数・購入金額の合計（税込）・最終購入日・詳細の6列に変更。電話番号はキーワード検索の対象に残し、詳細に表示する方針をSPEC・一覧資料・詳細資料へ同期した
+- 氏名は通常文字とし、末尾の詳細列に公式Lucide `eye`のpath・circleを使用。商品一覧の編集列と同じ40pxの丸いリンク、読み上げ名とtitleは「{氏名}さんの詳細」。導線切り替えのクエリ・PHP分岐・旧classとindex.htmlの比較用の行を削除し、画面資料も現行構成へ更新。過去のMEMORYは書き換えていない
+- `customers.scss`で表の最小幅を68rem、氏名14.4rem・購入回数8.4rem・金額14rem・最終購入日11.2rem・詳細6.6remの固定幅とし、メールを残り幅にした。834pxでの列幅切り替えは削除。氏名が835〜1194pxでも縮まないようにし、詳細列は40pxの丸＋左右12px＋罫線を収める
+- メールをエスケープして@の前後に分け、間にwbrを入れる。各部分の途中では折り返さず、列幅を超える部分だけ省略し、titleに全文を保持する。Bladeにも同じ処理が必要とPHPコメントへ記録。金額見出しの「（税込）」はspanでまとめ、途中で分割されないようにした
+- Chrome・WebKitで1280×800・1024×768・920×800・834×1194の通常と全5preview、各24条件を検証。氏名の内容幅は全角約7.5〜10文字分、メールの途中改行なし、詳細アイコンがセルの余白内、ページ横はみ出しなし、コンソール・通信エラー0。WebKitでの確認はSafariアプリ自体の確認とは区別する。画像・測定結果は`/private/tmp/kumanichi-customers-stage2-E9SwNH/`（Chrome）・`/private/tmp/kumanichi-customers-stage2-Zq0bni/`（WebKit）へ保存した
+- 取得失敗のalert・日付エラーの2欄・検索開閉とクリア・サイドバー現在地・詳細リンクの読み上げ名・3pxフォーカス枠を維持。WebKit標準Tab移動はリンクを飛ばすため、キーボード操作後に対象リンクへフォーカスを当てて枠を別途確認した。初回のfavicon.ico 404は顧客一覧のheadに空のfaviconを指定して防いだ
+- `npm run sass`・DDEVの`php -l`・`git diff --check`を確認。今回の変更は顧客一覧PHP・専用Sass・生成CSS・index.html・SPEC・顧客一覧資料・顧客詳細資料・本MEMORYの8ファイル。ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。開始時からのAGENTS.md・sidebar・export等の未コミット差分は保持し、Gitコミットは行わない
+- 判断に迷った点・不明な点：長いメールの扱いはKenの追加回答で解消。新たな不明点はなし。顧客ID・本番URL、集計対象、購入回数の単位、キャンセル・返品時の最新情報は従来どおり未確定のまま
