@@ -1380,3 +1380,14 @@
 - ページJS・CSS／JS等の取得エラーなし。ただし初回の既知のfavicon.ico 404によるコンソールエラー1件は残存。共通化待ちの方針を維持し、今回faviconは変更していない。ブラウザ確認はChromeで実施した
 - 今回変更したのはcustomer-detail.php・customer-detail.scss・生成customer-detail.cssと、SPEC・QA_BACKEND・CLIENT_CUSTOMER_DETAIL・本MEMORYの7ファイルだけ。ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更せず、Gitコミットは行わない
 - 判断に迷った点・不明な点：商品メモの「小さく」は、指定のfz(14)を優先し補助色で区別した。届け先の判定方法・比較項目はバックエンド回答待ち。既知のfavicon 404は上記のとおり。その他なし
+
+## 2026-10-21 Client顧客詳細の制作5回目
+
+- `kumanichi-admin-design`を使用。現行資料の箱外のID・ラベル付き基本情報を今回の決定で変更すること、最新情報の参照元は変えないことを作業前に共有した。作業開始時のGit状態はクリーンで、前回の2コミットとその後のマージは変更していない
+- 基本情報の箱は氏名をh2にし、「基本情報（最新）」の画面見出し・補助文・氏名／メール／電話／住所のdtを削除。dlをやめ、メール・電話・〒郵便番号と住所の3つのpに変更した。郵便番号と住所は同じ段落内に続け、長文は省略せず折り返す。不要になったprofile-list・profile-help・postal-codeのスタイルを削除した
+- 顧客IDは箱内の氏名の下へ移動し、「顧客ID 1042」のpをfz(14)・補助色・上余白0.8remで表示する案にした。右側には置かず、氏名が長い場合もIDとの重なりを避ける構成とした。位置はKenが画面で調整する案のまま
+- 購入回数・購入金額の合計（税込）・最終購入日のラベル付きdl、ページ見出しと戻るリンク、注文履歴と表示データは維持した。ソース比較でも、表示例／業務処理部分・購入状況のHTML・注文履歴・ページ見出しの一致を確認。最新情報の所属パートナー内の参照範囲はPHPコメントとSPECに残した。SPECと顧客詳細資料の基本情報・項目・見た目・制作記録を現行の構成へそろえ、住所項目の採否等の既存の案・未確定事項は変更していない
+- npm run sass・DDEVのphp -l・相対リンクと節アンカー・git diff --checkを確認。Chromeの1280×800・1024×768・920×800・834×1194で通常・single・not-found・errorの16条件を確認し、横はみ出しなし。箱内のID・氏名h2・3段落・購入状況・現在地・戻るリンクのフォーカス枠を確認した。長い氏名・住所はブラウザで一時的に文字を差し替えて複数行折り返しと全文表示を確認し、元のダミーデータは変更していない。画像・結果は`/private/tmp/kumanichi-customer-stage5-XE65Dd/`に保存した
+- ページJS・CSS／JS等の取得エラーなし。ただし詳細の初回に既知のfavicon.ico 404によるコンソールエラー1件は残存。共通化待ちの方針を維持し、今回もfaviconは変更していない。今回のブラウザ確認はChromeで実施した
+- 今回変更したのはcustomer-detail.php・専用customer-detail.scss・生成customer-detail.css・SPEC・CLIENT_CUSTOMER_DETAIL・本MEMORYの6ファイル。ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。Gitコミットは行わない
+- 判断に迷った点・不明な点：顧客IDは氏名の下に置く案を採用。既知のfavicon 404は上記のとおり。その他なし
