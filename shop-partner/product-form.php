@@ -33,15 +33,22 @@ $foodLabelExample = "名称：焼き菓子\n原材料名：小麦粉（国内製
 // 運送会社の規格は店舗画面と同じファイルを読む。規格の正はdocs/SPEC.md。
 $carriers = require __DIR__ . '/includes/data_carriers.php';
 // 店舗・配送は制作確認用。Bladeでは同じJSONの形で実データを出す。
-// coolSurchargeSetは空欄=false、0円も含む設定あり=true。実額は判定には渡さない。
+// 温度帯ごとの設定有無（JSONの形は案・バックエンドと確認）。空欄=false、0円を含む設定あり=true。実額は渡さない。
 $storeShippingData = [
     '1' => [
         'name' => '熊日モール サンプル店舗',
         'carrierId' => 'yamato',
         'sizeBased' => true,
         'usedSizes' => [60, 80, 100, 120, 140, 160],
-        'coolSurchargeSetBySize' => [60 => true, 80 => true, 100 => true, 120 => true, 140 => true, 160 => true],
-        'coolSurchargeSet' => false, // サイズ別なしの場合だけ参照する。
+        'coolSurchargeSetBySize' => [
+            60 => ['refrigerated' => true, 'frozen' => true],
+            80 => ['refrigerated' => true, 'frozen' => true],
+            100 => ['refrigerated' => true, 'frozen' => false],
+            120 => ['refrigerated' => true, 'frozen' => true],
+            140 => ['refrigerated' => false, 'frozen' => false],
+            160 => ['refrigerated' => false, 'frozen' => false],
+        ],
+        'coolSurchargeSet' => ['refrigerated' => false, 'frozen' => false], // サイズ別なしの場合だけ参照する。
     ],
     '2' => [
         'name' => '熊本ギフト サンプル店舗',
@@ -49,7 +56,7 @@ $storeShippingData = [
         'sizeBased' => false,
         'usedSizes' => [],
         'coolSurchargeSetBySize' => (object) [],
-        'coolSurchargeSet' => true,
+        'coolSurchargeSet' => ['refrigerated' => true, 'frozen' => false],
     ],
 ];
 foreach ($storeShippingData as &$storeShipping) {
@@ -84,7 +91,7 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
  * Referenced in: /shop-partner/products.php・/index.html・/docs/design/CLIENT_PRODUCT_FORM.md
  * 編集元: /shop-partner/product-form.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-21
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -366,8 +373,8 @@ $coolWarningExample = $isCoolWarningState ? 'ヤマト運輸のクール便は3�
                 <label class="form-check" for="product-food"><input type="checkbox" id="product-food" name="is_food" value="1" aria-controls="food-fields"<?= $isFoodState ? ' checked' : '' ?> /><span>この商品は食品です</span></label>
               </div>
             </div>
-            <!-- 初期状態はPHPで出す。2-Aのproduct-form.jsでdisabled・hiddenを同期し、入力値を保持する。 -->
-            <fieldset class="food-fields" id="food-fields"<?= $isFoodState ? '' : ' disabled hidden' ?>>
+            <!-- 初期状態はPHPで出す。JSはhiddenだけを同期し、食品オフでも直前の編集値を送信する。 -->
+            <fieldset class="food-fields" id="food-fields"<?= $isFoodState ? '' : ' hidden' ?>>
               <legend class="sr-only">商品仕様（食品表示）</legend>
               <div class="form-field form-row">
                 <label class="form-label" for="food-label">食品表示 <span class="required-label">必須</span></label>
