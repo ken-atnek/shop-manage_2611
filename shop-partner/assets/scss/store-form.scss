@@ -229,7 +229,7 @@
             }
         }
     }
-    .shipping-table { font-size: inherit; }
+    .shipping-table { font-size: inherit; min-width: 0; padding: 0; border: 0; }
     .bulk-controls {
         font-size: inherit;
         display: flex;
@@ -250,7 +250,7 @@
     .shipping-region {
         font-size: inherit;
         margin-top: 2.4rem;
-        h3 { font-size: fz(16); font-weight: 500; }
+        h3 { font-size: fz(16); font-weight: 600; }
     }
     .region-heading {
         font-size: inherit;

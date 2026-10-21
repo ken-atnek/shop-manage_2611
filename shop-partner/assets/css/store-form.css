@@ -343,6 +343,9 @@
 }
 .store-form .shipping-table {
   font-size: inherit;
+  min-width: 0;
+  padding: 0;
+  border: 0;
 }
 .store-form .bulk-controls {
   font-size: inherit;
@@ -390,7 +393,7 @@
 }
 .store-form .shipping-region h3 {
   font-size: max(12px, 1em);
-  font-weight: 500;
+  font-weight: 600;
 }
 .store-form .region-heading {
   font-size: inherit;
