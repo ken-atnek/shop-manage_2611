@@ -1,0 +1,233 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 顧客詳細 スタイル
+ * URL: /shop-partner/assets/scss/customer-detail.scss
+ * Referenced in: /shop-partner/customer-detail.php
+ * Created: 2026-10-21
+ * Last updated: 2026-10-21
+ * ======================================= */
+
+/* =================================
+ * 見出し・白い箱・読み取り専用情報
+ * ------------------------------ */
+.customer-detail-page {
+    min-width: 0;
+    .page-heading {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1.2rem 2.4rem;
+    }
+    .back-link {
+        font-size: inherit;
+        color: var(--color-brand-accent);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+    // 店舗フォームの.form-boxを基準にし、入力欄は置かない。
+    .form-box {
+        font-size: inherit;
+        min-width: 0;
+        padding: 2.4rem;
+        margin-bottom: 2.4rem;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+    }
+    h2 {
+        font-size: fz(20);
+        font-weight: 600;
+    }
+    .profile-help {
+        font-size: inherit;
+        margin-top: 1.2rem;
+        color: $color-text-secondary;
+    }
+    .profile-list {
+        font-size: inherit;
+        margin-top: 2.4rem;
+        > div {
+            display: grid;
+            grid-template-columns: 12rem minmax(0, 1fr);
+            gap: 1.2rem;
+            font-size: inherit;
+            + div {
+                margin-top: 1.2rem;
+            }
+        }
+        dt,
+        dd {
+            min-width: 0;
+            font-size: inherit;
+        }
+        dt {
+            font-weight: 500;
+            color: $color-text-secondary;
+        }
+        dd {
+            overflow-wrap: anywhere;
+        }
+    }
+    .postal-code {
+        display: block;
+        font-size: inherit;
+    }
+    .tax-note {
+        display: inline-block;
+        font-size: inherit;
+        white-space: nowrap;
+    }
+    .purchase-summary {
+        font-size: inherit;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.6rem 2.4rem;
+        margin-top: 2.4rem;
+        padding-top: 2.4rem;
+        border-top: 1px solid $color-border-inner;
+        > div,
+        dt,
+        dd {
+            min-width: 0;
+            font-size: inherit;
+        }
+        dt {
+            color: $color-text-secondary;
+            font-weight: 500;
+        }
+        dd {
+            margin-top: 0.8rem;
+            text-align: left;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+}
+
+/* =================================
+ * 注文ごとの履歴・表示専用の発送状況
+ * ------------------------------ */
+.customer-detail-page {
+    .customer-history {
+        font-size: inherit;
+        > h2 {
+            margin-bottom: 1.6rem;
+        }
+    }
+    .history-heading {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.2rem 2.4rem;
+        h3 {
+            font-size: fz(18);
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+    }
+    .order-status,
+    .order-status dd {
+        font-size: inherit;
+    }
+    .shipping-status {
+        font-size: fz(14);
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        min-height: 3.6rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        color: $pure-white;
+        white-space: nowrap;
+        &.status-new { background: $color-status-new; }
+        &.status-processing { background: $color-status-processing; }
+        &.status-shipped { background: $color-status-shipped; }
+        &.status-return { background: $color-status-return; }
+        &.status-cancelled { background: $color-status-cancelled; }
+    }
+    .order-summary {
+        font-size: inherit;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.6rem 2.4rem;
+        margin-top: 1.6rem;
+        padding-bottom: 2.4rem;
+        border-bottom: 1px solid $color-border-inner;
+        > div,
+        dt,
+        dd {
+            min-width: 0;
+            font-size: inherit;
+        }
+        dt {
+            color: $color-text-secondary;
+            font-weight: 500;
+        }
+        dd {
+            margin-top: 0.8rem;
+            overflow-wrap: anywhere;
+        }
+        time {
+            font-size: inherit;
+            font-variant-numeric: tabular-nums;
+        }
+        .order-amount dd {
+            text-align: left;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+    .order-addresses {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2.4rem;
+        margin-top: 2.4rem;
+        font-size: inherit;
+        .address-group {
+            min-width: 0;
+            font-size: fz(14);
+        }
+        h4 {
+            font-size: inherit;
+            font-weight: 500;
+        }
+        .contact-lines {
+            font-size: inherit;
+            margin-top: 1.6rem;
+            p {
+                font-size: inherit;
+                overflow-wrap: anywhere;
+                + p {
+                    margin-top: 0.4rem;
+                }
+            }
+        }
+        @media (max-width: $tb) {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+    .order-actions {
+        font-size: inherit;
+        margin-top: 2.4rem;
+        text-align: right;
+        a {
+            @include button-base;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+    }
+    .list-error {
+        .message {
+            color: $color-error;
+        }
+        .error-help {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            color: $color-text-secondary;
+        }
+    }
+}

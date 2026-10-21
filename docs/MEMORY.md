@@ -1312,3 +1312,30 @@
 - 取得失敗のalert・日付エラーの2欄・検索開閉とクリア・サイドバー現在地・詳細リンクの読み上げ名・3pxフォーカス枠を維持。WebKit標準Tab移動はリンクを飛ばすため、キーボード操作後に対象リンクへフォーカスを当てて枠を別途確認した。初回のfavicon.ico 404は顧客一覧のheadに空のfaviconを指定して防いだ
 - `npm run sass`・DDEVの`php -l`・`git diff --check`を確認。今回の変更は顧客一覧PHP・専用Sass・生成CSS・index.html・SPEC・顧客一覧資料・顧客詳細資料・本MEMORYの8ファイル。ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。開始時からのAGENTS.md・sidebar・export等の未コミット差分は保持し、Gitコミットは行わない
 - 判断に迷った点・不明な点：長いメールの扱いはKenの追加回答で解消。新たな不明点はなし。顧客ID・本番URL、集計対象、購入回数の単位、キャンセル・返品時の最新情報は従来どおり未確定のまま
+
+## 2026-10-21 Client顧客詳細・制作1回目
+
+- `kumanichi-admin-design`を使用。作業前にSPECの顧客管理、顧客詳細資料、顧客一覧PHP／Sass、受注一覧の状態名・`apply-status-box`、店舗フォームの`.form-box`を確認した。未制作の資料を更新すること、操作用mixinを表示専用バッジへ直接流用しないこと、集計値・見つからない画面は業務仕様を確定しない表示例とすることを共有した
+- `shop-partner/customer-detail.php`・`assets/scss/customer-detail.scss`・生成`assets/css/customer-detail.css`を作成。`common.css`→専用CSS、body末尾の`common.js`だけを読み込み、`$currentPage = 'customers'`で顧客管理を現在地にする。見出し付近へ顧客一覧に戻る文字リンクを置き、編集・保存・削除・CSV・メモ・保存バーは置いていない
+- 店舗フォームの白い箱を基準に基本情報をdlで表示し、最新の注文で確定した情報であることを補助文で説明した。住所の表示と同じ箱下部の購入回数・税込合計・最終購入日は案。回数・金額は右揃え・tabular-nums、日付はtime要素とし、一覧の書き方に合わせた
+- 注文履歴は新しい順の5件。注文番号h3、日時・店舗・税込金額、発送状況のラベルとバッジ、注文時点の注文者情報と届け先、受注一覧で見るリンクを注文単位にまとめた。1194pxより広ければ住所情報2列、それ以下では縦並び。住所は省略せず折り返す
+- 状況は新規受付・対応中・発送済・返品対応・キャンセルの5種類で、既存`$color-status-*`を使用。`apply-status-box`の選択用構造・ボタン・選択肢・data-selectbox・操作時の色変化は付けていない。ダミーは2店舗・本人宛・ギフト・長い住所を含み、古い注文では住所と電話番号を変えた。すべてサンプルの氏名・店舗、架空県・サンプル町、000の郵便番号と電話番号、example.comを使用する
+- 通常・single・not-found・errorを作成。not-foundは未存在IDと権限外IDを同じ文・一覧への戻るリンクで扱う表示案とし、ほかの顧客の存在を画面で区別させない。errorは顧客一覧と同じ考え方の`.list-error[role="alert"]`。どちらも顧客情報・注文履歴を出さない。PHPはpreviewだけを切り替え、実際の存在確認・権限判定・HTTP応答は実装しない
+- `scripts/export-html.php`へ追加し、index.htmlに詳細の行・4状態のリンクと制作中を追加（画面数7→8）。顧客詳細資料へ構成・URL・class・案・制作確認を追記。見つからない表示はSPECの閲覧範囲の確定事項を守るための画面案、ID識別とHTTP応答は未確定と整理し、SPECの業務仕様は変更していない
+- Chrome・WebKitで1280×800・1024×768・920×800・834×1194の4状態を各16条件確認。ページの横はみ出し・コンソール・通信エラーなし、住所の2列／1列・長文の全文折り返し・過去情報・5色の表示専用バッジ・受注リンクの注文番号・現在地・3pxフォーカス枠・非表示状態で個人情報が出ないことを確認。WebKitはSafariアプリの実操作確認とは区別する。画像と結果は`/private/tmp/kumanichi-customer-detail-stage1-wQGAMD/`（Chrome）・`/private/tmp/kumanichi-customer-detail-stage1-HPyPwg/`（WebKit）へ保存した
+- `npm run sass`・DDEVの`php -l`・`git diff --check`を確認。静的出力は詳細だけをメモリ上で実行し、doctype・PHPタグ除去・一覧／受注一覧のhtmlリンクを検証。他画面の静的HTMLは出力していない。今回の変更は新規PHP・Sass・CSS、export・index、顧客詳細資料・本MEMORYの7ファイル。ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更せず、新しいトークンも追加していない。Gitコミットは行わない
+- 判断に迷った点・不明な点：作業を止める新たな点はなし。基本情報の住所・購入状況の位置・横並び／縦並び・not-foundの共通表示は案。顧客ID・本番URL・HTTP応答・集計条件は未確定。通常5回・¥48,600／single1回・¥12,800は固定の制作例で、一覧とのデータ連動はしない
+
+## 2026-10-21 Client顧客詳細・制作2回目
+
+- `kumanichi-admin-design`を使用。制作1回目のラベル付き表示・1194pxでの並び替え・数値の右揃えを今回のKenの決定で更新。`button-base`がaにも使えることを確認した。作業前に、現行の顧客一覧にも空favicon指定が残るが今回の除去対象は詳細だけであること、共通favicon未配置により404が再発し得ることを共有した
+- 注文者情報・届け先は見出しを残し、dl／dt／ddを3つのpへ変更。「氏名」「〒郵便番号 住所」「電話番号」とし、郵便番号と住所は1つの段落で続けて表示。address要素は使わない。各まとまりを見出しごとfz(14)、段落間0.4remにし、長い住所は省略せず折り返す。基本情報の文字サイズ・dlは維持した
+- `.order-addresses`の切り替えを`$tbw`から`$tb`へ変更し、834px以下だけ1列、それより広ければ2列とした。購入状況3項目と注文概要の合計金額の値は左揃えにし、tabular-numsは維持した
+- `.order-actions a`へ既存のbutton-baseを適用し、inline-flexで白地・枠線・高さ44px以上のボタン表示にした。a要素・受注一覧へ移る用途・箱の右下の位置を維持。role=buttonは付けず、戻るリンクの位置も維持した
+- ダミー注文番号を数字13桁の2610210112345等へ変更し、注文見出し・section識別子・読み上げ補助・keywordの値を一致させた。空favicon指定を詳細のheadから削除。共通faviconは追加せず、共通化時の検討に残した
+- 顧客詳細資料の項目・見た目・制作記録を現行構成へそろえ、今回決まった表示と残る案を区別した。制作1回目の確認結果は当時の記録と明示し、2回目の結果を追記。既存MEMORYは変更せず本項を追記した
+- Chrome・WebKitの1280×800・1024×768・920×800・834×1194で、通常・single・not-found・errorを各16条件確認。横はみ出しなし、1280／1024／920は横並び、834は縦並び。長い住所の全文折り返し、3段落・ラベルなし、数値の左揃え、44pxのリンクボタンと3pxのフォーカス枠、数字注文番号と受注URL、既存状態と現在地を確認した。fz(14)は既存関数の下限12pxを維持し、基本情報のサイズは不変。画像・結果は`/private/tmp/kumanichi-customer-detail-stage2-ynLdcq/`（Chrome）・`/private/tmp/kumanichi-customer-detail-stage2-IFtVjU/`（WebKit）へ保存した
+- ページJSエラー・CSS／JS等の取得エラーなし。ただしChrome初回の`/favicon.ico`404は1件発生し、コンソールエラー完全0ではない。WebKitは0。指示どおりfaviconの対応を共通化時に残し、検証で隠したり詳細に空faviconを戻したりはしていない
+- `npm run sass`・DDEVの`php -l`・`git diff --check`、数字の受注URLを含むメモリ上の静的出力を確認。今回触れたのはcustomer-detail.php・専用Sass・生成CSS・顧客詳細資料・本MEMORYの5ファイルだけ。制作1回目からのindex.html・export-html.php等の未コミット差分は維持し、ほかの画面・共通Sass／JS・backend/・docs/backend/・.ddev/config.local.yamlは変更していない。Gitコミットは行わない
+- 判断に迷った点・不明な点：表示の追加判断はなし。faviconの未配置によるChrome初回404は共通化時の課題として残る。顧客ID・本番URL・HTTP応答・集計条件は従来どおり未確定のまま
+- 2026-10-21：顧客詳細の`.shipping-status`を受注一覧と同じ幅120px・文字中央揃え・左右余白0.8remに統一し、生成CSSと見た目の案へ反映。Sassコンパイル・4幅で5種の実寸／中央揃え／横はみ出しなし・`git diff --check`を確認。判断に迷った点・不明な点：なし。コミットなし。
