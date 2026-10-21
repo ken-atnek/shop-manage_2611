@@ -1,6 +1,6 @@
 # サーバー側ディレクトリ構成（案）
 
-更新日：2026-10-20  
+更新日：2026-10-21  
 状態：Master／ClientのLaravel共通化と商品画像の保存先は確定（2026-10-20）。その他の配置方針は検討案で、サブドメイン設定とLaravelの公開入口の接続方法は未確定。
 
 ## 前提
@@ -76,6 +76,23 @@
 ```
 
 `.env`、アプリケーションコード、`vendor/`、`storage/` はWebの公開フォルダに置かない。デモ用と公開用の設定・保存データは混在させない。
+
+## ローカルとサーバーの対応（方針：2026-10-21）
+
+リポジトリの `backend/` の中身を、サーバーのLaravel本体のフォルダにそのまま配置する。Laravelは自分のフォルダを基準にパスを解決するため、置き場所が違っても同じコードで動かす。
+
+| 区分 | Laravel本体 | 公開する入口 |
+| --- | --- | --- |
+| ローカル（XAMPP） | リポジトリの `backend/` | `backend/public`（VirtualHostのDocumentRoot） |
+| サーバー・デモ | `/home/{サーバーID}/laravel-apps/demo-shop-kumanichi-control/` | `public_html/demo-shop-master/`・`demo-shop-partner/` |
+| サーバー・公開 | `/home/{サーバーID}/laravel-apps/shop-kumanichi-control/` | `public_html/shop-master/`・`shop-partner/` |
+
+- `backend/public/index.php` などリポジトリ内のファイルを、サーバーの配置に合わせて書き換えない。サーバー側で必要な調整は、配置時の手順として別に扱う
+- コードの中にローカル・サーバーの絶対パスを書かない。`base_path()`・`storage_path()`・`public_path()` などのLaravelのヘルパーを使う
+- 環境ごとの違い（URL・DB接続・保存先など）は、各環境の `.env` で切り替える。`.env` はリポジトリに含めない
+- 要確認：サーバーの公開フォルダとLaravel本体をつなぐ方法（公開フォルダを `public/` に直接向ける、入口の `index.php` だけを置く、シンボリックリンクでつなぐ等）。XServerの設定・制限を確認して決める（下記「配置前の確認事項」2）
+- 要確認：商品画像の公開URLに使う `php artisan storage:link`（シンボリックリンク）がXServerで使えるか
+- 要確認：ローカルでのMaster／PartnerのURLの分け方（サーバーはサブドメインで分ける。[QA No.7](../QA_BACKEND.md#no7-ddev生成css)）
 
 ## Web公開フォルダ（想定）
 
