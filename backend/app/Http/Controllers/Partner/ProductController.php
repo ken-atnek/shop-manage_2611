@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
@@ -12,7 +13,7 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
         $filters = $this->normalizeFilters($request);
         $dateRules = [
@@ -20,7 +21,10 @@ class ProductController extends Controller
             'updated_to' => ['nullable', 'date_format:Y-m-d'],
         ];
 
-        if ($filters['updated_from'] !== '') {
+        if ($filters['updated_from'] !== '' && Validator::make(
+            ['updated_from' => $filters['updated_from']],
+            ['updated_from' => $dateRules['updated_from']],
+        )->passes()) {
             $dateRules['updated_to'][] = 'after_or_equal:updated_from';
         }
 
@@ -53,6 +57,10 @@ class ProductController extends Controller
                 'query' => $request->query(),
             ],
         );
+
+        if ($products->currentPage() > $products->lastPage()) {
+            return redirect($products->url($products->lastPage()));
+        }
 
         $view = view('partner.products.index', [
             'products' => $products,
