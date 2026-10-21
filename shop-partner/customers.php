@@ -16,12 +16,12 @@ $detailPath = 'customer-detail.' . $pageExtension;
 
 // 架空の表示例。メールアドレスはexample.com、電話番号は実在しない000始まりを使う。
 $customers = [
-    ['name' => 'サンプル 顧客名がとても長い表示確認用の購入者', 'email' => 'very-long-customer-name-for-layout-check@example.com', 'phone' => '000-0000-0001', 'count' => '128', 'amount' => '¥1,234,567', 'date' => '2026-10-21', 'dateLabel' => '2026/10/21'],
-    ['name' => 'テスト 花子', 'email' => 'sample.customer.02@example.com', 'phone' => '000-0000-0002', 'count' => '1', 'amount' => '¥980', 'date' => '2026-10-20', 'dateLabel' => '2026/10/20'],
-    ['name' => 'デモ 太郎', 'email' => 'layout-test+customer03@example.com', 'phone' => '000-0000-0003', 'count' => '24', 'amount' => '¥86,400', 'date' => '2026-10-19', 'dateLabel' => '2026/10/19'],
-    ['name' => '見本 次郎', 'email' => 'customer.sample04@example.com', 'phone' => '000-0000-0004', 'count' => '8', 'amount' => '¥12,800', 'date' => '2026-10-18', 'dateLabel' => '2026/10/18'],
-    ['name' => '架空 三郎', 'email' => 'customer.sample05@example.com', 'phone' => '000-0000-0005', 'count' => '3', 'amount' => '¥5,600', 'date' => '2026-10-17', 'dateLabel' => '2026/10/17'],
-    ['name' => '表示確認 四郎', 'email' => 'customer.sample06@example.com', 'phone' => '000-0000-0006', 'count' => '16', 'amount' => '¥204,000', 'date' => '2026-10-16', 'dateLabel' => '2026/10/16'],
+    ['id' => 1042, 'name' => 'サンプル 顧客名がとても長い表示確認用の購入者', 'email' => 'very-long-customer-name-for-layout-check@example.com', 'phone' => '000-0000-0001', 'count' => '128', 'amount' => '¥1,234,567', 'date' => '2026-10-21', 'dateLabel' => '2026/10/21'],
+    ['id' => 87, 'name' => 'テスト 花子', 'email' => 'sample.customer.02@example.com', 'phone' => '000-0000-0002', 'count' => '1', 'amount' => '¥980', 'date' => '2026-10-20', 'dateLabel' => '2026/10/20'],
+    ['id' => 615, 'name' => 'デモ 太郎', 'email' => 'layout-test+customer03@example.com', 'phone' => '000-0000-0003', 'count' => '24', 'amount' => '¥86,400', 'date' => '2026-10-19', 'dateLabel' => '2026/10/19'],
+    ['id' => 2308, 'name' => '見本 次郎', 'email' => 'customer.sample04@example.com', 'phone' => '000-0000-0004', 'count' => '8', 'amount' => '¥12,800', 'date' => '2026-10-18', 'dateLabel' => '2026/10/18'],
+    ['id' => 319, 'name' => '架空 三郎', 'email' => 'customer.sample05@example.com', 'phone' => '000-0000-0005', 'count' => '3', 'amount' => '¥5,600', 'date' => '2026-10-17', 'dateLabel' => '2026/10/17'],
+    ['id' => 1705, 'name' => '表示確認 四郎', 'email' => 'customer.sample06@example.com', 'phone' => '000-0000-0006', 'count' => '16', 'amount' => '¥204,000', 'date' => '2026-10-16', 'dateLabel' => '2026/10/16'],
 ];
 ?>
 <!doctype html>
@@ -132,11 +132,12 @@ $customers = [
             </div>
           <?php else: ?>
             <!-- 986件のうち架空の6件を掲載。最終購入日の新しい順・1ページ50件の表示例。 -->
-            <!-- 顧客詳細URL・顧客IDは未確定。仮のcustomer-detail.phpへ進み、メールアドレスはURLやパラメータに入れない。 -->
+            <!-- 顧客IDで詳細へ進む表示例。仮URLはcustomer-detail.php?id={顧客ID}。本番のURLの形と顧客テーブル方式はバックエンド回答待ち。メールアドレスはURLに入れない。 -->
             <div class="customers-scroll">
               <table class="customers-table" aria-labelledby="customer-list-heading">
                 <thead>
                   <tr>
+                    <th class="customer-id" scope="col">ID</th>
                     <th class="customer-name" scope="col">氏名</th>
                     <th class="customer-email" scope="col">メールアドレス</th>
                     <th class="customer-count" scope="col">購入回数</th>
@@ -148,6 +149,7 @@ $customers = [
                 <tbody>
                   <?php foreach ($customers as $customer): ?>
                     <tr>
+                      <td class="customer-id"><?= $customer['id'] ?></td>
                       <td class="customer-name"><?= htmlspecialchars($customer['name'], ENT_QUOTES, 'UTF-8') ?></td>
                       <?php
                       // Bladeでも、メールをエスケープして各部分を出力し、@の直前へwbrを入れる。
@@ -159,7 +161,7 @@ $customers = [
                       <td class="customer-amount"><?= htmlspecialchars($customer['amount'], ENT_QUOTES, 'UTF-8') ?></td>
                       <td class="customer-purchased"><time datetime="<?= $customer['date'] ?>"><?= $customer['dateLabel'] ?></time></td>
                       <?php $detailLabel = $customer['name'] . 'さんの詳細'; ?>
-                      <td class="customer-detail"><a class="detail-link" href="<?= $detailPath ?>" aria-label="<?= htmlspecialchars($detailLabel, ENT_QUOTES, 'UTF-8') ?>" title="<?= htmlspecialchars($detailLabel, ENT_QUOTES, 'UTF-8') ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg></a></td>
+                      <td class="customer-detail"><a class="detail-link" href="<?= $detailPath ?>?id=<?= $customer['id'] ?>" aria-label="<?= htmlspecialchars($detailLabel, ENT_QUOTES, 'UTF-8') ?>" title="<?= htmlspecialchars($detailLabel, ENT_QUOTES, 'UTF-8') ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg></a></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
