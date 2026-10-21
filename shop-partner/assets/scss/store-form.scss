@@ -26,8 +26,13 @@
             display: flex;
             gap: 0.8rem;
         }
-        dt, dd { font-size: inherit; }
-        dd { font-variant-numeric: tabular-nums; }
+        dt,
+        dd {
+            font-size: inherit;
+        }
+        dd {
+            font-variant-numeric: tabular-nums;
+        }
     }
 }
 
@@ -63,16 +68,27 @@
         color: var(--color-brand-accent);
         background: var(--color-brand-subtle);
     }
-    .form-field + .form-field { margin-top: 2.4rem; }
-    .field-wide, .field-medium {
+    .form-field + .form-field {
+        margin-top: 2.4rem;
+    }
+    .field-wide,
+    .field-medium {
         font-size: inherit;
         width: 100%;
     }
-    .field-wide { max-width: 72rem; }
-    .field-medium { max-width: 40rem; }
-    .field-control { font-size: inherit; min-width: 0; }
+    .field-wide {
+        max-width: 72rem;
+    }
+    .field-medium {
+        max-width: 40rem;
+    }
+    .field-control {
+        font-size: inherit;
+        min-width: 0;
+    }
     .form-label {
-        .required-label, .optional-label {
+        .required-label,
+        .optional-label {
             display: inline-block;
             font-size: fz(12);
             font-weight: 400;
@@ -93,11 +109,17 @@
             grid-template-columns: 20rem minmax(0, 1fr);
             column-gap: 2.4rem;
         }
-        .form-row > .form-label { margin-bottom: 0; padding-top: 1rem; }
+        .form-row > .form-label {
+            margin-bottom: 0;
+            padding-top: 1rem;
+        }
     }
     .form-field {
         min-width: 0;
-        input[type="text"], input[type="tel"] { font-size: 1.6rem; }
+        input[type="text"],
+        input[type="tel"] {
+            font-size: 1.6rem;
+        }
         input[inputmode="numeric"] {
             text-align: right;
             font-variant-numeric: tabular-nums;
@@ -115,9 +137,12 @@
             background: $pure-white;
             appearance: auto;
         }
-        input, select {
+        input,
+        select {
             scroll-margin-block: 8rem 10rem;
-            &:hover:not(:disabled) { border-color: $color-border-hover; }
+            &:hover:not(:disabled) {
+                border-color: $color-border-hover;
+            }
             &:disabled {
                 color: $color-text-muted;
                 background: $color-bg-subtle;
@@ -149,24 +174,48 @@
         margin-top: 0.8rem;
         line-height: 1.7;
     }
-    .contact-help { margin: 2.4rem 0 1.6rem; }
+    .store-contact {
+        font-size: inherit;
+        min-width: 0;
+        margin-top: 2.4rem;
+        padding: 0;
+        border: 0;
+        legend {
+            width: 100%;
+            font-size: fz(16);
+            font-weight: 600;
+            padding-top: 1.6rem;
+            margin-bottom: 1.6rem;
+            border-top: 1px solid $color-border-inner;
+        }
+    }
     .price-input {
         font-size: inherit;
         display: flex;
         align-items: center;
         gap: 0.8rem;
         min-width: 0;
-        input { width: 14rem; max-width: 100%; min-width: 0; }
-        span { font-size: fz(14); white-space: nowrap; }
+        input {
+            width: 14rem;
+            max-width: 100%;
+            min-width: 0;
+        }
+        span {
+            font-size: fz(14);
+            white-space: nowrap;
+        }
     }
-    .used-sizes, .shipping-mode {
+    .used-sizes,
+    .shipping-mode {
         font-size: inherit;
         min-width: 0;
         padding: 0;
         border: 0;
     }
     // flex/grid等でhiddenを上書きしない。
-    [hidden] { display: none; }
+    [hidden] {
+        display: none;
+    }
 }
 
 /* =================================
@@ -181,27 +230,52 @@
     h3 {
         font-size: fz(16);
         font-weight: 500;
-        span { font-size: fz(12); font-weight: 400; margin-left: 0.8rem; color: $color-text-secondary; }
+        span {
+            font-size: fz(12);
+            font-weight: 400;
+            margin-left: 0.8rem;
+            color: $color-text-secondary;
+        }
     }
-    dl, div, dt, dd { font-size: fz(14); }
+    dl,
+    div,
+    dt,
+    dd {
+        font-size: fz(14);
+    }
     .carrier-sizes {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 0.8rem 2.4rem;
         margin-top: 1.6rem;
-        div { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
-        dd { color: $color-text-secondary; }
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 1.2rem;
+        }
+        dd {
+            color: $color-text-secondary;
+        }
     }
     .carrier-cool {
         margin-top: 1.6rem;
         padding-top: 1.6rem;
         border-top: 1px solid $color-border-inner;
-        div { display: flex; gap: 1.6rem; }
-        div + div { margin-top: 0.8rem; }
-        dt { flex: 0 0 auto; }
+        div {
+            display: flex;
+            gap: 1.6rem;
+        }
+        div + div {
+            margin-top: 0.8rem;
+        }
+        dt {
+            flex: 0 0 auto;
+        }
     }
     @media (max-width: $tbw) {
-        .carrier-sizes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .carrier-sizes {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
 }
 
@@ -209,38 +283,100 @@
  * サイズタブ・一括入力・地方別の送料表
  * ------------------------------ */
 .store-form {
-    .shipping-help { margin-bottom: 2.4rem; }
+    .shipping-help {
+        margin-bottom: 2.4rem;
+    }
     .size-tabs {
         font-size: inherit;
+        position: sticky;
+        top: 0;
+        z-index: 5;
         display: flex;
         flex-wrap: wrap;
         gap: 0.8rem;
-        margin-bottom: 2.4rem;
+        padding-top: 1.2rem;
+        background: $pure-white;
+        // 選択タブの白い面で下線を覆い、パネルとつなぐ。横スクロール時も線が切れない。
+        box-shadow: inset 0 -1px 0 $color-border-strong;
         button {
             @include button-base;
             @include button-secondary;
             min-width: 9.6rem;
+            flex-shrink: 0;
+            border: 1px solid $color-border-strong;
+            border-bottom: 0;
+            border-radius: $radius-sm $radius-sm 0 0;
             scroll-margin-block: 8rem 10rem;
+            &:focus-visible {
+                outline-offset: -4px;
+            }
             &[aria-selected="true"] {
                 color: var(--color-brand-accent);
-                border-color: var(--color-brand-accent);
-                background: var(--color-brand-subtle);
-                box-shadow: inset 0 -3px 0 var(--color-brand-accent);
+                border-color: $color-border-strong;
+                border-top-color: var(--color-brand-accent);
+                border-top-width: 3px;
+                background: $pure-white;
+                font-weight: 600;
             }
         }
+        @media (max-width: $tb) {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            // スクロールバーの厚みでタブとパネルの接続が離れないようにする。
+            scrollbar-width: none;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            // 全タブの合計幅をページのmin-content幅に含めない。
+            contain: inline-size;
+        }
     }
-    .shipping-table { font-size: inherit; min-width: 0; padding: 0; border: 0; }
+    .shipping-table {
+        font-size: inherit;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+    }
+    .shipping-table[role="tabpanel"] {
+        border: 1px solid $color-border-strong;
+        border-top: 0;
+        padding: 2.4rem;
+        input,
+        button {
+            // JSで実測したタブ高。デザイン用の余白トークンではない。
+            scroll-margin-top: calc(var(--store-tabs-height, 8rem) + 1.6rem);
+        }
+    }
+    .shipping-size-heading {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.8rem 1.6rem;
+        margin-bottom: 2.4rem;
+        h3 {
+            font-size: fz(18);
+            font-weight: 600;
+        }
+        .form-help {
+            margin: 0;
+        }
+    }
     .bulk-controls {
         font-size: inherit;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 0.8rem 1.6rem;
-        .price-input input { width: 10rem; }
+        .price-input input {
+            width: 10rem;
+        }
     }
     .bulk-button {
         @include button-base;
         @include button-secondary;
+        background: $pure-white;
+        border-color: $color-border-strong;
         scroll-margin-block: 8rem 10rem;
     }
     .national-entry {
@@ -249,8 +385,17 @@
     }
     .shipping-region {
         font-size: inherit;
-        margin-top: 2.4rem;
-        h3 { font-size: fz(16); font-weight: 600; }
+        margin-top: 1.6rem;
+        border: 1px solid $color-border-default;
+        border-radius: 0.8rem;
+        overflow: hidden;
+        h3 {
+            font-size: fz(16);
+            font-weight: 600;
+        }
+        > .prefecture-grid {
+            padding: 1.6rem 2rem 2rem;
+        }
     }
     .region-heading {
         font-size: inherit;
@@ -259,26 +404,46 @@
         justify-content: space-between;
         align-items: center;
         gap: 1.2rem 2.4rem;
-        padding-block: 1.2rem;
-        margin-bottom: 1.6rem;
-        border-bottom: 1px solid $color-border-inner;
+        padding: 0.6rem 1.6rem 0.6rem 2rem;
+        background: $color-bg-subtle;
+        border-bottom: 1px solid $color-border-default;
+        .bulk-label {
+            font-size: fz(12);
+            color: $color-text-secondary;
+        }
+        // 薄い帯の上下でも既存のフォーカス枠をカード内に収める。
+        input:focus-visible,
+        button:focus-visible {
+            outline-offset: 2px;
+        }
     }
     .prefecture-grid {
         font-size: inherit;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1.6rem 2.4rem;
-        .form-field { margin: 0; }
-        .price-input input { width: 100%; }
-        @media (max-width: $tbw) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .form-field {
+            margin: 0;
+        }
+        .price-input input {
+            width: 100%;
+        }
+        @media (max-width: $tbw) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
     .cool-surcharges {
         font-size: inherit;
         margin-top: 3.2rem;
         padding-top: 2.4rem;
         border-top: 1px solid $color-border-card;
-        h3 { font-size: fz(16); font-weight: 500; }
-        .cool-grid { margin-top: 1.6rem; }
+        h3 {
+            font-size: fz(16);
+            font-weight: 500;
+        }
+        .cool-grid {
+            margin-top: 1.6rem;
+        }
     }
 }
 
@@ -298,7 +463,8 @@
     padding: 1.6rem 2.4rem;
     border: 1px solid $color-border-card;
     background: $pure-white;
-    button, a {
+    button,
+    a {
         @include button-base;
         display: inline-flex;
         align-items: center;
@@ -306,6 +472,11 @@
         gap: 0.8rem;
         min-width: 14rem;
     }
-    button { @include button-primary; }
-    a { @include button-secondary; text-decoration: none; }
+    button {
+        @include button-primary;
+    }
+    a {
+        @include button-secondary;
+        text-decoration: none;
+    }
 }

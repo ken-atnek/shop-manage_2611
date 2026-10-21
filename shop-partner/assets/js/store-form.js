@@ -109,6 +109,10 @@
       table.disabled = !used;
       table.hidden = size !== null && (!bySize || !used || activeSize !== size);
       if (size !== null) {
+        const specification = table.querySelector("[data-size-spec]");
+        const definition = carrier?.sizes.find((item) => item.size === size);
+        specification.textContent = definition ? `3辺合計${size}cm・${definition.maxWeightKg}kgまで` : "";
+        specification.hidden = !definition;
         table.removeAttribute("aria-labelledby");
         table.removeAttribute("aria-label");
         table.setAttribute(used ? "aria-labelledby" : "aria-label", used ? `shipping-tab-${size}` : `${size}サイズ`);
@@ -133,6 +137,15 @@
       table.querySelector("[data-cool-help]").hidden = !hasCool;
     });
   };
+  // 横方向だけを移動し、送料入力中のページのスクロール位置は維持する。
+  const revealActiveTab = () => {
+    const tab = tabs.querySelector('[aria-selected="true"]');
+    if (!tab || !tabs.clientWidth) return;
+    const strip = tabs.getBoundingClientRect();
+    const selected = tab.getBoundingClientRect();
+    if (selected.left < strip.left) tabs.scrollLeft += selected.left - strip.left;
+    else if (selected.right > strip.right) tabs.scrollLeft += selected.right - strip.right;
+  };
   const activateTab = (size, moveFocus = false) => {
     activeSize = size;
     tabs.querySelectorAll('[role="tab"]').forEach((tab) => {
@@ -142,6 +155,7 @@
     });
     syncTables();
     if (moveFocus) tabs.querySelector(`#shipping-tab-${size}`)?.focus();
+    revealActiveTab();
   };
   const renderTabs = () => {
     const used = (currentCarrier()?.sizes || []).map((item) => item.size).filter((size) => selectedSizes.has(size));
@@ -211,6 +225,25 @@
     const next = event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1
       : (index + (event.key === "ArrowRight" ? 1 : -1) + buttons.length) % buttons.length;
     activateTab(Number(buttons[next].id.replace("shipping-tab-", "")), true);
+  });
+
+  // 折り返し・画面幅・文字サイズに合わせてフォーカス欄の上側余白を確保する。
+  new ResizeObserver(() => {
+    const height = tabs.getBoundingClientRect().height;
+    if (height) sizeMode.style.setProperty("--store-tabs-height", `${height}px`);
+    revealActiveTab();
+  }).observe(tabs);
+  sizeMode.addEventListener("focusin", (event) => {
+    const field = event.target;
+    if (!field.matches("input, button") || !field.closest('[role="tabpanel"]')) return;
+    // Tab移動で既に画面内と判断された欄も、stickyの下に隠れる場合だけ補正する。
+    requestAnimationFrame(() => {
+      const strip = tabs.getBoundingClientRect();
+      const position = field.getBoundingClientRect();
+      if (strip.top <= 0 && position.top < strip.bottom && position.bottom > 0) {
+        window.scrollBy({ top: position.top - parseFloat(getComputedStyle(field).scrollMarginTop), behavior: "instant" });
+      }
+    });
   });
 
   // ===== 一括入力（保存時の検証・エラー表示は3回目） =====

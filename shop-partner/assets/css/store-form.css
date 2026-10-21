@@ -68,7 +68,8 @@
   display: flex;
   gap: 0.8rem;
 }
-.store-form-page .store-meta dt, .store-form-page .store-meta dd {
+.store-form-page .store-meta dt,
+.store-form-page .store-meta dd {
   font-size: inherit;
 }
 .store-form-page .store-meta dd {
@@ -111,7 +112,8 @@
 .store-form .form-field + .form-field {
   margin-top: 2.4rem;
 }
-.store-form .field-wide, .store-form .field-medium {
+.store-form .field-wide,
+.store-form .field-medium {
   font-size: inherit;
   width: 100%;
 }
@@ -125,7 +127,8 @@
   font-size: inherit;
   min-width: 0;
 }
-.store-form .form-label .required-label, .store-form .form-label .optional-label {
+.store-form .form-label .required-label,
+.store-form .form-label .optional-label {
   display: inline-block;
   font-size: 12px;
   font-weight: 400;
@@ -153,7 +156,8 @@
 .store-form .form-field {
   min-width: 0;
 }
-.store-form .form-field input[type=text], .store-form .form-field input[type=tel] {
+.store-form .form-field input[type=text],
+.store-form .form-field input[type=tel] {
   font-size: 1.6rem;
 }
 .store-form .form-field input[inputmode=numeric] {
@@ -173,13 +177,16 @@
   background: #fff;
   appearance: auto;
 }
-.store-form .form-field input, .store-form .form-field select {
+.store-form .form-field input,
+.store-form .form-field select {
   scroll-margin-block: 8rem 10rem;
 }
-.store-form .form-field input:hover:not(:disabled), .store-form .form-field select:hover:not(:disabled) {
+.store-form .form-field input:hover:not(:disabled),
+.store-form .form-field select:hover:not(:disabled) {
   border-color: #8a929c;
 }
-.store-form .form-field input:disabled, .store-form .form-field select:disabled {
+.store-form .form-field input:disabled,
+.store-form .form-field select:disabled {
   color: #737b86;
   background: #f6f7f8;
   cursor: not-allowed;
@@ -208,8 +215,20 @@
   margin-top: 0.8rem;
   line-height: 1.7;
 }
-.store-form .contact-help {
-  margin: 2.4rem 0 1.6rem;
+.store-form .store-contact {
+  font-size: inherit;
+  min-width: 0;
+  margin-top: 2.4rem;
+  padding: 0;
+  border: 0;
+}
+.store-form .store-contact legend {
+  width: 100%;
+  font-size: max(12px, 1em);
+  font-weight: 600;
+  padding-top: 1.6rem;
+  margin-bottom: 1.6rem;
+  border-top: 1px solid #e3e6ea;
 }
 .store-form .price-input {
   font-size: inherit;
@@ -227,7 +246,8 @@
   font-size: max(12px, 0.875em);
   white-space: nowrap;
 }
-.store-form .used-sizes, .store-form .shipping-mode {
+.store-form .used-sizes,
+.store-form .shipping-mode {
   font-size: inherit;
   min-width: 0;
   padding: 0;
@@ -257,7 +277,10 @@
   margin-left: 0.8rem;
   color: #4f5863;
 }
-.store-form .carrier-rules dl, .store-form .carrier-rules div, .store-form .carrier-rules dt, .store-form .carrier-rules dd {
+.store-form .carrier-rules dl,
+.store-form .carrier-rules div,
+.store-form .carrier-rules dt,
+.store-form .carrier-rules dd {
   font-size: max(12px, 0.875em);
 }
 .store-form .carrier-rules .carrier-sizes {
@@ -303,10 +326,15 @@
 }
 .store-form .size-tabs {
   font-size: inherit;
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-  margin-bottom: 2.4rem;
+  padding-top: 1.2rem;
+  background: #fff;
+  box-shadow: inset 0 -1px 0 #aeb5be;
 }
 .store-form .size-tabs button {
   font-size: inherit;
@@ -333,19 +361,65 @@
 }
 .store-form .size-tabs button {
   min-width: 9.6rem;
+  flex-shrink: 0;
+  border: 1px solid #aeb5be;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
   scroll-margin-block: 8rem 10rem;
+}
+.store-form .size-tabs button:focus-visible {
+  outline-offset: -4px;
 }
 .store-form .size-tabs button[aria-selected=true] {
   color: var(--color-brand-accent);
-  border-color: var(--color-brand-accent);
-  background: var(--color-brand-subtle);
-  box-shadow: inset 0 -3px 0 var(--color-brand-accent);
+  border-color: #aeb5be;
+  border-top-color: var(--color-brand-accent);
+  border-top-width: 3px;
+  background: #fff;
+  font-weight: 600;
+}
+@media (max-width: 834px) {
+  .store-form .size-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .store-form .size-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .store-form .size-tabs {
+    contain: inline-size;
+  }
 }
 .store-form .shipping-table {
   font-size: inherit;
   min-width: 0;
   padding: 0;
   border: 0;
+}
+.store-form .shipping-table[role=tabpanel] {
+  border: 1px solid #aeb5be;
+  border-top: 0;
+  padding: 2.4rem;
+}
+.store-form .shipping-table[role=tabpanel] input,
+.store-form .shipping-table[role=tabpanel] button {
+  scroll-margin-top: calc(var(--store-tabs-height, 8rem) + 1.6rem);
+}
+.store-form .shipping-size-heading {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.6rem;
+  margin-bottom: 2.4rem;
+}
+.store-form .shipping-size-heading h3 {
+  font-size: max(12px, 1.125em);
+  font-weight: 600;
+}
+.store-form .shipping-size-heading .form-help {
+  margin: 0;
 }
 .store-form .bulk-controls {
   font-size: inherit;
@@ -381,6 +455,8 @@
   background: #e2e5e9;
 }
 .store-form .bulk-button {
+  background: #fff;
+  border-color: #aeb5be;
   scroll-margin-block: 8rem 10rem;
 }
 .store-form .national-entry {
@@ -389,11 +465,17 @@
 }
 .store-form .shipping-region {
   font-size: inherit;
-  margin-top: 2.4rem;
+  margin-top: 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 0.8rem;
+  overflow: hidden;
 }
 .store-form .shipping-region h3 {
   font-size: max(12px, 1em);
   font-weight: 600;
+}
+.store-form .shipping-region > .prefecture-grid {
+  padding: 1.6rem 2rem 2rem;
 }
 .store-form .region-heading {
   font-size: inherit;
@@ -402,9 +484,17 @@
   justify-content: space-between;
   align-items: center;
   gap: 1.2rem 2.4rem;
-  padding-block: 1.2rem;
-  margin-bottom: 1.6rem;
-  border-bottom: 1px solid #e3e6ea;
+  padding: 0.6rem 1.6rem 0.6rem 2rem;
+  background: #f6f7f8;
+  border-bottom: 1px solid #d9dde2;
+}
+.store-form .region-heading .bulk-label {
+  font-size: 12px;
+  color: #4f5863;
+}
+.store-form .region-heading input:focus-visible,
+.store-form .region-heading button:focus-visible {
+  outline-offset: 2px;
 }
 .store-form .prefecture-grid {
   font-size: inherit;
@@ -454,7 +544,8 @@
   border: 1px solid #c4cad2;
   background: #fff;
 }
-.store-form .save-bar button, .store-form .save-bar a {
+.store-form .save-bar button,
+.store-form .save-bar a {
   font-size: inherit;
   font-weight: 500;
   min-height: 4.4rem;
@@ -465,10 +556,12 @@
   background: #fff;
   white-space: nowrap;
 }
-.store-form .save-bar button:hover, .store-form .save-bar a:hover {
+.store-form .save-bar button:hover,
+.store-form .save-bar a:hover {
   background: #f6f7f8;
 }
-.store-form .save-bar button, .store-form .save-bar a {
+.store-form .save-bar button,
+.store-form .save-bar a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
