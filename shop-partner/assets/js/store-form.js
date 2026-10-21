@@ -353,7 +353,7 @@
     const table = button.closest(".shipping-table");
     const input = document.getElementById(button.dataset.bulkInput);
     const notice = table.querySelector(".bulk-notice");
-    // 全角数字だけを正規化し、補助入力欄そのものは書き換えない。
+    // 全角数字は判定用に正規化。不正値はそのまま残し、成功時だけ補助欄を空にする。
     const value = input.value.replace(/[０-９]/g, (digit) => String.fromCharCode(digit.charCodeAt(0) - 0xfee0));
     const amount = Number(value);
     if (!/^[0-9]+$/.test(value) || !Number.isInteger(amount) || amount < 0 || amount > 99999) {
@@ -363,6 +363,7 @@
     const scope = button.dataset.bulkScope === "region" ? button.closest(".shipping-region") : table;
     const inputs = [...scope.querySelectorAll("[data-prefecture-fee]")];
     inputs.forEach((field) => { field.value = String(amount); });
+    input.value = "";
     markChanged();
     announce(notice, `${inputs.length}件に入力しました`);
   });
