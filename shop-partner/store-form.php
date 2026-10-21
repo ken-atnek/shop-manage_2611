@@ -5,19 +5,23 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
 // preview・架空の値・金額は表示確認専用。Bladeでは本番のデータ・状態に置き換える。
 // idクエリでは検索しない。通常URLは編集例、新規はpreview=newで確認する。
 $previewState = ($staticExport ?? false) ? '' : ($_GET['preview'] ?? '');
-$isNewState = $previewState === 'new';
+$isEmptyState = $previewState === 'new';
+$isErrorState = $previewState === 'error';
+$isNewState = $isEmptyState || $isErrorState;
 $isNoSizeState = $previewState === 'no-size';
 $isSagawaState = $previewState === 'sagawa';
+$isSavedState = $previewState === 'saved';
+$isRegisteredState = $previewState === 'registered';
 $pageTitle = $isNewState ? '店舗登録' : '店舗編集';
 $storeId = $isNoSizeState ? 2 : ($isSagawaState ? 3 : 1);
 $storeName = $isNewState ? '' : ($isNoSizeState ? '熊本ギフト サンプル店舗' : ($isSagawaState ? '熊本の旬の味覚と地域の特産品を全国へお届けする 阿蘇・天草ふるさとギフト サンプル店舗' : '熊日モール サンプル店舗'));
 $carriers = require __DIR__ . '/includes/data_carriers.php';
 $prefectureRegions = require __DIR__ . '/includes/data_prefectures.php';
-$carrierCode = $isNewState ? '' : ($isNoSizeState ? 'yupack' : ($isSagawaState ? 'sagawa' : 'yamato'));
+$carrierCode = $isEmptyState ? '' : ($isNoSizeState ? 'yupack' : ($isSagawaState ? 'sagawa' : 'yamato'));
 $carrier = $carriers[$carrierCode] ?? null;
-$sizeBased = !$isNewState && !$isNoSizeState;
-$usedSizes = $isNewState ? [] : ($isNoSizeState ? array_column($carrier['sizes'], 'size') : ($isSagawaState ? [60, 80, 100, 140, 160] : [60, 80, 100, 120, 140, 160]));
-$freeShippingEnabled = !$isNewState && !$isNoSizeState && !$isSagawaState;
+$sizeBased = !$isEmptyState && !$isNoSizeState;
+$usedSizes = $isEmptyState ? [] : ($isNoSizeState ? array_column($carrier['sizes'], 'size') : ($isSagawaState ? [60, 80, 100, 140, 160] : [60, 80, 100, 120, 140, 160]));
+$freeShippingEnabled = !$isEmptyState && !$isNoSizeState && !$isSagawaState;
 $temperatureLabels = ['refrigerated' => '冷蔵', 'frozen' => '冷凍'];
 // 全社のサイズ表を先に持つ。非表示・非選択でもDOMの金額は破棄しない。
 $storeCarriers = array_intersect_key($carriers, array_flip(['yamato', 'sagawa', 'yupack']));
@@ -43,7 +47,7 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
 ?>
 <!doctype html>
 <!-- =======================================
- * 熊日モール Client 店舗の登録・編集（2回目：配送・送料の操作）
+ * 熊日モール Client 店舗の登録・編集（3回目：送信・エラー・離脱）
  * URL: /shop-partner/store-form.<?= $pageExtension . PHP_EOL ?>
  * Referenced in: /shop-partner/stores.php・/index.html・/docs/design/CLIENT_STORE_FORM.md
  * 編集元: /shop-partner/store-form.php（.htmlは必要時のみの書き出し物。Git管理外）
@@ -89,34 +93,52 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
             <div><dt>更新日時</dt><dd><time datetime="2026-10-20T14:30:00+09:00">2026/10/20 14:30</time></dd></div>
           </dl>
         <?php endif; ?>
-        <!-- name・idは仮。送信・保存・検証は3回目に制作する。 -->
-        <form class="store-form" method="post" action="#" novalidate data-sizes-initialized="<?= $isNewState ? 'false' : 'true' ?>">
+        <?php if ($isSavedState || $isRegisteredState): ?>
+          <p class="save-status" role="status"><?= $isRegisteredState ? '店舗を登録しました' : '保存しました' ?></p>
+        <?php endif; ?>
+        <?php if ($isErrorState): ?>
+          <!-- サーバー検証後の表示例。ヤマト160は規格外のため、冷蔵のエラー例は100サイズ。 -->
+          <section class="error-summary" id="store-errors" aria-labelledby="store-errors-heading" tabindex="-1">
+            <h2 id="store-errors-heading">入力内容を確認してください（4件）</h2>
+            <ul>
+              <li data-error-fields="store-name"><a href="#store-name">店舗名を入力してください</a></li>
+              <li data-error-fields="shipping-size-100-refrigerated"><a href="#shipping-size-100-refrigerated">100サイズ：クール便の追加料金（冷蔵）を確認してください</a></li>
+              <li data-error-fields="shipping-size-120-pref-01 shipping-size-120-pref-47"><a href="#shipping-size-120-pref-01">120サイズ：送料が未入力の都道府県が2件あります</a></li>
+              <li data-error-fields="store-free-shipping-threshold"><a href="#store-free-shipping-threshold">送料無料にする金額を確認してください</a></li>
+            </ul>
+          </section>
+        <?php endif; ?>
+        <!-- action・name・idは仮。保存・検証処理はバックエンドが組み込む。 -->
+        <form class="store-form" method="post" action="#" novalidate data-sizes-initialized="<?= $isEmptyState ? 'false' : 'true' ?>">
           <section class="form-box" aria-labelledby="basic-heading">
             <h2 id="basic-heading"><span class="heading-icon"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" />
   <path d="M12 16v-4" />
   <path d="M12 8h.01" /></svg></span>基本情報</h2>
             <div class="form-field form-row">
               <label class="form-label" for="store-name">店舗名 <span class="required-label">必須</span></label>
-              <div class="field-control field-wide"><input type="text" id="store-name" name="name" maxlength="50" value="<?= htmlspecialchars($storeName, ENT_QUOTES, 'UTF-8') ?>" required aria-required="true" /></div>
+              <div class="field-control field-wide">
+                <input type="text" id="store-name" name="name" maxlength="50" value="<?= htmlspecialchars($storeName, ENT_QUOTES, 'UTF-8') ?>" required aria-required="true"<?= $isErrorState ? ' aria-invalid="true" aria-describedby="store-name-error"' : '' ?> />
+                <?php if ($isErrorState): ?><p class="form-error" id="store-name-error">店舗名を入力してください</p><?php endif; ?>
+              </div>
             </div>
             <fieldset class="store-contact">
               <legend>発送元（社内の連絡用・任意）</legend>
               <div class="form-field form-row">
                 <label class="form-label" for="store-postal-code">郵便番号 <span class="optional-label">任意</span></label>
-                <div class="field-control field-medium"><input type="text" id="store-postal-code" name="postal_code" value="<?= $isNewState ? '' : '860-0000' ?>" /></div>
+                <div class="field-control field-medium"><input type="text" id="store-postal-code" name="postal_code" value="<?= $isEmptyState ? '' : '860-0000' ?>" /></div>
               </div>
               <div class="form-field form-row">
                 <label class="form-label" for="store-address">住所 <span class="optional-label">任意</span></label>
-                <div class="field-control field-wide"><input type="text" id="store-address" name="address" value="<?= $isNewState ? '' : '熊本県熊本市 サンプル住所' ?>" /></div>
+                <div class="field-control field-wide"><input type="text" id="store-address" name="address" value="<?= $isEmptyState ? '' : '熊本県熊本市 サンプル住所' ?>" /></div>
               </div>
               <div class="form-field form-row">
                 <label class="form-label" for="store-contact-name">担当者 <span class="optional-label">任意</span></label>
-                <div class="field-control field-medium"><input type="text" id="store-contact-name" name="contact_name" maxlength="50" value="<?= $isNewState ? '' : 'サンプル担当者' ?>" /></div>
+                <div class="field-control field-medium"><input type="text" id="store-contact-name" name="contact_name" maxlength="50" value="<?= $isEmptyState ? '' : 'サンプル担当者' ?>" /></div>
               </div>
               <div class="form-field form-row">
                 <label class="form-label" for="store-phone">電話番号 <span class="optional-label">任意</span></label>
                 <div class="field-control field-medium">
-                  <input type="tel" id="store-phone" name="phone" value="<?= $isNewState ? '' : '096-000-0000' ?>" aria-describedby="store-phone-help" />
+                  <input type="tel" id="store-phone" name="phone" value="<?= $isEmptyState ? '' : '096-000-0000' ?>" aria-describedby="store-phone-help" />
                   <p class="form-help" id="store-phone-help">ハイフンの有無はどちらでも入力できます。</p>
                 </div>
               </div>
@@ -197,7 +219,7 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                     $prefix = $isSizeMode ? 'shipping-size-' . $size : 'shipping-common';
                     $namePrefix = $isSizeMode ? 'shipping_tables[by_size][' . $size . ']' : 'shipping_tables[common]';
                     $isUsedSize = !$isSizeMode || in_array($size, $usedSizes, true);
-                    $hasExampleAmounts = !$isNewState && $activeMode && $isUsedSize;
+                    $hasExampleAmounts = !$isEmptyState && $activeMode && $isUsedSize;
                 ?>
                   <fieldset class="shipping-table" data-shipping-size="<?= $size ?? 'common' ?>"<?= $isSizeMode ? ' role="tabpanel" id="shipping-panel-' . $size . '"' . ($isUsedSize ? ' aria-labelledby="shipping-tab-' . $size . '"' : ' aria-label="' . $size . 'サイズ"') : ' id="shipping-common-table"' ?><?= $isUsedSize ? '' : ' disabled' ?><?= $isSizeMode && $size !== ($usedSizes[0] ?? null) ? ' hidden' : '' ?>>
                     <?php if ($isSizeMode):
@@ -228,12 +250,15 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                           </div>
                         </div>
                         <div class="prefecture-grid">
-                          <?php foreach ($region['prefectures'] as $prefecture): ?>
+                          <?php foreach ($region['prefectures'] as $prefecture):
+                              $isRateError = $isErrorState && $size === 120 && in_array($prefecture['code'], ['01', '47'], true);
+                          ?>
                             <div class="form-field">
                               <label class="form-label" for="<?= $prefix ?>-pref-<?= $prefecture['code'] ?>"><?= $prefecture['name'] ?></label>
                               <div class="price-input">
-                                <input type="text" inputmode="numeric" data-prefecture-fee id="<?= $prefix ?>-pref-<?= $prefecture['code'] ?>" name="<?= $namePrefix ?>[rates][<?= $prefecture['code'] ?>][base_fee_yen]" value="<?= $hasExampleAmounts ? 800 + $index * 200 : '' ?>" maxlength="5" pattern="[0-9]{1,5}" required aria-required="true" aria-describedby="shipping-amount-help" /><span>円（税込）</span>
+                                <input type="text" inputmode="numeric" data-prefecture-fee id="<?= $prefix ?>-pref-<?= $prefecture['code'] ?>" name="<?= $namePrefix ?>[rates][<?= $prefecture['code'] ?>][base_fee_yen]" value="<?= $hasExampleAmounts && !$isRateError ? 800 + $index * 200 : '' ?>" maxlength="5" pattern="[0-9]{1,5}" required aria-required="true"<?= $isRateError ? ' aria-invalid="true"' : '' ?> aria-describedby="shipping-amount-help<?= $isRateError ? ' ' . $prefix . '-pref-' . $prefecture['code'] . '-error' : '' ?>" /><span>円（税込）</span>
                               </div>
+                              <?php if ($isRateError): ?><p class="form-error" id="<?= $prefix ?>-pref-<?= $prefecture['code'] ?>-error">入力してください</p><?php endif; ?>
                             </div>
                           <?php endforeach; ?>
                         </div>
@@ -252,11 +277,14 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
                             $coolValue = $hasExampleAmounts && $showCool ? '330' : '';
                             if ($isSagawaState && $temperature === 'refrigerated') $coolValue = '';
                             if ($carrierCode === 'yamato' && $size === 100 && $temperature === 'frozen') $coolValue = '';
+                            $isCoolError = $isErrorState && $size === 100 && $temperature === 'refrigerated';
+                            if ($isCoolError) $coolValue = 'abc';
                             $showYupack160Help = $carrierCode === 'yupack' && $size === 160 && $temperature === 'refrigerated';
                         ?>
                           <fieldset class="form-field" data-cool-temperature="<?= $temperature ?>"<?= $showCool ? '' : ' disabled hidden' ?>>
                             <label class="form-label" for="<?= $prefix ?>-<?= $temperature ?>"><?= $label ?></label>
-                            <div class="price-input"><input type="text" inputmode="numeric" id="<?= $prefix ?>-<?= $temperature ?>" name="<?= $namePrefix ?>[cool_<?= $temperature ?>_surcharge_yen]" value="<?= $coolValue ?>" maxlength="5" pattern="[0-9]{1,5}" aria-describedby="<?= $prefix ?>-cool-help<?= $showYupack160Help ? ' ' . $prefix . '-refrigerated-limit' : '' ?>" /><span>円（税込）</span></div>
+                            <div class="price-input"><input type="text" inputmode="numeric" id="<?= $prefix ?>-<?= $temperature ?>" name="<?= $namePrefix ?>[cool_<?= $temperature ?>_surcharge_yen]" value="<?= $coolValue ?>" maxlength="5" pattern="[0-9]{1,5}"<?= $isCoolError ? ' aria-invalid="true"' : '' ?> aria-describedby="<?= $prefix ?>-cool-help<?= $showYupack160Help ? ' ' . $prefix . '-refrigerated-limit' : '' ?><?= $isCoolError ? ' ' . $prefix . '-' . $temperature . '-error' : '' ?>" /><span>円（税込）</span></div>
+                            <?php if ($isCoolError): ?><p class="form-error" id="<?= $prefix ?>-<?= $temperature ?>-error">0〜99,999円の整数で入力してください</p><?php endif; ?>
                             <?php if ($size === 160 && $temperature === 'refrigerated'): ?><p class="form-help" id="<?= $prefix ?>-refrigerated-limit" data-yupack-limit<?= $showYupack160Help ? '' : ' hidden' ?>>3辺合計150cmまで</p><?php endif; ?>
                           </fieldset>
                         <?php endforeach; ?>
@@ -279,15 +307,15 @@ $canUseCool = static function (?array $definition, ?int $size, string $temperatu
             <div class="form-field form-row">
               <label class="form-label" for="store-free-shipping-threshold">送料無料にする金額</label>
               <div class="field-control">
-                <div class="price-input"><input type="text" inputmode="numeric" id="store-free-shipping-threshold" name="free_shipping_threshold_yen" value="<?= $freeShippingEnabled ? '10000' : '' ?>" maxlength="5" pattern="(?=.*[1-9])[0-9]{1,5}" aria-describedby="free-shipping-help"<?= $freeShippingEnabled ? '' : ' disabled' ?> /><span>円（税込）以上</span></div>
+                <div class="price-input"><input type="text" inputmode="numeric" id="store-free-shipping-threshold" name="free_shipping_threshold_yen" value="<?= $isErrorState ? '0' : ($freeShippingEnabled ? '10000' : '') ?>" maxlength="5" pattern="(?=.*[1-9])[0-9]{1,5}"<?= $isErrorState ? ' aria-invalid="true"' : '' ?> aria-describedby="free-shipping-help<?= $isErrorState ? ' store-free-shipping-threshold-error' : '' ?>"<?= $freeShippingEnabled ? '' : ' disabled' ?> /><span>円（税込）以上</span></div>
                 <p class="form-help" id="free-shipping-help">1〜99,999円の整数で入力してください。この金額以上で送料無料になります。</p>
+                <?php if ($isErrorState): ?><p class="form-error" id="store-free-shipping-threshold-error">1〜99,999円の整数で入力してください</p><?php endif; ?>
               </div>
             </div>
           </section>
           <div class="save-bar">
             <a href="stores.<?= $pageExtension ?>"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>一覧へ戻る</a>
-            <!-- 保存はまだ行わない。送信ボタン化・保存中表示は3回目に制作する。 -->
-            <button class="button-primary" id="store-save" type="button">保存する</button>
+            <button class="button-primary" id="store-save" type="submit">保存する</button>
           </div>
         </form>
       </main>

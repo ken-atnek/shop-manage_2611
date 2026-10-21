@@ -1,5 +1,5 @@
 /* =======================================
- * 熊日モール Client 店舗フォーム 配送・送料の切り替え（制作2回目）
+ * 熊日モール Client 店舗フォーム 配送・送料・送信・エラー・離脱（制作3回目）
  * URL: /shop-partner/assets/js/store-form.js
  * Referenced in: /shop-partner/store-form.php・/docs/design/CLIENT_STORE_FORM.md
  * Created: 2026-10-21
@@ -27,11 +27,49 @@
   const rules = form.querySelector("#store-carrier-rules");
   const freeShipping = form.querySelector("#store-free-shipping");
   const freeThreshold = form.querySelector("#store-free-shipping-threshold");
+  const errorSummary = form.closest("main").querySelector("#store-errors");
   const temperatureLabels = { refrigerated: "冷蔵", frozen: "冷凍" };
   let selectedSizes = new Set([...sizeChoices.querySelectorAll("input:checked")].map((input) => Number(input.value)));
   let sizesInitialized = form.dataset.sizesInitialized === "true";
   let activeSize = Number(tabs.querySelector('[aria-selected="true"]')?.id.replace("shipping-tab-", "")) || null;
   const currentCarrier = () => carriers[carrierSelect.value] || null;
+
+  // ===== 変更あり・送信・戻る（商品フォーム2-Bと同じ仕組み） =====
+  const saveButton = form.querySelector("#store-save");
+  const saveLabel = saveButton.textContent;
+  let hasChanges = false;
+  let submitting = false;
+  const warnBeforeLeaving = (event) => {
+    if (!hasChanges || submitting) return;
+    event.preventDefault();
+    event.returnValue = true;
+  };
+  const markChanged = () => {
+    hasChanges = true;
+    if (!submitting) window.addEventListener("beforeunload", warnBeforeLeaving);
+  };
+  form.addEventListener("input", markChanged);
+  form.addEventListener("change", markChanged);
+  form.addEventListener("submit", (event) => {
+    if (submitting) {
+      event.preventDefault();
+      return;
+    }
+    submitting = true;
+    window.removeEventListener("beforeunload", warnBeforeLeaving);
+    saveButton.disabled = true;
+    saveButton.textContent = "保存中…";
+    form.setAttribute("aria-busy", "true");
+  });
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    submitting = false;
+    saveButton.disabled = false;
+    saveButton.textContent = saveLabel;
+    form.removeAttribute("aria-busy");
+    // 復元された入力は未保存のまま。再度離れる場合も警告する。
+    if (hasChanges) window.addEventListener("beforeunload", warnBeforeLeaving);
+  });
 
   // 同じ文言を続けて通知する場合も、常設のlive領域で読み上げられるよう一度空にする。
   const noticeTimers = new WeakMap();
@@ -45,6 +83,41 @@
     if (text !== undefined) node.textContent = text;
     if (className) node.className = className;
     return node;
+  };
+
+  // サーバーが付けたエラー属性だけを読む。値の再検証・修正後のエラー解除はしない。
+  const syncErrors = () => {
+    tabs.querySelectorAll('[role="tab"]').forEach((tab) => {
+      const panel = document.getElementById(tab.getAttribute("aria-controls"));
+      const count = panel.querySelectorAll('[aria-invalid="true"]:not(:disabled)').length;
+      const label = `${panel.dataset.shippingSize}サイズ`;
+      tab.textContent = label;
+      tab.setAttribute("aria-label", count ? `${label}、エラー${count}件` : label);
+      if (count) {
+        const badge = element("span", `! ${count}`, "tab-error");
+        badge.setAttribute("aria-hidden", "true");
+        tab.append(badge);
+      }
+    });
+    form.querySelectorAll('[aria-invalid="true"]').forEach((field) => {
+      (field.getAttribute("aria-describedby") || "").split(/\s+/).forEach((id) => {
+        const message = document.getElementById(id);
+        if (message?.classList.contains("form-error")) message.hidden = field.matches(":disabled");
+      });
+    });
+    if (!errorSummary) return;
+    let count = 0;
+    errorSummary.querySelectorAll("[data-error-fields]").forEach((row) => {
+      const target = row.dataset.errorFields.split(/\s+/).map((id) => document.getElementById(id))
+        .find((field) => field?.matches('[aria-invalid="true"]:not(:disabled)'));
+      row.hidden = !target;
+      if (target) {
+        row.querySelector("a").setAttribute("href", `#${target.id}`);
+        count++;
+      }
+    });
+    errorSummary.hidden = count === 0;
+    errorSummary.querySelector("#store-errors-heading").textContent = `入力内容を確認してください（${count}件）`;
   };
 
   // ===== 規格の読み取り専用表示 =====
@@ -129,13 +202,17 @@
           const showLimit = carrierSelect.value === "yupack" && supported;
           limit.hidden = !showLimit;
           const helpId = table.querySelector("[data-cool-help]").id;
-          field.querySelector("input").setAttribute("aria-describedby", helpId + (showLimit ? ` ${limit.id}` : ""));
+          const input = field.querySelector("input");
+          const errorIds = (input.getAttribute("aria-describedby") || "").split(/\s+/)
+            .filter((id) => document.getElementById(id)?.classList.contains("form-error"));
+          input.setAttribute("aria-describedby", [helpId, ...(showLimit ? [limit.id] : []), ...errorIds].join(" "));
         }
       });
       table.querySelector("[data-cool-unselected]").hidden = Boolean(carrier);
       table.querySelector("[data-cool-unavailable]").hidden = !carrier || hasCool;
       table.querySelector("[data-cool-help]").hidden = !hasCool;
     });
+    syncErrors();
   };
   // 横方向だけを移動し、送料入力中のページのスクロール位置は維持する。
   const revealActiveTab = () => {
@@ -227,6 +304,27 @@
     activateTab(Number(buttons[next].id.replace("shipping-tab-", "")), true);
   });
 
+  // 読み上げ専用labelは位置の基準にせず、見えるラベルから欄までを表示する。
+  const visibleFieldLabel = (field) => [...(field.labels || [])]
+    .find((label) => !label.classList.contains("sr-only")) || field;
+  const scrollToFieldContext = (field, target) => {
+    const margin = parseFloat(getComputedStyle(field).scrollMarginTop) || 0;
+    window.scrollBy({ top: target.getBoundingClientRect().top - margin, behavior: "instant" });
+  };
+  errorSummary?.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const field = document.getElementById(link.getAttribute("href").slice(1));
+    if (!field || field.matches(":disabled")) return;
+    event.preventDefault();
+    const panel = field.closest('[role="tabpanel"]');
+    if (panel) activateTab(Number(panel.dataset.shippingSize));
+    // 地方の帯を先に見せる。カード外はラベルを基準にし、focusでは再スクロールしない。
+    const heading = field.closest(".shipping-region")?.querySelector(".region-heading");
+    scrollToFieldContext(field, heading || visibleFieldLabel(field));
+    field.focus({ preventScroll: true });
+  });
+
   // 折り返し・画面幅・文字サイズに合わせてフォーカス欄の上側余白を確保する。
   new ResizeObserver(() => {
     const height = tabs.getBoundingClientRect().height;
@@ -236,17 +334,19 @@
   sizeMode.addEventListener("focusin", (event) => {
     const field = event.target;
     if (!field.matches("input, button") || !field.closest('[role="tabpanel"]')) return;
-    // Tab移動で既に画面内と判断された欄も、stickyの下に隠れる場合だけ補正する。
+    // 欄だけが見えていてもラベルがstickyの下に隠れる場合は、ラベルの上まで補正する。
     requestAnimationFrame(() => {
+      if (document.activeElement !== field) return;
       const strip = tabs.getBoundingClientRect();
       const position = field.getBoundingClientRect();
-      if (strip.top <= 0 && position.top < strip.bottom && position.bottom > 0) {
-        window.scrollBy({ top: position.top - parseFloat(getComputedStyle(field).scrollMarginTop), behavior: "instant" });
+      const label = visibleFieldLabel(field);
+      if (strip.top <= 0 && label.getBoundingClientRect().top < strip.bottom && position.bottom > 0) {
+        scrollToFieldContext(field, label);
       }
     });
   });
 
-  // ===== 一括入力（保存時の検証・エラー表示は3回目） =====
+  // ===== 一括入力（保存時の検証はサーバー側） =====
   form.addEventListener("click", (event) => {
     const button = event.target.closest("[data-bulk-scope]");
     if (!button || button.matches(":disabled")) return;
@@ -263,13 +363,23 @@
     const scope = button.dataset.bulkScope === "region" ? button.closest(".shipping-region") : table;
     const inputs = [...scope.querySelectorAll("[data-prefecture-fee]")];
     inputs.forEach((field) => { field.value = String(amount); });
+    markChanged();
     announce(notice, `${inputs.length}件に入力しました`);
   });
 
   // ===== 送料無料（金額は保持し、オフは送らない） =====
-  const syncFreeShipping = () => { freeThreshold.disabled = !freeShipping.checked; };
+  const syncFreeShipping = () => {
+    freeThreshold.disabled = !freeShipping.checked;
+    syncErrors();
+  };
   freeShipping.addEventListener("change", syncFreeShipping);
   renderRules();
   renderTabs();
   syncFreeShipping();
+  if (errorSummary && !errorSummary.hidden) {
+    const firstErrorPanel = tables.find((table) => table.matches('[role="tabpanel"]:not(:disabled)')
+      && table.querySelector('[aria-invalid="true"]:not(:disabled)'));
+    if (firstErrorPanel) activateTab(Number(firstErrorPanel.dataset.shippingSize));
+    errorSummary.focus();
+  }
 })();
