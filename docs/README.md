@@ -6,7 +6,7 @@
 
 資料どうしで内容が食い違う場合は、この順で優先する。迷ったら更新前にフロント・バックエンドで確認する。
 
-1. `SPEC.md`：画面一覧と業務の仕様（確定事項・未確定事項）。両担当で共有する
+1. `SPEC.md`：画面一覧と業務の仕様（確定事項・未確定事項）。両担当で参照し、本文はフロントが書く
 2. `design/` の画面資料（例：`design/CLIENT_ORDER_LIST.md`）：画面ごとの構成・項目・操作・状態
 3. `../DESIGN_TOKENS.md`：色・文字・余白などのデザイントークン
 
@@ -16,15 +16,16 @@
 
 | 場所 | 内容 | 担当 |
 |---|---|---|
-| `../AGENTS.md` | AIエージェント（Codex等）向けの作業ルール | フロント（バックエンド用のルールは担当者が追記） |
-| `SPEC.md` | 画面一覧・業務仕様・制作手順 | 共有 |
+| `../AGENTS.md` | AIエージェント（Codex等）向けの作業ルール | フロント |
+| `SPEC.md` | 画面一覧・業務仕様・制作手順 | フロント |
+| [QA_BACKEND.md](QA_BACKEND.md) | 質問・フロントの案・バックエンド回答・フロントの対応の経緯 | 両方（欄ごとに担当を分ける） |
 | `MEMORY.md` | フロントの作業・判断の履歴 | フロント |
 | `design/DESIGN.md` | デザイン方針 | フロント |
-| `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更は共有） |
-| `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
-| `design/CLIENT_PRODUCT_FORM.md` | Client商品詳細（登録・編集）の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
-| [design/CLIENT_STORE_LIST.md](design/CLIENT_STORE_LIST.md) | Client店舗一覧の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
-| [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更は共有） |
+| `design/CLIENT_ORDER_LIST.md` | Client受注一覧の画面資料 | フロント（業務仕様の変更はQAで確認） |
+| `design/CLIENT_PRODUCT_LIST.md` | Client商品一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| `design/CLIENT_PRODUCT_FORM.md` | Client商品詳細（登録・編集）の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| [design/CLIENT_STORE_LIST.md](design/CLIENT_STORE_LIST.md) | Client店舗一覧の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（仕様確定（制作前）。確定事項・残る案／未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
@@ -38,8 +39,11 @@
 
 ## 追加するときのルール
 
-- バックエンドのコードはリポジトリのルートの `backend/`、資料は `docs/backend/` に置く。中の構成は担当者が決める
+- `docs/backend/`・`backend/`はバックエンドだけが書く。中の構成はバックエンド担当者が決める
 - フロントの資料は `design/`（見た目・画面）と `coding/`（実装・引き渡し）に置く
 - 画面資料は `design/` 直下に `CLIENT_画面名.md`・`MASTER_画面名.md` で置く
-- 業務仕様（保存方式・ステータスの選択肢・集計条件など）を決めたら、どちらの担当でも `SPEC.md` と該当する画面資料へ反映する。`backend/` や `MEMORY.md` だけに書かない
+- `SPEC.md`の本文はフロントだけが書く。バックエンドが仕様を変えたい・確認したいときは[QA_BACKEND.md](QA_BACKEND.md)へ書く。決まった業務仕様（保存方式・ステータスの選択肢・集計条件など）はフロントがSPEC本文の確定事項と該当する画面資料へ反映する。QA・`docs/backend/`・`MEMORY.md`だけに書かない
+- `QA_BACKEND.md`は両方が書く。各項目の「回答（バックエンド）」はバックエンドだけ、それ以外はフロントが書く。ただし新しい質問はどちらも末尾へ新しい番号で追加でき、バックエンドからは「質問（バックエンド）」としてその質問欄を書く
+- `docs/design/`・`docs/coding/`・`shop-partner/`・`shop-master/`・`scss/`・`index.html`・`AGENTS.md`はフロントだけが書く
 - 相手の担当の資料を変える必要がある場合は、直接書き換えずに相手へ確認する
+- 作業を始める前に相手のブランチを取り込む。資料の変更とコードの変更はなるべく別のコミットにする
