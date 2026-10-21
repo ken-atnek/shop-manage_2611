@@ -1257,3 +1257,13 @@
 - 実ブラウザの標準離脱ダイアログ表示・取消と実bfcache復帰は、既存制作時の一時テストで確認した範囲を申し送りに明示した。今回は資料だけの作業でブラウザ再検証・コードの再ビルドは行っていない
 - 今回の変更は新規申し送り2件、画面資料2件、README、IMPLEMENTATION_REFERENCE、SPEC、MEMORY、index.htmlの9ファイル。index.htmlは既存状態表示1か所の文言・is-doneだけ。開始時ハッシュと照合しPHP・Sass・CSS・JS・backend/・docs/backend/の追加変更なし。git diff --statに出るstore-form.jsの差分は前回の未コミット分で、今回触れていない。既存MEMORYを保持して追記し、.ddev/config.local.yamlは触れず、Gitコミットは行わない
 - 判断に迷った点・不明な点：資料上の旧記述は最新SPEC・実コードで解消。本番の送信契約・DB対応と上記の復元詳細は確認事項として残す。業務仕様の追加決定はしていない
+
+
+## 2026-10-21 Safariのbfcache実確認と共通化時の選択部品の改善
+
+- `kumanichi-admin-design`を使用。現行資料の「実bfcache復帰は未確認」「チェックボックスはネイティブ表示を維持」を今回の確認結果・決定で更新することを作業前に共有した。ほかの食い違いはなし
+- Kenが2026-10-21にSafariの実ブラウザで「保存する」→すぐに「戻る」を操作し、bfcacheのpageshow.persistedによって保存ボタンが「保存する」・押せる状態へ復帰することを確認。商品フォーム・店舗フォームの申し送りと画面資料に反映した。標準の離脱ダイアログの実表示・取消など、今回確認していない項目は未確認のまま残し、警告の再登録等は従来の一時テストの確認範囲と区別した
+- DESIGN_TOKENS.mdの「フォーム部品」に「共通化のときに対応（2026-10-21 Kenの決定）」を追加。全画面のチェックボックスをappearance: noneとCSS描画へ変更し、選択中をブランド色の地＋白い✓にする。Safariの薄い灰色の地＋✓とChromeの緑の地の差を解消するための決定。商品フォームの食品・在庫管理なし・入稿、店舗フォームのサイズ別・使うサイズ・送料無料を含む
+- 全画面の未選択ラジオの枠を、現行の約2:1から#8A929C（白地との比較で約3.2:1）へ変更することも同節に記録。一般の入力枠や共通罫線色を一括変更する決定にはしない。両フォーム資料の既存共通化候補に2点を追記し、DESIGN_TOKENSを参照。現行実装の記録と区別し、共通化時の対応予定・未実装と明記した
+- 変更はHANDOFF_CLIENT_PRODUCT_FORM.md・HANDOFF_CLIENT_STORE_FORM.md・CLIENT_PRODUCT_FORM.md・CLIENT_STORE_FORM.md・DESIGN_TOKENS.md・本MEMORYの6資料だけ。開始時ハッシュとgit diff --statで範囲を照合し、PHP・Sass・CSS・JS・index.html・その他資料・.ddev/config.local.yamlは変更していない。git diff --checkに問題なし。既存MEMORYは書き換えず追記した
+- 今回はKenの実確認結果の記録と対応予定の整理で、Codexによるブラウザ再検証・実装・ビルドは行っていない。Gitコミットは行わない。判断に迷った点・不明な点：なし
