@@ -2,9 +2,9 @@
 /* =======================================
  * 熊日モール Client 共通サイドバー
  * URL: /shop-partner/includes/inc_sidebar.php
- * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php・/shop-partner/store-form.php
+ * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php・/shop-partner/store-form.php・/shop-partner/customers.php
  * Created: 2026-10-17
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-21
  * ======================================= */
 ?>
       <aside class="admin-sidebar">
@@ -30,7 +30,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5" /><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244" /><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05" /></svg>
               <span class="nav-label">店舗</span>
             </a>
-            <a href="#" title="顧客管理">
+            <a href="customers.<?= $pageExtension ?? 'php' ?>" title="顧客管理"<?= ($currentPage ?? '') === 'customers' ? ' aria-current="page"' : '' ?>>
               <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M16 3.128a4 4 0 0 1 0 7.744" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /></svg>
               <span class="nav-label">顧客管理</span>
             </a>

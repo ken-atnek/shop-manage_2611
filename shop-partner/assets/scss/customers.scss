@@ -1,0 +1,162 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 顧客一覧 スタイル
+ * URL: /shop-partner/assets/scss/customers.scss
+ * Referenced in: /shop-partner/customers.php
+ * Created: 2026-10-21
+ * Last updated: 2026-10-21
+ * ======================================= */
+
+/* =================================
+ * 顧客一覧だけの検索条件配置・取得失敗
+ * ------------------------------ */
+.admin-main {
+    .search-box {
+        margin-top: 0;
+        .search-panel {
+            .search-fields {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .last-purchase-field {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+    .list-error {
+        .message {
+            color: $color-error;
+        }
+        .error-help {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            color: $color-text-secondary;
+        }
+    }
+}
+
+/* =================================
+ * 顧客テーブル（氏名を固定幅、メールを可変幅にする調整案）
+ * ------------------------------ */
+.admin-main {
+    .customers-scroll {
+        font-size: inherit;
+        width: 100%;
+        margin-top: 1.6rem;
+    }
+    .customers-table {
+        font-size: inherit;
+        width: 100%;
+        min-width: 68rem;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+            font-size: inherit;
+        }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            text-align: left;
+            &:not(:first-child) {
+                border-left: 1px solid $color-border-inner;
+            }
+        }
+        th {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+            background: $color-bg-head;
+        }
+        td {
+            border-top: 1px solid $color-border-inner;
+        }
+        tbody tr:hover {
+            background: $color-bg-detail;
+        }
+        .customer-name {
+            width: 14.4rem;
+            overflow-wrap: anywhere;
+        }
+        .customer-email {
+            // 固定列を除いた残りの幅を使い、幅ごとの切り替えをしない。
+            overflow-wrap: normal;
+            word-break: normal;
+        }
+        .customer-email-value {
+            display: block;
+            font-size: inherit;
+            .email-part {
+                display: inline-block;
+                max-width: 100%;
+                overflow: hidden;
+                font-size: inherit;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                vertical-align: bottom;
+            }
+        }
+        .customer-count {
+            width: 8.4rem;
+        }
+        .customer-amount {
+            width: 14rem;
+            .tax-note {
+                display: inline-block;
+                font-size: inherit;
+                white-space: nowrap;
+            }
+        }
+        .customer-purchased {
+            width: 11.2rem;
+        }
+        .customer-count,
+        .customer-amount,
+        .customer-purchased {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        td.customer-count,
+        td.customer-amount,
+        td.customer-purchased {
+            white-space: nowrap;
+        }
+        .customer-purchased time {
+            font-size: fz(14);
+        }
+        .customer-detail {
+            // 40pxの丸＋左右12px＋罫線が、すべての幅で収まる寸法。
+            width: 6.6rem;
+            text-align: center;
+        }
+        .detail-link {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            margin-inline: auto;
+            color: $color-text-secondary;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            transition:
+                color $transition-base,
+                background-color $transition-base,
+                border-color $transition-base;
+            &:hover {
+                color: $color-text-primary;
+                background: $pure-white;
+                border-color: $color-border-card;
+            }
+        }
+    }
+}
