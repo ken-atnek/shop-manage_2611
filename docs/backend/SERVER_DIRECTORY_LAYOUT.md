@@ -30,7 +30,7 @@
 - XAMPP側のPHPは8.3.31（2026-10-21、Laravel導入時に実機で確認。2026-10-20の共有時点では8.3.30と記録）。Laravel 13.xのPHPバージョン条件を満たす。サーバー側のPHP 8.3.35とは区別して記録する。拡張機能の確認結果は「Laravelの導入記録」を参照
 - XAMPP側のDBはMariaDB 10.4.32（担当者からの共有：2026-10-20）。[Laravel 13.xのDB対応条件](https://laravel.com/framework/docs/13.x/database#introduction)（MariaDB 10.3以上）を満たす。サーバー側のMariaDB 10.11.xとはバージョンが異なるため、DBの機能・照合順序等の差による影響は実装時に確認する。ポートは3308（担当者からの共有：2026-10-21）。2026-10-21にLaravelからの接続とmigrateを確認済み（下記「Laravelの導入記録」）
 - XAMPPのApacheにVirtualHostを設定し、リポジトリ内の`backend/public`をドキュメントルートとして表示する方式を採用する（担当者決定：2026-10-20）。リポジトリをXAMPPの`htdocs`へ移動せず、現在の配置のまま使用する
-- ローカルURLは`http://demo-kumanichi-shop-manage.test`とする（担当者決定：2026-10-20）。VirtualHostの`ServerName`は`demo-kumanichi-shop-manage.test`とし、Windowsの`hosts`で同名を`127.0.0.1`に対応付ける。Master／ClientのローカルでのURL振り分けは別途決める
+- ローカルURLは`http://demo-kumanichi-shop-manage.test`とする（担当者決定：2026-10-20）。VirtualHostの`ServerName`は`demo-kumanichi-shop-manage.test`とし、Windowsの`hosts`で同名を`127.0.0.1`に対応付ける。Master／ClientのローカルでのURL振り分けは別途決める。ApacheのポートはXAMPPの設定で8082のため、実際のURLは`http://demo-kumanichi-shop-manage.test:8082`（担当者からの共有：2026-10-21）
 - ApacheとWindowsの`hosts`の具体的な設定は環境構築時に行う。既存VirtualHostと使用ポートの競合は設定前に確認する。Laravelは2026-10-21に`backend/`へ導入済み（下記「Laravelの導入記録」）。DDEVの設定は変更しない
 - 生成CSS・JS・画面用画像はLaravelの`public`配下へコピーして取り込む方式を採用する（担当者決定：2026-10-20）。取り込み運用の詳細は次節を参照
 - SPEC「バックエンドへの確認事項」7（現在は[QA No.7](../QA_BACKEND.md#no7-ddev生成css)）の回答欄には、2026-10-20に担当者の了承を得てローカル環境・アセット取り込み方針と未確定事項を反映済み。回答欄以外の全体資料の更新は別途確認後に行う
@@ -41,13 +41,13 @@
 - 導入時のローカル環境：PHP 8.3.31、Composer 2.10.3。Laravelに必要なPHP拡張（ctype・curl・dom・fileinfo・filter・hash・mbstring・openssl・pcre・pdo・pdo_mysql・session・tokenizer・xml）とzipが有効であることを確認。`composer.lock`はこのPHPで作成し、`composer check-platform-reqs`は全項目success
 - `--no-scripts`のため、`post-create-project-cmd`のうち`database.sqlite`の作成と`migrate --graceful`は実行していない。`.env`は`.env.example`から作成し、`APP_KEY`の生成だけを行った
 - ローカルDB：DB名`kumanichi_shop_manage`（utf8mb4_unicode_ci）、この DB だけに権限を持つ専用ユーザーで接続する（担当者決定：2026-10-21）。`.env`は`DB_CONNECTION=mariadb`・`DB_HOST=127.0.0.1`・`DB_PORT=3308`。`.env.example`はひな形として`DB_PORT=3306`とし、ユーザー名・パスワードは空欄にする
-- セッション・キャッシュ・キューは、ローカルではLaravelの初期値のDB保存（`database`）を仮に使う（担当者決定：2026-10-21）。要確認：本番の保存先・有効期限、Master／Client間の共有方法。`SESSION_DOMAIN`は空のまま（アクセスしたホストだけにCookieを送る）とする案
+- セッション・キャッシュ・キューは、ローカルではLaravelの初期値のDB保存（`database`）を仮に使う（担当者決定：2026-10-21）。要確認：本番の保存先・有効期限、Master／Client間の共有方法。`SESSION_DOMAIN`は`null`（未設定）のまま（アクセスしたホストだけにCookieを送る）とする案
 - `php artisan migrate`でLaravel標準のテーブル（users・password_reset_tokens・sessions・cache・cache_locks・jobs・job_batches・failed_jobs）を作成した（2026-10-21）。`users`は管理画面ユーザーの仮のテーブルで、認証用ユーザーテーブルの設計（`DB_DESIGN.md`）が決まったら追加のマイグレーションで変更する
 - Laravel付属のREADMEは`backend/README.laravel.md`として残した。`backend/.gitattributes`（Laravel付属）により、`backend/`配下の改行コードはLFで管理する
-- XAMPPのVirtualHost・Windowsの`hosts`の設定とブラウザでの表示確認は担当者が行う。設定例：
+- XAMPPのVirtualHost・Windowsの`hosts`は担当者が設定し、2026-10-21に`http://demo-kumanichi-shop-manage.test:8082/`でLaravelの初期画面の表示を確認した。`.env`の`APP_URL`はこのURLにする（`.env.example`は`http://localhost`のまま）。設定例：
 
 ```apache
-<VirtualHost *:80>
+<VirtualHost *:8082>
     ServerName demo-kumanichi-shop-manage.test
     DocumentRoot "E:/web_data/sv973.xbiz.ne.jp/kumanichi.com/shop-manage_2611/backend/public"
     <Directory "E:/web_data/sv973.xbiz.ne.jp/kumanichi.com/shop-manage_2611/backend/public">
