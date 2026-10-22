@@ -7,3 +7,5 @@ shop-partner/*.html
 shop-master/*.html
 # Claude Code の個人の許可設定（各自のローカルだけで使う）
 .claude/settings.local.json
+# 禁止のルールはユーザー全体の設定で行うため、案件の設定も管理しない
+.claude/settings.json
