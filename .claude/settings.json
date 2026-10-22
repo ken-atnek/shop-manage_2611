@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tail -n 80 docs/MEMORY.md; echo ----; grep -rn \"D-026\" --include=*.md . ~/site_data/art-factory-ai 2>/dev/null | head; echo ----; grep -n \"^#\" DESIGN_TOKENS.md | head -50; echo ---; grep -n \"集計\\\\|グラフ\\\\|chart\" DESIGN_TOKENS.md docs/design/DESIGN.md | head)",
+      "Read(//Users/ken/site_data/art-factory-ai/**)",
+      "Bash(sed -n 98,114p DESIGN_TOKENS.md; echo ---; grep -n \"返品対応\\\\|キャンセル\" docs/design/CLIENT_ORDER_LIST.md | head -20; echo ---; grep -rn \"D-026\\\\|D-0\" docs/MEMORY.md | head -5; ls ~/site_data/art-factory-ai/infra/ 2>/dev/null; grep -n \"8.3.3\" docs/SPEC.md docs/backend/*.md docs/QA_BACKEND.md | head)",
+      "Read(//Users/ken/site_data/art-factory-ai/infra/**)",
+      "Bash(~/site_data/art-factory-ai/infra/ai-ken-ask.sh --help)",
+      "Bash(bash ~/site_data/art-factory-ai/infra/ai-ken-ask.sh --help)",
+      "Bash(bash ~/site_data/art-factory-ai/infra/ai-ken-ask.sh --role knowledge -- docs/backend/DB_DESIGN.md)",
+      "Bash(codex --version)",
+      "Bash(codex exec *)",
+      "Bash(git diff *)",
+      "Bash(bash ~/site_data/art-factory-ai/infra/ai-ken-ask.sh --rate 20261022-145720-14575 fix \"大筋は正しい。shipping_status_updated_atを発送日に使えない点、キャンセル日・一部返品・返金額の欠落、5状態は画面資料で定義済みの点を見落とし\")",
+      "Bash(sed -n 1,20p backend/composer.json; grep -n -A3 '\"config\"' backend/composer.json; grep -n '\"platform' backend/composer.json backend/composer.lock | head; ls -a .github 2>/dev/null; ls backend/.github 2>/dev/null; echo ---untracked; grep -n -E '8\\\\.[34]|php' DDEV_PHP_UPDATE_GUIDE.md .ddev/web-build/Dockerfile | head -30; echo ---artfactory; grep -rn -E '本番の ?PHP.{0,20}未確認|PHP.{0,10}未確認' ~/site_data/art-factory-ai --include=*.md 2>/dev/null | head)",
+      "Bash(sed -n 8420,8430p backend/composer.lock; grep -rn -E 'PHP.{0,30}未確認|未確認.{0,20}PHP' ~/site_data/art-factory-ai 2>/dev/null | grep -v '/\\\\.git/' | cut -c1-200 | head)",
+      "Bash(grep -rn -E 'shop-manage|熊日' ~/site_data/art-factory-ai 2>/dev/null | grep -v '/\\\\.git/' | grep -i -E 'php|8\\\\.3|8\\\\.4|本番' | cut -c1-220 | head -20)",
+      "Bash(mkdir -p ~/codex-logs)",
+      "Bash(rm -f ~/codex-logs/latest.log)",
+      "Bash(osascript -e 'tell application \"Terminal\" to do script \"cd /Users/ken/site_data/sv973.xbiz.ne.jp/kumanichi.com/shop-manage_2611 && codex exec --sandbox workspace-write - < /private/tmp/claude-501/-Users-ken-site-data-sv973-xbiz-ne-jp-kumanichi-com-shop-manage-2611/9a4fc97d-c85e-4604-b4bb-420d08cbd5fe/scratchpad/codex-brief-php.md 2>&1 | tee ~/codex-logs/latest.log; echo CODEX_DONE >> ~/codex-logs/latest.log\"')",
+      "Read(//Users/ken/codex-logs/**)",
+      "Bash(awk '/^### 集計の案（未確定）/{f=1} /^### Masterへの展開方針/{f=0} f' docs/SPEC.md)",
+      "Bash(grep -n -E 'git \\(add|commit|diff\\)' ~/site_data/art-factory-ai/infra/ai-ken-commit.sh | head)",
+      "Read(//Users/ken/site_data/art-factory-ai/docs/**)",
+      "Bash(git -C /private/tmp/claude-501/-Users-ken-site-data-sv973-xbiz-ne-jp-kumanichi-com-shop-manage-2611/9a4fc97d-c85e-4604-b4bb-420d08cbd5fe/scratchpad/gitexp/remote.git log --oneline main)",
+      "Read(//Users/ken/.codex/**)",
+      "Bash(git check-ignore *)",
+      "Bash(cd ~/site_data/art-factory-ai && ls -la .ai/brief.md .ai/report.md 2>&1; head -5 .ai/brief.md 2>/dev/null; ls infra/launchd; ls skills/*)",
+      "Read(//Users/ken/site_data/art-factory-ai/.ai/**)",
+      "Bash(rm -f .ai/codex-done)",
+      "Bash(osascript -e 'tell application \"Terminal\" to do script \"cd /Users/ken/site_data/art-factory-ai && cat .ai/brief.md | codex exec --sandbox workspace-write -o .ai/codex-last.md - 2>&1 | tee .ai/codex-progress.log; touch .ai/codex-done\"')",
+      "Bash(until [ -e /Users/ken/site_data/art-factory-ai/.ai/codex-done ]; do sleep 5; done; tail -n 30 /Users/ken/site_data/art-factory-ai/.ai/codex-last.md)",
+      "Bash(osascript -e 'tell application \"Terminal\" to get {name, visible} of every window')",
+      "Bash(osascript -e 'tell application \"Terminal\" *)"
+    ],
+    "additionalDirectories": [
+      "/Users/ken/site_data/art-factory-ai/.ai"
+    ]
+  }
+}
