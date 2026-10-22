@@ -28,6 +28,7 @@
 | [design/CLIENT_STORE_FORM.md](design/CLIENT_STORE_FORM.md) | Client店舗の登録・編集と送料設定の画面資料（完成（引き渡し前）。表示・操作・制作記録・申し送り） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_CUSTOMER_LIST.md](design/CLIENT_CUSTOMER_LIST.md) | Client顧客一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_CUSTOMER_DETAIL.md](design/CLIENT_CUSTOMER_DETAIL.md) | Client顧客詳細の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| [design/CLIENT_SALES.md](design/CLIENT_SALES.md) | Client集計の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
