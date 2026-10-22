@@ -45,6 +45,7 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 | `.detail-toggle`の`aria-controls`・`aria-expanded`、対応する`.search-panel`の`id`と`inert` | パネルは`aria-controls`の値から取得する。開閉時に`aria-expanded`・`inert`を同期し、フォーカスは詳細検索ボタンに残す |
 | パネル内の`.clear-conditions`、最初の`input` | パネル内の入力値を空にし、チェックを解除して、最初のinputへフォーカスする |
 | `toggleAccordion(button, panel)` | ボタンの`aria-expanded`とパネルの`inert`を切り替え、開いたかを返す共通関数。詳細検索と、`order.js`の展開行から使用する |
+| `select[data-auto-submit]`と所属する`form` | セレクトの`change`時に`select.form.requestSubmit()`で所属フォームを送信する。フォームがない場合は何もしない。属性がないセレクトは対象外 |
 
 - 通常の初期状態は閉じる（パネルは`inert`、ボタンは`aria-expanded="false"`）。閉じたパネルをTab操作・読み上げの対象から外す
 - 詳細条件が入った状態で検索結果を表示するときは、パネルを開いた状態で出力する。パネルの`inert`を外し、`.detail-toggle`を`aria-expanded="true"`にして、入力値・チェックも復元する
@@ -52,6 +53,8 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 - フォーカス先を日付等に固定しない。現行の先頭inputは受注一覧が注文日の開始日、商品一覧が「公開」のチェックボックス
 - `.detail-toggle`がないページでもエラーにしない。詳細検索の処理はブロックスコープ内、`toggleAccordion`はページ別JSから使える位置に維持する
 - `.search-panel-inner`の`position: relative`は維持する。閉じた内容の絶対配置`.sr-only`が外側を基準にしてクリップを逃れ、一覧の高さを押し広げることを防ぐ
+- `data-auto-submit`は変更時に即送信する欄だけに付ける（2026-10-22追加）。現在は集計の月・並び順だけ。店舗への適用は未確定。`requestSubmit()`を使うため、通常のフォーム検証・`submit`イベントを経由する。hiddenで適用済みの条件を保持し、ページ番号を送らず1ページ目へ戻す。実際の送信先・条件の復元はBladeで組み込む
+- JSなしの代替操作は既存の詳細検索・受注ステータスにもないため、集計にも`noscript`の表示ボタンは追加していない。サイドバー・詳細検索・`toggleAccordion`の既存処理は変更していない
 
 ## 5. 入力エラー
 
