@@ -38,6 +38,7 @@
 | `coding/HANDOFF_CLIENT_PRODUCT_FORM.md` | Client商品フォーム固有の申し送り（新規／編集・送信項目・画像・エラー・店舗JSON・JS依存先・未確定事項） | フロント |
 | [coding/HANDOFF_CLIENT_STORE_LIST.md](coding/HANDOFF_CLIENT_STORE_LIST.md) | Client店舗一覧固有の申し送り（7列・集計・状態・追加／編集導線・現在地・未確定事項） | フロント |
 | [coding/HANDOFF_CLIENT_STORE_FORM.md](coding/HANDOFF_CLIENT_STORE_FORM.md) | Client店舗フォーム固有の申し送り（送信・料金保持・DB対応・エラー・規格JSON・JS依存先・検証範囲） | フロント |
+| [coding/DDEV_PHP_UPDATE_GUIDE.md](coding/DDEV_PHP_UPDATE_GUIDE.md) | フロントのDDEVのPHPを修正版へ更新する手順（追加Dockerfile `.ddev/web-build/Dockerfile`） | フロント |
 | `backend/` | API・DB・ルーティング・Blade組み込み等の資料 | バックエンド |
 | `../backend/`（リポジトリのルート） | Laravel等のバックエンドのコード | バックエンド |
 

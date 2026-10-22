@@ -1412,3 +1412,14 @@
 - 画面資料の価格欄にあったセール価格の未確定記述と、画面名「商品編集」／SPECの「商品詳細」の統一が未確定である記述も復元。画像なし・行ホバー・寸法は画面資料の既存の見た目の案に残し、SPECから参照する。画面や既存の表示・列幅は変更していない
 - 今回の変更はSPEC・CLIENT_PRODUCT_LIST・HANDOFF_CLIENT_PRODUCT_LIST・本MEMORYの4資料だけ。3資料それぞれのgit diff HEADの削除行を照合し、No.12・No.13で確定した内容以外の未確定事項に復元漏れがないことを確認した。No.12・No.13の確定内容、QA_BACKENDとproducts.phpの前回差分は維持した。相対リンク・節アンカー78件とgit diff --checkを確認し、Gitコミットは行わない
 - 判断に迷った点・不明な点：なし
+
+## 2026-10-22 誤って入ったファイルの修正（de3ac99・648c6d6）
+
+- de3ac99（本番PHPを8.4.27へ更新予定とする記述）には、メッセージにない docs/SPEC.md の「集計の案（未確定）」の追加も含まれている。集計の案は別のコミットにする予定だったが、`git add -p` で両方の塊が選ばれた
+- 648c6d6 は、メッセージ（集計の案の追加）と中身がずれている。実際の中身は `.claude/settings.json`・`.ddev/web-build/Dockerfile`・`DDEV_PHP_UPDATE_GUIDE.md` の3ファイル。ステージが空のまま VS Code でコミットし、スマートコミットが未追跡のファイルまでステージしたため（Kenの確認）。再発防止として、Ken が VS Code のユーザー設定を `git.enableSmartCommit: false`・`git.smartCommitChanges: "tracked"` にする
+- どちらも push 済みのため、履歴は書き換えず、修正用のコミットで対応した（Kenの決定）
+  - `.claude/settings.json`：Git の管理から外した（`git rm --cached`）。中身の個人の許可の一覧は `.claude/settings.local.json` へ移し、`.gitignore` に追加した。ローカルの `settings.json` は `{}` にした。チームで共有する禁止のルール用として管理に戻すかは、基盤の Git 操作の共通仕様を見て Ken が決める
+  - `.ddev/web-build/Dockerfile`：このまま管理する
+  - `DDEV_PHP_UPDATE_GUIDE.md`：`docs/coding/DDEV_PHP_UPDATE_GUIDE.md` へ移し、[docs/README.md](README.md) の資料の一覧に追加した。ほかに参照している箇所はなかった
+- 修正用のコミットは、Ken の指示で今回だけ Claude Code が作成した。push は Ken が確認してから行う
+- 判断に迷った点・不明な点：管理から外したあとも `.claude/settings.json` はローカルに残り、未追跡のファイルとして表示される。Claude Code で「今後も許可」を選ぶと、`{}` にしたあとも `settings.json` に許可が書き足される（2026-10-22に確認）
