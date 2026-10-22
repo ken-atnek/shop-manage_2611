@@ -66,24 +66,13 @@
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+.customer-detail-page .customer-profile h2 {
+  overflow-wrap: anywhere;
+}
 .customer-detail-page .customer-meta {
   font-size: max(12px, 0.875em);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem 2.4rem;
-  margin: -0.8rem 0 2.4rem;
+  margin-top: 0.8rem;
   color: #4f5863;
-}
-.customer-detail-page .customer-meta div {
-  font-size: inherit;
-  display: flex;
-  gap: 0.8rem;
-}
-.customer-detail-page .customer-meta dt,
-.customer-detail-page .customer-meta dd {
-  font-size: inherit;
-}
-.customer-detail-page .customer-meta dd {
   font-variant-numeric: tabular-nums;
 }
 .customer-detail-page .form-box {
@@ -98,39 +87,16 @@
   font-size: max(12px, 1.25em);
   font-weight: 600;
 }
-.customer-detail-page .profile-help {
+.customer-detail-page .profile-contact {
   font-size: inherit;
-  margin-top: 1.2rem;
-  color: #4f5863;
+  margin-top: 1.6rem;
 }
-.customer-detail-page .profile-list {
+.customer-detail-page .profile-contact p {
   font-size: inherit;
-  margin-top: 2.4rem;
-}
-.customer-detail-page .profile-list > div {
-  display: grid;
-  grid-template-columns: 12rem minmax(0, 1fr);
-  gap: 1.2rem;
-  font-size: inherit;
-}
-.customer-detail-page .profile-list > div + div {
-  margin-top: 1.2rem;
-}
-.customer-detail-page .profile-list dt,
-.customer-detail-page .profile-list dd {
-  min-width: 0;
-  font-size: inherit;
-}
-.customer-detail-page .profile-list dt {
-  font-weight: 500;
-  color: #4f5863;
-}
-.customer-detail-page .profile-list dd {
   overflow-wrap: anywhere;
 }
-.customer-detail-page .postal-code {
-  display: block;
-  font-size: inherit;
+.customer-detail-page .profile-contact p + p {
+  margin-top: 0.4rem;
 }
 .customer-detail-page .tax-note {
   display: inline-block;

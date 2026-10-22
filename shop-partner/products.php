@@ -22,7 +22,7 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
  * Referenced in: /shop-partner/products.<?= $pageExtension . PHP_EOL ?>
  * 編集元: /shop-partner/products.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-19
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-21
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -124,8 +124,8 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
             <?php endif; ?>
           </div>
         <?php else: ?>
-        <!-- 架空商品の表示例。986件のうち6件を掲載。価格は税込、更新が新しい順。写真は既存の確認用JPEGを流用。 -->
-        <!-- 残りわずかの3個は表示例。全商品共通の基準値は未確定で、ここでは判定処理を持たない。 -->
+        <!-- 架空商品の表示例。986件のうち7件を掲載。価格は税込、更新が新しい順。写真は既存の確認用JPEGを流用。 -->
+        <!-- QA No.13：在庫切れ＝0、残りわずか＝1〜5、在庫あり＝6以上。3個は基準内の表示例で、検索・在庫の判定処理は持たない。 -->
         <!-- 編集のhref="#"は商品詳細が未作成の仮リンク。実際のURLはバックエンド組み込み時に差し替える。 -->
         <div class="products-scroll">
           <table class="products-table" aria-labelledby="product-list-heading">
@@ -201,6 +201,17 @@ $filterNote = $isNoResultsState ? '検索結果' : 'すべてを表示';
                 <td><span class="publish-state">公開</span></td>
                 <td class="product-updated"><time datetime="2026-10-17T09:00:00+09:00"><span>2026/10/17</span> <span>09:00</span></time></td>
                 <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="記念写真の卓上カレンダーを編集" title="記念写真の卓上カレンダーを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
+              </tr>
+              <!-- QA No.12で確定した在庫管理なしの表示。ラベルは付けず、検索では在庫ありに含める。 -->
+              <tr>
+                <td class="product-id">980</td>
+                <td class="product-image"><img src="assets/images/sample/photo_01.jpg" width="48" height="48" alt="" /></td>
+                <td class="product-name">サンプル 受注生産の名入れプレート</td>
+                <td class="product-price">¥3,300</td>
+                <td class="product-stock"><span aria-hidden="true">—</span><span class="sr-only">在庫管理なし</span></td>
+                <td><span class="publish-state">公開</span></td>
+                <td class="product-updated"><time datetime="2026-10-16T09:00:00+09:00"><span>2026/10/16</span> <span>09:00</span></time></td>
+                <td class="product-edit"><a class="edit-link" href="product-form.<?= $pageExtension ?>" aria-label="サンプル 受注生産の名入れプレートを編集" title="サンプル 受注生産の名入れプレートを編集"><svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></a></td>
               </tr>
             </tbody>
           </table>

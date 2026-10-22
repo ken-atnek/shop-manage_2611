@@ -141,17 +141,17 @@ if ($isSingleState) {
             </div>
           </div>
         <?php else: ?>
-          <dl class="customer-meta"><div><dt>顧客ID</dt><dd><?= $customerId ?></dd></div></dl>
           <section class="form-box customer-profile" aria-labelledby="customer-profile-heading">
-            <h2 id="customer-profile-heading">基本情報（最新）</h2>
-            <p class="profile-help">閲覧できる注文のうち、最新の注文で確定した注文者情報です。</p>
-            <dl class="profile-list">
-              <div><dt>氏名</dt><dd><?= htmlspecialchars($latestBuyer['name'], ENT_QUOTES, 'UTF-8') ?></dd></div>
-              <div><dt>メールアドレス</dt><dd><?= htmlspecialchars($customerEmail, ENT_QUOTES, 'UTF-8') ?></dd></div>
-              <div><dt>電話番号</dt><dd><?= htmlspecialchars($latestBuyer['phone'], ENT_QUOTES, 'UTF-8') ?></dd></div>
+            <?php // 表示元は従来どおり、Clientが閲覧できる注文のうち最新の注文で確定した注文者情報。 ?>
+            <h2 id="customer-profile-heading"><?= htmlspecialchars($latestBuyer['name'], ENT_QUOTES, 'UTF-8') ?></h2>
+            <!-- 顧客IDは箱内の氏名の下に置く配置案。位置はKenが画面で調整する。 -->
+            <p class="customer-meta">顧客ID <?= $customerId ?></p>
+            <div class="profile-contact">
+              <p><?= htmlspecialchars($customerEmail, ENT_QUOTES, 'UTF-8') ?></p>
+              <p><?= htmlspecialchars($latestBuyer['phone'], ENT_QUOTES, 'UTF-8') ?></p>
               <?php // 基本情報に住所を表示するのは制作1回目の案。 ?>
-              <div><dt>住所</dt><dd><span class="postal-code">〒<?= htmlspecialchars($latestBuyer['postal'], ENT_QUOTES, 'UTF-8') ?></span><?= htmlspecialchars($latestBuyer['address'], ENT_QUOTES, 'UTF-8') ?></dd></div>
-            </dl>
+              <p>〒<?= htmlspecialchars($latestBuyer['postal'], ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars($latestBuyer['address'], ENT_QUOTES, 'UTF-8') ?></p>
+            </div>
             <!-- 集計表示の位置・構成は案。対象となる注文はSPECの閲覧範囲に従う。 -->
             <dl class="purchase-summary">
               <div><dt>購入回数</dt><dd><?= $purchaseCount ?>回</dd></div>
