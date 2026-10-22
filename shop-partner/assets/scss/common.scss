@@ -11,7 +11,7 @@
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-22
  * ======================================= */
 
 // 一覧内ではなくページ全体でスクロールする。共通resetの横方向の抑止を解除する。
@@ -473,6 +473,27 @@ textarea {
                 }
                 input {
                     flex: 1;
+                }
+            }
+            .date-field,
+            .updated-field {
+                display: grid;
+                // 56remを超える分は右端の空き列へ渡し、入力欄の幅を維持する。
+                grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(0, calc(100% - 56rem));
+                align-items: center;
+                // HTMLは維持し、両入力とエラー文を同じGridで配置する。
+                > .date-range {
+                    display: contents;
+                    > span {
+                        // 空き列との間には余白を足さず、日付の区切りだけ間隔を保つ。
+                        margin-inline: 1.2rem;
+                    }
+                }
+                > .form-error {
+                    // 終了日の左端から右の空き列まで広げ、収まらない幅では折り返す。
+                    grid-column: 3 / -1;
+                    min-width: 0;
+                    overflow-wrap: anywhere;
                 }
             }
             .check-group {

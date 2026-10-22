@@ -245,7 +245,7 @@ button {
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-22
  * ======================================= */
 html {
   overflow-x: auto;
@@ -715,6 +715,26 @@ textarea {
 }
 .admin-main .search-box .search-panel .date-range input {
   flex: 1;
+}
+.admin-main .search-box .search-panel .date-field,
+.admin-main .search-box .search-panel .updated-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(0, calc(100% - 56rem));
+  align-items: center;
+}
+.admin-main .search-box .search-panel .date-field > .date-range,
+.admin-main .search-box .search-panel .updated-field > .date-range {
+  display: contents;
+}
+.admin-main .search-box .search-panel .date-field > .date-range > span,
+.admin-main .search-box .search-panel .updated-field > .date-range > span {
+  margin-inline: 1.2rem;
+}
+.admin-main .search-box .search-panel .date-field > .form-error,
+.admin-main .search-box .search-panel .updated-field > .form-error {
+  grid-column: 3/-1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .admin-main .search-box .search-panel .check-group {
   font-size: inherit;
