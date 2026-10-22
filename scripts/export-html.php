@@ -4,7 +4,7 @@
  * URL: /scripts/export-html.php
  * Referenced in: /docs/coding/IMPLEMENTATION_REFERENCE.md
  * Created: 2026-10-17
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-22
  * ======================================= */
 
 // Web経由では書き込まず、DDEV等のPHP CLIからだけ実行する。
@@ -14,7 +14,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $projectRoot = dirname(__DIR__);
-$pages = ['shop-partner/orders', 'shop-partner/products', 'shop-partner/product-form', 'shop-partner/stores', 'shop-partner/store-form', 'shop-partner/customers', 'shop-partner/customer-detail'];
+$pages = ['shop-partner/orders', 'shop-partner/products', 'shop-partner/product-form', 'shop-partner/stores', 'shop-partner/store-form', 'shop-partner/customers', 'shop-partner/customer-detail', 'shop-partner/sales'];
 
 // 新しい画面は、制作を始めた時点で上の一覧へ明示的に追加する。
 foreach ($pages as $page) {

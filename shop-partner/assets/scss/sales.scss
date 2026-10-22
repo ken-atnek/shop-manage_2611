@@ -1,0 +1,279 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Client 集計 スタイル
+ * URL: /shop-partner/assets/scss/sales.scss
+ * Referenced in: /shop-partner/sales.php
+ * Created: 2026-10-22
+ * Last updated: 2026-10-22
+ * ======================================= */
+
+/* =================================
+ * 期間・店舗・CSV・並び順
+ * ------------------------------ */
+.sales-page {
+    // 一覧内ではなく、既存画面と同じページ全体のスクロールを使う。
+    .sales-period {
+        padding: 1.6rem;
+        border: 1px solid $color-border-card;
+        border-radius: $radius-sm;
+        background: $pure-white;
+    }
+    .period-fields,
+    .month-controls,
+    .date-range,
+    .sales-toolbar,
+    .store-form,
+    .sort-form {
+        font-size: inherit;
+        display: flex;
+        align-items: center;
+    }
+    .period-fields {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 2.4rem;
+        // B案の常時表示を保ち、1行に収まらない幅では月の操作と期間指定を2段に折り返す。
+    }
+    .month-form,
+    .period-form {
+        flex-shrink: 0;
+    }
+    .month-form,
+    .period-form,
+    .csv-form,
+    .date-field {
+        font-size: inherit;
+    }
+    .month-controls {
+        gap: 0.8rem;
+    }
+    // Safariでも高さ・余白を反映するため、ネイティブの外観を外して既存の矢印を使う。
+    .form-field select {
+        @include svg-icon-arrow-bottom("4f5863");
+        aspect-ratio: auto;
+        font-size: 1.6rem;
+        height: 4.4rem;
+        min-height: 4.4rem;
+        padding: 1rem 3.2rem 1rem 1.6rem;
+        border: 1px solid $color-border-default;
+        border-radius: $radius-sm;
+        color: $color-text-primary;
+        background-color: $pure-white;
+        background-size: 0.8rem 0.5rem;
+        background-position: right 1.2rem center;
+        appearance: none;
+        &:hover {
+            border-color: $color-border-hover;
+        }
+    }
+    .month-button {
+        @include button-base;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        min-width: 4.4rem;
+        padding: 1rem;
+    }
+    .date-range {
+        display: grid;
+        grid-template-columns: 18rem auto 18rem auto;
+        align-items: flex-end;
+        gap: 0 1.2rem;
+        .date-field {
+            width: 18rem;
+        }
+        .date-separator {
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            min-height: 4.4rem;
+        }
+        .form-error {
+            // 終了日の左端から、集計ボタンの右端までをエラー文の領域にする。
+            grid-column: 3 / -1;
+        }
+    }
+    .period-submit {
+        @include button-base;
+        @include button-primary;
+    }
+    .applied-period {
+        font-size: inherit;
+        margin-top: 1.6rem;
+        color: $color-text-secondary;
+        strong {
+            font-weight: 600;
+            color: $color-text-primary;
+        }
+    }
+    .period-help,
+    .sales-note {
+        font-size: fz(14);
+        margin-top: 0.8rem;
+        color: $color-text-secondary;
+    }
+    .sales-toolbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1.6rem;
+        margin-block: 1.6rem;
+    }
+    .store-form,
+    .sort-form {
+        gap: 1.2rem;
+        .form-label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+    }
+    .sales-store-name {
+        font-size: inherit;
+    }
+    .csv-download {
+        @include button-base;
+        @include button-secondary;
+    }
+    .month-button:disabled,
+    .csv-download:disabled {
+        color: $color-text-muted;
+        border-color: $color-border-default;
+        background: $color-bg-subtle;
+    }
+}
+
+/* =================================
+ * 合計（表示専用。受注KPIの共通化は行わない）
+ * ------------------------------ */
+.sales-page {
+    .sales-totals {
+        font-size: inherit;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.6rem;
+        > div {
+            font-size: inherit;
+            min-width: 0;
+            padding: 1.6rem;
+            border: 1px solid $color-border-card;
+            border-radius: $radius-sm;
+            background: $pure-white;
+        }
+        dt {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+        }
+        dd {
+            font-size: fz(30);
+            font-weight: 600;
+            margin-top: 0.8rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .unit {
+            // 数値のfz()に重ねず、本文と同じ相対サイズへ戻す。
+            font-size: calc(1em * 16 / 30);
+            font-weight: 500;
+            margin-left: 0.4rem;
+        }
+    }
+}
+
+/* =================================
+ * 商品テーブル・取得失敗
+ * ------------------------------ */
+.sales-page {
+    .sales-list-heading {
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.6rem;
+    }
+    .sales-list-title {
+        font-size: inherit;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.8rem 1.2rem;
+        .count {
+            color: $color-text-secondary;
+        }
+    }
+    .sales-scroll {
+        font-size: inherit;
+        width: 100%;
+        margin-top: 1.6rem;
+    }
+    .sales-table {
+        font-size: inherit;
+        width: 100%;
+        min-width: 70.4rem;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid $color-border-card;
+        background: $pure-white;
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+            font-size: inherit;
+        }
+        th,
+        td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            text-align: left;
+            &:not(:first-child) {
+                border-left: 1px solid $color-border-inner;
+            }
+        }
+        th {
+            font-size: fz(14);
+            font-weight: 500;
+            color: $color-text-secondary;
+            background: $color-bg-head;
+        }
+        td {
+            border-top: 1px solid $color-border-inner;
+        }
+        tbody tr:hover {
+            background: $color-bg-detail;
+        }
+        .sales-product {
+            overflow-wrap: anywhere;
+        }
+        .sales-count,
+        .sales-quantity {
+            width: 11.2rem;
+        }
+        .sales-amount {
+            width: 14.4rem;
+        }
+        .sales-count,
+        .sales-quantity,
+        .sales-amount {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .tax-note {
+            display: inline-block;
+            font-size: inherit;
+        }
+    }
+    .list-error {
+        .message {
+            color: $color-error;
+        }
+        .error-help {
+            font-size: inherit;
+            margin-top: 0.8rem;
+            color: $color-text-secondary;
+        }
+    }
+}

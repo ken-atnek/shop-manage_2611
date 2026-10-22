@@ -1,9 +1,9 @@
 /* =======================================
  * 熊日モール Client 共通操作
  * URL: /shop-partner/assets/js/common.js
- * Referenced in: /shop-partner/orders.php・/shop-partner/products.php
+ * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/sales.php ほか
  * Created: 2026-10-19
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-22
  * ======================================= */
 
 "use strict";
@@ -68,6 +68,13 @@
     });
   }
 }
+
+// ===== セレクトの自動送信（data-auto-submitを付けた欄だけ） =====
+document.querySelectorAll("select[data-auto-submit]").forEach((select) => {
+  select.addEventListener("change", () => {
+    select.form?.requestSubmit();
+  });
+});
 
 // grid 0fr/1fr のアコーディオン。閉じたパネルはinertで操作・読み上げの対象から外す。
 function toggleAccordion(button, panel) {
