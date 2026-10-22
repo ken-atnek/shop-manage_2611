@@ -225,4 +225,4 @@ CSSは`common.css`→`product-form.css`。body末尾のJSONに続けて、`commo
 
 回答が決まった内容はSPEC・商品フォーム資料・本申し送りへ反映し、name・JSON・マークアップの変更はフロントと合わせて進めてほしい。
 
-2026-10-21の組み込み順は、商品一覧→受注一覧→商品フォーム（画像対応後）→店舗（制作完了後）。1つのLaravel・セッション認証・サーバーのPHP 8.3／Laravel 13／MariaDB 10.11、XAMPPでbackend/publicを表示、フロントDDEV維持、バックエンドがアセットをLaravelのpublicへコピーする方針は[SPECの確定事項](../SPEC.md#バックエンド構成開発環境の確定事項)・[組み込み順](../SPEC.md#bladeへの組み込み順2026-10-21kenの決定)で確認済み。確認の経緯は[QA No.5](../QA_BACKEND.md#no5-masterclientとログイン)・[No.6](../QA_BACKEND.md#no6-技術構成)・[No.7](../QA_BACKEND.md#no7-ddev生成css)・[No.8](../QA_BACKEND.md#no8-blade組み込み)を参照する。ログインIDと具体的な接続・配置方法等は未確定。
+2026-10-21の組み込み順は、商品一覧→受注一覧→商品フォーム（画像対応後）→店舗（制作完了後）。1つのLaravel・セッション認証・サーバーのPHP 8.3（8.4.27へ更新予定）／Laravel 13／MariaDB 10.11、XAMPPでbackend/publicを表示、フロントDDEV維持、バックエンドがアセットをLaravelのpublicへコピーする方針は[SPECの確定事項](../SPEC.md#バックエンド構成開発環境の確定事項)・[組み込み順](../SPEC.md#bladeへの組み込み順2026-10-21kenの決定)で確認済み。確認の経緯は[QA No.5](../QA_BACKEND.md#no5-masterclientとログイン)・[No.6](../QA_BACKEND.md#no6-技術構成)・[No.7](../QA_BACKEND.md#no7-ddev生成css)・[No.8](../QA_BACKEND.md#no8-blade組み込み)を参照する。ログインIDと具体的な接続・配置方法等は未確定。

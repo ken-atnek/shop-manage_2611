@@ -5,3 +5,7 @@ docs/design/proposals
 # 静的HTMLは必要時のみ scripts/export-html.php で書き出す（納品はPHP）
 shop-partner/*.html
 shop-master/*.html
+# Claude Code の個人の許可設定（各自のローカルだけで使う）
+.claude/settings.local.json
+# 禁止のルールはユーザー全体の設定で行うため、案件の設定も管理しない
+.claude/settings.json
