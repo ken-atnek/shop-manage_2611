@@ -61,6 +61,8 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 - 入力エラーの判定はバックエンドで行う。対象欄が見えるよう詳細検索パネルを開き、入力値を復元する
 - エラー時だけ対象の入力欄に`aria-invalid="true"`と`aria-describedby="エラー文のid"`、fieldset／項目内に`<p class="form-error" id="…">エラー文</p>`を出力する。正常時はエラー用属性・文を出さない
 - 期間は開始日・終了日の両方から1つのエラー文を参照する。開始日と終了日が逆の場合の文言は「終了日は開始日以降の日付を指定してください」。画面固有の入力・エラーidは各申し送りを参照
+- 受注一覧（注文日）・商品一覧（更新日）の期間エラー文は、終了日の入力欄の下（左端）から表示し、集計にそろえた（2026-10-22、Kenの決定）。CSSの変更で位置が変わる。HTMLの入れ子・順序・classは変わらず、生成`common.css`の再取り込みが必要
+- 詳細検索内の`.date-field`・`.updated-field`を4列のGrid（開始日・区切り・終了日・右側の空き領域）にし、直下の`.date-range`を`display: contents`にして両入力とエラー文を同じGridへ配置する。終了日は3列目、エラー文は`grid-column: 3 / -1`で3〜4列目を使うため、幅が変わっても左端がそろう。入力欄2つと区切りは従来の上限幅`56rem`・間隔`1.2rem`を維持し、それを超える幅は4列目へ渡す。エラー文は終了日の欄より右へ伸ばして1行で表示し、収まらない狭い幅では詳細検索の枠内で折り返す。ほかの`.form-error`は対象外。[CSS Display仕様](https://www.w3.org/TR/css-display-3/#box-generation)・[HTMLのfieldset描画仕様](https://html.spec.whatwg.org/multipage/rendering.html#the-fieldset-and-legend-elements)を参照
 
 ## 6. 一覧の表示状態
 

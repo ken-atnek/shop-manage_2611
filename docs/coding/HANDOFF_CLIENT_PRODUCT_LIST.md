@@ -84,6 +84,7 @@
 - 詳細検索パネルは`#product-search-panel`。パネル内は公開状態→在庫の状態→更新日の順で、fieldset・legend・各inputのlabelを維持する
 - クリア後の先頭inputは「公開」の`#search-publish-public`。更新日の開始日へ固定するために共通JSを変えない
 - 更新日の入力は`#product-updated-from`・`#product-updated-to`、共通のエラー文は`#product-date-error`。制作確認の`date-error`は開始日2026-10-20・終了日2026-10-10の逆転例で、文言は「終了日は開始日以降の日付を指定してください」
+- 期間エラー文は終了日の入力欄の下（左端）から表示し、集計にそろえた（2026-10-22、Kenの決定）。CSSの変更で位置が変わる。HTMLは変わらず、既存Bladeの構造修正は不要。生成`common.css`の再取り込みが必要（詳細は共通申し送り§5）
 
 2026-10-21、Ken承認済みの[QA No.13](../QA_BACKEND.md#no13-商品一覧の絞り込みの細則)で次を確定した。仕様の正は[SPECのClient商品一覧の確定事項](../SPEC.md#client商品一覧の確定事項)を参照する。
 

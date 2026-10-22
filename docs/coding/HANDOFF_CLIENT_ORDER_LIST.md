@@ -48,6 +48,7 @@ Laravel・Bladeへ組み込むときに知っておいてほしいことをま�
 
 - 詳細検索パネルは`#order-search-panel`。パネル内クリア後の先頭inputは注文日の開始日`#order-date-from`
 - 注文日の開始日・終了日は`#order-date-from`・`#order-date-to`、共通のエラー文は`#order-date-error`。制作確認の`?preview=date-error`では開始日2026-10-20・終了日2026-10-10の逆転例を出している
+- 期間エラー文は終了日の入力欄の下（左端）から表示し、集計にそろえた（2026-10-22、Kenの決定）。CSSの変更で位置が変わる。HTMLは変わらない。生成`common.css`の再取り込みが必要（詳細は共通申し送り§5）
 - `name`属性（`date_from`・`date_to`・`status[]`・`phone`・`email`・`product`・`keyword`）は表示例。正式な項目名はバックエンドで決めてよい（変えた場合はフロントへ連絡してほしい）
 
 ## 6. ステータス（発送状況）の保存
