@@ -8,6 +8,8 @@
 
 画面資料は`CLIENT_SALES.md`、制作用PHPは`shop-partner/sales.php`、固有Sassは`shop-partner/assets/scss/sales.scss`とする。見た目は[デザイントークン](../../DESIGN_TOKENS.md)・[デザイン方針](DESIGN.md)、共通構造は[共通レイアウト](../coding/LAYOUT_TEMPLATE.md)、実装時の書き方は[実装連携ガイド](../coding/IMPLEMENTATION_REFERENCE.md)を参照する。
 
+Blade組み込み向けの注意点は[Client集計の申し送り](../coding/HANDOFF_CLIENT_SALES.md)を参照する。
+
 ## 確定している前提（2026-10-22）
 
 以下は[SPECの集計の確定事項](../SPEC.md#集計の確定事項)の要約。集計条件の詳細はSPECを参照する。
