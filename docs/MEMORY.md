@@ -1423,3 +1423,4 @@
   - `DDEV_PHP_UPDATE_GUIDE.md`：`docs/coding/DDEV_PHP_UPDATE_GUIDE.md` へ移し、[docs/README.md](README.md) の資料の一覧に追加した。ほかに参照している箇所はなかった
 - 修正用のコミットは、Ken の指示で今回だけ Claude Code が作成した。push は Ken が確認してから行う
 - 判断に迷った点・不明な点：管理から外したあとも `.claude/settings.json` はローカルに残り、未追跡のファイルとして表示される。Claude Code で「今後も許可」を選ぶと、`{}` にしたあとも `settings.json` に許可が書き足される（2026-10-22に確認）
+  - 同日、Kenの決定で `.claude/settings.json` も `.gitignore` に追加した。書き足された許可は `settings.local.json` へまとめ、ローカルの `settings.json` は削除した。禁止のルールはユーザー全体の設定（`~/.claude/settings.json`）で行うため、案件の `settings.json` は管理に戻さない
