@@ -71,7 +71,7 @@ Node.js環境ではnpmパッケージの`sass`を使用し、`node-sass`は使�
 - 現在のSCSSの記述構成を基準とし、共通レイアウト・ブランド設定は`common.scss`、受注一覧固有は`order.scss`、商品一覧固有は`products.scss`へ置く。既存のネストとセクションコメントを維持し、`admin.scss`への再編は前提にしない
 - 色は既存の色変数・ブランド用CSSカスタムプロパティを使う。サイズは既存の`fz()`と流動フォント設定を使い、余白・幅・罫線などは`px`・`rem`・`em`の直接指定も認める。サイズの全面変数化や削除済み変数の復活は行わない
 - class名は既存HTMLを優先し、役割が分かる名前にする。`.admin-*`／`.order-*`やBEMは必須にせず、要素セレクタと短いクラス名を使った現在のネスト構成を継続する
-- 既存の関数・mixinを利用し、Codexは依頼なく新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない。詳細は[実装連携ガイド](coding/IMPLEMENTATION_REFERENCE.md#クラス名とscssの書き方)を参照する
+- 既存の関数・mixinを利用し、Kenが承認した計画なしに新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない。Sassの分解・mixin化はAIが行い、Kenは計画の承認と最後の見た目の確認だけを行う（2026-10-23、Kenの決定）。詳細は[実装連携ガイド](coding/IMPLEMENTATION_REFERENCE.md#クラス名とscssの書き方)を参照する
 - 共通Sassの読み込み先は`--load-path=scss`で指定し、watch時も監視する
 - `npm run sass`：通常コンパイル
 - `npm run watch:sass`：変更監視・再コンパイル
