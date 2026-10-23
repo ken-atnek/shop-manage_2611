@@ -328,6 +328,51 @@ textarea {
         height: 1.6rem;
         accent-color: var(--color-brand-accent);
     }
+    input[type="checkbox"] {
+        -webkit-appearance: none;
+        appearance: none;
+        display: grid;
+        place-content: center;
+        margin: 0;
+        padding: 0;
+        border: 1.5px solid $color-control-border;
+        border-radius: 2px;
+        background: $pure-white;
+        &::before {
+            content: "";
+            width: 0.5rem;
+            height: 0.9rem;
+            border: solid $pure-white;
+            border-width: 0 2px 2px 0;
+            transform: translateY(-0.1rem) rotate(45deg);
+            visibility: hidden;
+        }
+        &:checked {
+            border-color: var(--color-brand-accent);
+            background: var(--color-brand-accent);
+            &::before {
+                visibility: visible;
+            }
+            &:hover:not(:disabled) {
+                // 店舗フォームの入力欄用hoverより選択中の色を優先する。
+                border-color: var(--color-brand-accent);
+            }
+        }
+        &:disabled {
+            border-color: $color-border-strong;
+            background: $color-bg-subtle;
+            &:checked {
+                background: $color-text-muted;
+            }
+        }
+        @media (forced-colors: active) {
+            -webkit-appearance: auto;
+            appearance: auto;
+            &::before {
+                display: none;
+            }
+        }
+    }
     span {
         font-size: inherit;
     }

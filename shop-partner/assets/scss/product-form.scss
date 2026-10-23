@@ -122,7 +122,7 @@
         select {
             // エラーリンクで移動しても欄のラベル・legendが画面上端に隠れない余白。
             scroll-margin-block: $field-scroll-margin;
-            &:hover:not(:disabled):not([aria-invalid="true"]):not([type="radio"]) {
+            &:hover:not(:disabled):not([aria-invalid="true"]):not([type="radio"]):not([type="checkbox"]) {
                 border-color: $color-border-hover;
             }
             &:disabled {
@@ -133,7 +133,7 @@
             &[readonly] {
                 background: $color-bg-subtle;
             }
-            &[aria-invalid="true"] {
+            &[aria-invalid="true"]:not([type="checkbox"]) {
                 border-color: $color-error;
             }
         }
@@ -143,8 +143,7 @@
         }
         input[type="radio"][aria-invalid="true"],
         input[type="checkbox"][aria-invalid="true"] {
-            // 入力欄用の枠を打ち消す。エラーはカード枠と説明文で示す。
-            border: 0;
+            // エラーはカード枠と説明文で示し、ラジオ・チェック自身の枠は残す。
             &:not(:focus-visible) {
                 outline: none;
             }
@@ -158,7 +157,7 @@
             width: 1.6rem;
             height: 1.6rem;
             padding: 0;
-            border: 1.5px solid $color-border-strong;
+            border: 1.5px solid $color-control-border;
             border-radius: 50%;
             color: var(--color-brand-accent);
             background: $pure-white;
@@ -172,7 +171,7 @@
             }
             &[aria-invalid="true"] {
                 // エラーはカードで示し、ラジオ自身の丸枠は残す。
-                border: 1.5px solid $color-border-strong;
+                border: 1.5px solid $color-control-border;
             }
             &:checked {
                 border-color: currentColor;
@@ -191,7 +190,7 @@
         @include check-group;
     }
     .form-check {
-        // commonの入力欄用paddingを解除。チェックはネイティブ表示を維持。
+        // commonの入力欄用paddingを解除。チェックの描画はcommon.scssを使う。
         @include form-check-field;
     }
     .form-help {

@@ -198,9 +198,9 @@
 .product-form .form-field select {
   scroll-margin-block: 8rem 10rem;
 }
-.product-form .form-field input:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]),
-.product-form .form-field textarea:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]),
-.product-form .form-field select:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]) {
+.product-form .form-field input:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]):not([type=checkbox]),
+.product-form .form-field textarea:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]):not([type=checkbox]),
+.product-form .form-field select:hover:not(:disabled):not([aria-invalid=true]):not([type=radio]):not([type=checkbox]) {
   border-color: #8a929c;
 }
 .product-form .form-field input:disabled,
@@ -215,18 +215,14 @@
 .product-form .form-field select[readonly] {
   background: #f6f7f8;
 }
-.product-form .form-field input[aria-invalid=true],
-.product-form .form-field textarea[aria-invalid=true],
-.product-form .form-field select[aria-invalid=true] {
+.product-form .form-field input[aria-invalid=true]:not([type=checkbox]),
+.product-form .form-field textarea[aria-invalid=true]:not([type=checkbox]),
+.product-form .form-field select[aria-invalid=true]:not([type=checkbox]) {
   border-color: #d21f3c;
 }
 .product-form .form-field input.input-number {
   width: 14rem;
   max-width: 100%;
-}
-.product-form .form-field input[type=radio][aria-invalid=true],
-.product-form .form-field input[type=checkbox][aria-invalid=true] {
-  border: 0;
 }
 .product-form .form-field input[type=radio][aria-invalid=true]:not(:focus-visible),
 .product-form .form-field input[type=checkbox][aria-invalid=true]:not(:focus-visible) {
@@ -240,7 +236,7 @@
   width: 1.6rem;
   height: 1.6rem;
   padding: 0;
-  border: 1.5px solid #aeb5be;
+  border: 1.5px solid #8a929c;
   border-radius: 50%;
   color: var(--color-brand-accent);
   background: #fff;
@@ -254,7 +250,7 @@
   transform: scale(0);
 }
 .product-form .form-field input[type=radio][aria-invalid=true] {
-  border: 1.5px solid #aeb5be;
+  border: 1.5px solid #8a929c;
 }
 .product-form .form-field input[type=radio]:checked {
   border-color: currentColor;
