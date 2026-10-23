@@ -34,40 +34,7 @@
             font-variant-numeric: tabular-nums;
         }
     }
-    .save-status,
-    .error-summary {
-        font-size: inherit;
-        margin-bottom: 2.4rem;
-        padding: 1.6rem 2.4rem;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
-    }
-    .save-status {
-        border-left: 4px solid var(--color-brand-accent);
-    }
-    .error-summary {
-        border-color: $color-error;
-        h2 {
-            font-size: inherit;
-            font-weight: 600;
-        }
-        ul {
-            font-size: inherit;
-            margin-top: 1.2rem;
-            padding-left: 2rem;
-            list-style: disc;
-        }
-        li {
-            font-size: inherit;
-            margin-top: 0.8rem;
-        }
-        a {
-            font-size: inherit;
-            color: $color-error;
-            text-decoration: underline;
-            text-underline-offset: 0.2em;
-        }
-    }
+    @include form-messages;
 }
 
 /* =================================
@@ -109,17 +76,7 @@
             @include field-badge;
         }
     }
-    @media (width > $tbw) {
-        div.form-row {
-            display: grid;
-            grid-template-columns: 20rem minmax(0, 1fr);
-            column-gap: 2.4rem;
-        }
-        .form-row > .form-label {
-            margin-bottom: 0;
-            padding-top: 1rem;
-        }
-    }
+    @include form-row-pc;
     .form-field {
         min-width: 0;
         input[type="text"],
@@ -154,22 +111,10 @@
         }
     }
     .check-group {
-        font-size: inherit;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem 2.4rem;
+        @include check-group;
     }
     .form-check {
-        min-height: $tap-target-size;
-        input {
-            padding: 0;
-            width: 1.6rem;
-            height: 1.6rem;
-            &:focus-visible {
-                outline: 3px solid var(--color-brand-accent);
-                outline-offset: 5px;
-            }
-        }
+        @include form-check-field;
     }
     .form-help {
         @include form-help;
@@ -462,32 +407,5 @@
  * 保存バー（商品フォームから転記。保存処理はバックエンドが組み込む）
  * ------------------------------ */
 .store-form .save-bar {
-    font-size: inherit;
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1.2rem 2.4rem;
-    padding: 1.6rem 2.4rem;
-    border: 1px solid $color-border-card;
-    background: $pure-white;
-    button,
-    a {
-        @include button-base;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.8rem;
-        min-width: 14rem;
-    }
-    button {
-        @include button-primary;
-    }
-    a {
-        @include button-secondary;
-        text-decoration: none;
-    }
+    @include save-bar;
 }
