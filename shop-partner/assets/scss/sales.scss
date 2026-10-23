@@ -203,47 +203,10 @@
         }
     }
     .sales-scroll {
-        font-size: inherit;
-        width: 100%;
-        margin-top: 1.6rem;
+        @include table-scroll;
     }
     .sales-table {
-        font-size: inherit;
-        width: 100%;
-        min-width: 70.4rem;
-        table-layout: fixed;
-        border-collapse: separate;
-        border-spacing: 0;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
-        thead,
-        tbody,
-        tr,
-        th,
-        td {
-            font-size: inherit;
-        }
-        th,
-        td {
-            padding: 1.2rem;
-            vertical-align: middle;
-            text-align: left;
-            &:not(:first-child) {
-                border-left: 1px solid $color-border-inner;
-            }
-        }
-        th {
-            font-size: fz(14);
-            font-weight: 500;
-            color: $color-text-secondary;
-            background: $color-bg-head;
-        }
-        td {
-            border-top: 1px solid $color-border-inner;
-        }
-        tbody tr:hover {
-            background: $color-bg-detail;
-        }
+        @include data-table(70.4rem);
         .sales-product {
             overflow-wrap: anywhere;
         }
@@ -257,9 +220,7 @@
         .sales-count,
         .sales-quantity,
         .sales-amount {
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-            white-space: nowrap;
+            @include numeric-cell;
         }
         .tax-note {
             display: inline-block;

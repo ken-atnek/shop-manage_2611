@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/customers.scss
  * Referenced in: /shop-partner/customers.php
  * Created: 2026-10-21
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -41,53 +41,14 @@
  * ------------------------------ */
 .admin-main {
     .customers-scroll {
-        font-size: inherit;
-        width: 100%;
-        margin-top: 1.6rem;
+        @include table-scroll;
     }
     .customers-table {
-        font-size: inherit;
-        width: 100%;
-        min-width: 70.4rem;
-        table-layout: fixed;
-        border-collapse: separate;
-        border-spacing: 0;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
-        thead,
-        tbody,
-        tr,
-        th,
-        td {
-            font-size: inherit;
-        }
-        th,
-        td {
-            padding: 1.2rem;
-            vertical-align: middle;
-            text-align: left;
-            &:not(:first-child) {
-                border-left: 1px solid $color-border-inner;
-            }
-        }
-        th {
-            font-size: fz(14);
-            font-weight: 500;
-            color: $color-text-secondary;
-            background: $color-bg-head;
-        }
-        td {
-            border-top: 1px solid $color-border-inner;
-        }
-        tbody tr:hover {
-            background: $color-bg-detail;
-        }
+        @include data-table(70.4rem);
         .customer-id {
             // 商品一覧のID列と同じ幅・数字の揃え方。
             width: 6.4rem;
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-            white-space: nowrap;
+            @include numeric-cell;
         }
         .customer-name {
             width: 14.4rem;
@@ -128,8 +89,7 @@
         .customer-count,
         .customer-amount,
         .customer-purchased {
-            text-align: right;
-            font-variant-numeric: tabular-nums;
+            @include numeric-cell(false);
         }
         td.customer-count,
         td.customer-amount,
@@ -145,25 +105,7 @@
             text-align: center;
         }
         .detail-link {
-            font-size: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 4rem;
-            height: 4rem;
-            margin-inline: auto;
-            color: $color-text-secondary;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            transition:
-                color $transition-base,
-                background-color $transition-base,
-                border-color $transition-base;
-            &:hover {
-                color: $color-text-primary;
-                background: $pure-white;
-                border-color: $color-border-card;
-            }
+            @include icon-link(auto);
         }
     }
 }
