@@ -211,11 +211,11 @@ button {
  * レスポンシブ設定
  * ------------------------------ */
 /* =======================================
- * ふもと旅館採用 SVG背景・アイコンmixin
- * URL: /src/styles/foundation/_svg.scss
- * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * 熊日モール 管理画面 SVG背景・アイコンmixin
+ * URL: /scss/_svg.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
  * Created: 2026-07-07
- * Last updated: 2026-09-21
+ * Last updated: 2026-10-23
  * Created source: ファイル作成日時（移植元由来）
  * ======================================= */
 /* =======================================
