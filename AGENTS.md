@@ -24,7 +24,7 @@ Figmaは必須工程とせず、必要な場合のみ使用する。
 1. 既存ファイル、フォルダ構成、関連資料を確認する
 2. 要件、画面仕様、状態、操作、デザイン方針を整理する
 3. `docs/`内のMarkdownを更新し、資料間の矛盾を確認する
-4. Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する
+4. プロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、Kenが見た目など必要な箇所を調整する（AIの役割分担は `~/site_data/art-factory-ai/AGENTS.md` 2章に従う）
 5. Sassをコンパイルし、ブラウザで表示と操作を確認して必要な範囲だけ調整する
 6. 確定した仕様と制作用PHP・Sass・生成CSSをバックエンド担当者へ引き渡せる形に整理する（静的HTMLは納品物に含めない）
 
@@ -74,7 +74,7 @@ Gitの操作は `~/site_data/art-factory-ai/AGENTS.md` 7章と `~/site_data/art-
 
 ## PHP・HTML実装について
 
-- 制作の流れ：Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。ユーザーが調整した箇所は、Codexが次回以降の作業で元に戻さない
+- 制作の流れ：プロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、Kenが見た目など必要な箇所を調整する。AIの役割分担は `~/site_data/art-factory-ai/AGENTS.md` 2章に従う。Kenが調整した箇所は、次回以降の作業で元に戻さない
 - Codexはプロンプトで依頼された画面・範囲だけを作成・変更する。依頼のない画面のPHP・HTMLを作らない
 - Clientの制作・編集元は`shop-partner/orders.php`・`shop-partner/products.php`と`shop-partner/includes/inc_header.php`・`inc_sidebar.php`。固有Sassは`shop-partner/assets/scss/order.scss`・`shop-partner/assets/scss/products.scss`。PHPは共通部品の読み込み・現在地・静的出力時のリンク切り替えと制作確認用の表示分岐に使い、Laravelや業務処理は実装しない
 - バックエンド担当者への納品はPHPのみとし、静的HTMLは納品・Git管理しない（`.gitignore`で`shop-partner/*.html`・`shop-master/*.html`を除外）。PHPが動かない環境で見せる必要がある場合だけ、`ddev exec php scripts/export-html.php`で書き出す。HTMLの組み立てにNodeは使わない

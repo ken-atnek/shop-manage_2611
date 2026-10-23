@@ -5,7 +5,7 @@ description: Design and review Master / Client admin screens, shared UI, form co
 
 # 熊日モール管理画面デザイン
 
-`shop-manage_2611`の管理画面を、共通UIの一貫性を保ちながら制作用PHP（共通部品のインクルード）・Sassとブラウザ確認で設計する。Codexがプロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、ユーザーが必要な箇所を調整し、Claudeが確認する。Figmaは必要な場合のみ使用する。
+`shop-manage_2611`の管理画面を、共通UIの一貫性を保ちながら制作用PHP（共通部品のインクルード）・Sassとブラウザ確認で設計する。プロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、Kenが見た目など必要な箇所を調整する。AIの役割分担は `~/site_data/art-factory-ai/AGENTS.md` 2章に従う。Figmaは必要な場合のみ使用する。
 
 ## 仕様の確認
 

@@ -29,7 +29,7 @@ ECサイト管理画面の共通構造を整理するためのテンプレート
 
 ## HTML構造の参考
 
-以下は共通構造の参考。Clientの制作・編集元は制作用PHPと共通インクルードで、依頼された範囲をCodexが作成しKenが調整する。
+以下は共通構造の参考。Clientの制作・編集元は制作用PHPと共通インクルードで、依頼された範囲を作成し、Kenが調整する（AIの役割分担は基盤（art-factory-ai）の AGENTS.md 2章に従う）。
 
 ```html
 <body class="admin-page">
