@@ -16,9 +16,9 @@ $detailPath = 'customer-detail.' . $pageExtension;
 
 // 架空の表示例。メールアドレスはexample.com、電話番号は実在しない000始まりを使う。
 $customers = [
-    ['id' => 1042, 'name' => 'サンプル 顧客名がとても長い表示確認用の購入者', 'email' => 'very-long-customer-name-for-layout-check@example.com', 'phone' => '000-0000-0001', 'count' => '3', 'amount' => '¥42,400', 'date' => '2026-10-21', 'dateLabel' => '2026/10/21'],
+    ['id' => 1042, 'name' => 'サンプル 顧客詳細の表示確認用の購入者', 'email' => 'customer.detail@example.com', 'phone' => '000-0000-0001', 'count' => '3', 'amount' => '¥42,400', 'date' => '2026-10-21', 'dateLabel' => '2026/10/21'],
     ['id' => 87, 'name' => 'テスト 花子', 'email' => 'sample.customer.02@example.com', 'phone' => '000-0000-0002', 'count' => '1', 'amount' => '¥12,800', 'date' => '2026-10-21', 'dateLabel' => '2026/10/21'],
-    ['id' => 615, 'name' => 'デモ 太郎', 'email' => 'layout-test+customer03@example.com', 'phone' => '000-0000-0003', 'count' => '128', 'amount' => '¥1,234,567', 'date' => '2026-10-19', 'dateLabel' => '2026/10/19'],
+    ['id' => 615, 'name' => 'サンプル 顧客名がとても長い表示確認用の購入者', 'email' => 'very-long-customer-name-for-layout-check@example.com', 'phone' => '000-0000-0003', 'count' => '128', 'amount' => '¥1,234,567', 'date' => '2026-10-19', 'dateLabel' => '2026/10/19'],
     ['id' => 2308, 'name' => '見本 次郎', 'email' => 'customer.sample04@example.com', 'phone' => '000-0000-0004', 'count' => '8', 'amount' => '¥12,800', 'date' => '2026-10-18', 'dateLabel' => '2026/10/18'],
     ['id' => 319, 'name' => '架空 三郎', 'email' => 'customer.sample05@example.com', 'phone' => '000-0000-0005', 'count' => '3', 'amount' => '¥5,600', 'date' => '2026-10-17', 'dateLabel' => '2026/10/17'],
     ['id' => 1705, 'name' => '表示確認 四郎', 'email' => 'customer.sample06@example.com', 'phone' => '000-0000-0006', 'count' => '16', 'amount' => '¥204,000', 'date' => '2026-10-16', 'dateLabel' => '2026/10/16'],
