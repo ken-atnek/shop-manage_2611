@@ -12,17 +12,36 @@
 /* =================================
  * ページの枠
  * ------------------------------ */
-// サイドバーなし。地の上に白い箱を真ん中に置く。
+body.login-page {
+    min-width: 0;
+    min-height: 100dvh;
+}
+.login-layout {
+    font-size: inherit;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+    @media (width > $tbw) {
+        grid-template-columns: 45% minmax(0, 1fr);
+        grid-template-rows: auto;
+    }
+}
 .login-main {
-    align-items: center;
-    justify-content: center;
-    padding: 4.8rem 1.6rem;
+    @include flex-center(column);
+    min-width: 0;
+    padding: 4.8rem 2.4rem;
+    background: $pure-white;
+    @media (width > $tbw) {
+        padding: 6.4rem 4.8rem;
+    }
 }
 .login-box {
-    font-size: inherit;
-    width: min(100%, 48rem);
-    padding: 4rem;
-    border: 1px solid $color-border-card;
+    // ログインはスマホで開かれやすいため、箱の中は画面幅にかかわらず16pxを基準にする（2026-10-23、Kenの決定）。
+    font-size: 1.6rem;
+    width: min(100%, 40rem);
+    min-width: 0;
     background: $pure-white;
     @include form-messages;
     .save-status,
@@ -37,28 +56,63 @@
         font-weight: 600;
         margin-bottom: 2.4rem;
     }
-    @media (max-width: $tb) {
-        padding: 3.2rem 2.4rem;
+}
+
+/* =================================
+ * ブランドの面・帯
+ * ------------------------------ */
+.login-brand {
+    @include flex-center(column);
+    min-width: 0;
+    padding: 1.6rem 2.4rem;
+    color: $pure-white;
+    text-align: center;
+    background: var(--color-nav-bg);
+    background: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
+    @media (width > $tbw) {
+        padding: 6.4rem 3.2rem;
     }
 }
-// ログイン後のヘッダー（.admin-header .box-identity）と同じ表記・大きさにする。
 .login-identity {
+    font-size: inherit;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 1.6rem;
-    margin-bottom: 3.2rem;
-    .service-name {
+    justify-content: center;
+    gap: 0.8rem 1.6rem;
+    .login-logo {
         font-size: fz(20);
         font-weight: 600;
     }
     .admin-name {
-        font-size: fz(20);
+        font-size: fz(16);
         font-weight: 500;
         padding-left: 1.6rem;
-        border-left: 1px solid $color-border-strong;
+        border-left: 1px solid var(--color-nav-text);
+    }
+    @media (width > $tbw) {
+        .login-logo {
+            font-size: fz(32);
+        }
+        .admin-name {
+            font-size: fz(20);
+        }
     }
 }
+.login-tagline {
+    font-size: fz(16);
+    font-weight: 400;
+    display: none;
+    margin-top: 2.4rem;
+    color: var(--color-nav-text);
+    @media (width > $tbw) {
+        display: block;
+    }
+}
+
+/* =================================
+ * フォーム
+ * ------------------------------ */
 .login-lead {
     margin-bottom: 2.4rem;
     color: $color-text-secondary;
@@ -70,9 +124,6 @@
     }
 }
 
-/* =================================
- * フォーム
- * ------------------------------ */
 .login-form {
     font-size: inherit;
     display: grid;
@@ -81,6 +132,7 @@
         @include form-help;
     }
     .form-check {
+        font-size: fz(14);
         // 上の欄との間を詰め、ボタンとの間を空ける。
         margin-block: -0.8rem 0;
     }
@@ -88,8 +140,16 @@
 // 主ボタンを幅いっぱいにする。送信中の無効表示はこの画面だけ（button-baseに:disabledがないため）。
 .login-submit {
     @include button-base;
-    @include button-primary;
     width: 100%;
+    border-color: var(--color-brand-accent);
+    color: $pure-white;
+    background: var(--color-brand-accent);
+    &:hover {
+        background: var(--color-brand-accent);
+    }
+    &:focus-visible {
+        outline-offset: 4px;
+    }
     &:disabled {
         border-color: $color-border-default;
         color: $color-text-muted;
@@ -161,7 +221,7 @@
     }
 }
 .resend-form {
-    font-size: inherit;
+    font-size: fz(14);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -198,6 +258,7 @@
     margin-top: 1.6rem;
     text-align: center;
     a {
+        font-size: fz(14);
         display: inline-flex;
         align-items: center;
         min-height: $tap-target-size;

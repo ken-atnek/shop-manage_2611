@@ -9,17 +9,45 @@
 /* =================================
  * ページの枠
  * ------------------------------ */
+body.login-page {
+  min-width: 0;
+  min-height: 100dvh;
+}
+
+.login-layout {
+  font-size: inherit;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 100%;
+  min-width: 0;
+  min-height: 100dvh;
+}
+@media (width > 1194px) {
+  .login-layout {
+    grid-template-columns: 45% minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+}
+
 .login-main {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4.8rem 1.6rem;
+  min-width: 0;
+  padding: 4.8rem 2.4rem;
+  background: #fff;
+}
+@media (width > 1194px) {
+  .login-main {
+    padding: 6.4rem 4.8rem;
+  }
 }
 
 .login-box {
-  font-size: inherit;
-  width: min(100%, 48rem);
-  padding: 4rem;
-  border: 1px solid #c4cad2;
+  font-size: 1.6rem;
+  width: min(100%, 40rem);
+  min-width: 0;
   background: #fff;
 }
 .login-box .save-status,
@@ -68,30 +96,71 @@
   font-weight: 600;
   margin-bottom: 2.4rem;
 }
-@media (max-width: 834px) {
-  .login-box {
-    padding: 3.2rem 2.4rem;
+
+/* =================================
+ * ブランドの面・帯
+ * ------------------------------ */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 1.6rem 2.4rem;
+  color: #fff;
+  text-align: center;
+  background: var(--color-nav-bg);
+  background: linear-gradient(90deg, var(--color-nav-bg-start), var(--color-nav-bg-end));
+}
+@media (width > 1194px) {
+  .login-brand {
+    padding: 6.4rem 3.2rem;
   }
 }
 
 .login-identity {
+  font-size: inherit;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 1.6rem;
-  margin-bottom: 3.2rem;
+  justify-content: center;
+  gap: 0.8rem 1.6rem;
 }
-.login-identity .service-name {
+.login-identity .login-logo {
   font-size: max(12px, 1.25em);
   font-weight: 600;
 }
 .login-identity .admin-name {
-  font-size: max(12px, 1.25em);
+  font-size: max(12px, 1em);
   font-weight: 500;
   padding-left: 1.6rem;
-  border-left: 1px solid #aeb5be;
+  border-left: 1px solid var(--color-nav-text);
+}
+@media (width > 1194px) {
+  .login-identity .login-logo {
+    font-size: max(12px, 2em);
+  }
+  .login-identity .admin-name {
+    font-size: max(12px, 1.25em);
+  }
 }
 
+.login-tagline {
+  font-size: max(12px, 1em);
+  font-weight: 400;
+  display: none;
+  margin-top: 2.4rem;
+  color: var(--color-nav-text);
+}
+@media (width > 1194px) {
+  .login-tagline {
+    display: block;
+  }
+}
+
+/* =================================
+ * フォーム
+ * ------------------------------ */
 .login-lead {
   margin-bottom: 2.4rem;
   color: #4f5863;
@@ -103,9 +172,6 @@
   overflow-wrap: anywhere;
 }
 
-/* =================================
- * フォーム
- * ------------------------------ */
 .login-form {
   font-size: inherit;
   display: grid;
@@ -118,6 +184,7 @@
   line-height: 1.7;
 }
 .login-form .form-check {
+  font-size: max(12px, 0.875em);
   margin-block: -0.8rem 0;
 }
 
@@ -136,16 +203,16 @@
   background: #f6f7f8;
 }
 .login-submit {
-  font-weight: 500;
-  border-color: #9db5d6;
-  color: #1f4e8c;
-  background: #e6edf7;
+  width: 100%;
+  border-color: var(--color-brand-accent);
+  color: #fff;
+  background: var(--color-brand-accent);
 }
 .login-submit:hover {
-  background: #d6e2f2;
+  background: var(--color-brand-accent);
 }
-.login-submit {
-  width: 100%;
+.login-submit:focus-visible {
+  outline-offset: 4px;
 }
 .login-submit:disabled {
   border-color: #d9dde2;
@@ -214,7 +281,7 @@
 }
 
 .resend-form {
-  font-size: inherit;
+  font-size: max(12px, 0.875em);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -252,6 +319,7 @@
   text-align: center;
 }
 .login-links a {
+  font-size: max(12px, 0.875em);
   display: inline-flex;
   align-items: center;
   min-height: 4.4rem;

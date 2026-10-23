@@ -5,6 +5,7 @@ $pageExtension = ($staticExport ?? false) ? 'html' : 'php';
 // Master・Clientの共通テンプレート。shop-master/password-forgot.phpから$adminType = 'master'で読み込む。
 $isMaster = ($adminType ?? 'client') === 'master';
 $adminName = $isMaster ? '管理画面' : 'パートナー管理画面';
+$loginTagline = $isMaster ? '熊日モールの運営管理' : '受注・商品・店舗をまとめて管理';
 
 // 制作時の表示確認専用。Laravel・Bladeでは使用せず、バックエンド側の状態分岐へ置き換える。
 $previewState = ($staticExport ?? false) ? '' : ($_GET['preview'] ?? '');
@@ -36,38 +37,43 @@ $isSentState = $previewState === 'sent';
   </head>
 
   <body class="login-page">
-    <main class="login-main">
-      <div class="login-box">
+    <div class="login-layout">
+      <header class="login-brand">
         <p class="login-identity">
-          <span class="service-name">熊日モール</span>
+          <span class="login-logo">熊日モール</span>
           <span class="admin-name"><?= $adminName ?></span>
         </p>
-        <h1>パスワードの再設定</h1>
+        <p class="login-tagline"><?= $loginTagline ?></p>
+      </header>
+      <main class="login-main">
+        <div class="login-box">
+          <h1>パスワードの再設定</h1>
 
-        <?php if ($isSentState): ?>
-          <!-- 登録の有無にかかわらず同じ表示にする。入力したメールアドレスも出さない。 -->
-          <p class="save-status" role="status">登録があれば、再設定のメールを送りました。</p>
-          <p class="login-lead">メールに記載されたリンクから、新しいパスワードを設定してください。届かない場合は、メールアドレスを確かめてもう一度お申し込みください。</p>
-        <?php else: ?>
-          <p class="login-lead">登録しているメールアドレスを入力してください。パスワードを再設定するためのメールを送ります。</p>
+          <?php if ($isSentState): ?>
+            <!-- 登録の有無にかかわらず同じ表示にする。入力したメールアドレスも出さない。 -->
+            <p class="save-status" role="status">登録があれば、再設定のメールを送りました。</p>
+            <p class="login-lead">メールに記載されたリンクから、新しいパスワードを設定してください。届かない場合は、メールアドレスを確かめてもう一度お申し込みください。</p>
+          <?php else: ?>
+            <p class="login-lead">登録しているメールアドレスを入力してください。パスワードを再設定するためのメールを送ります。</p>
 
-          <!-- action・nameは制作例。メール送信・入力チェックはバックエンドが組み込む。 -->
-          <form class="login-form" method="post" action="#" novalidate>
-            <div class="form-field">
-              <label class="form-label" for="forgot-email">メールアドレス</label>
-              <input type="email" id="forgot-email" name="email" value="" autocomplete="username" autocapitalize="none" spellcheck="false"<?= $isFieldErrorState ? ' aria-invalid="true" aria-describedby="forgot-email-error" autofocus' : '' ?> />
-              <?php if ($isFieldErrorState): ?>
-                <p class="form-error" id="forgot-email-error">メールアドレスを入力してください</p>
-              <?php endif; ?>
-            </div>
+            <!-- action・nameは制作例。メール送信・入力チェックはバックエンドが組み込む。 -->
+            <form class="login-form" method="post" action="#" novalidate>
+              <div class="form-field">
+                <label class="form-label" for="forgot-email">メールアドレス</label>
+                <input type="email" id="forgot-email" name="email" value="" autocomplete="username" autocapitalize="none" spellcheck="false"<?= $isFieldErrorState ? ' aria-invalid="true" aria-describedby="forgot-email-error" autofocus' : '' ?> />
+                <?php if ($isFieldErrorState): ?>
+                  <p class="form-error" id="forgot-email-error">メールアドレスを入力してください</p>
+                <?php endif; ?>
+              </div>
 
-            <button class="login-submit" type="submit" data-busy-label="送信中…">再設定のメールを送る</button>
-          </form>
-        <?php endif; ?>
+              <button class="login-submit" type="submit" data-busy-label="送信中…">再設定のメールを送る</button>
+            </form>
+          <?php endif; ?>
 
-        <p class="login-links"><a href="login.<?= $pageExtension ?>">ログイン画面に戻る</a></p>
-      </div>
-    </main>
+          <p class="login-links"><a href="login.<?= $pageExtension ?>">ログイン画面に戻る</a></p>
+        </div>
+      </main>
+    </div>
     <script src="assets/js/login.js"></script>
   </body>
 </html>
