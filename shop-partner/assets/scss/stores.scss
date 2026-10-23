@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/stores.scss
  * Referenced in: /shop-partner/stores.php
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -31,14 +31,7 @@
         text-decoration: none;
     }
     .list-error {
-        .message {
-            color: $color-error;
-        }
-        .error-help {
-            font-size: inherit;
-            margin-top: 0.8rem;
-            color: $color-text-secondary;
-        }
+        @include list-error;
     }
 }
 
@@ -47,45 +40,10 @@
  * ------------------------------ */
 .admin-main {
     .stores-scroll {
-        font-size: inherit;
-        width: 100%;
+        @include table-scroll(null);
     }
     .stores-table {
-        font-size: inherit;
-        width: 100%;
-        table-layout: fixed;
-        border-collapse: separate;
-        border-spacing: 0;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
-        thead,
-        tbody,
-        tr,
-        th,
-        td {
-            font-size: inherit;
-        }
-        th,
-        td {
-            padding: 1.2rem;
-            vertical-align: middle;
-            text-align: left;
-            &:not(:first-child) {
-                border-left: 1px solid $color-border-inner;
-            }
-        }
-        th {
-            font-size: fz(14);
-            font-weight: 500;
-            color: $color-text-secondary;
-            background: $color-bg-head;
-        }
-        td {
-            border-top: 1px solid $color-border-inner;
-        }
-        tbody tr:hover {
-            background: $color-bg-detail;
-        }
+        @include data-table;
         // 商品一覧のID列と同じクラス・幅・数字の表示を使用する。
         .product-id {
             width: 6.4rem;
@@ -106,46 +64,18 @@
         }
         .product-id,
         .store-products {
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-            white-space: nowrap;
+            @include numeric-cell;
         }
         .store-updated {
             width: 11rem;
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-            white-space: nowrap;
-            time {
-                font-size: fz(14);
-                span {
-                    font-size: inherit;
-                    display: block;
-                }
-            }
+            @include table-date-2line;
         }
         .store-edit {
             width: 6.4rem;
             text-align: center;
         }
         .edit-link {
-            font-size: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 4rem;
-            height: 4rem;
-            color: $color-text-secondary;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            transition:
-                color $transition-base,
-                background-color $transition-base,
-                border-color $transition-base;
-            &:hover {
-                color: $color-text-primary;
-                background: $pure-white;
-                border-color: $color-border-card;
-            }
+            @include icon-link;
         }
     }
 }

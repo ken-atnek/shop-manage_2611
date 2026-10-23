@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/customer-detail.scss
  * Referenced in: /shop-partner/customer-detail.php
  * Created: 2026-10-21
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -37,12 +37,7 @@
     }
     // 店舗フォームの.form-boxを基準にし、入力欄は置かない。
     .form-box {
-        font-size: inherit;
-        min-width: 0;
-        padding: 2.4rem;
-        margin-bottom: 2.4rem;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
+        @include form-box(0);
     }
     h2 {
         font-size: fz(20);
@@ -129,11 +124,9 @@
         border-radius: 6px;
         color: $pure-white;
         white-space: nowrap;
-        &.status-new { background: $color-status-new; }
-        &.status-processing { background: $color-status-processing; }
-        &.status-shipped { background: $color-status-shipped; }
-        &.status-return { background: $color-status-return; }
-        &.status-cancelled { background: $color-status-cancelled; }
+        @each $name, $color in $status-colors {
+            &.status-#{$name} { background: $color; }
+        }
     }
     .order-summary {
         font-size: inherit;
@@ -285,13 +278,6 @@
         }
     }
     .list-error {
-        .message {
-            color: $color-error;
-        }
-        .error-help {
-            font-size: inherit;
-            margin-top: 0.8rem;
-            color: $color-text-secondary;
-        }
+        @include list-error;
     }
 }

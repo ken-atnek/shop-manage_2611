@@ -1,0 +1,400 @@
+@charset "UTF-8";
+/* =======================================
+ * 熊日モール 管理画面 共通Sassの入口
+ * URL: /scss/_index.scss
+ * Referenced in: /shop-partner/assets/scss/ の画面別Sass
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =================================
+ * ウィンドウ・フォントサイズ設定
+ * ------------------------------ */
+/* =======================================
+ * 熊日モール 管理画面 共通カラー
+ * URL: /scss/_colors.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =================================
+ * レスポンシブ設定
+ * ------------------------------ */
+/* =======================================
+ * 熊日モール 管理画面 共通の操作状態
+ * URL: /scss/_interaction.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
+ * 熊日モール 管理画面 SVG背景・アイコンmixin
+ * URL: /scss/_svg.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
+ * Created: 2026-07-07
+ * Last updated: 2026-10-23
+ * Created source: ファイル作成日時（移植元由来）
+ * ======================================= */
+/* =======================================
+ * 熊日モール 共通UI mixin
+ * URL: /scss/_ui.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+/*=========================================
+ボタン
+-----------------------------------------*/
+/*=========================================
+中央寄せ
+-----------------------------------------*/
+/*=========================================
+ドロップシャドウ
+-----------------------------------------*/
+/* =======================================
+ * 熊日モール 管理画面 共通の表mixin
+ * URL: /scss/_ui-table.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
+ * 熊日モール 管理画面 受注ステータスmixin
+ * URL: /scss/_ui-status.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+/* =======================================
+ * 熊日モール 管理画面 共通のフォームmixin
+ * URL: /scss/_ui-form.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
+ * 熊日モール Client 集計 スタイル
+ * URL: /shop-partner/assets/scss/sales.scss
+ * Referenced in: /shop-partner/sales.php
+ * Created: 2026-10-22
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =================================
+ * 期間・店舗・CSV・並び順
+ * ------------------------------ */
+.sales-page .sales-period {
+  padding: 1.6rem;
+  border: 1px solid #c4cad2;
+  border-radius: 4px;
+  background: #fff;
+}
+.sales-page .period-fields,
+.sales-page .month-controls,
+.sales-page .date-range,
+.sales-page .sales-toolbar,
+.sales-page .store-form,
+.sales-page .sort-form {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+}
+.sales-page .period-fields {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2.4rem;
+}
+.sales-page .month-form,
+.sales-page .period-form {
+  flex-shrink: 0;
+}
+.sales-page .month-form,
+.sales-page .period-form,
+.sales-page .csv-form,
+.sales-page .date-field {
+  font-size: inherit;
+}
+.sales-page .month-controls {
+  gap: 0.8rem;
+}
+.sales-page .form-field select {
+  aspect-ratio: 8/5;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%234f5863"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
+  aspect-ratio: auto;
+  font-size: 1.6rem;
+  height: 4.4rem;
+  min-height: 4.4rem;
+  padding: 1rem 3.2rem 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background-color: #fff;
+  background-size: 0.8rem 0.5rem;
+  background-position: right 1.2rem center;
+  appearance: none;
+}
+.sales-page .form-field select:hover {
+  border-color: #8a929c;
+}
+.sales-page .month-button {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.sales-page .month-button:hover {
+  background: #f6f7f8;
+}
+.sales-page .month-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 4.4rem;
+  padding: 1rem;
+}
+.sales-page .date-range {
+  display: grid;
+  grid-template-columns: 18rem auto 18rem auto;
+  align-items: flex-end;
+  gap: 0 1.2rem;
+}
+.sales-page .date-range .date-field {
+  width: 18rem;
+}
+.sales-page .date-range .date-separator {
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  min-height: 4.4rem;
+}
+.sales-page .date-range .form-error {
+  grid-column: 3/-1;
+}
+.sales-page .period-submit {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.sales-page .period-submit:hover {
+  background: #f6f7f8;
+}
+.sales-page .period-submit {
+  font-weight: 500;
+  border-color: #9db5d6;
+  color: #1f4e8c;
+  background: #e6edf7;
+}
+.sales-page .period-submit:hover {
+  background: #d6e2f2;
+}
+.sales-page .applied-period {
+  font-size: inherit;
+  margin-top: 1.6rem;
+  color: #4f5863;
+}
+.sales-page .applied-period strong {
+  font-weight: 600;
+  color: #22272e;
+}
+.sales-page .period-help,
+.sales-page .sales-note {
+  font-size: max(12px, 0.875em);
+  margin-top: 0.8rem;
+  color: #4f5863;
+}
+.sales-page .sales-toolbar {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-block: 1.6rem;
+}
+.sales-page .store-form,
+.sales-page .sort-form {
+  gap: 1.2rem;
+}
+.sales-page .store-form .form-label,
+.sales-page .sort-form .form-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.sales-page .sales-store-name {
+  font-size: inherit;
+}
+.sales-page .csv-download {
+  font-size: inherit;
+  font-weight: 500;
+  min-height: 4.4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background: #fff;
+  white-space: nowrap;
+}
+.sales-page .csv-download:hover {
+  background: #f6f7f8;
+}
+.sales-page .csv-download {
+  border-color: #eceef1;
+  color: #22272e;
+  background: #eceef1;
+}
+.sales-page .csv-download:hover {
+  border-color: #e2e5e9;
+  background: #e2e5e9;
+}
+.sales-page .month-button:disabled,
+.sales-page .csv-download:disabled {
+  color: #737b86;
+  border-color: #d9dde2;
+  background: #f6f7f8;
+}
+
+/* =================================
+ * 合計（表示専用。受注KPIの共通化は行わない）
+ * ------------------------------ */
+.sales-page .sales-totals {
+  font-size: inherit;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+.sales-page .sales-totals > div {
+  font-size: inherit;
+  min-width: 0;
+  padding: 1.6rem;
+  border: 1px solid #c4cad2;
+  border-radius: 4px;
+  background: #fff;
+}
+.sales-page .sales-totals dt {
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+  color: #4f5863;
+}
+.sales-page .sales-totals dd {
+  font-size: max(12px, 1.875em);
+  font-weight: 600;
+  margin-top: 0.8rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sales-page .sales-totals .unit {
+  font-size: 0.5333333333em;
+  font-weight: 500;
+  margin-left: 0.4rem;
+}
+
+/* =================================
+ * 商品テーブル・取得失敗
+ * ------------------------------ */
+.sales-page .sales-list-heading {
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.6rem;
+}
+.sales-page .sales-list-title {
+  font-size: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.2rem;
+}
+.sales-page .sales-list-title .count {
+  color: #4f5863;
+}
+.sales-page .sales-scroll {
+  font-size: inherit;
+  width: 100%;
+  margin-top: 1.6rem;
+}
+.sales-page .sales-table {
+  font-size: inherit;
+  width: 100%;
+  min-width: 70.4rem;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #c4cad2;
+  background: #fff;
+}
+.sales-page .sales-table thead,
+.sales-page .sales-table tbody,
+.sales-page .sales-table tr,
+.sales-page .sales-table th,
+.sales-page .sales-table td {
+  font-size: inherit;
+}
+.sales-page .sales-table th,
+.sales-page .sales-table td {
+  padding: 1.2rem;
+  vertical-align: middle;
+  text-align: left;
+}
+.sales-page .sales-table th:not(:first-child),
+.sales-page .sales-table td:not(:first-child) {
+  border-left: 1px solid #e3e6ea;
+}
+.sales-page .sales-table th {
+  font-size: max(12px, 0.875em);
+  font-weight: 500;
+  color: #4f5863;
+  background: #e9edf1;
+}
+.sales-page .sales-table td {
+  border-top: 1px solid #e3e6ea;
+}
+.sales-page .sales-table tbody tr:hover {
+  background: #f8f9fb;
+}
+.sales-page .sales-table .sales-product {
+  overflow-wrap: anywhere;
+}
+.sales-page .sales-table .sales-count,
+.sales-page .sales-table .sales-quantity {
+  width: 11.2rem;
+}
+.sales-page .sales-table .sales-amount {
+  width: 14.4rem;
+}
+.sales-page .sales-table .sales-count,
+.sales-page .sales-table .sales-quantity,
+.sales-page .sales-table .sales-amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sales-page .sales-table .tax-note {
+  display: inline-block;
+  font-size: inherit;
+}
+.sales-page .list-error .message {
+  color: #d21f3c;
+}
+.sales-page .list-error .error-help {
+  font-size: inherit;
+  margin-top: 0.8rem;
+  color: #4f5863;
+}
+
+/*# sourceMappingURL=sales.css.map */

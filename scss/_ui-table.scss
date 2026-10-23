@@ -1,0 +1,114 @@
+@use "./colors" as *;
+@use "./settings" as *;
+@use "./interaction" as *;
+
+/* =======================================
+ * 熊日モール 管理画面 共通の表mixin
+ * URL: /scss/_ui-table.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+
+// 一覧表のラッパー。上余白がない画面ではnullを渡す。
+@mixin table-scroll($margin-top: 1.6rem) {
+    font-size: inherit;
+    width: 100%;
+    margin-top: $margin-top;
+}
+
+// 商品・店舗・顧客・集計の一覧表に共通する枠線・セル・行ホバー。
+@mixin data-table($min-width: null) {
+    font-size: inherit;
+    width: 100%;
+    min-width: $min-width;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid $color-border-card;
+    background: $pure-white;
+    thead,
+    tbody,
+    tr,
+    th,
+    td {
+        font-size: inherit;
+    }
+    th,
+    td {
+        padding: 1.2rem;
+        vertical-align: middle;
+        text-align: left;
+        &:not(:first-child) {
+            border-left: 1px solid $color-border-inner;
+        }
+    }
+    th {
+        font-size: fz(14);
+        font-weight: 500;
+        color: $color-text-secondary;
+        background: $color-bg-head;
+    }
+    td {
+        border-top: 1px solid $color-border-inner;
+    }
+    tbody tr:hover {
+        background: $color-bg-detail;
+    }
+}
+
+// 数値セルを右寄せ・等幅数字にし、必要な画面では折り返しを防ぐ。
+@mixin numeric-cell($nowrap: true) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    @if $nowrap {
+        white-space: nowrap;
+    }
+}
+
+// 商品・店舗の更新日時を右寄せの2行で表示する。
+@mixin table-date-2line {
+    @include numeric-cell;
+    time {
+        font-size: fz(14);
+        span {
+            font-size: inherit;
+            display: block;
+        }
+    }
+}
+
+// 表内の編集・詳細アイコンリンク。中央寄せが必要な画面ではautoを渡す。
+@mixin icon-link($margin-inline: null) {
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    margin-inline: $margin-inline;
+    color: $color-text-secondary;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    transition:
+        color $transition-base,
+        background-color $transition-base,
+        border-color $transition-base;
+    &:hover {
+        color: $color-text-primary;
+        background: $pure-white;
+        border-color: $color-border-card;
+    }
+}
+
+// 一覧の取得失敗メッセージと補足。
+@mixin list-error {
+    .message {
+        color: $color-error;
+    }
+    .error-help {
+        font-size: inherit;
+        margin-top: 0.8rem;
+        color: $color-text-secondary;
+    }
+}

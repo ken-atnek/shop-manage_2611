@@ -1,0 +1,236 @@
+@use "./colors" as *;
+@use "./settings" as *;
+@use "./svg" as *;
+@use "./ui" as *;
+@use "./interaction" as *;
+
+/* =======================================
+ * 熊日モール 管理画面 受注ステータスmixin
+ * URL: /scss/_ui-status.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+
+/*================================
+ ステータスボックス(JS併用版)
+--------------------------------*/
+@mixin select-status-box($height: $tap-target-size, $position: left, $list-height: 3rem) {
+    position: relative;
+    font-size: inherit;
+    --corner-radius: 6px;
+    .selectbox__head {
+        transition: 0.3s ease-out;
+        position: relative;
+        width: 100%;
+        height: $height;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: var(--corner-radius);
+        cursor: pointer;
+        user-select: none;
+        color: $pure-white;
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            translate: 0 -50%;
+            right: 0.8em;
+            width: 0.7em;
+            @include svg-icon-arrow-bottom("4f5863");
+            transition: 0.2s cubic-bezier(0.4, 0.25, 0.3, 1);
+        }
+        &:hover {
+            i {
+                border-color: $color-border-strong;
+            }
+        }
+        &:active {
+            i {
+                background-color: $color-bg-subtle;
+            }
+        }
+        .selectbox__value {
+            flex: 1;
+            font-size: fz(14);
+            display: flex;
+            align-self: stretch;
+            border-radius: var(--corner-radius) 0 0 var(--corner-radius);
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid $color-border-default;
+            border-left: 1px solid $color-border-default;
+            border-bottom: 1px solid $color-border-default;
+            @if $position == "center" {
+                text-align: center;
+            } @else {
+                text-align: left;
+            }
+        }
+        i {
+            display: block;
+            align-self: stretch;
+            // 幅は呼び出し側で指定する（apply-status-boxでは36px）。無効だった`3var (--corner-radius)`は削除
+            background-color: $pure-white;
+            border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
+            border: 1px solid $color-border-default;
+            transition: 0.3s ease-out;
+        }
+    }
+    .list-wrapper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        font-size: inherit;
+        top: calc(100% + 0.4rem);
+        z-index: 10;
+        display: grid;
+        width: 100%;
+        grid-template-rows: 0fr;
+        grid-template-columns: 1fr;
+        transition: grid-template-rows 0.2s ease-out;
+        overflow: hidden;
+        @include drop-shadow;
+        border-radius: var(--corner-radius);
+        .selectbox__panel {
+            font-size: inherit;
+            position: relative;
+            margin: 0;
+            background: $pure-white;
+            border-radius: var(--corner-radius);
+            overflow: hidden;
+            min-height: 0;
+            border-radius: var(--corner-radius);
+            width: 100%;
+            li {
+                width: 100%;
+                position: relative;
+                font-size: inherit;
+                input[type="radio"] {
+                    position: absolute;
+                    inset: 0;
+                    pointer-events: none;
+                }
+                // radioはlabelの下に隠れ、外側の共通フォーカス枠もoverflow: hiddenで切れる。
+                // キーボード操作時だけ、色面の上でも見える白枠をlabelの内側に出す。
+                input[type="radio"]:focus-visible + label {
+                    outline: 2px solid $pure-white;
+                    outline-offset: -4px;
+                }
+                label {
+                    position: relative;
+                    width: 100%;
+                    z-index: 1;
+                    height: $list-height;
+                    cursor: pointer;
+                    font-size: fz(14);
+                    padding-left: 1.4em;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $pure-white;
+                    transition: 0.3s ease-out;
+                    @if $position == "center" {
+                        padding-right: 1.4em;
+                    } @else {
+                        padding-left: 1.4em;
+                    }
+                }
+            }
+        }
+    }
+    &.is-selected {
+        .selectbox__head {
+            &::after {
+                rotate: 90deg;
+            }
+        }
+        &.is-open {
+            .selectbox__head {
+                &::after {
+                    rotate: 0deg;
+                }
+            }
+        }
+        &:hover {
+            .selectbox__head {
+                &::after {
+                    rotate: 0deg;
+                }
+            }
+        }
+    }
+    &.is-open {
+        .list-wrapper {
+            grid-template-rows: 1fr;
+            .selectbox__panel {
+                overflow: auto;
+                border-color: $color-border-strong;
+            }
+        }
+    }
+}
+
+/*================================
+ 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
+--------------------------------*/
+@mixin apply-status-box {
+    font-weight: 500;
+    width: 120px;
+    @include select-status-box(
+        $height: 3.6rem,
+        $position: "center",
+        $list-height: 3.6rem
+    );
+    .selectbox__head {
+        i {
+            width: 36px;
+        }
+        // 新規受付
+        // 対応中
+        // 発送済
+        // 返品対応
+        // キャンセル
+        @each $name, $color in $status-colors {
+            &.status-#{$name} {
+                .selectbox__value {
+                    background-color: $color;
+                }
+            }
+        }
+    }
+    .list-wrapper {
+        .selectbox__panel {
+            li {
+                label {
+                    transition: 0.3s ease-out;
+                    // 新規受付
+                    // 対応中
+                    // 発送済
+                    // 返品対応
+                    // キャンセル
+                    @each $name, $color in $status-colors {
+                        &.status-#{$name} {
+                            --status-color: #{$color};
+                        }
+                    }
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        background-color: var(--status-color);
+                        z-index: -1;
+                        transition: 0.3s ease-out;
+                    }
+                    &:hover {
+                        &::before {
+                            filter: brightness(0.9);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,3 +1,18 @@
+/* =======================================
+ * 熊日モール 管理画面 共通の操作状態
+ * URL: /scss/_interaction.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+
 // 共通の操作状態トークン（すべて仮）
 
 $transition-base: 0.15s ease-out;
+
+// 操作できる部品（ボタン・入力欄・リンク・タブ）の高さ・幅の最小値。44px
+$tap-target-size: 4.4rem;
+
+// エラーのリンクなどで欄へ移動したときの余白（scroll-margin-block）。
+// 上：欄の上のラベルが見える余白。下：固定の保存バーに隠れない余白。
+$field-scroll-margin: 8rem 10rem;

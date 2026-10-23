@@ -2,9 +2,9 @@
 /* =======================================
  * 熊日モール Client 共通サイドバー
  * URL: /shop-partner/includes/inc_sidebar.php
- * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php・/shop-partner/store-form.php・/shop-partner/customers.php
+ * Referenced in: /shop-partner/orders.php・/shop-partner/products.php・/shop-partner/product-form.php・/shop-partner/stores.php・/shop-partner/store-form.php・/shop-partner/customers.php・/shop-partner/sales.php
  * Created: 2026-10-17
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-22
  * ======================================= */
 ?>
       <aside class="admin-sidebar">
@@ -34,7 +34,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M16 3.128a4 4 0 0 1 0 7.744" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /></svg>
               <span class="nav-label">顧客一覧</span>
             </a>
-            <a href="#" title="集計">
+            <a href="sales.<?= $pageExtension ?? 'php' ?>" title="集計"<?= ($currentPage ?? '') === 'sales' ? ' aria-current="page"' : '' ?>>
               <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg>
               <span class="nav-label">集計</span>
             </a>

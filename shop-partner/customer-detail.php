@@ -8,7 +8,7 @@ $isNotFoundState = $previewState === 'not-found';
 $isErrorState = $previewState === 'error';
 
 // 架空の表示例。IDは表示確認用の候補だけを受け付け、DBの識別・権限判定には使わない。
-// 顧客テーブル方式はバックエンド回答待ち。仮URLはcustomer-detail.php?id={顧客ID}で、本番の形は未確定。
+// 顧客テーブル方式と本番URLの形は、バックエンドで決めて知らせてもらう（QA No.11、2026-10-23の方針）。仮URLはcustomer-detail.php?id={顧客ID}。
 $sampleCustomerIds = ['1042', '87', '615', '2308', '319', '1705'];
 $requestedId = ($staticExport ?? false) ? '1042' : ($_GET['id'] ?? ($isSingleState ? '87' : '1042'));
 $customerId = in_array($requestedId, $sampleCustomerIds, true) ? $requestedId : '1042';
@@ -73,9 +73,9 @@ $orders[3]['items'][0]['note'] = '表紙の印刷不備を確認。返品を受�
 $orders[4]['record'] = '表示確認用：お客様のご都合によるキャンセル。発送前に受付し、返金のご案内を完了しました。';
 $orders[4]['items'][0]['note'] = '制作前のためキャンセルを受け付けました。';
 
-// 回数・合計は表示確認用の固定値。キャンセル・返品の集計対象や回数の単位を確定するものではない。
-$purchaseCount = '5';
-$purchaseAmount = '¥48,600';
+// 回数・合計は表示確認用の固定値。キャンセル・返品の注文を除いた値（確定）。回数の単位（店舗ごとの注文か購入単位か）は未確定。
+$purchaseCount = '3';
+$purchaseAmount = '¥42,400';
 if ($isSingleState) {
     $orders = [$orders[0]];
     $purchaseCount = '1';
@@ -89,7 +89,7 @@ if ($isSingleState) {
  * Referenced in: /docs/design/CLIENT_CUSTOMER_DETAIL.md・/shop-partner/customers.php・/index.html
  * 編集元: /shop-partner/customer-detail.php（.htmlは必要時のみの書き出し物。Git管理外）
  * Created: 2026-10-21
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-23
  * ======================================= -->
 <html lang="ja">
   <head>

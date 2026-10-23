@@ -4,7 +4,7 @@
  * URL: /index.html
  * Referenced in: /index.html
  * Created: 2026-10-17
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-22
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -355,8 +355,27 @@
             <span class="status">制作中</span>
           </li>
           <li>
-            <span class="screen-name">集計</span>
-            <span class="status">未着手</span>
+            <div>
+              <a class="screen-link" href="./shop-partner/sales.php">
+                集計
+                <span class="screen-path">shop-partner/sales.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/CLIENT_SALES.md</code></dd></div>
+                <div><dt>構成</dt><dd>B案（期間指定を常時表示・並び順セレクト）</dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/sales.php">通常</a> /
+                  <a href="./shop-partner/sales.php?preview=empty">データなし</a> /
+                  <a href="./shop-partner/sales.php?preview=pager-middle">途中のページ</a> /
+                  <a href="./shop-partner/sales.php?preview=date-error">期間の入力エラー</a> /
+                  <a href="./shop-partner/sales.php?preview=error">取得失敗</a> /
+                  <a href="./shop-partner/sales.php?preview=single-store">単一店舗</a> /
+                  <a href="./shop-partner/sales.php?preview=date-range">期間指定</a> /
+                  <a href="./shop-partner/sales.php?preview=first-month">最初の注文月</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
           </li>
           <li>
             <span class="screen-name">ログイン</span>

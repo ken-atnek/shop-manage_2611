@@ -1,4 +1,11 @@
 @charset "UTF-8";
+/* =======================================
+ * 熊日モール 管理画面 共通Sassの入口
+ * URL: /scss/_index.scss
+ * Referenced in: /shop-partner/assets/scss/ の画面別Sass
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
 /* =================================
  * ウィンドウ・フォントサイズ設定
  * ------------------------------ */
@@ -7,17 +14,24 @@
  * URL: /scss/_colors.scss
  * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
  * Created: 不明
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-23
  * ======================================= */
 /* =================================
  * レスポンシブ設定
  * ------------------------------ */
 /* =======================================
- * ふもと旅館採用 SVG背景・アイコンmixin
- * URL: /src/styles/foundation/_svg.scss
- * Referenced in: /src/styles/foundation/_index.scss, /src/styles/globals.scss, /src/styles/foundation/_ui.scss
+ * 熊日モール 管理画面 共通の操作状態
+ * URL: /scss/_interaction.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
+ * Created: 不明
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
+ * 熊日モール 管理画面 SVG背景・アイコンmixin
+ * URL: /scss/_svg.scss
+ * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
  * Created: 2026-07-07
- * Last updated: 2026-09-21
+ * Last updated: 2026-10-23
  * Created source: ファイル作成日時（移植元由来）
  * ======================================= */
 /* =======================================
@@ -25,7 +39,7 @@
  * URL: /scss/_ui.scss
  * Referenced in: /scss/_index.scss
  * Created: 不明
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-23
  * ======================================= */
 /*=========================================
 ボタン
@@ -36,6 +50,20 @@
 /*=========================================
 ドロップシャドウ
 -----------------------------------------*/
+/* =======================================
+ * 熊日モール 管理画面 共通の表mixin
+ * URL: /scss/_ui-table.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
+ * 熊日モール 管理画面 受注ステータスmixin
+ * URL: /scss/_ui-status.scss
+ * Referenced in: /scss/_index.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
 /*================================
  ステータスボックス(JS併用版)
 --------------------------------*/
@@ -43,11 +71,18 @@
  受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
 --------------------------------*/
 /* =======================================
+ * 熊日モール 管理画面 共通のフォームmixin
+ * URL: /scss/_ui-form.scss
+ * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+/* =======================================
  * 熊日モール Client 商品詳細（登録・編集）スタイル
  * URL: /shop-partner/assets/scss/product-form.scss
  * Referenced in: /shop-partner/product-form.php
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-23
  * ======================================= */
 /* =================================
  * フォーム全体・読み取り専用情報・保存結果

@@ -45,6 +45,7 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 | `.detail-toggle`の`aria-controls`・`aria-expanded`、対応する`.search-panel`の`id`と`inert` | パネルは`aria-controls`の値から取得する。開閉時に`aria-expanded`・`inert`を同期し、フォーカスは詳細検索ボタンに残す |
 | パネル内の`.clear-conditions`、最初の`input` | パネル内の入力値を空にし、チェックを解除して、最初のinputへフォーカスする |
 | `toggleAccordion(button, panel)` | ボタンの`aria-expanded`とパネルの`inert`を切り替え、開いたかを返す共通関数。詳細検索と、`order.js`の展開行から使用する |
+| `select[data-auto-submit]`と所属する`form` | セレクトの`change`時に`select.form.requestSubmit()`で所属フォームを送信する。フォームがない場合は何もしない。属性がないセレクトは対象外 |
 
 - 通常の初期状態は閉じる（パネルは`inert`、ボタンは`aria-expanded="false"`）。閉じたパネルをTab操作・読み上げの対象から外す
 - 詳細条件が入った状態で検索結果を表示するときは、パネルを開いた状態で出力する。パネルの`inert`を外し、`.detail-toggle`を`aria-expanded="true"`にして、入力値・チェックも復元する
@@ -52,12 +53,16 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 - フォーカス先を日付等に固定しない。現行の先頭inputは受注一覧が注文日の開始日、商品一覧が「公開」のチェックボックス
 - `.detail-toggle`がないページでもエラーにしない。詳細検索の処理はブロックスコープ内、`toggleAccordion`はページ別JSから使える位置に維持する
 - `.search-panel-inner`の`position: relative`は維持する。閉じた内容の絶対配置`.sr-only`が外側を基準にしてクリップを逃れ、一覧の高さを押し広げることを防ぐ
+- `data-auto-submit`は変更時に即送信する欄だけに付ける（2026-10-22追加）。現在は集計の月・店舗・並び順が対象（2026-10-22、Kenの決定）。`requestSubmit()`を使うため、通常のフォーム検証・`submit`イベントを経由する。hiddenで適用済みの条件を保持し、ページ番号を送らず1ページ目へ戻す。実際の送信先・条件の復元はBladeで組み込む
+- JSなしの代替操作は既存の詳細検索・受注ステータスにもないため、集計にも`noscript`の表示ボタンは追加していない。サイドバー・詳細検索・`toggleAccordion`の既存処理は変更していない
 
 ## 5. 入力エラー
 
 - 入力エラーの判定はバックエンドで行う。対象欄が見えるよう詳細検索パネルを開き、入力値を復元する
 - エラー時だけ対象の入力欄に`aria-invalid="true"`と`aria-describedby="エラー文のid"`、fieldset／項目内に`<p class="form-error" id="…">エラー文</p>`を出力する。正常時はエラー用属性・文を出さない
 - 期間は開始日・終了日の両方から1つのエラー文を参照する。開始日と終了日が逆の場合の文言は「終了日は開始日以降の日付を指定してください」。画面固有の入力・エラーidは各申し送りを参照
+- 受注一覧（注文日）・商品一覧（更新日）の期間エラー文は、終了日の入力欄の下（左端）から表示し、集計にそろえた（2026-10-22、Kenの決定）。CSSの変更で位置が変わる。HTMLの入れ子・順序・classは変わらず、生成`common.css`の再取り込みが必要
+- 詳細検索内の`.date-field`・`.updated-field`を4列のGrid（開始日・区切り・終了日・右側の空き領域）にし、直下の`.date-range`を`display: contents`にして両入力とエラー文を同じGridへ配置する。終了日は3列目、エラー文は`grid-column: 3 / -1`で3〜4列目を使うため、幅が変わっても左端がそろう。入力欄2つと区切りは従来の上限幅`56rem`・間隔`1.2rem`を維持し、それを超える幅は4列目へ渡す。エラー文は終了日の欄より右へ伸ばして1行で表示し、収まらない狭い幅では詳細検索の枠内で折り返す。ほかの`.form-error`は対象外。[CSS Display仕様](https://www.w3.org/TR/css-display-3/#box-generation)・[HTMLのfieldset描画仕様](https://html.spec.whatwg.org/multipage/rendering.html#the-fieldset-and-legend-elements)を参照
 
 ## 6. 一覧の表示状態
 

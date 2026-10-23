@@ -6,12 +6,13 @@
 @use "../../../scss/interaction" as *;
 @use "../../../scss/svg" as *;
 @use "../../../scss/ui" as *;
+@use "../../../scss/ui-form" as *;
 /* =======================================
  * 熊日モール Client 共通スタイル
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-23
  * ======================================= */
 
 // 一覧内ではなくページ全体でスクロールする。共通resetの横方向の抑止を解除する。
@@ -34,7 +35,7 @@ body {
     overflow: visible;
     color: $color-text-primary;
     font-family: $font-family-base;
-    background-color: #fff;
+    background-color: $pure-white;
     --color-brand-subtle: #eef9f4;
     --color-brand-accent: #097141;
     // サイドバーは管理画面ごとの濃い色（Client＝深い緑、Master＝深い紺）で種類を示す
@@ -83,15 +84,7 @@ footer {
 }
 
 .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
+    @include visually-hidden;
 }
 
 /* =================================
@@ -176,8 +169,8 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 4.4rem;
-        height: 4.4rem;
+        width: $tap-target-size;
+        height: $tap-target-size;
         margin-inline: 1rem;
         color: var(--color-nav-text);
         background: transparent;
@@ -205,7 +198,7 @@ footer {
             display: flex;
             align-items: center;
             gap: 1.2rem;
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
             padding: 0.8rem 1.8rem;
             border-left: 3px solid transparent;
             color: var(--color-nav-text);
@@ -251,15 +244,7 @@ html.sidebar-collapsed .admin-sidebar {
     }
     // display:noneにはせず、リンクの読み上げ名を残す。
     .nav-label {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-        border: 0;
+        @include visually-hidden;
     }
 }
 
@@ -308,12 +293,9 @@ textarea {
         font-size: 1.6rem;
         width: 100%;
         min-width: 0;
-        height: 4.4rem;
+        height: $tap-target-size;
         padding: 1rem 1.6rem;
-        border: 1px solid $color-border-default;
-        border-radius: $radius-sm;
-        color: $color-text-primary;
-        background: $pure-white;
+        @include input-base;
         &[aria-invalid="true"] {
             border-color: $color-error;
         }
@@ -392,12 +374,9 @@ textarea {
             input {
                 // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
                 font-size: 1.6rem;
-                min-height: 4.4rem;
+                min-height: $tap-target-size;
                 padding: 1rem 1.6rem;
-                border: 1px solid $color-border-default;
-                border-radius: $radius-sm;
-                color: $color-text-primary;
-                background: $pure-white;
+                @include input-base;
                 flex: 1;
                 min-width: 0;
                 // Safariの検索欄の角丸・独自余白を外す
@@ -475,11 +454,29 @@ textarea {
                     flex: 1;
                 }
             }
+            .date-field,
+            .updated-field {
+                display: grid;
+                // 56remを超える分は右端の空き列へ渡し、入力欄の幅を維持する。
+                grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(0, calc(100% - 56rem));
+                align-items: center;
+                // HTMLは維持し、両入力とエラー文を同じGridで配置する。
+                > .date-range {
+                    display: contents;
+                    > span {
+                        // 空き列との間には余白を足さず、日付の区切りだけ間隔を保つ。
+                        margin-inline: 1.2rem;
+                    }
+                }
+                > .form-error {
+                    // 終了日の左端から右の空き列まで広げ、収まらない幅では折り返す。
+                    grid-column: 3 / -1;
+                    min-width: 0;
+                    overflow-wrap: anywhere;
+                }
+            }
             .check-group {
-                font-size: inherit;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.4rem 2.4rem;
+                @include check-group;
             }
             .search-actions {
                 font-size: inherit;
@@ -597,8 +594,8 @@ textarea {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 4.4rem;
-            min-height: 4.4rem;
+            min-width: $tap-target-size;
+            min-height: $tap-target-size;
             border-radius: $radius-sm;
             color: $color-text-secondary;
             font-variant-numeric: tabular-nums;
