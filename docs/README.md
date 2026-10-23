@@ -40,6 +40,8 @@
 | [coding/HANDOFF_CLIENT_STORE_LIST.md](coding/HANDOFF_CLIENT_STORE_LIST.md) | Client店舗一覧固有の申し送り（7列・集計・状態・追加／編集導線・現在地・未確定事項） | フロント |
 | [coding/HANDOFF_CLIENT_STORE_FORM.md](coding/HANDOFF_CLIENT_STORE_FORM.md) | Client店舗フォーム固有の申し送り（送信・料金保持・DB対応・エラー・規格JSON・JS依存先・検証範囲） | フロント |
 | [coding/HANDOFF_CLIENT_SALES.md](coding/HANDOFF_CLIENT_SALES.md) | Client集計固有の申し送り（集計条件・期間・操作・状態・CSV・ページ送り・バックエンドで決めてほしいこと・未確定事項） | フロント |
+| [coding/HANDOFF_CLIENT_CUSTOMER_LIST.md](coding/HANDOFF_CLIENT_CUSTOMER_LIST.md) | Client顧客一覧固有の申し送り（7列・検索・集計条件・状態・ページ送り・バックエンドで決めてほしいこと・未確定事項） | フロント |
+| [coding/HANDOFF_CLIENT_CUSTOMER_DETAIL.md](coding/HANDOFF_CLIENT_CUSTOMER_DETAIL.md) | Client顧客詳細固有の申し送り（基本情報・購入状況・注文履歴・届け先判定・状態・バックエンドで決めてほしいこと・未確定事項） | フロント |
 | [coding/DDEV_PHP_UPDATE_GUIDE.md](coding/DDEV_PHP_UPDATE_GUIDE.md) | フロントのDDEVのPHPを修正版へ更新する手順（追加Dockerfile `.ddev/web-build/Dockerfile`） | フロント |
 | `backend/` | API・DB・ルーティング・Blade組み込み等の資料 | バックエンド |
 | `../backend/`（リポジトリのルート） | Laravel等のバックエンドのコード | バックエンド |
