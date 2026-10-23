@@ -503,16 +503,7 @@
         }
         input[type="file"] {
             // sr-only相当。標準UIだけを隠し、Tab・読み上げ・label操作は残す。
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            min-height: 0;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip-path: inset(50%);
-            white-space: nowrap;
-            border: 0;
+            @include visually-hidden(0);
         }
     }
     .image-select-button {

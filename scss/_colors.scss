@@ -3,7 +3,7 @@
  * URL: /scss/_colors.scss
  * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
  * Created: 不明
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-23
  * ======================================= */
 
 // 共通ニュートラルカラー（すべて仮）
@@ -45,6 +45,15 @@ $color-status-processing: #8a3fd1; // 対応中：紫 5.66:1
 $color-status-shipped: #3d7a1f; // 発送済：黄みの緑（ブランド緑#097141と色味を離す）5.25:1
 $color-status-return: #d21f3c; // 返品対応：赤 5.25:1
 $color-status-cancelled: #3a3f46; // キャンセル：チャコール 10.61:1
+
+// 受注ステータスのclass名（status-*）と色。@eachで塗り分けに使う
+$status-colors: (
+    new: $color-status-new,
+    processing: $color-status-processing,
+    shipped: $color-status-shipped,
+    return: $color-status-return,
+    cancelled: $color-status-cancelled,
+);
 
 // 商品の公開状態（2026-10-19 Ken決定。操作できない表示専用バッジ）
 $color-publish-public: #3a5f95; // 公開：青。白文字と6.46:1

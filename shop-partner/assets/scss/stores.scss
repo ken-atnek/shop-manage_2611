@@ -31,14 +31,7 @@
         text-decoration: none;
     }
     .list-error {
-        .message {
-            color: $color-error;
-        }
-        .error-help {
-            font-size: inherit;
-            margin-top: 0.8rem;
-            color: $color-text-secondary;
-        }
+        @include list-error;
     }
 }
 

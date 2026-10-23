@@ -100,3 +100,15 @@
         border-color: $color-border-card;
     }
 }
+
+// 一覧の取得失敗メッセージと補足。
+@mixin list-error {
+    .message {
+        color: $color-error;
+    }
+    .error-help {
+        font-size: inherit;
+        margin-top: 0.8rem;
+        color: $color-text-secondary;
+    }
+}
