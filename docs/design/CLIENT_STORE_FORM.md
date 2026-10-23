@@ -164,7 +164,7 @@ DBとの相違は、`carrier_code`が`stores.carrier_id`ではなく会社コー
 
 ### 地方別送料のカード表示（2026-10-21 Kenの決定・制作済み）
 
-- `.shipping-region`を既存の通常枠線色1px・角丸0.8rem・overflow: hiddenのカードにし、カード間は1.6rem。既存の角丸変数は4pxのため、カードは指定値を直接使用する
+- `.shipping-region`を既存の通常枠線色1px・角丸0.8rem・overflow: hiddenのカードにし、カード間は1.6rem。既存の角丸変数は4pxのため、カードは指定値を直接使用する。2026-10-23に角丸を`$radius-sm`（4px）へそろえた（Sass共通化の7c、Kenの決定）
 - `.region-heading`を全国一律と同じ淡い背景の帯にし、下に通常枠線色1px。余白は上下0.6rem・左2rem・右1.6rem。旧margin-bottomを外し、地方名は600を維持。地方名と一括入力が収まらない場合はflex-wrapで自然に折り返す
 - 金額欄の前に`.bulk-label`の「一括入力」（fz(12)・補助文の色）を表示する。aria-hidden=trueとし、既存の「○○の一括入力金額」の読み上げ用labelとforを維持して二重読み上げを避ける
 - 全国・地方両方の`.bulk-button`を白地＋既存の濃い枠線色1pxにする。ホバー色・フォーカス枠は既存仕様を継承。帯の入力欄とボタンだけoutline-offsetを2pxにし、カードのoverflowで枠が切れないようにする

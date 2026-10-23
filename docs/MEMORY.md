@@ -1529,3 +1529,11 @@
 - 2回目で`$tap-target-size: 4.4rem`（操作できる部品の最小の高さ・幅）と`$field-scroll-margin: 8rem 10rem`（上：欄の上のラベルが見える余白、下：固定の保存バーに隠れない余白）を`scss/_interaction.scss`に追加した。ヘッダーは固定されていないため、固定ヘッダーとの関係は書かない（Kenの決定）
 - 7回目の候補：partialのコメントヘッダーを`/* */`から`//`にしてCSSへ出力しない形にするか（今は各partialのヘッダーが全CSSへ出力される。2026-10-23 Kenの指示で記録）。ほかに、チェックボックスのCSS描画・未選択ラジオの枠`#8A929C`（2026-10-21の決定）、`select-status-box`の効いていない指定の削除、角丸のばらつき、影の茶色の見直し
 - D-037（基盤、2026-10-23）より前の資料の変更（6件：`dfeecad`・`9102d81`・`a744621`・`fd335c9`・`61cf6dc`・`b0cf107`）は、Kenの確認でCodexのチェックに代えた（2026-10-23、Kenの決定）
+
+## 2026-10-23 Sass共通化の6・7回目
+
+- 6回目（`.list-error`を4画面からcommon.scssへ）と7a（partialのコメントを`//`にしてCSSへ出さない、`select-status-box`の二重・効いていない指定の削除、`.admin-header`のコメントアウトの削除）を`2ccfbd6`でまとめて行った。partialのコメントの決まりはAGENTS.md・IMPLEMENTATION_REFERENCE.mdに追加（`0df51f4`、`_reset.scss`は除く）
+- 7b（`176388a`）：2026-10-21の決定どおり、チェックボックスをCSSで描き（選択中はブランド色の地＋白い✓、角丸2px、無効で選択中は地`$color-text-muted`、強制カラーモードでは標準の描画）、未選択のラジオ・チェックボックスの枠を`$color-control-border`（`#8a929c`）にした。KenがSafariで確認し、角丸2pxで確定
+- 7c（`e9e4ff2`、Kenの決定）：影は案B（`0 4px 12px 0 rgba($color-text-primary, 0.12)`）、角丸は案B（送料表とログアウトだけ4px。ステータス6px・フォームの箱の角丸なしはKenの調整のまま）、セレクトは案A（集計の形をmixin `select-control`にして商品・店舗フォームにも使う）、受注一覧の展開行のアイコンボタンは案A（`icon-link`）。案A・案Bは`html.v7c-b`の比較用の指定で見比べ、決定後に消した（コミットには含めていない）
+- 7a・7b・7cの表示の確認は、この案件のメモリに残っていた古い手順（headless Chrome）で行い、基盤のoperations.md「表示の確認」（D-033：Claude in Chrome、画像をファイルに保存しない）と食い違っていた。Kenの指摘でメモリを直した（2026-10-23）
+- 取り込み直しが必要なことを`docs/coding/HANDOFF_CLIENT_COMMON.md`の§8へ書いた。ファイル名・読み込み順・HTMLのclassは変わらない

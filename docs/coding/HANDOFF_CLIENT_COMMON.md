@@ -99,6 +99,7 @@ JS・CSSが依存するclass・属性（変える場合は共通JS・CSSも合�
 - CSSは`common.css`→ページ別CSS。resetは`common.scss`だけで読み込み、ページ別Sassで重複させない
 - JSは`common.js`→ページ別JSの順に`</body>`直前で各1回読み込む。受注一覧は`common.js`→`order.js`、商品一覧は`common.js`だけ
 - `common.js`を先に読み込まないと、`order.js`の展開行で`toggleAccordion`を使えない。読み込み順を変えたり、共通関数をページ別JSから参照できないスコープへ移したりしない
+- 2026-10-23のSassの共通化（6・7回目）で、`common.css`と画面のCSSの中身が変わったため、取り込み直しが必要（取り込み済みの`common.css`・`products.css`を含む）。対象は`ken-work`の`e9e4ff2`の時点の`shop-partner/assets/css/`。ファイル名・読み込み順・HTMLのclassは変わらない。主な変更は、取得失敗の表示（`.list-error`）を画面のCSSから`common.css`へ移した、チェックボックスをCSSで描く（`common.css`）、未選択のラジオ・チェックボックスの枠の色、商品・店舗フォームのセレクトの描き方、受注一覧のステータスの選択肢の影・展開行のアイコンボタン、送料表・ログアウトの角丸、CSSへ出力していたSassの部品のコメントの削除。`products.css`の変更はコメントだけ
 - JS・CSSを更新したときに古いファイルがブラウザに残らないよう、読み込むURLにバージョンを付けてほしい（Laravelの仕組み、またはファイルの更新日時を`?v=`に付けるなど）。共通ファイルと対応するページ別ファイルは組で更新する。特に`common.js`と`order.js`は必ず組で更新する。片方だけ古いと、受注一覧の操作がすべて止まることがある
 
 ## 9. 未確定のまま残っている項目

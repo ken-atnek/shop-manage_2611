@@ -152,7 +152,7 @@ B案の構成は確定（2026-10-22、Kenの決定）。共通ヘッダー・サ
 
 - JSは`common.js`のみ。集計専用JSは作っていない。`</body>`直前に1回読み込み、月・店舗・並び順の自動送信に使う
 - CSSは`common.css`→`sales.css`。固有Sassは`sales.scss`で、resetを重複させない。共通headのサイドバー初期化・読み込み順・キャッシュ対策は[共通申し送り§2](HANDOFF_CLIENT_COMMON.md#2-headの読み込みと初期化)・[§8](HANDOFF_CLIENT_COMMON.md#8-cssjsの読み込み順とキャッシュ対策)を参照
-- セレクトの高さは集計のSass内で`appearance: none`・`4.4rem`と既存の矢印mixinを使ってそろえている。共通フォームやほかの画面の指定へ置き換えない
+- セレクトは`scss/_ui-form.scss`のmixin `select-control`（`appearance: none`・高さ`$tap-target-size`（4.4rem）・既存の矢印mixin）で描く。もとは集計のSass内だけの指定だったが、2026-10-23に商品フォーム・店舗フォームのセレクトも同じmixinにそろえた（Kenの決定）。集計の生成CSSは変わっていない
 
 ## 9. バックエンドで決めてほしいこと
 
