@@ -2,6 +2,7 @@
 @use "./settings" as *;
 @use "./breakpoints" as *;
 @use "./ui" as *;
+@use "./svg" as *;
 @use "./interaction" as *;
 
 // =======================================
@@ -18,6 +19,23 @@
     border-radius: $radius-sm;
     color: $color-text-primary;
     background: $pure-white;
+}
+
+// Safariでも高さ・余白を反映するセレクト。集計の宣言順を維持する。
+@mixin select-control {
+    @include svg-icon-arrow-bottom("4f5863");
+    aspect-ratio: auto;
+    font-size: 1.6rem;
+    height: $tap-target-size;
+    min-height: $tap-target-size;
+    padding: 1rem 3.2rem 1rem 1.6rem;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    color: $color-text-primary;
+    background-color: $pure-white;
+    background-size: 0.8rem 0.5rem;
+    background-position: right 1.2rem center;
+    appearance: none;
 }
 
 // 商品・店舗フォームと顧客詳細の白い箱。顧客詳細では最小幅に0を渡す。

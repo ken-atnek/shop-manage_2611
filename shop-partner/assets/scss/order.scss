@@ -502,18 +502,7 @@
             }
             .image-preview,
             .file-download {
-                font-size: inherit;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 4rem;
-                height: 4rem;
-                color: $color-text-secondary;
-                border-radius: 50%;
-                &:hover {
-                    color: $color-text-primary;
-                    background: $pure-white;
-                }
+                @include icon-link;
             }
         }
         .detail-notes {

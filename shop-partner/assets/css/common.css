@@ -328,7 +328,7 @@ footer {
   color: #fff;
   background-color: var(--color-brand-accent);
   padding: 0.5em 1.4em;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 .admin-header .box-actions form button:focus-visible {
   outline: 3px solid var(--color-brand-accent);

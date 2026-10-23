@@ -189,9 +189,23 @@
   --textarea-max-lines: 8;
 }
 .product-form .form-field select {
+  aspect-ratio: 8/5;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%234f5863"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
+  aspect-ratio: auto;
+  font-size: 1.6rem;
+  height: 4.4rem;
   min-height: 4.4rem;
-  appearance: auto;
-  padding-right: 3.2rem;
+  padding: 1rem 3.2rem 1rem 1.6rem;
+  border: 1px solid #d9dde2;
+  border-radius: 4px;
+  color: #22272e;
+  background-color: #fff;
+  background-size: 0.8rem 0.5rem;
+  background-position: right 1.2rem center;
+  appearance: none;
 }
 .product-form .form-field input,
 .product-form .form-field textarea,
@@ -207,18 +221,20 @@
 .product-form .form-field textarea:disabled,
 .product-form .form-field select:disabled {
   color: #737b86;
-  background: #f6f7f8;
   cursor: not-allowed;
-}
-.product-form .form-field input[readonly],
-.product-form .form-field textarea[readonly],
-.product-form .form-field select[readonly] {
-  background: #f6f7f8;
 }
 .product-form .form-field input[aria-invalid=true]:not([type=checkbox]),
 .product-form .form-field textarea[aria-invalid=true]:not([type=checkbox]),
 .product-form .form-field select[aria-invalid=true]:not([type=checkbox]) {
   border-color: #d21f3c;
+}
+.product-form .form-field input:disabled, .product-form .form-field input[readonly],
+.product-form .form-field textarea:disabled,
+.product-form .form-field textarea[readonly] {
+  background: #f6f7f8;
+}
+.product-form .form-field select:disabled, .product-form .form-field select[readonly] {
+  background-color: #f6f7f8;
 }
 .product-form .form-field input.input-number {
   width: 14rem;

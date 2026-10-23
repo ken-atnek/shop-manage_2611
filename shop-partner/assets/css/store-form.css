@@ -160,13 +160,23 @@
   display: block;
   width: 100%;
   min-width: 0;
+  aspect-ratio: 8/5;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" fill="%234f5863"><path d="M7.15983 0.526429L3.57806 4.10449L0 0.526429L0.526513 -8.39464e-05L3.57806 3.05147L6.62961 -8.42131e-05L7.15613 0.526429L7.15983 0.526429Z"/></svg>');
+  aspect-ratio: auto;
+  font-size: 1.6rem;
+  height: 4.4rem;
   min-height: 4.4rem;
   padding: 1rem 3.2rem 1rem 1.6rem;
   border: 1px solid #d9dde2;
   border-radius: 4px;
   color: #22272e;
-  background: #fff;
-  appearance: auto;
+  background-color: #fff;
+  background-size: 0.8rem 0.5rem;
+  background-position: right 1.2rem center;
+  appearance: none;
 }
 .store-form .form-field input,
 .store-form .form-field select {
@@ -179,8 +189,13 @@
 .store-form .form-field input:disabled,
 .store-form .form-field select:disabled {
   color: #737b86;
-  background: #f6f7f8;
   cursor: not-allowed;
+}
+.store-form .form-field input:disabled {
+  background: #f6f7f8;
+}
+.store-form .form-field select:disabled {
+  background-color: #f6f7f8;
 }
 .store-form .check-group {
   font-size: inherit;
@@ -469,7 +484,7 @@
   font-size: inherit;
   margin-top: 1.6rem;
   border: 1px solid #d9dde2;
-  border-radius: 0.8rem;
+  border-radius: 4px;
   overflow: hidden;
 }
 .store-form .shipping-region h3 {

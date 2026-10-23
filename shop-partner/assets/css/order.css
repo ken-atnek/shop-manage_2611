@@ -398,7 +398,7 @@
   grid-template-columns: 1fr;
   transition: grid-template-rows 0.2s ease-out;
   overflow: hidden;
-  box-shadow: 2px 2px 3px 0 rgba(53, 45, 32, 0.15);
+  box-shadow: 0 4px 12px 0 rgba(34, 39, 46, 0.12);
   border-radius: var(--corner-radius);
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel {
@@ -649,11 +649,14 @@
   height: 4rem;
   color: #4f5863;
   border-radius: 50%;
+  border: 1px solid transparent;
+  transition: color 0.15s ease-out, background-color 0.15s ease-out, border-color 0.15s ease-out;
 }
 .admin-main .order-card .order-detail .file-row .image-preview:hover,
 .admin-main .order-card .order-detail .file-row .file-download:hover {
   color: #22272e;
   background: #fff;
+  border-color: #c4cad2;
 }
 .admin-main .order-card .order-detail .detail-notes {
   font-size: inherit;

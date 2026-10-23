@@ -130,7 +130,7 @@ footer {
                 color: $pure-white;
                 background-color: var(--color-brand-accent);
                 padding: 0.5em 1.4em;
-                border-radius: 2px;
+                border-radius: $radius-sm;
 
                 // 塗りと同色の枠が埋もれないよう、ボタンから離して表示する。
                 &:focus-visible {

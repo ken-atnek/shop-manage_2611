@@ -113,9 +113,7 @@
             --textarea-max-lines: 8;
         }
         select {
-            min-height: $tap-target-size;
-            appearance: auto;
-            padding-right: 3.2rem;
+            @include select-control;
         }
         input,
         textarea,
@@ -127,14 +125,23 @@
             }
             &:disabled {
                 color: $color-text-muted;
-                background: $color-bg-subtle;
                 cursor: not-allowed;
-            }
-            &[readonly] {
-                background: $color-bg-subtle;
             }
             &[aria-invalid="true"]:not([type="checkbox"]) {
                 border-color: $color-error;
+            }
+        }
+        input,
+        textarea {
+            &:disabled,
+            &[readonly] {
+                background: $color-bg-subtle;
+            }
+        }
+        select {
+            &:disabled,
+            &[readonly] {
+                background-color: $color-bg-subtle;
             }
         }
         input.input-number {

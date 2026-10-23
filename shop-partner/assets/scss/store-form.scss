@@ -75,10 +75,7 @@
             display: block;
             width: 100%;
             min-width: 0;
-            min-height: $tap-target-size;
-            padding: 1rem 3.2rem 1rem 1.6rem;
-            @include input-base;
-            appearance: auto;
+            @include select-control;
         }
         input,
         select {
@@ -88,8 +85,17 @@
             }
             &:disabled {
                 color: $color-text-muted;
-                background: $color-bg-subtle;
                 cursor: not-allowed;
+            }
+        }
+        input {
+            &:disabled {
+                background: $color-bg-subtle;
+            }
+        }
+        select {
+            &:disabled {
+                background-color: $color-bg-subtle;
             }
         }
     }
@@ -326,7 +332,7 @@
         font-size: inherit;
         margin-top: 1.6rem;
         border: 1px solid $color-border-default;
-        border-radius: 0.8rem;
+        border-radius: $radius-sm;
         overflow: hidden;
         h3 {
             font-size: fz(16);
