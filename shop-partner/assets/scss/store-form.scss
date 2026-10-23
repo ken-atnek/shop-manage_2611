@@ -15,24 +15,7 @@
 .store-form-page {
     min-width: 0;
     .store-meta {
-        font-size: fz(14);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem 2.4rem;
-        margin: -0.8rem 0 2.4rem;
-        color: $color-text-secondary;
-        div {
-            font-size: inherit;
-            display: flex;
-            gap: 0.8rem;
-        }
-        dt,
-        dd {
-            font-size: inherit;
-        }
-        dd {
-            font-variant-numeric: tabular-nums;
-        }
+        @include form-meta;
     }
     @include form-messages;
 }

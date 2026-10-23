@@ -93,6 +93,28 @@
     }
 }
 
+// 商品・店舗フォームのページ上部に表示する読み取り専用情報。
+@mixin form-meta {
+    font-size: fz(14);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 2.4rem;
+    margin: -0.8rem 0 2.4rem;
+    color: $color-text-secondary;
+    div {
+        font-size: inherit;
+        display: flex;
+        gap: 0.8rem;
+    }
+    dt,
+    dd {
+        font-size: inherit;
+    }
+    dd {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
 // 商品・店舗フォームの保存結果とエラーのまとめ。
 @mixin form-messages {
     .save-status,
