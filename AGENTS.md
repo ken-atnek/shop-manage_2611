@@ -98,6 +98,6 @@ Gitの操作は `~/site_data/art-factory-ai/AGENTS.md` 7章と `~/site_data/art-
 
 - 手動作成するHTML・制作用PHP・Sassには、用途のタイトル・`URL`・`Referenced in`・`Created`・`Last updated`を記載したファイル冒頭のコメントヘッダーを付ける
 - 新規作成時に記載し、既存ファイルにない場合は、そのファイルを次に修正するときに追加する。`Created`は保持し、修正時は`Last updated`を更新する。日付は`YYYY-MM-DD`とし、不明な作成日を推測しない
-- HTMLは`<!doctype html>`の直後に`<!-- ... -->`で、Sassは先頭の`@use`群の直後（なければ先頭。`@charset`があればその後）に`/* ... */`で記載する
+- HTMLは`<!doctype html>`の直後に`<!-- ... -->`で、Sassは先頭の`@use`群の直後（なければ先頭。`@charset`があればその後）に`/* ... */`で記載する。ただし、ルートの`scss/`のpartial（`_`で始まるファイル）は、CSSに出力しないよう`//`で書く（`_reset.scss`のコメントは除く。2026-10-23、Kenの決定）
 - 詳細・テンプレートは[実装連携ガイドのコメント記述ルール](docs/coding/IMPLEMENTATION_REFERENCE.md#コメント記述ルール)を参照する。既存のセクション区切りは維持し、ヘッダー追加だけを理由に依頼範囲外のHTML・Sassを一括変更しない
 
