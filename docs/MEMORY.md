@@ -1521,3 +1521,10 @@
 
 - Sassの分解・mixin化はKenが行う方針をやめ、AIに任せる（2026-10-23、Kenの決定）。洗い出しと計画・レビューはClaude Code、実装はCodexが行い、Kenは計画の承認と最後の見た目の確認だけを行う
 - 「依頼なくmixin等を追加しない」は「Kenが承認した計画なしに追加しない」に読み替えて残した。変更は`DESIGN_TOKENS.md`（文字の太さ・トークン運用）・`docs/SPEC.md`・`docs/coding/IMPLEMENTATION_REFERENCE.md`（Client画面の制作単位）・`docs/design/CLIENT_PRODUCT_FORM.md`（共通化の候補）。本MEMORYの過去の記録（受注一覧完成後にKenが分解する等）は履歴として変更しない
+
+## 2026-10-23 Sass共通化の進め方と7回目の候補
+
+- 計画（Claude Code作成、2026-10-23 Kenの承認）：0回目 基準の記録、1回目 `_svg.scss`のヘッダー修正、2回目 出力の変わらない値の変数化、3回目 表のmixin、4回目 取得失敗・視覚的に隠す指定・ステータス色のmixin、5回目 フォームのmixin。6回目（common.scssへの移動）・7回目（見た目が変わる統一）は、そのときに別に承認する。毎回、作業前後の生成CSSを比べ、見た目に影響がある箇所だけKenがSafariで確認する
+- 1回目の未使用の削除は行わない。ブレイクポイントのmixin（`pc`・`spw`・`tbw`）と`$spw`、`$pc-max-width`・`$article-max-width`は、Masterで使う可能性があり、未使用でもCSSに出力されないため残す（Kenの決定）
+- 2回目で`$tap-target-size: 4.4rem`（操作できる部品の最小の高さ・幅）と`$field-scroll-margin: 8rem 10rem`（上：欄の上のラベルが見える余白、下：固定の保存バーに隠れない余白）を`scss/_interaction.scss`に追加した。ヘッダーは固定されていないため、固定ヘッダーとの関係は書かない（Kenの決定）
+- 7回目の候補：partialのコメントヘッダーを`/* */`から`//`にしてCSSへ出力しない形にするか（今は各partialのヘッダーが全CSSへ出力される。2026-10-23 Kenの指示で記録）。ほかに、チェックボックスのCSS描画・未選択ラジオの枠`#8A929C`（2026-10-21の決定）、`select-status-box`の効いていない指定の削除、角丸のばらつき、影の茶色の見直し
