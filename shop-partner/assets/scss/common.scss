@@ -6,6 +6,7 @@
 @use "../../../scss/interaction" as *;
 @use "../../../scss/svg" as *;
 @use "../../../scss/ui" as *;
+@use "../../../scss/ui-form" as *;
 /* =======================================
  * 熊日モール Client 共通スタイル
  * URL: /shop-partner/assets/scss/common.scss
@@ -294,10 +295,7 @@ textarea {
         min-width: 0;
         height: $tap-target-size;
         padding: 1rem 1.6rem;
-        border: 1px solid $color-border-default;
-        border-radius: $radius-sm;
-        color: $color-text-primary;
-        background: $pure-white;
+        @include input-base;
         &[aria-invalid="true"] {
             border-color: $color-error;
         }
@@ -378,10 +376,7 @@ textarea {
                 font-size: 1.6rem;
                 min-height: $tap-target-size;
                 padding: 1rem 1.6rem;
-                border: 1px solid $color-border-default;
-                border-radius: $radius-sm;
-                color: $color-text-primary;
-                background: $pure-white;
+                @include input-base;
                 flex: 1;
                 min-width: 0;
                 // Safariの検索欄の角丸・独自余白を外す

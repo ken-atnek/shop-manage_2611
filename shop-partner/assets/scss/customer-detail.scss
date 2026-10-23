@@ -37,12 +37,7 @@
     }
     // 店舗フォームの.form-boxを基準にし、入力欄は置かない。
     .form-box {
-        font-size: inherit;
-        min-width: 0;
-        padding: 2.4rem;
-        margin-bottom: 2.4rem;
-        border: 1px solid $color-border-card;
-        background: $pure-white;
+        @include form-box(0);
     }
     h2 {
         font-size: fz(20);
