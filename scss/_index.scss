@@ -1,10 +1,10 @@
-/* =======================================
- * 熊日モール 管理画面 共通Sassの入口
- * URL: /scss/_index.scss
- * Referenced in: /shop-partner/assets/scss/ の画面別Sass
- * Created: 不明
- * Last updated: 2026-10-23
- * ======================================= */
+// =======================================
+// * 熊日モール 管理画面 共通Sassの入口
+// * URL: /scss/_index.scss
+// * Referenced in: /shop-partner/assets/scss/ の画面別Sass
+// * Created: 不明
+// * Last updated: 2026-10-23
+// * =======================================
 
 // 画面別Sassから `@use "index" as *;` でトークンを参照する共通入口。
 // コンパイル時にルートの scss/ を --load-path で指定する。

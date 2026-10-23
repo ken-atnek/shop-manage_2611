@@ -2,13 +2,13 @@
 @use "./settings" as *;
 @use "./interaction" as *;
 
-/* =======================================
- * 熊日モール 管理画面 共通の表mixin
- * URL: /scss/_ui-table.scss
- * Referenced in: /scss/_index.scss
- * Created: 2026-10-23
- * Last updated: 2026-10-23
- * ======================================= */
+// =======================================
+// * 熊日モール 管理画面 共通の表mixin
+// * URL: /scss/_ui-table.scss
+// * Referenced in: /scss/_index.scss
+// * Created: 2026-10-23
+// * Last updated: 2026-10-23
+// * =======================================
 
 // 一覧表のラッパー。上余白がない画面ではnullを渡す。
 @mixin table-scroll($margin-top: 1.6rem) {

@@ -7,6 +7,7 @@
 @use "../../../scss/svg" as *;
 @use "../../../scss/ui" as *;
 @use "../../../scss/ui-form" as *;
+@use "../../../scss/ui-table" as *;
 /* =======================================
  * 熊日モール Client 共通スタイル
  * URL: /shop-partner/assets/scss/common.scss
@@ -91,7 +92,6 @@ footer {
  * HEADER
  * ------------------------------ */
 .admin-header {
-    // min-height: $admin-header-height;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -561,6 +561,9 @@ textarea {
                 @include button-primary;
             }
         }
+    }
+    .list-error {
+        @include list-error;
     }
 }
 

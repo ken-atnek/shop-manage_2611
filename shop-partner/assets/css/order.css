@@ -1,83 +1,5 @@
 @charset "UTF-8";
 /* =======================================
- * 熊日モール 管理画面 共通Sassの入口
- * URL: /scss/_index.scss
- * Referenced in: /shop-partner/assets/scss/ の画面別Sass
- * Created: 不明
- * Last updated: 2026-10-23
- * ======================================= */
-/* =================================
- * ウィンドウ・フォントサイズ設定
- * ------------------------------ */
-/* =======================================
- * 熊日モール 管理画面 共通カラー
- * URL: /scss/_colors.scss
- * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
- * Created: 不明
- * Last updated: 2026-10-23
- * ======================================= */
-/* =================================
- * レスポンシブ設定
- * ------------------------------ */
-/* =======================================
- * 熊日モール 管理画面 共通の操作状態
- * URL: /scss/_interaction.scss
- * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
- * Created: 不明
- * Last updated: 2026-10-23
- * ======================================= */
-/* =======================================
- * 熊日モール 管理画面 SVG背景・アイコンmixin
- * URL: /scss/_svg.scss
- * Referenced in: /scss/_index.scss・/scss/_ui.scss・/shop-partner/assets/scss/common.scss
- * Created: 2026-07-07
- * Last updated: 2026-10-23
- * Created source: ファイル作成日時（移植元由来）
- * ======================================= */
-/* =======================================
- * 熊日モール 共通UI mixin
- * URL: /scss/_ui.scss
- * Referenced in: /scss/_index.scss
- * Created: 不明
- * Last updated: 2026-10-23
- * ======================================= */
-/*=========================================
-ボタン
------------------------------------------*/
-/*=========================================
-中央寄せ
------------------------------------------*/
-/*=========================================
-ドロップシャドウ
------------------------------------------*/
-/* =======================================
- * 熊日モール 管理画面 共通の表mixin
- * URL: /scss/_ui-table.scss
- * Referenced in: /scss/_index.scss
- * Created: 2026-10-23
- * Last updated: 2026-10-23
- * ======================================= */
-/* =======================================
- * 熊日モール 管理画面 受注ステータスmixin
- * URL: /scss/_ui-status.scss
- * Referenced in: /scss/_index.scss
- * Created: 2026-10-23
- * Last updated: 2026-10-23
- * ======================================= */
-/*================================
- ステータスボックス(JS併用版)
---------------------------------*/
-/*================================
- 受注ステータス(JS併用版・配色は_colors.scssの$color-status-*)
---------------------------------*/
-/* =======================================
- * 熊日モール 管理画面 共通のフォームmixin
- * URL: /scss/_ui-form.scss
- * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
- * Created: 2026-10-23
- * Last updated: 2026-10-23
- * ======================================= */
-/* =======================================
  * 熊日モール Client 受注一覧 スタイル
  * URL: /shop-partner/assets/scss/order.scss
  * Referenced in: /shop-partner/orders.php
@@ -487,7 +409,6 @@
   border-radius: var(--corner-radius);
   overflow: hidden;
   min-height: 0;
-  border-radius: var(--corner-radius);
   width: 100%;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li {
@@ -533,7 +454,6 @@
 }
 .admin-main .order-progress .select-customer-status.is-open .list-wrapper .selectbox__panel {
   overflow: auto;
-  border-color: #aeb5be;
 }
 .admin-main .order-progress .select-customer-status .selectbox__head i {
   width: 36px;
@@ -552,9 +472,6 @@
 }
 .admin-main .order-progress .select-customer-status .selectbox__head.status-cancelled .selectbox__value {
   background-color: #3a3f46;
-}
-.admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label {
-  transition: 0.3s ease-out;
 }
 .admin-main .order-progress .select-customer-status .list-wrapper .selectbox__panel li label.status-new {
   --status-color: #c2410c;

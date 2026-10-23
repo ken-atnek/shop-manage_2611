@@ -4,13 +4,13 @@
 @use "./ui" as *;
 @use "./interaction" as *;
 
-/* =======================================
- * 熊日モール 管理画面 共通のフォームmixin
- * URL: /scss/_ui-form.scss
- * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
- * Created: 2026-10-23
- * Last updated: 2026-10-23
- * ======================================= */
+// =======================================
+// * 熊日モール 管理画面 共通のフォームmixin
+// * URL: /scss/_ui-form.scss
+// * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
+// * Created: 2026-10-23
+// * Last updated: 2026-10-23
+// * =======================================
 
 // 入力欄に共通する枠・角丸・文字色・背景。
 @mixin input-base {
