@@ -210,7 +210,7 @@ CSSは`common.css`→`product-form.css`。body末尾のJSONに続けて、`commo
 
 ## 8. 未確定のまま残っている項目
 
-[QA_BACKEND.md](../QA_BACKEND.md)のNo.1〜8には回答とフロントの対応を記録済み。特に[No.1 商品画像](../QA_BACKEND.md#no1-商品画像)・[No.2 食品オフ保存の値](../QA_BACKEND.md#no2-食品オフ保存の値)・[No.4 運送会社の規格](../QA_BACKEND.md#no4-運送会社の規格)を参照する。画像一時保存は採用済み・フロント実装は次回、食品オフのB方式は今回対応、独立allergens本文のDB追加は依頼中。規格はDBテーブル＋Seeder・初期Master編集なしで確認済み。ログインID、画像API等の残る詳細だけを未確定とする。
+[QA_BACKEND.md](../QA_BACKEND.md)のNo.1〜8には回答とフロントの対応を記録済み。特に[No.1 商品画像](../QA_BACKEND.md#no1-商品画像)・[No.2 食品オフ保存の値](../QA_BACKEND.md#no2-食品オフ保存の値)・[No.4 運送会社の規格](../QA_BACKEND.md#no4-運送会社の規格)を参照する。画像一時保存は採用済み・フロント実装は次回、食品オフのB方式は今回対応、独立allergens本文のDB追加は依頼中。規格はDBテーブル＋Seeder・初期Master編集なしで確認済み。画像API等の残る詳細だけを未確定とする（ログインIDはメールアドレスに決定、2026-10-23）。
 
 商品フォーム固有の案・未確定事項は[SPECの商品詳細の未確定事項](../SPEC.md#client商品詳細登録編集の未確定事項案)も参照。特に次を確認してほしい。
 
@@ -225,4 +225,4 @@ CSSは`common.css`→`product-form.css`。body末尾のJSONに続けて、`commo
 
 回答が決まった内容はSPEC・商品フォーム資料・本申し送りへ反映し、name・JSON・マークアップの変更はフロントと合わせて進めてほしい。
 
-2026-10-21の組み込み順は、商品一覧→受注一覧→商品フォーム（画像対応後）→店舗（制作完了後）。1つのLaravel・セッション認証・サーバーのPHP 8.3（8.4.27へ更新予定）／Laravel 13／MariaDB 10.11、XAMPPでbackend/publicを表示、フロントDDEV維持、バックエンドがアセットをLaravelのpublicへコピーする方針は[SPECの確定事項](../SPEC.md#バックエンド構成開発環境の確定事項)・[組み込み順](../SPEC.md#bladeへの組み込み順2026-10-21kenの決定)で確認済み。確認の経緯は[QA No.5](../QA_BACKEND.md#no5-masterclientとログイン)・[No.6](../QA_BACKEND.md#no6-技術構成)・[No.7](../QA_BACKEND.md#no7-ddev生成css)・[No.8](../QA_BACKEND.md#no8-blade組み込み)を参照する。ログインIDと具体的な接続・配置方法等は未確定。
+2026-10-21の組み込み順は、商品一覧→受注一覧→商品フォーム（画像対応後）→店舗（制作完了後）。1つのLaravel・セッション認証・サーバーのPHP 8.3（8.4.27へ更新予定）／Laravel 13／MariaDB 10.11、XAMPPでbackend/publicを表示、フロントDDEV維持、バックエンドがアセットをLaravelのpublicへコピーする方針は[SPECの確定事項](../SPEC.md#バックエンド構成開発環境の確定事項)・[組み込み順](../SPEC.md#bladeへの組み込み順2026-10-21kenの決定)で確認済み。確認の経緯は[QA No.5](../QA_BACKEND.md#no5-masterclientとログイン)・[No.6](../QA_BACKEND.md#no6-技術構成)・[No.7](../QA_BACKEND.md#no7-ddev生成css)・[No.8](../QA_BACKEND.md#no8-blade組み込み)を参照する。具体的な接続・配置方法等は未確定（ログインIDはメールアドレスに決定、2026-10-23）。

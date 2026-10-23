@@ -69,7 +69,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 - `fz()`はem基準のため入れ子で掛け算になる。基準にする要素で1回だけ使い、子は`inherit`にする
 - 例外として、入力欄（`input`・`textarea`）の文字は`1.6rem`（16px）固定とする。16px未満だとiOSのSafariがフォーカス時に画面を拡大するため
 - `textarea`には`rows`を書かない。高さは`common.scss`の共通指定（`field-sizing: content`で入力に合わせて伸ばす、最小2行・最大10行）に任せ、欄ごとの行数は`--textarea-min-lines`・`--textarea-max-lines`、上下の余白は`--textarea-padding-block`で変える。余白を`padding`で指定するときは`--textarea-padding-block`と同じ値にする（最小・最大の高さの計算に使うため）。`field-sizing`未対応の環境では既定の2行＋欄内スクロールになる
-- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはログアウトだけ
+- ボタンは主（`$color-button-primary-*`）・副（`$color-button-secondary-*`）・切り替え（白地＋枠）・アイコン（背景なし）に分ける。通常のボタンは`scss/_ui.scss`の`button-base`を使い、主ボタンは`button-primary`、副ボタンは`button-secondary`を後から重ねる。色は`scss/_colors.scss`の変数を使い、ブランド色の塗りはヘッダーのログアウトとログイン系5画面の主ボタン（`login.scss`の`.login-submit`）だけ（2026-10-23、Kenの決定。詳細は`DESIGN_TOKENS.md`の「ボタンの色」）
 - リセットの`font-weight: unset`により太さは親から継承されるため、太字が必要な要素は`font-weight`を明示する
 - アイコンはインラインsvgで書く。`common.scss`ではsvgの幅・線・塗りを上書きせず、`scss/_reset.scss`の指定に任せる
   - 線のアイコン：`fill`・`stroke`・`stroke-linecap`・`stroke-linejoin`の属性を書かない（リセットの「fill属性のないsvg＝文字色の線・丸い角」が効く）。`stroke-width`と`width`・`height`・`viewBox`は書く
