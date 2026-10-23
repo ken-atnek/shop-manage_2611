@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/store-form.scss
  * Referenced in: /shop-partner/store-form.php
  * Created: 2026-10-21
- * Last updated: 2026-10-21
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -137,7 +137,7 @@
             white-space: nowrap;
         }
     }
-    @media (width > 1194px) {
+    @media (width > $tbw) {
         div.form-row {
             display: grid;
             grid-template-columns: 20rem minmax(0, 1fr);
@@ -163,7 +163,7 @@
             display: block;
             width: 100%;
             min-width: 0;
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
             padding: 1rem 3.2rem 1rem 1.6rem;
             border: 1px solid $color-border-default;
             border-radius: $radius-sm;
@@ -173,7 +173,7 @@
         }
         input,
         select {
-            scroll-margin-block: 8rem 10rem;
+            scroll-margin-block: $field-scroll-margin;
             &:hover:not(:disabled) {
                 border-color: $color-border-hover;
             }
@@ -191,7 +191,7 @@
         gap: 0.4rem 2.4rem;
     }
     .form-check {
-        min-height: 4.4rem;
+        min-height: $tap-target-size;
         input {
             padding: 0;
             width: 1.6rem;
@@ -340,7 +340,7 @@
             border: 1px solid $color-border-strong;
             border-bottom: 0;
             border-radius: $radius-sm $radius-sm 0 0;
-            scroll-margin-block: 8rem 10rem;
+            scroll-margin-block: $field-scroll-margin;
             &:focus-visible {
                 outline-offset: -4px;
             }
@@ -422,7 +422,7 @@
         @include button-secondary;
         background: $pure-white;
         border-color: $color-border-strong;
-        scroll-margin-block: 8rem 10rem;
+        scroll-margin-block: $field-scroll-margin;
     }
     .national-entry {
         padding: 1.6rem 2.4rem;

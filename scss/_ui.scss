@@ -10,7 +10,7 @@
  * URL: /scss/_ui.scss
  * Referenced in: /scss/_index.scss
  * Created: 不明
- * Last updated: 2026-10-19
+ * Last updated: 2026-10-23
  * ======================================= */
 /*=========================================
 ボタン
@@ -18,7 +18,7 @@
 @mixin button-base {
     font-size: inherit;
     font-weight: 500;
-    min-height: 4.4rem;
+    min-height: $tap-target-size;
     padding: 1rem 1.6rem;
     border: 1px solid $color-border-default;
     border-radius: $radius-sm;
@@ -72,7 +72,7 @@
 /*================================
  ステータスボックス(JS併用版)
 --------------------------------*/
-@mixin select-status-box($height: 4.4rem, $position: left, $list-height: 3rem) {
+@mixin select-status-box($height: $tap-target-size, $position: left, $list-height: 3rem) {
     position: relative;
     font-size: inherit;
     --corner-radius: 6px;
@@ -87,7 +87,7 @@
         border-radius: var(--corner-radius);
         cursor: pointer;
         user-select: none;
-        color: #fff;
+        color: $pure-white;
         &::after {
             content: "";
             position: absolute;
@@ -129,7 +129,7 @@
             display: block;
             align-self: stretch;
             // 幅は呼び出し側で指定する（apply-status-boxでは36px）。無効だった`3var (--corner-radius)`は削除
-            background-color: #fff;
+            background-color: $pure-white;
             border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
             border: 1px solid $color-border-default;
             transition: 0.3s ease-out;
@@ -154,7 +154,7 @@
             font-size: inherit;
             position: relative;
             margin: 0;
-            background: #fff;
+            background: $pure-white;
             border-radius: var(--corner-radius);
             overflow: hidden;
             min-height: 0;
@@ -172,7 +172,7 @@
                 // radioはlabelの下に隠れ、外側の共通フォーカス枠もoverflow: hiddenで切れる。
                 // キーボード操作時だけ、色面の上でも見える白枠をlabelの内側に出す。
                 input[type="radio"]:focus-visible + label {
-                    outline: 2px solid #fff;
+                    outline: 2px solid $pure-white;
                     outline-offset: -4px;
                 }
                 label {
@@ -186,7 +186,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: #fff;
+                    color: $pure-white;
                     transition: 0.3s ease-out;
                     @if $position == "center" {
                         padding-right: 1.4em;

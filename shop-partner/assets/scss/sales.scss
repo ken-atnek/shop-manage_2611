@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/sales.scss
  * Referenced in: /shop-partner/sales.php
  * Created: 2026-10-22
- * Last updated: 2026-10-22
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -54,8 +54,8 @@
         @include svg-icon-arrow-bottom("4f5863");
         aspect-ratio: auto;
         font-size: 1.6rem;
-        height: 4.4rem;
-        min-height: 4.4rem;
+        height: $tap-target-size;
+        min-height: $tap-target-size;
         padding: 1rem 3.2rem 1rem 1.6rem;
         border: 1px solid $color-border-default;
         border-radius: $radius-sm;
@@ -74,7 +74,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        min-width: 4.4rem;
+        min-width: $tap-target-size;
         padding: 1rem;
     }
     .date-range {
@@ -89,7 +89,7 @@
             font-size: inherit;
             display: flex;
             align-items: center;
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
         }
         .form-error {
             // 終了日の左端から、集計ボタンの右端までをエラー文の領域にする。

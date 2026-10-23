@@ -11,7 +11,7 @@
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-22
+ * Last updated: 2026-10-23
  * ======================================= */
 
 // 一覧内ではなくページ全体でスクロールする。共通resetの横方向の抑止を解除する。
@@ -34,7 +34,7 @@ body {
     overflow: visible;
     color: $color-text-primary;
     font-family: $font-family-base;
-    background-color: #fff;
+    background-color: $pure-white;
     --color-brand-subtle: #eef9f4;
     --color-brand-accent: #097141;
     // サイドバーは管理画面ごとの濃い色（Client＝深い緑、Master＝深い紺）で種類を示す
@@ -176,8 +176,8 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 4.4rem;
-        height: 4.4rem;
+        width: $tap-target-size;
+        height: $tap-target-size;
         margin-inline: 1rem;
         color: var(--color-nav-text);
         background: transparent;
@@ -205,7 +205,7 @@ footer {
             display: flex;
             align-items: center;
             gap: 1.2rem;
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
             padding: 0.8rem 1.8rem;
             border-left: 3px solid transparent;
             color: var(--color-nav-text);
@@ -308,7 +308,7 @@ textarea {
         font-size: 1.6rem;
         width: 100%;
         min-width: 0;
-        height: 4.4rem;
+        height: $tap-target-size;
         padding: 1rem 1.6rem;
         border: 1px solid $color-border-default;
         border-radius: $radius-sm;
@@ -392,7 +392,7 @@ textarea {
             input {
                 // 入力欄は16px固定（16px未満だとiOSのSafariがフォーカス時に拡大するため）
                 font-size: 1.6rem;
-                min-height: 4.4rem;
+                min-height: $tap-target-size;
                 padding: 1rem 1.6rem;
                 border: 1px solid $color-border-default;
                 border-radius: $radius-sm;
@@ -618,8 +618,8 @@ textarea {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 4.4rem;
-            min-height: 4.4rem;
+            min-width: $tap-target-size;
+            min-height: $tap-target-size;
             border-radius: $radius-sm;
             color: $color-text-secondary;
             font-variant-numeric: tabular-nums;

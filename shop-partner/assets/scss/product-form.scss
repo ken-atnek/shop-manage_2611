@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/product-form.scss
  * Referenced in: /shop-partner/product-form.php
  * Created: 2026-10-20
- * Last updated: 2026-10-20
+ * Last updated: 2026-10-23
  * ======================================= */
 
 /* =================================
@@ -138,7 +138,7 @@
         min-width: 0;
     }
     // 箱は1列のまま。PCだけラベルと入力を分け、legendも同じ列に置く。
-    @media (width > 1194px) {
+    @media (width > $tbw) {
         div.form-row {
             display: grid;
             grid-template-columns: 20rem minmax(0, 1fr);
@@ -203,7 +203,7 @@
             --textarea-max-lines: 8;
         }
         select {
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
             appearance: auto;
             padding-right: 3.2rem;
         }
@@ -211,7 +211,7 @@
         textarea,
         select {
             // エラーリンクで移動しても欄のラベル・legendが画面上端に隠れない余白。
-            scroll-margin-block: 8rem 10rem;
+            scroll-margin-block: $field-scroll-margin;
             &:hover:not(:disabled):not([aria-invalid="true"]):not([type="radio"]) {
                 border-color: $color-border-hover;
             }
@@ -284,7 +284,7 @@
         gap: 0.4rem 2.4rem;
     }
     .form-check {
-        min-height: 4.4rem;
+        min-height: $tap-target-size;
         input {
             // commonの入力欄用paddingを解除。チェックはネイティブ表示を維持。
             padding: 0;
@@ -359,7 +359,7 @@
         font-size: inherit;
         display: flex;
         align-items: center;
-        min-height: 4.4rem;
+        min-height: $tap-target-size;
         line-height: 1.7;
     }
     .packing-help {
@@ -453,7 +453,7 @@
             font-size: inherit;
             width: fit-content;
             max-width: 100%;
-            min-height: 4.4rem;
+            min-height: $tap-target-size;
             padding-block: 1rem;
             color: var(--color-brand-accent);
             list-style-position: inside;
@@ -578,9 +578,9 @@
         button {
             @include button-base;
             padding: 0;
-            flex: 0 0 4.4rem;
-            width: 4.4rem;
-            height: 4.4rem;
+            flex: 0 0 $tap-target-size;
+            width: $tap-target-size;
+            height: $tap-target-size;
             &:disabled {
                 color: $color-text-muted;
                 background: $color-bg-subtle;
