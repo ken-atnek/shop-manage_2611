@@ -103,9 +103,12 @@ footer {
         display: flex;
         align-items: center;
         gap: 0 1.6rem;
+        // パートナー名が長いときは管理画面名を省略し、右の操作を押し出さない。
+        min-width: 0;
         .service-name {
             font-size: fz(20);
             font-weight: 600;
+            white-space: nowrap;
         }
         .admin-name {
             padding-left: 1.6rem;
@@ -113,10 +116,17 @@ footer {
             color: $color-text-primary;
             font-size: fz(20);
             font-weight: 500;
+            // 1行で省略し、全文はtitle属性で出す。
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
     .box-actions {
         font-size: inherit;
+        flex-shrink: 0;
+        margin-left: 2.4rem;
         display: flex;
         align-items: center;
         gap: 0 2.4rem;

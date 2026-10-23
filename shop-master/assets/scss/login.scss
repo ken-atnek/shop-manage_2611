@@ -1,0 +1,11 @@
+// ===== 読み込み =====
+// 画面はClientと共通。色はcommon.cssのMasterのブランド色で切り替わる。
+@use "../../../shop-partner/assets/scss/login";
+
+/* =======================================
+ * 熊日モール Master ログイン スタイル
+ * URL: /shop-master/assets/scss/login.scss
+ * Referenced in: /shop-master/login.php・/shop-master/password-forgot.php・/shop-master/password-reset.php・/shop-master/login-code.php
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */

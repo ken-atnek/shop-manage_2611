@@ -1537,3 +1537,15 @@
 - 7c（`e9e4ff2`、Kenの決定）：影は案B（`0 4px 12px 0 rgba($color-text-primary, 0.12)`）、角丸は案B（送料表とログアウトだけ4px。ステータス6px・フォームの箱の角丸なしはKenの調整のまま）、セレクトは案A（集計の形をmixin `select-control`にして商品・店舗フォームにも使う）、受注一覧の展開行のアイコンボタンは案A（`icon-link`）。案A・案Bは`html.v7c-b`の比較用の指定で見比べ、決定後に消した（コミットには含めていない）
 - 7a・7b・7cの表示の確認は、この案件のメモリに残っていた古い手順（headless Chrome）で行い、基盤のoperations.md「表示の確認」（D-033：Claude in Chrome、画像をファイルに保存しない）と食い違っていた。Kenの指摘でメモリを直した（2026-10-23）
 - 取り込み直しが必要なことを`docs/coding/HANDOFF_CLIENT_COMMON.md`の§8へ書いた。ファイル名・読み込み順・HTMLのclassは変わらない
+
+## 2026-10-23 ログイン画面（Master・Client共通）の仕様の記録とモック
+
+- 仕様はKenの承認（2026-10-23）。今回はCodexを使わず、Claude Codeが仕様の記録とモックを作った（Kenの指示）。業務仕様はSPECの「ログインの確定事項」、画面の構成・状態・文言は新規の`docs/design/COMMON_LOGIN.md`。共通の画面資料は`COMMON_画面名.md`とする決まりをdocs/README.mdに足した
+- ログインIDはメールアドレス。QA No.5は「フロントの対応」欄に一言足しただけで、新しい項目は追加しない。「バックエンドで決めてほしいこと」は、あとでログインの申し送りにまとめる（今回は書かない）
+- 上部の表記はヘッダーとそろえる（Client「熊日モール｜パートナー管理画面」、Master「熊日モール｜管理画面」）。新しいパスワードの2つの欄にも目のアイコンを付ける。再設定リンクの期限切れ・使用済み、確認コードの期限切れ・5回の失敗の文言は仮のまま（Kenの決定）
+- ファイルの形はA案（Kenの決定）：PHPのテンプレートは`shop-partner/`の`login.php`・`password-forgot.php`・`password-reset.php`に置き、`shop-master/`の同じ名前のPHPが`$adminType = 'master'`を入れて読み込む。確認コードは`shop-master/login-code.php`だけ。Masterの共通Sass`shop-master/assets/scss/common.scss`を新しく作り、Clientの`common.scss`を`@use`してブランド色9つ（DESIGN_TOKENSのMasterの仮値）だけbodyで上書きした。`shop-master/assets/js/login.js`はClientのコピーで、先頭に「変えるときは両方を直す」と書いた
+- `scripts/export-html.php`は、ログインの7ページを足し、ページごとに`$adminType`を戻すようにした（Masterのあとに書き出したClientのページがMasterの表記にならないように）
+- ログイン後のClientのヘッダーの`.admin-name`を「熊日メディアコム 管理画面」（表示例）にし、長い名前は1行で省略して`title`で全文を出す（Kenの決定）。common.scssの差は`.box-identity`・`.admin-name`の省略の指定と、`.box-actions`の`flex-shrink: 0`・`margin-left: 2.4rem`だけ
+- Sass共通化の候補：`button-base`（`scss/_ui.scss`）に`:disabled`がなく、無効のボタンの見た目を画面ごとに書いている（商品フォームの画像の操作、店舗フォーム、集計、今回の`login.scss`の`.login-submit`）。あとでSassの共通化に回す（2026-10-23、Kenの指示で記録）。ほかに、ログインの上部表記（`.login-identity`）はヘッダーの`.box-identity`と同じ指定を`login.scss`に書いている
+- 判断に迷った点・不明な点：確認コードが違うときの表示は、欄が1つなので欄の下にした（案）。送り先の伏せ方は表示例`k***@example.jp`で、バックエンドで決める
+- 2026-10-23 ログイン画面のモックは例外として Claude Code が実装。次の画面から D-026 どおり Codex が実装する

@@ -299,10 +299,12 @@ footer {
   display: flex;
   align-items: center;
   gap: 0 1.6rem;
+  min-width: 0;
 }
 .admin-header .box-identity .service-name {
   font-size: max(12px, 1.25em);
   font-weight: 600;
+  white-space: nowrap;
 }
 .admin-header .box-identity .admin-name {
   padding-left: 1.6rem;
@@ -310,9 +312,15 @@ footer {
   color: #22272e;
   font-size: max(12px, 1.25em);
   font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .admin-header .box-actions {
   font-size: inherit;
+  flex-shrink: 0;
+  margin-left: 2.4rem;
   display: flex;
   align-items: center;
   gap: 0 2.4rem;

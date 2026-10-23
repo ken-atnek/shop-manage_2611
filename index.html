@@ -4,7 +4,7 @@
  * URL: /index.html
  * Referenced in: /index.html
  * Created: 2026-10-17
- * Last updated: 2026-10-22
+ * Last updated: 2026-10-23
  * ======================================= -->
 <html lang="ja">
   <head>
@@ -221,7 +221,7 @@
       <section class="screen-group" aria-labelledby="client-heading">
         <div class="screen-group__header">
           <h2 id="client-heading">Client管理画面</h2>
-          <span class="screen-count">8画面</span>
+          <span class="screen-count">11画面</span>
         </div>
         <p class="group-note">共通の申し送り：<code>docs/coding/HANDOFF_CLIENT_COMMON.md</code></p>
         <ul class="screen-list">
@@ -378,8 +378,58 @@
             <span class="status is-working">制作中（Safari確認待ち）</span>
           </li>
           <li>
-            <span class="screen-name">ログイン</span>
-            <span class="status">未着手</span>
+            <div>
+              <a class="screen-link" href="./shop-partner/login.php">
+                ログイン
+                <span class="screen-path">shop-partner/login.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>補足</dt><dd>Master・Client共通のテンプレート（Masterは<code>shop-master/</code>の同じ名前のPHPから読み込む）</dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/login.php">通常</a> /
+                  <a href="./shop-partner/login.php?preview=field-error">未入力・形式の誤り</a> /
+                  <a href="./shop-partner/login.php?preview=auth-error">認証の失敗</a> /
+                  <a href="./shop-partner/login.php?preview=locked">5回続けて失敗</a> /
+                  <a href="./shop-partner/login.php?preview=password-changed">パスワードの変更完了</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-partner/password-forgot.php">
+                パスワードの再設定（申し込み・送信しました）
+                <span class="screen-path">shop-partner/password-forgot.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/password-forgot.php">通常</a> /
+                  <a href="./shop-partner/password-forgot.php?preview=field-error">未入力</a> /
+                  <a href="./shop-partner/password-forgot.php?preview=sent">送信しました</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-partner/password-reset.php">
+                新しいパスワードの設定
+                <span class="screen-path">shop-partner/password-reset.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-partner/password-reset.php">通常</a> /
+                  <a href="./shop-partner/password-reset.php?preview=field-error">8文字未満・不一致</a> /
+                  <a href="./shop-partner/password-reset.php?preview=invalid-link">リンクの期限切れ・使用済み</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
           </li>
         </ul>
       </section>
@@ -387,9 +437,86 @@
       <section class="screen-group" aria-labelledby="master-heading">
         <div class="screen-group__header">
           <h2 id="master-heading">Master管理画面</h2>
-          <span class="screen-count">0画面</span>
+          <span class="screen-count">4画面</span>
         </div>
-        <p class="empty-message">まだ作成していません。</p>
+        <p class="group-note">ログインまわりだけ制作。管理画面本体はまだ作成していません。</p>
+        <ul class="screen-list">
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-master/login.php">
+                ログイン
+                <span class="screen-path">shop-master/login.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>補足</dt><dd>Clientと同じテンプレート。上部の表記・ブランド色が違い、「ログイン状態を保持する」を出さない</dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-master/login.php">通常</a> /
+                  <a href="./shop-master/login.php?preview=field-error">未入力・形式の誤り</a> /
+                  <a href="./shop-master/login.php?preview=auth-error">認証の失敗</a> /
+                  <a href="./shop-master/login.php?preview=locked">5回続けて失敗</a> /
+                  <a href="./shop-master/login.php?preview=password-changed">パスワードの変更完了</a> /
+                  <a href="./shop-master/login.php?preview=code-failed">確認コードを5回間違えた</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-master/login-code.php">
+                確認コードの入力（Masterのみ）
+                <span class="screen-path">shop-master/login-code.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-master/login-code.php">通常（60秒を数える）</a> /
+                  <a href="./shop-master/login-code.php?preview=field-error">6桁でない</a> /
+                  <a href="./shop-master/login-code.php?preview=code-error">コードが違う</a> /
+                  <a href="./shop-master/login-code.php?preview=expired">期限切れ</a> /
+                  <a href="./shop-master/login-code.php?preview=resent">再送した</a> /
+                  <a href="./shop-master/login-code.php?preview=resend-ready">再送できる</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-master/password-forgot.php">
+                パスワードの再設定（申し込み・送信しました）
+                <span class="screen-path">shop-master/password-forgot.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-master/password-forgot.php">通常</a> /
+                  <a href="./shop-master/password-forgot.php?preview=field-error">未入力</a> /
+                  <a href="./shop-master/password-forgot.php?preview=sent">送信しました</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+          <li>
+            <div>
+              <a class="screen-link" href="./shop-master/password-reset.php">
+                新しいパスワードの設定
+                <span class="screen-path">shop-master/password-reset.php</span>
+              </a>
+              <dl class="screen-meta">
+                <div><dt>画面資料</dt><dd><code>docs/design/COMMON_LOGIN.md</code></dd></div>
+                <div><dt>確認する状態</dt><dd>
+                  <a href="./shop-master/password-reset.php">通常</a> /
+                  <a href="./shop-master/password-reset.php?preview=field-error">8文字未満・不一致</a> /
+                  <a href="./shop-master/password-reset.php?preview=invalid-link">リンクの期限切れ・使用済み</a>
+                </dd></div>
+              </dl>
+            </div>
+            <span class="status is-working">制作中（Safari確認待ち）</span>
+          </li>
+        </ul>
       </section>
     </main>
   </body>

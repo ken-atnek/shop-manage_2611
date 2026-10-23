@@ -29,6 +29,7 @@
 | [design/CLIENT_CUSTOMER_LIST.md](design/CLIENT_CUSTOMER_LIST.md) | Client顧客一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_CUSTOMER_DETAIL.md](design/CLIENT_CUSTOMER_DETAIL.md) | Client顧客詳細の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_SALES.md](design/CLIENT_SALES.md) | Client集計の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| [design/COMMON_LOGIN.md](design/COMMON_LOGIN.md) | Master・Client共通のログイン・パスワード再設定・確認コード（Masterのみ）の画面資料（確定事項・状態・文言・制作記録） | フロント（業務仕様の変更はQAで確認） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
 | `coding/LAYOUT_TEMPLATE.md` | 共通レイアウトの構造 | フロント |
@@ -50,7 +51,7 @@
 
 - `docs/backend/`・`backend/`はバックエンドだけが書く。中の構成はバックエンド担当者が決める
 - フロントの資料は `design/`（見た目・画面）と `coding/`（実装・引き渡し）に置く
-- 画面資料は `design/` 直下に `CLIENT_画面名.md`・`MASTER_画面名.md` で置く
+- 画面資料は `design/` 直下に `CLIENT_画面名.md`・`MASTER_画面名.md` で置く。Master・Client共通の画面は `COMMON_画面名.md` とする（2026-10-23、ログイン画面で追加）
 - `SPEC.md`の本文はフロントだけが書く。バックエンドが仕様を変えたい・確認したいときは[QA_BACKEND.md](QA_BACKEND.md)へ書く。決まった業務仕様（保存方式・ステータスの選択肢・集計条件など）はフロントがSPEC本文の確定事項と該当する画面資料へ反映する。QA・`docs/backend/`・`MEMORY.md`だけに書かない
 - `QA_BACKEND.md`は両方が書く。各項目の「回答（バックエンド）」はバックエンドだけ、それ以外はフロントが書く。ただし新しい質問はどちらも末尾へ新しい番号で追加でき、バックエンドからは「質問（バックエンド）」としてその質問欄を書く
 - フロントからの確認事項のうち、バックエンドの判断で決めて実装できるもの（保存値・データの持ち方・実装の時期など）は`QA_BACKEND.md`に追加しない。`SPEC.md`の該当する節と画面の申し送り（`coding/HANDOFF_*.md`）に「バックエンドで決めてほしいこと」として、フロントの前提と並べて書く。決めた内容はバックエンドからフロントへ知らせてもらい、フロントがSPEC・画面資料へ反映する。回答がないと画面の仕様を決められないものだけを`QA_BACKEND.md`へ書く（2026-10-22、Kenの決定）

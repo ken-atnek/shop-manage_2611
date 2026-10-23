@@ -1,0 +1,208 @@
+// ===== 読み込み =====
+@use "../../../scss/index" as *;
+
+/* =======================================
+ * 熊日モール Master・Client共通 ログイン スタイル
+ * URL: /shop-partner/assets/scss/login.scss
+ * Referenced in: /shop-partner/login.php・/shop-partner/password-forgot.php・/shop-partner/password-reset.php・/shop-master/assets/scss/login.scss
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+
+/* =================================
+ * ページの枠
+ * ------------------------------ */
+// サイドバーなし。地の上に白い箱を真ん中に置く。
+.login-main {
+    align-items: center;
+    justify-content: center;
+    padding: 4.8rem 1.6rem;
+}
+.login-box {
+    font-size: inherit;
+    width: min(100%, 48rem);
+    padding: 4rem;
+    border: 1px solid $color-border-card;
+    background: $pure-white;
+    @include form-messages;
+    .save-status,
+    .error-summary {
+        line-height: 1.7;
+    }
+    p {
+        font-size: inherit;
+    }
+    h1 {
+        font-size: fz(24);
+        font-weight: 600;
+        margin-bottom: 2.4rem;
+    }
+    @media (max-width: $tb) {
+        padding: 3.2rem 2.4rem;
+    }
+}
+// ログイン後のヘッダー（.admin-header .box-identity）と同じ表記・大きさにする。
+.login-identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1.6rem;
+    margin-bottom: 3.2rem;
+    .service-name {
+        font-size: fz(20);
+        font-weight: 600;
+    }
+    .admin-name {
+        font-size: fz(20);
+        font-weight: 500;
+        padding-left: 1.6rem;
+        border-left: 1px solid $color-border-strong;
+    }
+}
+.login-lead {
+    margin-bottom: 2.4rem;
+    color: $color-text-secondary;
+    line-height: 1.7;
+    .code-destination {
+        font-weight: 500;
+        color: $color-text-primary;
+        overflow-wrap: anywhere;
+    }
+}
+
+/* =================================
+ * フォーム
+ * ------------------------------ */
+.login-form {
+    font-size: inherit;
+    display: grid;
+    gap: 2.4rem;
+    .form-help {
+        @include form-help;
+    }
+    .form-check {
+        // 上の欄との間を詰め、ボタンとの間を空ける。
+        margin-block: -0.8rem 0;
+    }
+}
+// 主ボタンを幅いっぱいにする。送信中の無効表示はこの画面だけ（button-baseに:disabledがないため）。
+.login-submit {
+    @include button-base;
+    @include button-primary;
+    width: 100%;
+    &:disabled {
+        border-color: $color-border-default;
+        color: $color-text-muted;
+        background: $color-bg-subtle;
+        cursor: default;
+    }
+}
+
+/* =================================
+ * パスワードの表示切り替え
+ * ------------------------------ */
+.password-field {
+    font-size: inherit;
+    position: relative;
+    input {
+        // 右端のボタンに文字が隠れないようにする。
+        padding-right: 5.2rem;
+        // Edgeの独自の表示ボタンは二重になるため消す。
+        &::-ms-reveal {
+            display: none;
+        }
+    }
+    .password-toggle {
+        @include flex-center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: $tap-target-size;
+        height: $tap-target-size;
+        border-radius: $radius-sm;
+        color: $color-text-secondary;
+        background: transparent;
+        cursor: pointer;
+        &[hidden] {
+            display: none;
+        }
+        &:hover {
+            color: $color-text-primary;
+        }
+        &:focus-visible {
+            outline-offset: -3px;
+        }
+        .icon-hide {
+            display: none;
+        }
+        &[aria-pressed="true"] {
+            .icon-show {
+                display: none;
+            }
+            .icon-hide {
+                display: block;
+            }
+        }
+    }
+}
+
+/* =================================
+ * 確認コード（Masterのみ）
+ * ------------------------------ */
+.code-field {
+    input {
+        font-size: 2.4rem;
+        height: 5.6rem;
+        letter-spacing: 0.4em;
+        // 字間の分だけ右へ寄るため、左にも同じだけ空けて中央にそろえる。
+        text-indent: 0.4em;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+    }
+}
+.resend-form {
+    font-size: inherit;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0 1.2rem;
+    margin-top: 1.6rem;
+    .resend-button {
+        font-size: inherit;
+        min-height: $tap-target-size;
+        color: var(--color-brand-accent);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+        background: transparent;
+        cursor: pointer;
+        &:disabled {
+            color: $color-text-muted;
+            text-decoration: none;
+            cursor: default;
+        }
+    }
+    .resend-timer {
+        color: $color-text-secondary;
+        font-variant-numeric: tabular-nums;
+        &[hidden] {
+            display: none;
+        }
+    }
+}
+
+/* =================================
+ * リンク
+ * ------------------------------ */
+.login-links {
+    margin-top: 1.6rem;
+    text-align: center;
+    a {
+        display: inline-flex;
+        align-items: center;
+        min-height: $tap-target-size;
+        color: var(--color-brand-accent);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+}

@@ -1,0 +1,27 @@
+// ===== 読み込み =====
+// 部品はClientと共通。Clientのcommon.scss（reset・レイアウト・フォーム部品など）をそのまま出力する。
+@use "../../../shop-partner/assets/scss/common";
+
+/* =======================================
+ * 熊日モール Master 共通スタイル
+ * URL: /shop-master/assets/scss/common.scss
+ * Referenced in: /shop-master/login.php・/shop-master/password-forgot.php・/shop-master/password-reset.php・/shop-master/login-code.php
+ * Created: 2026-10-23
+ * Last updated: 2026-10-23
+ * ======================================= */
+
+/* =================================
+ * Masterのブランド色
+ * ------------------------------ */
+// 値はDESIGN_TOKENS.mdのMasterの仮値。Clientのbodyの指定より後に書いて上書きする。
+body {
+    --color-brand-subtle: #eef5f9;
+    --color-brand-accent: #0d679c;
+    --color-nav-bg: #13294b;
+    --color-nav-bg-start: #1b3763;
+    --color-nav-bg-end: #0f2240;
+    --color-nav-text: #cfdbea;
+    --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
+    --color-nav-active-bg: #1f4277;
+    --color-nav-active: #8cc4f2;
+}
