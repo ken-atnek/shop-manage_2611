@@ -1583,3 +1583,10 @@
 - KenがSafariで3点を確認し、問題なし：パスワード欄のAutoFillの鍵のアイコンと目のボタンは重ならない、スマホ幅の上の帯は崩れない、「戻る」で戻っても送信中の表示やパスワードは残らない。COMMON_LOGIN（レイアウト・制作記録）と申し送り§10・§11を確認済みに直した
 - SPEC・COMMON_LOGIN・申し送り§11の未確定事項「Masterのログイン後の行き先」に「Masterの制作のときに決める」を足した（Kenの指示）
 - 資料の数行の修正のため、Kenの指示でCodexのチェックははさまず、Claude Codeが直して差分を確かめた。index.htmlのログイン系の状態表示「制作中（Safari確認待ち）」は今回変えていない
+
+## 2026-10-24 Sass共通化の8回目（1）ボタンの無効表示
+
+- `button-disabled`に文字`$color-text-muted`・地`$color-bg-subtle`・枠`$color-border-default`をまとめ、`button-base`・`button-primary`・`button-secondary`の`:disabled`から使う。主・副・ログイン系のブランド色の主ボタンと送信中も同じグレーにし、カーソルはresetの`not-allowed`を使う（Kenの決定）。主・副を別のセレクタで重ねる箇所でも無効の見た目が勝つよう、3つすべてに指定を置く
+- hoverは`:hover:where(:not(:disabled))`にして無効のときは出さず、詳細度を上げずに店舗フォームのサイズのタブの選択中の白地を保つ。リンクにも`button-base`を使えるが、リンクは無効にせず、押せないときは出さないか`button`にする。`aria-disabled`や送信中の専用の見た目は追加しない（Kenの決定）
+- 変更ファイル：`scss/_ui.scss`、`shop-partner/assets/scss/login.scss`・`sales.scss`・`product-form.scss`、`DESIGN_TOKENS.md`、`docs/coding/HANDOFF_CLIENT_COMMON.md`、本記録、`.ai/report.md`。画面別の無効の指定4か所を削除し、取り込み直しが必要なCSSを申し送り§8へ記載した。生成CSSを検証し、ブラウザでの確認はClaude Codeへ引き継ぐ
+- 判断に迷った点・不明な点：なし
