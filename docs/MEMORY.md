@@ -1602,7 +1602,7 @@
 
 ## 2026-10-24 Sass共通化の9回目（規格の文字の入れ子・当たらない:disabled）
 
-- 店舗フォームの`.carrier-rules`：`dl`だけ`fz(14)`にし、`div`・`dt`・`dd`は`font-size: inherit`にした（Kenの決定、案1）。resetの`* { font-size: 62.5% }`があるため子にも指定が要り、`fz(14)`（`max(14px, 0.875em)`）が3段重なっていた。Chromeの計算値で、1280px（既定・sagawa・no-size）は14pxのまま、スマホ縦480pxで14→15.12px（同じ箱の`.form-help`と同じ）、440pxは14pxのまま。案Aに戻してもPCで14pxを保てる。Safariの縦480px・1280pxの確認はKenが行う（未確認）
+- 店舗フォームの`.carrier-rules`：`dl`だけ`fz(14)`にし、`div`・`dt`・`dd`は`font-size: inherit`にした（Kenの決定、案1）。resetの`* { font-size: 62.5% }`があるため子にも指定が要り、`fz(14)`（`max(14px, 0.875em)`）が3段重なっていた。Chromeの計算値で、1280px（既定・sagawa・no-size）は14pxのまま、スマホ縦480pxで14→15.12px（同じ箱の`.form-help`と同じ）、440pxは14pxのまま。案Aに戻してもPCで14pxを保てる。KenがSafariで確認済み（2026-10-24、既定・sagawa・no-sizeの3通り×縦480px・1280pxの6通り）
 - `button-base`・`button-primary`・`button-secondary`に`$disabled`引数（既定`true`、既定の出力は変わらない）を足し、リンク（`.empty-actions a`・`.show-all`・保存バーの`a`・`.store-add`）と`label`（`.image-select-button`）では`false`にした（Kenの決定、案1）。`.month-button`は端の月が`<button disabled>`のため既定のまま。保存バーの`button, a`の`button-base`も`false`にしたため、`.save-bar button:disabled, .save-bar a:disabled`の規則がまるごと消える。保存ボタン（商品・店舗フォームとも`button-primary`の1つだけ）の無効のグレーは、`button-primary`の`:disabled`に残ることを確かめた（Kenの指示）
 - 生成CSSをcss-compare.shで比べ、差は当たらない`:disabled`の規則の削除・`.carrier-rules`の2つの規則・`stores.css`と`store-form.css`のヘッダーの日付だけ。`sales.css`などほかのCSSは差なし。取り込み直しのCSSを申し送り§8に、mixinの使い方をDESIGN_TOKENSのボタンの色に足した
 - 商品フォームのファイル入力（`#product-images`）を`disabled`にする処理は、PHP・JSともなし（枚数の上限は未確定）
