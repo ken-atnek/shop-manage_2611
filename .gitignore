@@ -1,6 +1,9 @@
 .DS_Store
 node_modules/
 *.map
+# Sassの出力先（生成CSSはnpm run sassで作る。D-045）
+shop-master/assets/css/
+shop-partner/assets/css/
 docs/design/proposals
 # 静的HTMLは必要時のみ scripts/export-html.php で書き出す（納品はPHP）
 shop-partner/*.html
