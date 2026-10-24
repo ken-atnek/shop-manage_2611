@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/store-form.scss
  * Referenced in: /shop-partner/store-form.php
  * Created: 2026-10-21
- * Last updated: 2026-10-23
+ * Last updated: 2026-10-24
  * ======================================= */
 
 /* =================================
@@ -171,11 +171,13 @@
             color: $color-text-secondary;
         }
     }
-    dl,
+    dl {
+        font-size: fz(14);
+    }
     div,
     dt,
     dd {
-        font-size: fz(14);
+        font-size: inherit;
     }
     .carrier-sizes {
         display: grid;

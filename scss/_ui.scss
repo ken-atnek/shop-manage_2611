@@ -25,7 +25,8 @@
 // 詳細度で負けないよう、base・主・副の3つすべてに:disabledを置く。
 // リンク（a）にもbutton-baseを使えるが、リンクは無効にしない。押せないときは出さないかbuttonにする。
 // aria-disabledの見た目は用意しない（2026-10-24、Kenの決定）。
-@mixin button-base {
+// リンク（a）・labelで使うときは$disabled: falseにし、当たらない:disabledを出さない（2026-10-24、Kenの決定）。
+@mixin button-base($disabled: true) {
     font-size: inherit;
     font-weight: 500;
     min-height: $tap-target-size;
@@ -38,13 +39,15 @@
     &:hover:where(:not(:disabled)) {
         background: $color-bg-subtle;
     }
-    &:disabled {
-        @include button-disabled;
+    @if $disabled {
+        &:disabled {
+            @include button-disabled;
+        }
     }
 }
 
 // 主ボタン（検索・この条件で検索・保存）。button-baseの後に重ねる
-@mixin button-primary {
+@mixin button-primary($disabled: true) {
     font-weight: 500;
     border-color: $color-button-primary-border;
     color: $color-button-primary-text;
@@ -52,13 +55,15 @@
     &:hover:where(:not(:disabled)) {
         background: $color-button-primary-bg-hover;
     }
-    &:disabled {
-        @include button-disabled;
+    @if $disabled {
+        &:disabled {
+            @include button-disabled;
+        }
     }
 }
 
 // 副ボタン（条件をクリア）。button-baseの後に重ねる
-@mixin button-secondary {
+@mixin button-secondary($disabled: true) {
     border-color: $color-button-secondary-bg;
     color: $color-text-primary;
     background: $color-button-secondary-bg;
@@ -66,8 +71,10 @@
         border-color: $color-button-secondary-bg-hover;
         background: $color-button-secondary-bg-hover;
     }
-    &:disabled {
-        @include button-disabled;
+    @if $disabled {
+        &:disabled {
+            @include button-disabled;
+        }
     }
 }
 

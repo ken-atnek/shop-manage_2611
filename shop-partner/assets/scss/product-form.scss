@@ -408,7 +408,7 @@
         }
     }
     .image-select-button {
-        @include button-base;
+        @include button-base($disabled: false);
         display: inline-flex;
         align-items: center;
         justify-content: center;

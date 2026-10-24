@@ -606,14 +606,14 @@ textarea {
             gap: 1.2rem;
             margin-top: 2.4rem;
             a {
-                @include button-base;
+                @include button-base($disabled: false);
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 text-decoration: none;
             }
             .show-all {
-                @include button-primary;
+                @include button-primary($disabled: false);
             }
         }
     }

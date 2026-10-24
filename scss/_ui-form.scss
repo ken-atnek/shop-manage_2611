@@ -10,7 +10,7 @@
 // * URL: /scss/_ui-form.scss
 // * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
 // * Created: 2026-10-23
-// * Last updated: 2026-10-23
+// * Last updated: 2026-10-24
 // * =======================================
 
 // 入力欄に共通する枠・角丸・文字色・背景。
@@ -187,7 +187,7 @@
     background: $pure-white;
     button,
     a {
-        @include button-base;
+        @include button-base($disabled: false);
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -198,7 +198,7 @@
         @include button-primary;
     }
     a {
-        @include button-secondary;
+        @include button-secondary($disabled: false);
         text-decoration: none;
     }
 }
