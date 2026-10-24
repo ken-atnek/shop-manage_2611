@@ -94,7 +94,7 @@ Master＝青／Client＝緑の割り当ては要確認。以下の面・線・�
 | ログアウト | `--color-brand-accent` | ブランド色の塗り＋白文字 | ヘッダーのみ。管理画面の種類（Client＝緑／Master＝青）を色で示すための例外 |
 | ログイン系の主ボタン | `--color-brand-accent` | ブランド色の塗り＋白文字（白文字とClient 6.09:1・Master 6.11:1）。ホバーで色を変えない（暗い色のトークンがないため）。フォーカスは塗りと同色の枠が埋もれないようoffset 4px | ログイン系5画面（ログイン・再設定の申し込み・新しいパスワード・確認コード）の「ログイン」「再設定のメールを送る」「パスワードを変更する」「確認する」。いちばん押してほしい操作が1つだけのための例外（2026-10-23、Kenの決定）。`shop-partner/assets/scss/login.scss`の`.login-submit` |
 
-無効のボタンは、`button-base`・`button-primary`・`button-secondary`の`:disabled`で、文字`$color-text-muted`・地`$color-bg-subtle`・枠`$color-border-default`にそろえる。主・副・ログイン系のブランド色の主ボタンとも同じグレーとし、無効のときはhoverを出さない。カーソルはresetの`not-allowed`を使い、送信中（保存中…・ログイン中…）も同じ見た目にする。リンク（`a`）にも`button-base`を使えるが、リンクは無効にしない。押せないときはリンクを出さないか`button`にし、`aria-disabled`の見た目は用意しない（2026-10-24、Kenの決定）。
+無効のボタンは、`button-base`・`button-primary`・`button-secondary`の`:disabled`で、文字`$color-text-muted`・地`$color-bg-subtle`・枠`$color-border-default`にそろえる。主・副・ログイン系のブランド色の主ボタンとも同じグレーとし、無効のときはhoverを出さない。カーソルはresetの`not-allowed`を使い、送信中（保存中…・ログイン中…）も同じ見た目にする。リンク（`a`）にも`button-base`を使えるが、リンクは無効にしない。押せないときはリンクを出さないか`button`にし、`aria-disabled`の見た目は用意しない（2026-10-24、Kenの決定）。リンク（`a`）や`label`に3つのmixinを使うときは`$disabled: false`を渡し、当たらない`:disabled`の規則を出さない。無効になる`button`にも当たる指定（端の月が`<button disabled>`になる月送りの`.month-button`）は既定の`true`のままにする。保存バーの`button, a`の`button-base`は`false`にしているが、保存ボタンに重ねる`button-primary`が無効の見た目を持つ（2026-10-24、Kenの決定）。
 
 主ボタンの青は受注ステータスの色ではないため、「受注ステータスに青を使わない」とは矛盾しない。商品の公開バッジとも別用途の色とする。Masterはブランド色も青系のため、Master画面の制作時に主ボタンとの見分けを確認する。
 
