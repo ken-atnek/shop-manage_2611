@@ -29,6 +29,7 @@
 | [design/CLIENT_CUSTOMER_LIST.md](design/CLIENT_CUSTOMER_LIST.md) | Client顧客一覧の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_CUSTOMER_DETAIL.md](design/CLIENT_CUSTOMER_DETAIL.md) | Client顧客詳細の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
 | [design/CLIENT_SALES.md](design/CLIENT_SALES.md) | Client集計の画面資料（確定事項・案・未確定事項・制作予定） | フロント（業務仕様の変更はQAで確認） |
+| [design/MASTER_ORDER_LIST.md](design/MASTER_ORDER_LIST.md) | Master受注一覧の画面資料（Clientとの違い・確定事項・未確定事項。制作前） | フロント（業務仕様の変更はQAで確認） |
 | [design/COMMON_LOGIN.md](design/COMMON_LOGIN.md) | Master・Client共通のログイン・パスワード再設定・確認コード（Masterのみ）の画面資料（確定事項・状態・文言・制作記録） | フロント（業務仕様の変更はQAで確認） |
 | `design/reference/` | 提供ロゴ等の参照資料 | フロント |
 | `design/proposals/` | 画像モック・生成記録（Git管理外のローカル資料） | フロント |
