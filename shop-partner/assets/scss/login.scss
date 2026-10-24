@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/login.scss
  * Referenced in: /shop-partner/login.php・/shop-partner/password-forgot.php・/shop-partner/password-reset.php・/shop-master/assets/scss/login.scss
  * Created: 2026-10-23
- * Last updated: 2026-10-23
+ * Last updated: 2026-10-24
  * ======================================= */
 
 /* =================================
@@ -137,24 +137,18 @@ body.login-page {
         margin-block: -0.8rem 0;
     }
 }
-// 主ボタンを幅いっぱいにする。送信中の無効表示はこの画面だけ（button-baseに:disabledがないため）。
+// 主ボタンを幅いっぱいにする。送信中の無効表示はbutton-baseの共通の指定を使う。
 .login-submit {
     @include button-base;
     width: 100%;
     border-color: var(--color-brand-accent);
     color: $pure-white;
     background: var(--color-brand-accent);
-    &:hover {
+    &:hover:where(:not(:disabled)) {
         background: var(--color-brand-accent);
     }
     &:focus-visible {
         outline-offset: 4px;
-    }
-    &:disabled {
-        border-color: $color-border-default;
-        color: $color-text-muted;
-        background: $color-bg-subtle;
-        cursor: default;
     }
 }
 

@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/product-form.scss
  * Referenced in: /shop-partner/product-form.php
  * Created: 2026-10-20
- * Last updated: 2026-10-23
+ * Last updated: 2026-10-24
  * ======================================= */
 
 /* =================================
@@ -473,10 +473,6 @@
             flex: 0 0 $tap-target-size;
             width: $tap-target-size;
             height: $tap-target-size;
-            &:disabled {
-                color: $color-text-muted;
-                background: $color-bg-subtle;
-            }
         }
     }
 }

@@ -6,7 +6,7 @@
  * URL: /shop-partner/assets/scss/sales.scss
  * Referenced in: /shop-partner/sales.php
  * Created: 2026-10-22
- * Last updated: 2026-10-23
+ * Last updated: 2026-10-24
  * ======================================= */
 
 /* =================================
@@ -123,12 +123,6 @@
     .csv-download {
         @include button-base;
         @include button-secondary;
-    }
-    .month-button:disabled,
-    .csv-download:disabled {
-        color: $color-text-muted;
-        border-color: $color-border-default;
-        background: $color-bg-subtle;
     }
 }
 
