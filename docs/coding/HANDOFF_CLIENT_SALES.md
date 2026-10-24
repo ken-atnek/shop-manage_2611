@@ -1,7 +1,7 @@
 # Client集計 バックエンドへの申し送り
 
 - 作成日：2026-10-22
-- 対象：`shop-partner/sales.php`（制作用PHP）、`shop-partner/assets/scss/sales.scss`、生成CSS（`shop-partner/assets/css/sales.css`）
+- 対象：`shop-partner/sales.php`（制作用PHP）、`shop-partner/assets/scss/sales.scss`、生成CSS（`shop-partner/assets/css/sales.css`。`npm run sass`で作る。Gitでは追跡しない）
 - 作成：フロント（Ken・Codex）
 
 共通の内容は[HANDOFF_CLIENT_COMMON.md](HANDOFF_CLIENT_COMMON.md)を参照。ここには集計固有の内容だけを記載する。仕様の正は[SPECの集計の確定事項](../SPEC.md#集計の確定事項)と[集計の画面資料](../design/CLIENT_SALES.md)。食い違う場合は仕様資料を優先し、フロントへ知らせてほしい。

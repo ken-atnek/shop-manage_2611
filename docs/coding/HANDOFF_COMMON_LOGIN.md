@@ -1,7 +1,7 @@
 # 共通 ログイン・パスワード再設定・確認コード バックエンドへの申し送り
 
 - 作成日：2026-10-23
-- 対象：Master・Clientのログイン系5画面の制作用PHP、`shop-partner/assets/scss/`・`shop-master/assets/scss/`の`common.scss`・`login.scss`、生成CSS（各`assets/css/common.css`・`login.css`）、各`assets/js/login.js`とMasterの`login-code.js`、Clientの`includes/inc_header.php`（具体的なパスは§1・§9）
+- 対象：Master・Clientのログイン系5画面の制作用PHP、`shop-partner/assets/scss/`・`shop-master/assets/scss/`の`common.scss`・`login.scss`、生成CSS（各`assets/css/common.css`・`login.css`。`npm run sass`で作る。Gitでは追跡しない）、各`assets/js/login.js`とMasterの`login-code.js`、Clientの`includes/inc_header.php`（具体的なパスは§1・§9）
 - 作成：フロント（Ken・Codex）
 
 仕様の正は[SPECのログインの確定事項](../SPEC.md#ログインの確定事項)と[ログインの画面資料](../design/COMMON_LOGIN.md)。食い違う場合は仕様資料を優先し、フロントへ知らせてほしい。実装の照合元は`013fb74`時点の対象ファイル（作業前`ken-work 819e449`でも差分なし）。
@@ -25,7 +25,7 @@
 | 種類 | Client共通一式 | Master共通一式 |
 |---|---|---|
 | Sass | `shop-partner/assets/scss/common.scss`・`shop-partner/assets/scss/login.scss` | `shop-master/assets/scss/common.scss`・`shop-master/assets/scss/login.scss` |
-| 生成CSS | `shop-partner/assets/css/common.css`・`shop-partner/assets/css/login.css` | `shop-master/assets/css/common.css`・`shop-master/assets/css/login.css` |
+| 生成CSS（`npm run sass`で作る。Gitでは追跡しない） | `shop-partner/assets/css/common.css`・`shop-partner/assets/css/login.css` | `shop-master/assets/css/common.css`・`shop-master/assets/css/login.css` |
 | JS | `shop-partner/assets/js/login.js` | `shop-master/assets/js/login.js` |
 
 - Masterの`login.php`・`password-forgot.php`・`password-reset.php`は、`$adminType = 'master'`を入れてClientの同名テンプレートを読む。`login-code.php`はMasterに単独で置く

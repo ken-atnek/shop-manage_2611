@@ -1,7 +1,7 @@
 # Client顧客詳細 バックエンドへの申し送り
 
 - 作成日：2026-10-23
-- 対象：`shop-partner/customer-detail.php`（制作用PHP）、`shop-partner/assets/scss/customer-detail.scss`、生成CSS（`shop-partner/assets/css/customer-detail.css`）
+- 対象：`shop-partner/customer-detail.php`（制作用PHP）、`shop-partner/assets/scss/customer-detail.scss`、生成CSS（`shop-partner/assets/css/customer-detail.css`。`npm run sass`で作る。Gitでは追跡しない）
 - 作成：フロント（Ken・Codex）
 
 共通の内容は[HANDOFF_CLIENT_COMMON.md](HANDOFF_CLIENT_COMMON.md)を参照。ここには顧客詳細固有の内容だけを記載する。仕様の正は[SPECの顧客管理の確定事項](../SPEC.md#顧客管理の確定事項)と[顧客詳細の画面資料](../design/CLIENT_CUSTOMER_DETAIL.md)。食い違う場合は仕様資料を優先し、フロントへ知らせてほしい。顧客のデータ・識別・閲覧範囲についての決定依頼は[顧客一覧の申し送り§9](HANDOFF_CLIENT_CUSTOMER_LIST.md#9-バックエンドで決めてほしいこと)にまとめる。

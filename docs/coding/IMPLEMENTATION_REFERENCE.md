@@ -38,7 +38,7 @@ Codexは依頼範囲外のPHP・HTMLを作成・変更せず、作成した構�
 - `order.scss`は`@use → コメントヘッダー → 受注一覧固有のセクション`とする。KPI、受注一覧だけの検索条件配置、列見出し、注文の箱、商品明細、進捗状況、操作、展開行、拡大表示を置き、共通部分は戻さない
 - `common.scss`＋ページ別Sassの構成を継続し、受注一覧完成後も`admin.scss`への再編を前提にしない
 - 既存の関数・mixinを利用し、Kenが承認した計画なしに新しいmixin・`@extend`・関数・パーシャルを追加したり、ファイルを再編したりしない
-- Sassの分解・mixin化はAIが行う。洗い出しと計画・レビューはClaude Code、実装はCodexが行い、Kenは計画の承認と最後の見た目の確認だけを行う（2026-10-23、Kenの決定）。分解の前後で各画面の生成CSSを比べ、値・指定が変わっていないことを確かめる。違いが出た箇所は理由を説明し、見た目に影響がある箇所だけをKenがSafariで確認する
+- Sassの分解・mixin化はAIが行う。洗い出しと計画・レビューはClaude Code、実装はCodexが行い、Kenは計画の承認と最後の見た目の確認だけを行う（2026-10-23、Kenの決定）。分解の前後で各画面の生成CSSを比べ、値・指定が変わっていないことを確かめる。生成CSSは基盤の`css-compare.sh`で比べる（基盤の`~/site_data/art-factory-ai/docs/operations.md`「ビルドの仕方を変えたときの確かめ方」）。違いが出た箇所は理由を説明し、見た目に影響がある箇所だけをKenがSafariで確認する
 
 Client画面で共用する操作は`shop-partner/assets/js/common.js`、画面固有の操作はページ別JSへ置く。受注一覧は`common.js`→`order.js`の順に`</body>`直前で読み込み、`order.js`は`common.js`の`toggleAccordion`を展開行に使用する。
 
@@ -136,7 +136,7 @@ Clientのサイドバー開閉も`common.scss`・`common.js`で共用する。PC
 ## 制作環境と引き渡し
 
 - Sassの編集元、出力先、npmコマンドは`docs/SPEC.md`の「フォルダとSass」を参照する
-- 引き渡すものは制作用PHP（ページと`includes/`の共通部品）、共通・管理画面別のSass、生成CSSと必要なアセット、仕様資料とする。静的HTMLは含めない
+- 引き渡すものは制作用PHP（ページと`includes/`の共通部品）、共通・管理画面別のSass、生成CSS（ビルドで作る。Gitでは追跡しない）と必要なアセット、仕様資料とする。静的HTMLは含めない
 - Sassの再コンパイル用に`package.json`と`package-lock.json`も渡す。`node_modules/`は含めない
 - Laravel・Bladeへの組み込みはバックエンド担当者が同じリポジトリで行う。フロントの作業ではLaravelを構築しない
 - Vite・Astroは現時点では使用しない

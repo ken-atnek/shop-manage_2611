@@ -1,7 +1,7 @@
 # Client店舗一覧 バックエンドへの申し送り
 
 - 作成日：2026-10-21
-- 対象：`shop-partner/stores.php`（制作用PHP）、`shop-partner/assets/scss/stores.scss`、生成CSS
+- 対象：`shop-partner/stores.php`（制作用PHP）、`shop-partner/assets/scss/stores.scss`、生成CSS（`npm run sass`で作る。Gitでは追跡しない）
 - 作成：フロント（Ken・Codex）
 
 共通の内容は[HANDOFF_CLIENT_COMMON.md](HANDOFF_CLIENT_COMMON.md)を参照。ここには店舗一覧固有の内容だけを記載する。仕様の正は[SPECの店舗と送料](../SPEC.md#店舗と送料の確定事項)と[店舗一覧資料](../design/CLIENT_STORE_LIST.md)。食い違う場合は最新の仕様資料を優先し、フロントへ知らせてほしい。

@@ -1,7 +1,7 @@
 # Client商品詳細（登録・編集） バックエンドへの申し送り
 
 - 作成日：2026-10-20
-- 対象：`shop-partner/product-form.php`（制作用PHP）、`shop-partner/assets/scss/product-form.scss`、生成CSS、`shop-partner/assets/js/product-form.js`
+- 対象：`shop-partner/product-form.php`（制作用PHP）、`shop-partner/assets/scss/product-form.scss`、生成CSS（`npm run sass`で作る。Gitでは追跡しない）、`shop-partner/assets/js/product-form.js`
 - 作成：フロント（Ken・Codex）
 
 共通の内容は[HANDOFF_CLIENT_COMMON.md](HANDOFF_CLIENT_COMMON.md)を参照。ここには商品フォーム固有の内容だけを記載する。仕様の正は[仕様書](../SPEC.md)と[商品フォーム資料](../design/CLIENT_PRODUCT_FORM.md)で、内容が食い違う場合は最新の仕様資料を優先し、フロントへ知らせてほしい。

@@ -16,7 +16,7 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 - 制作の流れ：プロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、Kenが見た目など必要な箇所を調整する。依頼範囲外のPHP・HTMLは作成・変更しない。AIの役割分担は基盤（art-factory-ai）の AGENTS.md 2章に従う
 - 静的HTML・Sassをブラウザで確認しながらデザインを固める
 - 制作時はDDEVのPHPで共通ヘッダー・サイドバーをインクルードする。HTMLの組み立てにNodeは使わず、PHPは表示の共通化・現在地・静的出力時のリンク切り替えだけに限定する
-- 制作用PHP（include構成）・Sass・生成CSSをバックエンド担当者へ渡し、Laravel・Bladeへの組み込みは担当者が行う。静的HTMLは納品物に含めない
+- 制作用PHP（include構成）・Sassをバックエンド担当者へ渡し、生成CSSは担当者が`npm ci`→`npm run sass`で作る。Laravel・Bladeへの組み込みは担当者が行う。静的HTMLは納品物に含めない
 - フロント（デザイン実装）の作業ではLaravelを構築しない。Laravelの構築・組み込みはバックエンド担当者が同じリポジトリで行う
 - Figmaは必須工程ではなく、必要な場合のみ使用する
 - Vite・Astroは現時点では使用しない
@@ -28,7 +28,7 @@ Master / Clientの2種類を対象とする。画面一覧は以下に整理し�
 - 1環境につき1つのLaravelアプリでMaster・Clientの管理画面と商品・店舗・注文などの共通データ・処理を扱う。管理画面ログインは新規実装し、Laravel標準のセッション認証を使う。ログインIDはメールアドレスとし、画面操作は[ログインの確定事項](#ログインの確定事項)に従う（2026-10-23、Kenの決定）。購入者側の認証はこの決定に含めない
 - サーバーの採用構成はPHP 8.3.35（8.4.27へ更新予定。2026-10-22、Kenの決定）／Laravel 13.x／MariaDB 10.11.x。切り替えまではコードをPHP 8.3互換に保つ。バックエンドのローカル開発はXAMPP（PHP 8.3.30／MariaDB 10.4.32）とし、サーバーのバージョンとは区別する
 - バックエンドはApacheのVirtualHostで`backend/public`を表示する。ローカルURLは`http://demo-kumanichi-shop-manage.test`。フロントのDDEVは制作確認用のままとし、バックエンド用にドキュメントルートを切り替えない
-- フロントの生成CSS・JS・画面用画像はバックエンド担当者がコピーし、Client用は`backend/public/assets/partner/`、Master用は`backend/public/assets/master/`（それぞれcss/・js/・images/）へ配置してBladeから読む。配置先はQA No.7の追記（2）・No.9で確定。Sassの編集元・出力先は維持する。フロント更新時は差分を確認して再取り込みし、Laravel連携のために変更したJSは変更内容を確認して調整する
+- フロントの生成CSS・JS・画面用画像はバックエンド担当者がコピーし、Client用は`backend/public/assets/partner/`、Master用は`backend/public/assets/master/`（それぞれcss/・js/・images/）へ配置してBladeから読む。生成CSSは`npm run sass`で作ってからコピーする。配置先はQA No.7の追記（2）・No.9で確定。Sassの編集元・出力先は維持する。フロント更新時は差分を確認して再取り込みし、Laravel連携のために変更したJSは変更内容を確認して調整する
 - 取り込み記録は[docs/backend/ASSET_IMPORT_LOG.md](backend/ASSET_IMPORT_LOG.md)に残す。表の1行を1回の取り込みとし、日付・取り込み元（`ken-work`と短縮7桁のコミット番号）・対象・フロント側のファイルパス・Laravel連携で直したJS・備考を記録して下へ追記する。初回は2026-10-21の`ken-work d86a27e`からClientの`common.css`・`products.css`・`common.js`の3ファイル、Laravel連携で直したJSは「なし」と記録されている。配置先は記録ファイルの冒頭に置き、表の列には加えない
 - URLの振り分け、取り込み手順の自動化とそのときの記録方法、認証テーブルやセッションの詳細は未確定。今後の取り込みや環境設定・接続の実確認は別作業とし、今回のフロント資料更新では環境設定・ファイルコピーを行わない
 
@@ -77,7 +77,7 @@ Node.js環境ではnpmパッケージの`sass`を使用し、`node-sass`は使�
 - `npm run sass`：通常コンパイル
 - `npm run watch:sass`：変更監視・再コンパイル
 - `npm run sass:prod`：圧縮コンパイル。ソースマップは生成しない
-- `package.json`、`package-lock.json`、生成CSSはGit管理し、`node_modules/`と`*.map`は除外する
+- `package.json`・`package-lock.json`はGit管理し、生成CSS（`shop-master/assets/css/`・`shop-partner/assets/css/`）・`node_modules/`・`*.map`は除外する
 
 ## 想定ユーザー
 
