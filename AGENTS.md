@@ -26,7 +26,7 @@ Figmaは必須工程とせず、必要な場合のみ使用する。
 3. `docs/`内のMarkdownを更新し、資料間の矛盾を確認する
 4. プロンプトの依頼範囲で制作用PHP（HTML部分）・Sassを作成し、Kenが見た目など必要な箇所を調整する（AIの役割分担は `~/site_data/art-factory-ai/AGENTS.md` 2章に従う）
 5. Sassをコンパイルし、ブラウザで表示と操作を確認して必要な範囲だけ調整する
-6. 確定した仕様と制作用PHP・Sass・生成CSSをバックエンド担当者へ引き渡せる形に整理する（静的HTMLは納品物に含めない）
+6. 確定した仕様と制作用PHP・Sassをバックエンド担当者へ引き渡せる形に整理する（生成CSSはGitで追跡せず、バックエンド担当者がビルドする。静的HTMLは納品物に含めない）
 
 ## Codexへの制限（この案件）
 
@@ -87,6 +87,12 @@ Gitの操作は `~/site_data/art-factory-ai/AGENTS.md` 7章と `~/site_data/art-
 
 - ルートの`scss/`はreset・変数・既存の関数やmixinなどの読み込み専用とし、各管理画面のSassから相対パスの`@use`で読み込む
 - `shop-master/assets/scss/`から`shop-master/assets/css/`へ、`shop-partner/assets/scss/`から`shop-partner/assets/css/`へコンパイルする
+- ビルドの仕方（2026-10-24、基盤のD-045を反映）
+  - 準備：`npm ci`
+  - 制作・引き渡し用：`npm run sass`（展開した形、ソースマップあり）。変更を監視するときは`npm run watch:sass`
+  - `npm run sass:prod`（圧縮、ソースマップなし）は今は使っていない
+  - 出力先の`shop-master/assets/css/`・`shop-partner/assets/css/`はGitで追跡しない
+  - バックエンド担当者は、自分でビルドしてから`backend/public/assets/`へ取り込む
 - Clientは`common.scss`（共通部分）＋ページ別Sass（受注一覧は`order.scss`、商品一覧は`products.scss`）の構成を継続し、`common.css`→ページ別CSSの順に読み込む。resetは`common.scss`だけで読み込む。`admin.scss`への再編は前提にしない
 - クラス名・ネスト・セクションコメントは既存コードを優先する。`.admin-*`／`.order-*`の接頭辞やBEMを強制せず、依頼なく一括改名しない
 - サイズは既存の`fz()`・流動フォント設定を使い、余白・幅・罫線などは`px`・`rem`・`em`の直接指定も認める。すべての数値を変数化せず、削除済みのサイズ変数を資料の旧仮案に合わせて復活させない
