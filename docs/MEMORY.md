@@ -1588,5 +1588,14 @@
 
 - `button-disabled`に文字`$color-text-muted`・地`$color-bg-subtle`・枠`$color-border-default`をまとめ、`button-base`・`button-primary`・`button-secondary`の`:disabled`から使う。主・副・ログイン系のブランド色の主ボタンと送信中も同じグレーにし、カーソルはresetの`not-allowed`を使う（Kenの決定）。主・副を別のセレクタで重ねる箇所でも無効の見た目が勝つよう、3つすべてに指定を置く
 - hoverは`:hover:where(:not(:disabled))`にして無効のときは出さず、詳細度を上げずに店舗フォームのサイズのタブの選択中の白地を保つ。リンクにも`button-base`を使えるが、リンクは無効にせず、押せないときは出さないか`button`にする。`aria-disabled`や送信中の専用の見た目は追加しない（Kenの決定）
-- 変更ファイル：`scss/_ui.scss`、`shop-partner/assets/scss/login.scss`・`sales.scss`・`product-form.scss`、`DESIGN_TOKENS.md`、`docs/coding/HANDOFF_CLIENT_COMMON.md`、本記録、`.ai/report.md`。画面別の無効の指定4か所を削除し、取り込み直しが必要なCSSを申し送り§8へ記載した。生成CSSを検証し、ブラウザでの確認はClaude Codeへ引き継ぐ
+- 変更ファイル：`scss/_ui.scss`、`shop-partner/assets/scss/login.scss`・`sales.scss`・`product-form.scss`、`DESIGN_TOKENS.md`、`docs/coding/HANDOFF_CLIENT_COMMON.md`、本記録。画面別の無効の指定4か所を削除し、取り込み直しが必要なCSSを申し送り§8へ記載した。生成CSSを検証し、ブラウザでの確認はClaude Codeへ引き継ぐ
+- 判断に迷った点・不明な点：なし
+
+## 2026-10-24 Sass共通化の8回目（2）文字の下限を14pxに（案B、Safariの確認待ち）
+
+- 狭い幅（主にタブレット縦）でほぼすべての文字が12pxになっていたため、本文と`fz()`の下限を14pxにした（Kenの決定、案B）。`fz(12)`の注記・バッジ7か所（受注一覧の`.updated`、商品一覧の`.no-image`・`.stock-note`、必須・任意のバッジ`field-badge`、店舗フォームの`.carrier-rules h3 span`・`.tab-error`・`.bulk-label`）だけ12pxのまま
+- `scss/_settings.scss`に`$body-min-font: 1.4rem`（本文の下限）と`$fz-min-font: 14`（`fz()`の下限）を足し、`common.scss`の`body`の3つ（通常・タブレット縦・スマホ縦）の下限を`$body-min-font`にした。`$min-font: 12`は流動計算と`fz(12)`以下の固定値に残した。流動計算（横向きの本文など）を変えないためと、案A（本文だけ14px、`fz()`の下限は12px）へ`$fz-min-font`を12にするだけで戻せるようにするため（Claude Codeの判断）。スマホ縦で幅480pxのとき本文が17.3pxになる件（上限なし）は触らない（Kenの決定）
+- 結果（Chromeで13画面×8幅を実測）：12px以下は`fz(12)`の注記・バッジだけになり、ログイン系5画面は全幅で0。PC（1280・1024）で変わったのは店舗フォームの「運送会社の規格」の`dt`・`dd`（12→14px）だけ。横向き844では`fz(14)`のラベル類が約13px→14px。タブレット縦では横のはみ出しは増えず、高さは受注一覧768で+139px、顧客詳細で+146〜203px、店舗フォームで+113〜137px、商品フォームで+54px、集計で+50px。折り返しが増えたのは、受注一覧のお届け先の住所、顧客一覧の顧客名、店舗一覧の店舗名（768）、店舗フォームのクール便の補助文（768）、顧客詳細の備考・住所・キャンセル理由（768）。スマホ縦（対象外）では、商品・店舗フォームと顧客詳細の横のはみ出しが増えた
+- KenがSafariのタブレット縦（834・768）で受注一覧・顧客詳細・店舗フォームを見て、案Bで確定するか案Aに戻すかを決める。確定するまで、DESIGN_TOKENS・IMPLEMENTATION_REFERENCE・COMMON_LOGIN・申し送り§8の文字サイズの記述は直していない
+- Sass共通化の候補（2026-10-24、Kenの指示で記録）：店舗フォームの`.carrier-rules`の`dl`・`div`・`dt`・`dd`に`fz(14)`が重なる入れ子（`store-form.scss`の174〜178行。案Bで下限の14pxになっているが、案Aに戻すとPCでも12pxに戻る）。ボタンのmixinをリンク（`a`）にも使うため、当たらない`:disabled`の規則（`.store-add:disabled`・`.empty-actions a:disabled`・`.save-bar a:disabled`など）がCSSに出ている
 - 判断に迷った点・不明な点：なし
