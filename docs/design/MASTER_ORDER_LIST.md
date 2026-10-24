@@ -23,7 +23,7 @@
 
 - ヘッダーの表記は「熊日モール」＋管理画面名「管理画面」とし、ログインの上部表記「熊日モール｜管理画面」とそろえる。`title`は「受注一覧｜熊日モール 管理画面」
 - レイアウトはClientと同じ共通レイアウト（ヘッダー・サイドバー。Sassは共通）。違うのは色とサイドバーの項目（[SPECの共通レイアウト](../SPEC.md#共通レイアウト)）
-- 確認の仕方（2026-10-24、Kenの指示）：動き（パートナーの選択ですぐ反映・KPIの連動・`?partner=`の受け渡し・`?preview=long-name`など）はClaude Codeが同じPHPで表示してPlaywrightで確かめる。見た目はKenがSafariで、Clientの受注一覧と同じ1280×800・1024×768・834×1194を見る。Chrome拡張・headless Chromeでの撮影は使わない
+- 確認の仕方（2026-10-24、Kenの決定）：基盤のD-033・operations.md「表示の確認」どおり、Claude CodeがChrome拡張（Claude in Chrome）で、Clientの受注一覧と同じ1280×800・1024×768・834×1194を見る。動き（パートナーの選択ですぐ反映・KPIの連動・`?partner=`の受け渡し・`?preview=long-name`など）も同じ方法で確かめる。headless Chromeでの撮影は使わず、画像は保存しない
 
 ## 未確定事項
 
