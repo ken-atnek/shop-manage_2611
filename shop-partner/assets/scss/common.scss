@@ -13,7 +13,7 @@
  * URL: /shop-partner/assets/scss/common.scss
  * Referenced in: /shop-partner/orders.php
  * Created: 2026-10-17
- * Last updated: 2026-10-23
+ * Last updated: 2026-10-24
  * ======================================= */
 
 // 一覧内ではなくページ全体でスクロールする。共通resetの横方向の抑止を解除する。
@@ -22,7 +22,7 @@ html {
 }
 
 body {
-    font-size: clamp(1.2rem, calc($base-vw * 1vw) + calc($slice * 1px), 1.6rem);
+    font-size: clamp($body-min-font, calc($base-vw * 1vw) + calc($slice * 1px), 1.6rem);
     margin: 0;
     padding: 0;
     display: flex;
@@ -49,11 +49,11 @@ body {
     --color-nav-active-bg: #1e5a43; // 選択中の面（白文字と8.08:1）
     --color-nav-active: #7be0ae; // 選択中の左バー
     @include tb {
-        // タブレットでも既存の12px下限を維持する。
-        font-size: clamp(1.2rem, 1.4vw, 1.6rem);
+        // タブレット縦も本文の下限（$body-min-font）で止める。
+        font-size: clamp($body-min-font, 1.4vw, 1.6rem);
     }
     @include sp {
-        font-size: 3.6vw;
+        font-size: max($body-min-font, 3.6vw);
     }
 }
 .admin-layout {

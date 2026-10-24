@@ -3,7 +3,7 @@
 // * URL: /scss/_settings.scss
 // * Referenced in: /scss/_index.scss・/shop-partner/assets/scss/common.scss
 // * Created: 不明
-// * Last updated: 2026-10-23
+// * Last updated: 2026-10-24
 // * =======================================
 
 $radius-sm: 4px; // 仮
@@ -21,6 +21,10 @@ $max-font: 16;
 $min-font: 12;
 $sp-width: 375;
 
+// 2026-10-24 Kenの決定（案B）。案Aに戻すときは$fz-min-fontを12にするだけでよい。
+$body-min-font: 1.4rem;
+$fz-min-font: 14;
+
 // 可変フォントサイズ計算
 $tilt: calc(($max-font - $min-font) / ($m-width - $sp-width));
 $slice: calc($min-font - ($tilt * $sp-width));
@@ -31,7 +35,7 @@ $base-vw: calc($tilt * 100);
     @if $size <= $min-font {
         @return $min-font * 1px;
     } @else {
-        @return max(12px, ($size / $max-font) * 1em);
+        @return max($fz-min-font * 1px, ($size / $max-font) * 1em);
     }
 }
 
